@@ -1,20 +1,21 @@
 {
   "include": [
-    "src/**/*.ts",
+    "./src/**/*.ts",
     "**/*.spec.ts",
     "**/*.test.ts"
   ],
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es2017",
     "types": [
       "node",
       "jest"
     ],
     "allowJs": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src"
   }
 }
