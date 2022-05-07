@@ -30,19 +30,15 @@ export const UserController: CrudController = {
     }
   },
 
-  list: async (req: Request, res: Response) => {
-    try {
-      const users = await User.findAll()
-
-      res.send(users)
-    } catch (error) {
-      res.status(500).send()
-    }
-  },
-
   read: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      if (!id) {
+        const users = await User.findAll()
+
+        return res.send(users)
+      }
 
       const user = await User.findByPk(id)
 
