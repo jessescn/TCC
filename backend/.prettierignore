@@ -7,3 +7,5 @@ out
 jest.config.js
 jest
 .next
+.env
+.env.example
