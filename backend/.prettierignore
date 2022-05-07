@@ -1,0 +1,9 @@
+tsconfig.json
+
+scripts
+dist
+public
+out
+jest.config.js
+jest
+.next
