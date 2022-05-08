@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
     "test": "jest",
+    "test:watch": "jest --watch",
     "coverage": "jest --coverage"
   },
   "devDependencies": {

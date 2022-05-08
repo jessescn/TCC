@@ -24,7 +24,7 @@ export const UserController: CrudController = {
 
       const user = await User.create(data)
 
-      res.send(user)
+      res.json(user)
     } catch (error) {
       res.status(500).send()
     }
@@ -37,7 +37,7 @@ export const UserController: CrudController = {
       if (!id) {
         const users = await User.findAll()
 
-        return res.send(users)
+        return res.json(users)
       }
 
       const user = await User.findByPk(id)
@@ -67,7 +67,7 @@ export const UserController: CrudController = {
 
       await userExists.save()
 
-      res.send(userExists)
+      res.json(userExists)
     } catch (error) {
       res.status(500).send()
     }
@@ -85,7 +85,7 @@ export const UserController: CrudController = {
 
       user.destroy()
 
-      res.send(user)
+      res.json(user)
     } catch (error) {
       res.status(500).send()
     }
