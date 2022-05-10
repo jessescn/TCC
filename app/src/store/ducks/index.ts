@@ -19,7 +19,5 @@ export const selectors = Object.freeze({
 })
 
 export const sagas = function* () {
-  yield all([
-    // ...sessionSlice.sagas
-  ])
+  yield all([...sessionSlice.sagas])
 }

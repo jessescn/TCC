@@ -1,11 +1,21 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import ReactDOM from 'react-dom/client'
-import { theme } from './theme'
+import { createRoot } from 'react-dom/client'
+import { theme } from './style/theme'
+import '@fontsource/inter'
 import App from './App'
+import { BrowserRouter } from 'react-router-dom'
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+import { Provider as ReduxProvider } from 'react-redux'
+import { store } from './store'
+
+const root = createRoot(document.getElementById('root') as HTMLElement)
+
 root.render(
-  <ChakraProvider theme={theme}>
-    <App />
-  </ChakraProvider>
+  <ReduxProvider store={store}>
+    <BrowserRouter>
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </BrowserRouter>
+  </ReduxProvider>
 )

@@ -1,14 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { UserModel } from '../../../domain/models/user'
+import { Credentials } from '../../../services/auth'
+
+type AuthStatus = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
-  user: any
+  user: UserModel | null
+  authStatus: AuthStatus
 }
 
 export const initialState: State = {
-  user: {}
+  user: null,
+  authStatus: 'pristine'
 }
 
-const reducers = {}
+const reducers = {
+  login: (state: State, action: PayloadAction<Credentials>) => {
+    state.authStatus = 'loading'
+  },
+  loginSuccess: (state: State, action: PayloadAction<UserModel>) => {
+    state.authStatus = 'success'
+    state.user = action.payload
+  },
+  loginFailure: (state: State) => {
+    state.authStatus = 'failure'
+  }
+}
 
 const session = createSlice({
   name: 'session',
