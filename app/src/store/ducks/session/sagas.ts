@@ -26,6 +26,8 @@ function* authUser(action: PayloadAction<Credentials>) {
 
     const data: AxiosResponse<UserModel> = yield call(() => AuthService.me())
 
+    localStorage.setItem('session_user', JSON.stringify(data.data))
+
     yield put(actions.loginSuccess(data.data))
   } catch (error) {
     console.warn(error)

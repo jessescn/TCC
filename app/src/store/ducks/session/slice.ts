@@ -2,28 +2,36 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from '../../../domain/models/user'
 import { Credentials } from '../../../services/auth'
 
-type AuthStatus = 'pristine' | 'loading' | 'success' | 'failure'
+type LoginStatus = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
-  user: UserModel | null
-  authStatus: AuthStatus
+  currentUser: UserModel | null
+  loginStatus: LoginStatus
 }
 
+const userLocalStorage = localStorage.getItem('session_user')
+
 export const initialState: State = {
-  user: null,
-  authStatus: 'pristine'
+  loginStatus: 'pristine',
+  currentUser: userLocalStorage ? JSON.parse(userLocalStorage) : null
 }
 
 const reducers = {
   login: (state: State, action: PayloadAction<Credentials>) => {
-    state.authStatus = 'loading'
+    state.loginStatus = 'loading'
   },
   loginSuccess: (state: State, action: PayloadAction<UserModel>) => {
-    state.authStatus = 'success'
-    state.user = action.payload
+    state.loginStatus = 'success'
+    state.currentUser = action.payload
   },
   loginFailure: (state: State) => {
-    state.authStatus = 'failure'
+    state.loginStatus = 'failure'
+  },
+  logout: (state: State) => {
+    localStorage.removeItem('session_user')
+    localStorage.removeItem('access_token')
+
+    document.location.reload()
   }
 }
 

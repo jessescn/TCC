@@ -1,9 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useSelector } from '../store'
 
-function RequireAuth({ children }: { children: JSX.Element }) {
-  const user = useSelector(state => state.session.user)
+function PrivateRoute({ children }: { children: JSX.Element }) {
   const location = useLocation()
+
+  const user = localStorage.getItem('session_user')
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
@@ -12,4 +12,4 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children
 }
 
-export default RequireAuth
+export default PrivateRoute

@@ -1,6 +1,8 @@
+import { AxiosResponse } from 'axios'
+import { UserModel } from '../domain/models/user'
 import { httpClient } from './config'
 
-type CreateUser = {
+export type CreateUser = {
   name: string
   email: string
   password: string
@@ -8,7 +10,7 @@ type CreateUser = {
 
 export const UserService = {
   create: (data: CreateUser) => {
-    return httpClient.request({
+    return httpClient.request<AxiosResponse<UserModel>>({
       method: 'post',
       url: '/users',
       body: data

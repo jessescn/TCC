@@ -10,26 +10,38 @@ import {
   Link,
   Text
 } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { CreateUser } from '../services/user'
+import { actions, store, useSelector } from '../store'
+import { validateEmail } from '../utils/validation'
 
-type RegisterForm = {
-  email: string
-  name: string
-  password: string
+type RegisterForm = CreateUser & {
   confirmPassword: string
 }
 
 export default function Register() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors }
-  } = useForm<RegisterForm>()
+  } = useForm<RegisterForm>({ mode: 'onSubmit', reValidateMode: 'onChange' })
+
+  const status = useSelector(state => state.user.createUserStatus)
 
   const handleRegisterSubmit = (form: RegisterForm) => {
-    console.log(form)
+    store.dispatch(actions.user.create(form))
   }
+
+  useEffect(() => {
+    if (status === 'success') {
+      navigate('/login')
+    }
+  }, [status])
 
   return (
     <Center
@@ -69,14 +81,11 @@ export default function Register() {
                   required: { value: true, message: '*nome obrigatório' }
                 })}
               />
-              <Text
-                mt="8px"
-                color="info.error"
-                hidden={!errors.name}
-                fontSize="12px"
-              >
-                {errors.name?.message}
-              </Text>
+              {errors.name && (
+                <Text mt="8px" color="info.error" fontSize="12px">
+                  {errors.name?.message}
+                </Text>
+              )}
             </FormControl>
             <FormControl isInvalid={Boolean(errors.email)} mt="12px">
               <FormLabel fontSize={{ base: '14px', md: '16px' }}>
@@ -86,17 +95,22 @@ export default function Register() {
                 id="email"
                 placeholder="Ex. email@ccc.ufcg.edu.br"
                 {...register('email', {
-                  required: { value: true, message: '*email obrigatório' }
+                  required: { value: true, message: '*email obrigatório' },
+                  validate: (value: string) => {
+                    return validateEmail(value)
+                  }
                 })}
               />
-              <Text
-                mt="8px"
-                color="info.error"
-                hidden={!errors.email}
-                fontSize="12px"
-              >
-                {errors.email?.message}
-              </Text>
+              {errors.email && (
+                <Text mt="8px" color="info.error" fontSize="12px">
+                  {errors.email?.message}
+                </Text>
+              )}
+              {errors.email && errors.email.type === 'validate' && (
+                <Text mt="8px" color="info.error" fontSize="12px">
+                  email inválido
+                </Text>
+              )}
             </FormControl>
             <FormControl mt="12px" isInvalid={Boolean(errors.password)}>
               <FormLabel fontSize={{ base: '14px', md: '16px' }}>
@@ -110,14 +124,11 @@ export default function Register() {
                   required: { value: true, message: '*senha obrigatória' }
                 })}
               />
-              <Text
-                mt="8px"
-                color="info.error"
-                hidden={!errors.password}
-                fontSize="12px"
-              >
-                {errors.password?.message}
-              </Text>
+              {errors.password && (
+                <Text mt="8px" color="info.error" fontSize="12px">
+                  {errors.password?.message}
+                </Text>
+              )}
             </FormControl>
             <FormControl mt="12px" isInvalid={Boolean(errors.confirmPassword)}>
               <FormLabel fontSize={{ base: '14px', md: '16px' }}>
@@ -128,23 +139,27 @@ export default function Register() {
                 placeholder="******"
                 type="password"
                 {...register('confirmPassword', {
-                  required: true
+                  required: true,
+                  validate: (value: string) => {
+                    const password = getValues('password')
+
+                    return value === password
+                  }
                 })}
               />
-              <Text
-                mt="8px"
-                color="info.error"
-                hidden={!errors.confirmPassword}
-                fontSize="12px"
-              >
-                {errors.confirmPassword?.message}
-              </Text>
+              {errors.confirmPassword &&
+                errors.confirmPassword.type === 'validate' && (
+                  <Text mt="8px" color="info.error" fontSize="12px">
+                    as senhas não correspondem
+                  </Text>
+                )}
             </FormControl>
             <Center mt="32px" flexDir="column" mb="16px">
               <Button
                 type="submit"
                 color="initial.white"
                 bgColor="primary.dark"
+                isLoading={status === 'loading'}
                 mb="8px"
                 _hover={{ bgColor: 'primary.default' }}
                 fontSize={{ base: '14px', md: '16px' }}

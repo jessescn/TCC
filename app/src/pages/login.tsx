@@ -32,13 +32,13 @@ export default function Login() {
     formState: { errors }
   } = useForm<LoginForm>()
 
-  const user = useSelector(state => state.session.user)
+  const status = useSelector(state => state.session.loginStatus)
 
   useEffect(() => {
-    if (user) {
+    if (status === 'success') {
       navigate('/home')
     }
-  }, [])
+  }, [status])
 
   const handleLoginSubmit = (form: LoginForm) => {
     store.dispatch(actions.session.login(form))
@@ -107,14 +107,11 @@ export default function Login() {
                     required: { value: true, message: '*email obrigatório' }
                   })}
                 />
-                <Text
-                  mt="8px"
-                  color="info.error"
-                  hidden={!errors.email}
-                  fontSize="12px"
-                >
-                  {errors.email?.message}
-                </Text>
+                {errors.email && (
+                  <Text mt="8px" color="info.error" fontSize="12px">
+                    {errors.email?.message}
+                  </Text>
+                )}
               </FormControl>
               <FormControl mt="12px" isInvalid={Boolean(errors.password)}>
                 <FormLabel fontSize={{ base: '14px', md: '16px' }}>
@@ -128,17 +125,15 @@ export default function Login() {
                     required: { value: true, message: '*senha obrigatória' }
                   })}
                 />
-                <Text
-                  mt="8px"
-                  color="info.error"
-                  hidden={!errors.password}
-                  fontSize="12px"
-                >
-                  {errors.password?.message}
-                </Text>
+                {errors.password && (
+                  <Text mt="8px" color="info.error" fontSize="12px">
+                    {errors.password?.message}
+                  </Text>
+                )}
               </FormControl>
               <Center mt="32px" flexDir="column" mb="16px">
                 <Button
+                  isLoading={status === 'loading'}
                   type="submit"
                   color="initial.white"
                   bgColor="primary.dark"

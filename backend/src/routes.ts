@@ -7,13 +7,13 @@ import permissions from './middlewares/permissions'
 const routes = Router()
 
 routes.post('/token', AuthController.token)
+routes.post('/users', UserController.create)
 
 routes.use(auth)
 routes.use(permissions)
 
 routes.get('/me', AuthController.me)
 
-routes.post('/users', UserController.create)
 routes.get('/users', UserController.read)
 routes.get('/users/:id', UserController.read)
 routes.put('/users/:id', UserController.update)
