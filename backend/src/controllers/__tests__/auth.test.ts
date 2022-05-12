@@ -1,31 +1,19 @@
 import { UserMock } from '../../models/mocks/user-mock'
-import { HttpStatusCode, Request, Response } from '../../types/express'
-import { AuthController } from '../auth'
-import jwt from 'jsonwebtoken'
-
 import User from '../../models/user'
+import { HttpStatusCode } from '../../types/express'
+import { AuthController } from '../auth'
+import {
+  makeRequest,
+  makeResponse,
+  makeStatusSpy,
+  mockJwtSign
+} from '../../jest/helpers/controllers'
 
 describe('AuthController', () => {
   const sut = AuthController
 
   const mockUserFindOne = (value: any) => {
     jest.spyOn(User, 'findOne').mockResolvedValue(value)
-  }
-
-  const mockJwtSign = (value: any) => {
-    jest.spyOn(jwt, 'sign').mockReturnValue(value)
-  }
-
-  const makeRequest = (content: any) => {
-    return { ...content } as Request
-  }
-
-  const makeResponse = (content: any) => {
-    return { ...content } as Response
-  }
-
-  const makeStatusSpy = () => {
-    return jest.fn().mockReturnValue({ send: jest.fn() })
   }
 
   const credenciais = { email: 'teste@teste.com', password: '1234' }

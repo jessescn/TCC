@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Sequelize } from 'sequelize'
 
 const username = process.env.POSTGRES_USER

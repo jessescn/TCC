@@ -1,4 +1,6 @@
 /* eslint-disable no-use-before-define */
+/* istanbul ignore file */
+
 import {
   DataTypes,
   InferAttributes,
