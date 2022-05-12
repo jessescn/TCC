@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from '../../../domain/models/user'
 import { Credentials } from '../../../services/auth'
@@ -27,7 +28,7 @@ const reducers = {
   loginFailure: (state: State) => {
     state.loginStatus = 'failure'
   },
-  logout: (state: State) => {
+  logout: () => {
     localStorage.removeItem('session_user')
     localStorage.removeItem('access_token')
 

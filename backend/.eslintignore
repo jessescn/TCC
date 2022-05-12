@@ -1,3 +1,4 @@
 jest.config.js
 .env
+db-data
 .env.example

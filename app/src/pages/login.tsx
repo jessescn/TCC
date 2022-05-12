@@ -35,6 +35,8 @@ export default function Login() {
   const status = useSelector(state => state.session.loginStatus)
 
   useEffect(() => {
+    console.log(status)
+
     if (status === 'success') {
       navigate('/home')
     }
@@ -143,6 +145,11 @@ export default function Login() {
                 >
                   Acessar
                 </Button>
+                {status === 'failure' && (
+                  <Text mt="8px" color="info.error" fontSize="12px">
+                    credenciais inválidas!
+                  </Text>
+                )}
                 <RouterLink to="/cadastro">
                   <Link
                     as="p"

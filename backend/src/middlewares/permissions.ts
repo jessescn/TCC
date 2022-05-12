@@ -36,10 +36,10 @@ const PermissionsMiddleware = (
     return acc && true
   }, true)
 
-  // if (!havePermission) {
-  //   res.status(401).send()
-  //   return
-  // }
+  if (!havePermission) {
+    res.status(401).send()
+    return
+  }
 
   next()
 }

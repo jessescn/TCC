@@ -166,6 +166,11 @@ export default function Register() {
               >
                 Cadastrar
               </Button>
+              {status === 'failure' && (
+                <Text mt="8px" color="info.error" fontSize="12px">
+                  credenciais inválidas!
+                </Text>
+              )}
               <RouterLink to="/login">
                 <Link
                   as="p"
