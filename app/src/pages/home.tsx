@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import Header from '../components/pages/header'
+import Header from 'components/organisms/header'
 
 export default function Home() {
   return (

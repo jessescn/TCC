@@ -1,7 +1,5 @@
 import {
   Avatar,
-  AvatarBadge,
-  Box,
   Flex,
   Icon,
   Menu,
@@ -10,9 +8,7 @@ import {
   MenuList,
   Text
 } from '@chakra-ui/react'
-import { GiHamburgerMenu } from 'react-icons/gi'
 import { BiLogOut } from 'react-icons/bi'
-
 import { actions, store, useSelector } from '../../store'
 
 export default function Header() {

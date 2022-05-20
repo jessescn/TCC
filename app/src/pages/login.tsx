@@ -1,22 +1,13 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Box,
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  Image,
-  Input,
-  Link,
-  Text
-} from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Text } from '@chakra-ui/react'
+import Link from 'components/atoms/link'
+import Screen from 'components/atoms/screen'
+import Alert from 'components/molecules/alert'
+import FormInput from 'components/molecules/forms/input'
+import LogoPanel from 'components/organisms/logo-panel'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { store, useSelector, actions } from '../store'
+import { useNavigate } from 'react-router-dom'
+import { actions, store, useSelector } from '../store'
 
 type LoginForm = {
   email: string
@@ -35,8 +26,6 @@ export default function Login() {
   const status = useSelector(state => state.session.loginStatus)
 
   useEffect(() => {
-    console.log(status)
-
     if (status === 'success') {
       navigate('/home')
     }
@@ -47,12 +36,7 @@ export default function Login() {
   }
 
   return (
-    <Center
-      bgColor="secondary.default"
-      w="100vw"
-      h="100vh"
-      px={{ base: '8px', md: '0' }}
-    >
+    <Screen>
       <Flex
         w="100%"
         maxW="800px"
@@ -60,79 +44,54 @@ export default function Login() {
         borderRadius="8px"
         flexDirection={{ base: 'column', md: 'row' }}
       >
-        <Center
-          flexDir={{ base: 'row', md: 'column' }}
-          bgColor="primary.dark"
-          borderRadius={{ base: '8px 8px 0 0', md: '8px 0 0 8px' }}
-          textAlign="center"
-          w={{ base: '100%', md: '350px' }}
-          p="16px"
-        >
-          <Image
-            src="./logo_ufcg.png"
-            maxW={{ base: '100px', md: '150px' }}
-            mr="16px"
-          />
-          <Text
-            mt={{ base: '0', md: '24px' }}
-            fontWeight="bold"
-            fontSize={{ base: '20px', md: '24px' }}
-            color="initial.white"
-            maxW="200px"
-          >
-            Sistema de Pós-Graduação UFCG
-          </Text>
-        </Center>
+        <LogoPanel side="left" />
         <Box>
-          <Alert
-            borderRadius={{ base: '0', md: '0 8px 0 0' }}
-            bgColor="info.warning-light"
-          >
-            <Box>
-              <AlertTitle>Aviso</AlertTitle>
-              <AlertDescription fontSize={{ base: '12px', md: '14px' }}>
-                Você não está conectado ao sistema. Utilize o formulário abaixo
-                para se autenticar
-              </AlertDescription>
-            </Box>
+          <Alert borderRadius={{ base: '0', md: '0 8px 0 0' }} title="Aviso">
+            <Text>
+              Você não está conectado ao sistema. Utilize o formulário abaixo
+              para se autenticar
+            </Text>
           </Alert>
           <Box mt="16px" px={{ base: '8px', md: '32px' }}>
             <form onSubmit={handleSubmit(handleLoginSubmit)}>
-              <FormControl isInvalid={Boolean(errors.email)}>
-                <FormLabel fontSize={{ base: '14px', md: '16px' }}>
-                  Email
-                </FormLabel>
-                <Input
-                  id="email"
-                  placeholder="Ex. email@ccc.ufcg.edu.br"
-                  {...register('email', {
-                    required: { value: true, message: '*email obrigatório' }
-                  })}
-                />
-                {errors.email && (
-                  <Text mt="8px" color="info.error" fontSize="12px">
-                    {errors.email?.message}
-                  </Text>
-                )}
-              </FormControl>
-              <FormControl mt="12px" isInvalid={Boolean(errors.password)}>
-                <FormLabel fontSize={{ base: '14px', md: '16px' }}>
-                  Senha
-                </FormLabel>
-                <Input
-                  id="password"
-                  placeholder="******"
-                  type="password"
-                  {...register('password', {
-                    required: { value: true, message: '*senha obrigatória' }
-                  })}
-                />
-                {errors.password && (
-                  <Text mt="8px" color="info.error" fontSize="12px">
-                    {errors.password?.message}
-                  </Text>
-                )}
-              </FormControl>
+              <FormInput
+                id="email"
+                placeholder="Ex. email@ccc.ufcg.edu.br"
+                isInvalid={Boolean(errors.email)}
+                label={{
+                  text: 'Email',
+                  style: { fontSize: { base: '14px', md: '16px' } }
+                }}
+                register={register('email', {
+                  required: { value: true, message: '*email obrigatório' }
+                })}
+                errors={[
+                  {
+                    text: errors.email?.message,
+                    condition: Boolean(errors.email)
+                  }
+                ]}
+              />
+              <FormInput
+                mt="12px"
+                id="password"
+                placeholder="******"
+                type="password"
+                isInvalid={Boolean(errors.password)}
+                label={{
+                  text: 'Senha',
+                  style: { fontSize: { base: '14px', md: '16px' } }
+                }}
+                register={register('password', {
+                  required: { value: true, message: '*senha obrigatória' }
+                })}
+                errors={[
+                  {
+                    text: errors.password?.message,
+                    condition: Boolean(errors.password)
+                  }
+                ]}
+              />
               <Center mt="32px" flexDir="column" mb="16px">
                 <Button
                   isLoading={status === 'loading'}
@@ -150,21 +109,14 @@ export default function Login() {
                     credenciais inválidas!
                   </Text>
                 )}
-                <RouterLink to="/cadastro">
-                  <Link
-                    as="p"
-                    fontSize="12px"
-                    textDecoration="underline"
-                    color="primary.default"
-                  >
-                    Não possui acesso? clique aqui!
-                  </Link>
-                </RouterLink>
+                <Link redirectTo="/cadastro">
+                  Não possui acesso? clique aqui!
+                </Link>
               </Center>
             </form>
           </Box>
         </Box>
       </Flex>
-    </Center>
+    </Screen>
   )
 }

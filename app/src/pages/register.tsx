@@ -1,21 +1,23 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  Image,
-  Input,
-  Link,
-  Text
-} from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { Box, Button, Center, Flex, Link, Text } from '@chakra-ui/react'
+import Screen from 'components/atoms/screen'
+import FormInput, { ErrorText } from 'components/molecules/forms/input'
+import LogoPanel from 'components/organisms/logo-panel'
+import { HTMLInputTypeAttribute, useEffect } from 'react'
+import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { CreateUser } from '../services/user'
-import { actions, store, useSelector } from '../store'
-import { validateEmail } from '../utils/validation'
+import { CreateUser } from 'services/user'
+import { actions, store, useSelector } from 'store'
+import { validateEmail } from 'utils/validation'
+
+type fieldProps = {
+  id: string
+  type?: HTMLInputTypeAttribute
+  invalid: boolean
+  placeholder: string
+  label: string
+  register: UseFormRegisterReturn
+  errors: ErrorText[]
+}
 
 type RegisterForm = CreateUser & {
   confirmPassword: string
@@ -43,13 +45,87 @@ export default function Register() {
     }
   }, [status])
 
+  const nameProps: fieldProps = {
+    invalid: Boolean(errors.name),
+    id: 'name',
+    placeholder: 'Ex. João da Silva',
+    label: 'Nome Completo',
+    register: register('name', {
+      required: { value: true, message: '*nome obrigatório' }
+    }),
+    errors: [{ text: errors.name?.message, condition: Boolean(errors.name) }]
+  }
+
+  const emailProps: fieldProps = {
+    invalid: Boolean(errors.email),
+    id: 'email',
+    placeholder: 'Ex. email@ccc.ufcg.edu.br',
+    label: 'Email',
+    register: register('email', {
+      required: { value: true, message: '*email obrigatório' },
+      validate: (value: string) => {
+        return validateEmail(value)
+      }
+    }),
+    errors: [
+      {
+        text: errors.email?.message,
+        condition: Boolean(errors.email)
+      },
+      {
+        text: 'email inválido',
+        condition: Boolean(errors.email && errors.email.type === 'validate')
+      }
+    ]
+  }
+
+  const passwordProps: fieldProps = {
+    invalid: Boolean(errors.password),
+    id: 'password',
+    placeholder: '******',
+    type: 'password',
+    label: 'Senha',
+    register: register('password', {
+      required: { value: true, message: '*senha obrigatória' }
+    }),
+    errors: [
+      { text: errors.password?.message, condition: Boolean(errors.password) }
+    ]
+  }
+
+  const confirmPasswordProps: fieldProps = {
+    invalid: Boolean(errors.confirmPassword),
+    id: 'confirmPassword',
+    placeholder: '******',
+    type: 'password',
+    label: 'Confirmar Senha',
+    register: register('confirmPassword', {
+      required: true,
+      validate: (value: string) => {
+        const password = getValues('password')
+
+        return value === password
+      }
+    }),
+    errors: [
+      {
+        text: 'as senhas não correspondem',
+        condition: Boolean(
+          errors.confirmPassword && errors.confirmPassword.type === 'validate'
+        )
+      }
+    ]
+  }
+
+  const formFields = [
+    nameProps,
+    emailProps,
+    passwordProps,
+    confirmPasswordProps
+  ]
+
   return (
-    <Center
-      bgColor="secondary.default"
-      w="100vw"
-      h="100vh"
-      px={{ base: '8px', md: '0' }}
-    >
+    <Screen>
       <Flex
         w="100%"
         maxW="800px"
@@ -70,90 +146,21 @@ export default function Register() {
             Cadastro
           </Text>
           <form onSubmit={handleSubmit(handleRegisterSubmit)}>
-            <FormControl isInvalid={Boolean(errors.name)}>
-              <FormLabel fontSize={{ base: '14px', md: '16px' }}>
-                Nome Completo
-              </FormLabel>
-              <Input
-                id="name"
-                placeholder="Ex. João da Silva"
-                {...register('name', {
-                  required: { value: true, message: '*nome obrigatório' }
-                })}
+            {formFields.map(field => (
+              <FormInput
+                key={field.id}
+                id={field.id}
+                type={field.type}
+                isInvalid={field.invalid}
+                placeholder={field.placeholder}
+                label={{
+                  text: field.label,
+                  style: { fontSize: { base: '14px', md: '16px' } }
+                }}
+                register={field.register}
+                errors={field.errors}
               />
-              {errors.name && (
-                <Text mt="8px" color="info.error" fontSize="12px">
-                  {errors.name?.message}
-                </Text>
-              )}
-            </FormControl>
-            <FormControl isInvalid={Boolean(errors.email)} mt="12px">
-              <FormLabel fontSize={{ base: '14px', md: '16px' }}>
-                Email
-              </FormLabel>
-              <Input
-                id="email"
-                placeholder="Ex. email@ccc.ufcg.edu.br"
-                {...register('email', {
-                  required: { value: true, message: '*email obrigatório' },
-                  validate: (value: string) => {
-                    return validateEmail(value)
-                  }
-                })}
-              />
-              {errors.email && (
-                <Text mt="8px" color="info.error" fontSize="12px">
-                  {errors.email?.message}
-                </Text>
-              )}
-              {errors.email && errors.email.type === 'validate' && (
-                <Text mt="8px" color="info.error" fontSize="12px">
-                  email inválido
-                </Text>
-              )}
-            </FormControl>
-            <FormControl mt="12px" isInvalid={Boolean(errors.password)}>
-              <FormLabel fontSize={{ base: '14px', md: '16px' }}>
-                Senha
-              </FormLabel>
-              <Input
-                id="password"
-                placeholder="******"
-                type="password"
-                {...register('password', {
-                  required: { value: true, message: '*senha obrigatória' }
-                })}
-              />
-              {errors.password && (
-                <Text mt="8px" color="info.error" fontSize="12px">
-                  {errors.password?.message}
-                </Text>
-              )}
-            </FormControl>
-            <FormControl mt="12px" isInvalid={Boolean(errors.confirmPassword)}>
-              <FormLabel fontSize={{ base: '14px', md: '16px' }}>
-                Confirmar Senha
-              </FormLabel>
-              <Input
-                id="confirmPassword"
-                placeholder="******"
-                type="password"
-                {...register('confirmPassword', {
-                  required: true,
-                  validate: (value: string) => {
-                    const password = getValues('password')
-
-                    return value === password
-                  }
-                })}
-              />
-              {errors.confirmPassword &&
-                errors.confirmPassword.type === 'validate' && (
-                  <Text mt="8px" color="info.error" fontSize="12px">
-                    as senhas não correspondem
-                  </Text>
-                )}
-            </FormControl>
+            ))}
             <Center mt="32px" flexDir="column" mb="16px">
               <Button
                 type="submit"
@@ -184,30 +191,8 @@ export default function Register() {
             </Center>
           </form>
         </Box>
-        <Center
-          flexDir={{ base: 'row', md: 'column' }}
-          bgColor="primary.dark"
-          borderRadius={{ base: '8px 8px 0 0', md: '0 8px 8px 0' }}
-          textAlign="center"
-          w={{ base: '100%', md: '350px' }}
-          p="16px"
-        >
-          <Image
-            src="./logo_ufcg.png"
-            maxW={{ base: '100px', md: '150px' }}
-            mr="16px"
-          />
-          <Text
-            mt={{ base: '0', md: '24px' }}
-            fontWeight="bold"
-            fontSize={{ base: '20px', md: '24px' }}
-            color="initial.white"
-            maxW="200px"
-          >
-            Sistema de Pós-Graduação UFCG
-          </Text>
-        </Center>
+        <LogoPanel side="right" />
       </Flex>
-    </Center>
+    </Screen>
   )
 }
