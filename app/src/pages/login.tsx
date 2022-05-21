@@ -7,7 +7,7 @@ import LogoPanel from 'components/organisms/logo-panel'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { actions, store, useSelector } from '../store'
+import { actions, store, useSelector, selectors } from '../store'
 
 type LoginForm = {
   email: string
@@ -23,7 +23,7 @@ export default function Login() {
     formState: { errors }
   } = useForm<LoginForm>()
 
-  const status = useSelector(state => state.session.loginStatus)
+  const status = useSelector(selectors.session.getAuthStatus)
 
   useEffect(() => {
     if (status === 'success') {
@@ -53,14 +53,20 @@ export default function Login() {
             </Text>
           </Alert>
           <Box mt="16px" px={{ base: '8px', md: '32px' }}>
-            <form onSubmit={handleSubmit(handleLoginSubmit)}>
+            <form
+              data-testid="login-form"
+              onSubmit={handleSubmit(handleLoginSubmit)}
+            >
               <FormInput
                 id="email"
                 placeholder="Ex. email@ccc.ufcg.edu.br"
                 isInvalid={Boolean(errors.email)}
                 label={{
                   text: 'Email',
-                  style: { fontSize: { base: '14px', md: '16px' } }
+                  props: {
+                    fontSize: { base: '14px', md: '16px' },
+                    htmlFor: 'email'
+                  }
                 }}
                 register={register('email', {
                   required: { value: true, message: '*email obrigatório' }
@@ -80,7 +86,10 @@ export default function Login() {
                 isInvalid={Boolean(errors.password)}
                 label={{
                   text: 'Senha',
-                  style: { fontSize: { base: '14px', md: '16px' } }
+                  props: {
+                    fontSize: { base: '14px', md: '16px' },
+                    htmlFor: 'password'
+                  }
                 }}
                 register={register('password', {
                   required: { value: true, message: '*senha obrigatória' }

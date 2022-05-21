@@ -1,3 +1,3 @@
 import './intersection-observer-mock'
 import './mach-media-mock'
-import './use-router-mock'
+export * from './react-hook-form-mock'

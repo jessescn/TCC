@@ -1,23 +1,23 @@
 import {
   FormControl as ChakraFormControl,
   FormLabel as ChakraFormLabel,
-  StyleProps
+  FormLabelProps
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
-type Props = StyleProps & {
+type Props = FormLabelProps & {
   label: ReactNode
   children: ReactNode
   isInvalid?: boolean
 }
 
-const FormLabel = ({ label, children, isInvalid, ...styleProps }: Props) => {
+const FormControl = ({ label, children, isInvalid, ...labelProps }: Props) => {
   return (
     <ChakraFormControl isInvalid={isInvalid}>
-      <ChakraFormLabel {...styleProps}>{label}</ChakraFormLabel>
+      <ChakraFormLabel {...labelProps}>{label}</ChakraFormLabel>
       {children}
     </ChakraFormControl>
   )
 }
 
-export default FormLabel
+export default FormControl

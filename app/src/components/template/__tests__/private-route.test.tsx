@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { render, screen } from '../../../jest/utils/test-util'
+import { render, screen } from 'jest/utils/test-utils'
 
 import PrivateRoute from '../private-route'
 

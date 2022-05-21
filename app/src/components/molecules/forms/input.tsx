@@ -18,7 +18,7 @@ export type ErrorText = {
 type Props = InputProps & {
   label: {
     text: ReactNode
-    style?: FormLabelProps
+    props?: FormLabelProps
   }
   register?: UseFormRegisterReturn
   errors?: ErrorText[]
@@ -26,11 +26,17 @@ type Props = InputProps & {
 
 const FormInput = ({ label, errors = [], register, ...inputProps }: Props) => {
   return (
-    <FormControl label={label.text} {...label.style}>
+    <FormControl label={label.text} {...label.props}>
       <Input {...register} {...inputProps} />
       {errors.map(error => {
         return !error.condition ? null : (
-          <Text mt="8px" color="info.error" fontSize="12px" {...error.style}>
+          <Text
+            key={error.text}
+            mt="8px"
+            color="info.error"
+            fontSize="12px"
+            {...error.style}
+          >
             {error.text}
           </Text>
         )

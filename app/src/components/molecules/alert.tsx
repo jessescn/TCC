@@ -22,7 +22,11 @@ export default function Alert(props: Props) {
       alignItems="flex-start"
       {...styleProps}
     >
-      {title && <ChakraAlertTitle>{title}</ChakraAlertTitle>}
+      {title && (
+        <ChakraAlertTitle data-testid="alert-title-container">
+          {title}
+        </ChakraAlertTitle>
+      )}
       <ChakraAlertDescription>{children}</ChakraAlertDescription>
     </ChakraAlert>
   )

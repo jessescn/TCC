@@ -9,10 +9,10 @@ import {
   Text
 } from '@chakra-ui/react'
 import { BiLogOut } from 'react-icons/bi'
-import { actions, store, useSelector } from '../../store'
+import { actions, store, useSelector, selectors } from 'store'
 
 export default function Header() {
-  const currentUser = useSelector(state => state.session.currentUser)
+  const currentUser = useSelector(selectors.session.getCurrentUser)
 
   const handleLogout = () => {
     store.dispatch(actions.session.logout())

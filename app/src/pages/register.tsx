@@ -6,7 +6,7 @@ import { HTMLInputTypeAttribute, useEffect } from 'react'
 import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { CreateUser } from 'services/user'
-import { actions, store, useSelector } from 'store'
+import { actions, store, useSelector, selectors } from 'store'
 import { validateEmail } from 'utils/validation'
 
 type fieldProps = {
@@ -19,7 +19,7 @@ type fieldProps = {
   errors: ErrorText[]
 }
 
-type RegisterForm = CreateUser & {
+export type RegisterForm = CreateUser & {
   confirmPassword: string
 }
 
@@ -33,7 +33,7 @@ export default function Register() {
     formState: { errors }
   } = useForm<RegisterForm>({ mode: 'onSubmit', reValidateMode: 'onChange' })
 
-  const status = useSelector(state => state.user.createUserStatus)
+  const status = useSelector(selectors.user.getCreateUserStatus)
 
   const handleRegisterSubmit = (form: RegisterForm) => {
     store.dispatch(actions.user.create(form))
@@ -51,7 +51,7 @@ export default function Register() {
     placeholder: 'Ex. João da Silva',
     label: 'Nome Completo',
     register: register('name', {
-      required: { value: true, message: '*nome obrigatório' }
+      required: { value: true, message: '*campo obrigatório' }
     }),
     errors: [{ text: errors.name?.message, condition: Boolean(errors.name) }]
   }
@@ -62,7 +62,7 @@ export default function Register() {
     placeholder: 'Ex. email@ccc.ufcg.edu.br',
     label: 'Email',
     register: register('email', {
-      required: { value: true, message: '*email obrigatório' },
+      required: { value: true, message: '*campo obrigatório' },
       validate: (value: string) => {
         return validateEmail(value)
       }
@@ -86,7 +86,7 @@ export default function Register() {
     type: 'password',
     label: 'Senha',
     register: register('password', {
-      required: { value: true, message: '*senha obrigatória' }
+      required: { value: true, message: '*campo obrigatório' }
     }),
     errors: [
       { text: errors.password?.message, condition: Boolean(errors.password) }
@@ -100,7 +100,7 @@ export default function Register() {
     type: 'password',
     label: 'Confirmar Senha',
     register: register('confirmPassword', {
-      required: true,
+      required: { value: true, message: '*campo obrigatório' },
       validate: (value: string) => {
         const password = getValues('password')
 
@@ -108,6 +108,10 @@ export default function Register() {
       }
     }),
     errors: [
+      {
+        text: errors.confirmPassword?.message,
+        condition: Boolean(errors.confirmPassword)
+      },
       {
         text: 'as senhas não correspondem',
         condition: Boolean(
@@ -145,7 +149,10 @@ export default function Register() {
           >
             Cadastro
           </Text>
-          <form onSubmit={handleSubmit(handleRegisterSubmit)}>
+          <form
+            onSubmit={handleSubmit(handleRegisterSubmit)}
+            data-testid="register-form"
+          >
             {formFields.map(field => (
               <FormInput
                 key={field.id}
@@ -155,7 +162,10 @@ export default function Register() {
                 placeholder={field.placeholder}
                 label={{
                   text: field.label,
-                  style: { fontSize: { base: '14px', md: '16px' } }
+                  props: {
+                    fontSize: { base: '14px', md: '16px' },
+                    htmlFor: field.id
+                  }
                 }}
                 register={field.register}
                 errors={field.errors}
@@ -175,7 +185,7 @@ export default function Register() {
               </Button>
               {status === 'failure' && (
                 <Text mt="8px" color="info.error" fontSize="12px">
-                  credenciais inválidas!
+                  erro ao criar novo usuário
                 </Text>
               )}
               <RouterLink to="/login">

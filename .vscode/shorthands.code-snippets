@@ -1,0 +1,16 @@
+{
+  "Estrutura do jest para React": {
+    "scope": "javascriptreact, typescriptreact",
+    "prefix": "test",
+    "body": [
+      "import { render, screen } from 'jest/utils/test-utils'",
+      "",
+      "describe('', () => {",
+      "\ttest('', () => {",
+      "\t\trender()",
+      "\t})",
+      "})",
+    ],
+    "description": "Estrutura do jest para React"
+  }
+}
