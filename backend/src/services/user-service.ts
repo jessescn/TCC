@@ -1,5 +1,5 @@
 import User from 'models/user'
-import { UserModel } from 'types/user'
+import { ConflictError, NotFoundError } from 'types/express/errors'
 import { BaseService } from './base-service'
 
 export type RemoteUser = {
@@ -18,8 +18,13 @@ export const UserService: TUserService = {
     return resource
   },
   getById: async function (id: number) {
-    const resource = await User.findByPk(id)
-    return resource
+    const user = await User.findByPk(id)
+
+    if (!user) {
+      throw new NotFoundError('user not found')
+    }
+
+    return user
   },
 
   getByEmail: async function (email: string) {
@@ -28,14 +33,22 @@ export const UserService: TUserService = {
   },
 
   create: async function (data: RemoteUser) {
+    const emailAlreadyUsed = await this.getByEmail(data.email)
+
+    if (emailAlreadyUsed) {
+      throw new ConflictError('user already exists')
+    }
+
     const resource = await User.create(data)
     return resource
   },
 
-  update: async function (id: number, data: UserModel) {
-    const user = await this.getById(id)
+  update: async function (id: number, data: any) {
+    const user = await User.findByPk(id)
 
-    if (!user) return null
+    if (!user) {
+      throw new NotFoundError('user not found')
+    }
 
     delete data.password
 
@@ -46,9 +59,11 @@ export const UserService: TUserService = {
     return user
   },
   destroy: async function (id: number) {
-    const user = await this.getById(id)
+    const user = await User.findByPk(id)
 
-    if (!user) return null
+    if (!user) {
+      throw new NotFoundError('user not found')
+    }
 
     user.destroy()
 

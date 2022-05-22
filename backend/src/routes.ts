@@ -15,7 +15,7 @@ routes.use(permissions)
 routes.get('/me', AuthController.me)
 
 routes.get('/users', UserController.read)
-routes.get('/users/:id', UserController.read)
+routes.get('/users/:id', UserController.readById)
 routes.put('/users/:id', UserController.update)
 routes.delete('/users/:id', UserController.delete)
 

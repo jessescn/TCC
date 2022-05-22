@@ -12,5 +12,16 @@
       "})",
     ],
     "description": "Estrutura do jest para React"
+  },
+  "Estrutura do jest para código javascript/typescript": {
+    "scope": "javascript, typescript",
+    "prefix": "test-ts",
+    "body": [
+      "describe('', () => {",
+      "\ttest('', () => {",
+      "\t})",
+      "})",
+    ],
+    "description": "Estrutura do jest para testes javascript/typescript"
   }
 }

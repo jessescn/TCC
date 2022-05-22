@@ -2,11 +2,21 @@ import { Request, Response, HttpStatusCode } from 'types/express'
 import { CrudController } from './crud'
 import { UserModel } from 'types/user'
 import { UserService } from 'services/user-service'
+import { BadRequestError, RequestError } from 'types/express/errors'
 
 export type RemoteUser = {
   name: string
   email: string
   password: string
+}
+
+export const errorResponseHandler = (res: Response, error: any) => {
+  if (error instanceof RequestError) {
+    res.status(error.status).send(error.message)
+    return
+  }
+
+  res.status(HttpStatusCode.serverError).send()
 }
 
 export const UserController: CrudController = {
@@ -15,69 +25,52 @@ export const UserController: CrudController = {
       const data: RemoteUser = req.body
 
       if (!data.email || !data.name || !data.password) {
-        res.status(HttpStatusCode.badRequest).send()
-        return
-      }
-
-      const emailAlreadyUsed = await UserService.getByEmail(data.email)
-
-      if (emailAlreadyUsed) {
-        res.status(HttpStatusCode.badRequest).send('email already used')
-        return
+        throw new BadRequestError('invalid data')
       }
 
       const user = await UserService.create(data)
 
       res.json(user)
     } catch (error) {
-      res.status(HttpStatusCode.serverError).send()
+      errorResponseHandler(res, error)
     }
   },
 
   read: async (req: Request, res: Response) => {
     try {
-      const { id } = req.params
+      const users = await UserService.getAll()
 
-      if (!id) {
-        const users = await UserService.getAll()
-
-        res.json(users)
-        return
-      }
-
-      const user = await UserService.getById(Number(id))
-
-      if (!user) {
-        res.status(HttpStatusCode.notFound).send()
-        return
-      }
-
-      res.json(user)
+      res.json(users)
     } catch (error) {
-      res.status(HttpStatusCode.serverError).send()
+      errorResponseHandler(res, error)
     }
   },
 
+  readById: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+
+      const user = await UserService.getById(Number(id))
+
+      res.json(user)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
   update: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
       const data: UserModel = req.body
 
       if (!data) {
-        res.status(HttpStatusCode.badRequest).send()
-        return
+        throw new BadRequestError('invalid data')
       }
 
       const updatedUser = await UserService.update(Number(id), data)
 
-      if (!updatedUser) {
-        res.status(HttpStatusCode.notFound).send()
-        return
-      }
-
       res.json(updatedUser)
     } catch (error) {
-      res.status(HttpStatusCode.serverError).send()
+      errorResponseHandler(res, error)
     }
   },
 
@@ -87,14 +80,9 @@ export const UserController: CrudController = {
 
       const userDestroyed = await UserService.destroy(Number(id))
 
-      if (!userDestroyed) {
-        res.status(HttpStatusCode.notFound).send()
-        return
-      }
-
       res.json(userDestroyed)
     } catch (error) {
-      res.status(HttpStatusCode.serverError).send()
+      errorResponseHandler(res, error)
     }
   }
 }

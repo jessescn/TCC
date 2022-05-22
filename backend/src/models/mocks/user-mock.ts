@@ -25,7 +25,7 @@ export class UserMock {
   }
 
   generate(size = 1) {
-    const result = []
+    const result: UserModel[] = []
 
     for (let i = 0; i < size; i++) {
       result.push(this.fill().build())
