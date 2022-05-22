@@ -1,42 +1,51 @@
-import { HttpStatusCode, Request, Response } from 'types/express'
 import { CrudController, errorResponseHandler } from 'controllers'
-import { RemoteUser, UserService } from 'services/user-service'
+import { FormField } from 'models/form'
+import { FormService } from 'services/form-service'
+import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
+import { isNumber } from 'utils/value'
 
-export const UserController: CrudController = {
+type RemoteForm = {
+  name: string
+  fields: FormField[]
+}
+
+export const FormController: CrudController = {
   create: async (req: Request, res: Response) => {
     try {
-      const data: RemoteUser = req.body
+      const data: RemoteForm = req.body
 
-      if (!data.email || !data.name || !data.password) {
+      if (!data.name || !data.fields) {
         throw new BadRequestError()
       }
 
-      const user = await UserService.create(data)
+      const form = await FormService.create(data)
 
-      res.status(HttpStatusCode.created).json(user)
+      res.status(HttpStatusCode.created).json(form)
     } catch (error) {
       errorResponseHandler(res, error)
     }
   },
-
   read: async (req: Request, res: Response) => {
     try {
-      const users = await UserService.getAll()
+      const forms = await FormService.getAll()
 
-      res.json(users)
+      res.send(forms)
     } catch (error) {
       errorResponseHandler(res, error)
     }
   },
-
   readById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
 
-      const user = await UserService.getById(Number(id))
+      if (!isNumber(id)) {
+        throw new BadRequestError()
+      }
 
-      res.json(user)
+      const form = await FormService.getById(Number(id))
+
+      res.json(form)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -46,25 +55,28 @@ export const UserController: CrudController = {
       const { id } = req.params
       const data = req.body
 
-      if (!data) {
+      if (!data || !isNumber(id)) {
         throw new BadRequestError()
       }
 
-      const updatedUser = await UserService.update(Number(id), data)
+      const updatedForm = await FormService.update(Number(id), data)
 
-      res.json(updatedUser)
+      res.json(updatedForm)
     } catch (error) {
       errorResponseHandler(res, error)
     }
   },
-
   delete: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
 
-      const userDestroyed = await UserService.destroy(Number(id))
+      if (!isNumber(id)) {
+        throw new BadRequestError()
+      }
 
-      res.json(userDestroyed)
+      const deletedForm = await FormService.destroy(Number(id))
+
+      res.json(deletedForm)
     } catch (error) {
       errorResponseHandler(res, error)
     }

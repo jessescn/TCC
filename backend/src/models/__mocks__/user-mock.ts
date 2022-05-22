@@ -1,16 +1,13 @@
-import { UserModel } from 'types/user'
-
 import { faker } from '@faker-js/faker'
+import { UserModel } from 'models/user'
 
-export class UserMock {
+export class UserMockBuilder {
   private id = 0
   private permissions = {}
   private email = ''
   private name = ''
   private password = ''
   private deleted = false
-  private createdAt = new Date()
-  private updatedAt = new Date()
 
   fill() {
     this.id = faker.datatype.number()
@@ -18,8 +15,6 @@ export class UserMock {
     this.name = faker.name.findName()
     this.password = faker.internet.password()
     this.deleted = faker.datatype.boolean()
-    this.createdAt = faker.date.past()
-    this.updatedAt = faker.date.past()
 
     return this
   }
@@ -41,9 +36,7 @@ export class UserMock {
       deleted: this.deleted,
       name: this.name,
       password: this.password,
-      permissions: this.permissions,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      permissions: this.permissions
     }
   }
 }

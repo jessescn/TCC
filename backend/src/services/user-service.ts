@@ -21,7 +21,7 @@ export const UserService: TUserService = {
     const user = await User.findByPk(id)
 
     if (!user) {
-      throw new NotFoundError('user not found')
+      throw new NotFoundError()
     }
 
     return user
@@ -36,7 +36,7 @@ export const UserService: TUserService = {
     const emailAlreadyUsed = await this.getByEmail(data.email)
 
     if (emailAlreadyUsed) {
-      throw new ConflictError('user already exists')
+      throw new ConflictError()
     }
 
     const resource = await User.create(data)
@@ -47,7 +47,7 @@ export const UserService: TUserService = {
     const user = await User.findByPk(id)
 
     if (!user) {
-      throw new NotFoundError('user not found')
+      throw new NotFoundError()
     }
 
     delete data.password
@@ -62,7 +62,7 @@ export const UserService: TUserService = {
     const user = await User.findByPk(id)
 
     if (!user) {
-      throw new NotFoundError('user not found')
+      throw new NotFoundError()
     }
 
     user.destroy()

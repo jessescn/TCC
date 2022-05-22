@@ -9,11 +9,22 @@ import {
 } from 'sequelize'
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
-import { allPermissions } from 'middlewares/permissions'
+import { Admin } from 'types/auth/actors'
+
+export interface UserModel {
+  id: number
+  name: string
+  email: string
+  password: string
+  deleted: boolean
+  permissions: Record<string, string>
+  createdAt?: Date
+  updatedAt?: Date
+}
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   id: number
-  name: string
+  name?: string
   email: string
   password: string
   deleted: boolean
@@ -78,10 +89,13 @@ User.beforeCreate(async (user, options) => {
   }
 })
 
-User.create({
-  password: 'admin',
-  email: 'admin@admin.com',
-  permissions: { ...allPermissions }
+User.findOrCreate({
+  where: { email: process.env.ADMIN_EMAIL },
+  defaults: {
+    password: process.env.ADMIN_PASSWORD,
+    email: process.env.ADMIN_EMAIL,
+    permissions: { ...Admin }
+  }
 })
 
 export default User

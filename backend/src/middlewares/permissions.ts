@@ -1,27 +1,6 @@
 import { NextFunction } from 'express'
+import { routesPermissionsMap } from 'types/auth/routes-permissions'
 import { Request, Response } from 'types/express'
-
-const routes = {
-  token: {
-    post: []
-  },
-  me: {
-    get: []
-  },
-  users: {
-    post: ['user_create'],
-    get: ['user_read'],
-    put: ['user_update'],
-    delete: ['user_delete']
-  }
-}
-
-export const allPermissions = {
-  user_create: 'all',
-  user_read: 'all',
-  user_update: 'all',
-  user_delete: 'all'
-}
 
 const PermissionsMiddleware = (
   req: Request,
@@ -33,7 +12,8 @@ const PermissionsMiddleware = (
   const resource = req.originalUrl.split('/')[1]
   const method = req.method.toLowerCase()
 
-  const resourcePermissions: string[] = routes[resource][method] || []
+  const resourcePermissions: string[] =
+    routesPermissionsMap[resource][method] || []
 
   const havePermission = resourcePermissions.reduce((acc, permission) => {
     if (!userPrivileges[permission]) {

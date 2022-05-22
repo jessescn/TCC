@@ -7,8 +7,10 @@ export const makeRequest = (content: any = {}) => {
 export const makeResponse = (content: any) => {
   return { ...content } as Response
 }
-export const makeStatusSpy = (sendSpy: any = jest.fn()) => {
-  return jest.fn().mockReturnValue({ send: sendSpy })
+export const makeStatusSpy = (data: any = {}) => {
+  return jest
+    .fn()
+    .mockReturnValue({ send: jest.fn(), status: jest.fn(), ...data })
 }
 
 export const mockJwtSign = (value: any) => {

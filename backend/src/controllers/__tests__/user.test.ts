@@ -1,13 +1,20 @@
-import { RemoteUser, UserController } from '../user'
-import { UserService } from 'services/user-service'
+import { UserController } from '../user'
+import { RemoteUser, UserService } from 'services/user-service'
 import {
   makeRequest,
   makeResponse,
   makeStatusSpy
-} from '../../jest/helpers/controllers'
-import { UserMock } from 'models/mocks/user-mock'
+} from '../../jest/__mocks__/controllers'
+import { UserMockBuilder } from 'models/__mocks__/user-mock'
 import { HttpStatusCode } from 'types/express'
 import { ConflictError, NotFoundError } from 'types/express/errors'
+import {
+  mockServiceCreate,
+  mockServiceUpdate,
+  mockServiceDestroy,
+  mockServiceGetAll,
+  mockServiceGetById
+} from '../../jest/__mocks__/services'
 
 describe('UserController', () => {
   const newUser: RemoteUser = {
@@ -16,42 +23,22 @@ describe('UserController', () => {
     password: 'password'
   }
 
-  const usersMock = new UserMock().generate(2)
-  const [userMock] = new UserMock().generate()
+  const usersMock = new UserMockBuilder().generate(2)
+  const [userMock] = new UserMockBuilder().generate()
 
   const sut = UserController
 
-  const mockUserCreate = (value: any) => {
-    jest.spyOn(UserService, 'create').mockResolvedValue(value)
-  }
-
-  const mockUserUpdate = (value: any) => {
-    jest.spyOn(UserService, 'update').mockResolvedValue(value)
-  }
-
-  const mockUserDestroy = (value: any) => {
-    jest.spyOn(UserService, 'destroy').mockResolvedValue(value)
-  }
-
-  const mockUserGetAll = (value: any) => {
-    jest.spyOn(UserService, 'getAll').mockResolvedValue(value)
-  }
-
-  const mockUserGetById = (value: any) => {
-    jest.spyOn(UserService, 'getById').mockResolvedValue(value)
-  }
-
   test('create: deve criar um novo usuário e retorná-lo com status 201 (created)', async () => {
-    const jsonSpy = jest.fn()
+    const statusSpy = makeStatusSpy()
 
     const request = makeRequest({ body: newUser })
-    const response = makeResponse({ json: jsonSpy })
+    const response = makeResponse({ status: statusSpy })
 
-    mockUserCreate(userMock)
+    mockServiceCreate(UserService, userMock)
 
     await sut.create(request, response)
 
-    expect(jsonSpy).toHaveBeenCalledWith(userMock)
+    expect(statusSpy).toHaveBeenCalledWith(HttpStatusCode.created)
   })
 
   const testCreateWithWrongData = async (data: any) => {
@@ -93,9 +80,7 @@ describe('UserController', () => {
   })
 
   test('create: deve retornar status e mensagem do erro caso ele seja um RequestError', async () => {
-    jest.spyOn(UserService, 'create').mockImplementation(() => {
-      throw new ConflictError('user already exists')
-    })
+    mockServiceCreate(UserService, Promise.reject(new ConflictError()))
 
     const statusSpy = makeStatusSpy()
 
@@ -112,7 +97,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: {} })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserGetAll(usersMock)
+    mockServiceGetAll(UserService, usersMock)
 
     await sut.read(request, response)
 
@@ -120,9 +105,7 @@ describe('UserController', () => {
   })
 
   test('read: deve retornar status 500 caso seja lançado um erro', async () => {
-    jest.spyOn(UserService, 'getAll').mockImplementation(() => {
-      throw new Error()
-    })
+    mockServiceGetAll(UserService, Promise.reject(new Error()))
 
     const statusSpy = makeStatusSpy()
     const request = makeRequest({ params: { id: 1 } })
@@ -138,7 +121,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: { id: 1 } })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserGetById(userMock)
+    mockServiceGetById(UserService, userMock)
 
     await sut.readById(request, response)
 
@@ -146,9 +129,7 @@ describe('UserController', () => {
   })
 
   test('readById: deve retornar status 404 (not found) caso o usuário não exista', async () => {
-    jest.spyOn(UserService, 'getById').mockImplementation(() => {
-      throw new NotFoundError('user not found')
-    })
+    mockServiceGetById(UserService, Promise.reject(new NotFoundError()))
 
     const statusSpy = makeStatusSpy()
     const request = makeRequest({ params: { id: 1 } })
@@ -175,7 +156,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: { id: 1 }, body: userModifiedMock })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserUpdate(userModifiedMock)
+    mockServiceUpdate(UserService, userModifiedMock)
 
     await sut.update(request, response)
 
@@ -183,9 +164,7 @@ describe('UserController', () => {
   })
 
   test('update: deve retornar status 404 (not found) caso o usuário não seja encontrado', async () => {
-    jest.spyOn(UserService, 'update').mockImplementation(() => {
-      throw new NotFoundError('user not found')
-    })
+    mockServiceUpdate(UserService, Promise.reject(new NotFoundError()))
 
     const statusSpy = makeStatusSpy()
     const request = makeRequest({ params: { id: 1 }, body: {} })
@@ -211,7 +190,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: { id: 1 } })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserDestroy(userMock)
+    mockServiceDestroy(UserService, userMock)
 
     await sut.delete(request, response)
 
@@ -219,9 +198,7 @@ describe('UserController', () => {
   })
 
   test('delete: deve retornar status 404 (not found) caso o usuário não exista', async () => {
-    jest.spyOn(UserService, 'destroy').mockImplementation(() => {
-      throw new NotFoundError('user not found')
-    })
+    mockServiceDestroy(UserService, Promise.reject(new NotFoundError()))
 
     const statusSpy = makeStatusSpy()
 

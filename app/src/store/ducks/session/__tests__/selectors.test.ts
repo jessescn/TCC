@@ -1,11 +1,11 @@
-import { UserMockBuilder } from 'domain/__mocks__/user-mock'
+import { UserMockBuilderBuilder } from 'domain/__mocks__/user-mock'
 import { SessionStateMockBuilder } from 'store/__mocks__/session-state-mock'
 import { StateMockBuilder } from 'store/__mocks__/state-mock-builder'
 import { getAuthStatus, getCurrentUser } from '../selectors'
 import { initialState } from '../slice'
 
 describe('Testes dos seletores de session', () => {
-  const currentUser = new UserMockBuilder().build()
+  const currentUser = new UserMockBuilderBuilder().build()
 
   const sessionState = new SessionStateMockBuilder()
     .withCurrentUser(currentUser)

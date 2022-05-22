@@ -1,4 +1,4 @@
-import { UserMock } from 'models/mocks/user-mock'
+import { UserMockBuilder } from 'models/__mocks__/user-mock'
 import User from 'models/user'
 import { HttpStatusCode } from 'types/express'
 import { AuthController } from '../auth'
@@ -7,7 +7,7 @@ import {
   makeResponse,
   makeStatusSpy,
   mockJwtSign
-} from '../../jest/helpers/controllers'
+} from '../../jest/__mocks__/controllers'
 
 describe('AuthController', () => {
   const sut = AuthController
@@ -23,7 +23,7 @@ describe('AuthController', () => {
   })
 
   test('me: retorna as credenciais do usuário presentes no token', async () => {
-    const user = new UserMock().build()
+    const user = new UserMockBuilder().build()
 
     const responseSpy = jest.fn()
 

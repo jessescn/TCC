@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
-import { UserModel } from '../user'
+import { UserModel } from 'models/user'
 
 export interface Request extends ExpressRequest {
   permissions?: Record<any, any>

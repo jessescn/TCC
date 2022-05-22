@@ -1,11 +1,10 @@
-import { HttpStatusCode, Request, Response } from 'types/express'
-
+import { errorResponseHandler } from 'controllers'
 import jwt from 'jsonwebtoken'
 import { UserService } from 'services/user-service'
+import { Request, Response } from 'types/express'
 import {
   BadRequestError,
   NotFoundError,
-  RequestError,
   UnauthorizedError
 } from 'types/express/errors'
 
@@ -14,34 +13,25 @@ type Credentials = {
   password: string
 }
 
-export const errorResponseHandler = (res: Response, error: any) => {
-  if (error instanceof RequestError) {
-    res.status(error.status).send(error.message)
-    return
-  }
-
-  res.status(HttpStatusCode.serverError).send()
-}
-
 export const AuthController = {
   token: async (req: Request, res: Response) => {
     try {
       const data: Credentials = req.body
 
       if (!data.email || !data.password) {
-        throw new BadRequestError('invalid data')
+        throw new BadRequestError()
       }
 
       const user = await UserService.getByEmail(data.email)
 
       if (!user) {
-        throw new NotFoundError('user not found')
+        throw new NotFoundError()
       }
 
       const isPasswordValid = await user.validPassword(data.password)
 
       if (!isPasswordValid) {
-        throw new UnauthorizedError('invalid password')
+        throw new UnauthorizedError()
       }
 
       const token = jwt.sign({ data: user }, process.env.JWT_SECRET_KEY)

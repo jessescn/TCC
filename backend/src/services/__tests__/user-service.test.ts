@@ -5,12 +5,12 @@ import {
   mockFindAll,
   mockFindByPk,
   mockFindOne
-} from 'services/__mocks__/models.mock'
-import { UserMock } from 'models/mocks/user-mock'
+} from 'services/__mocks__/models-mock'
+import { UserMockBuilder } from 'models/__mocks__/user-mock'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 
 describe('Serviço de usuário', () => {
-  const users = new UserMock().generate(3)
+  const users = new UserMockBuilder().generate(3)
   const sut = UserService
   const newUserData: RemoteUser = {
     email: 'teste@teste.com',
@@ -79,16 +79,13 @@ describe('Serviço de usuário', () => {
   })
 
   test('update: deve atualizar e retornar o usuário com as novas informações', async () => {
-    const setSpy = jest.fn()
-    const saveSpy = jest.fn()
-
-    const userWithSpies = { ...users[0], set: setSpy, save: saveSpy }
+    const userWithSpies = { ...users[0], set: jest.fn(), save: jest.fn() }
     mockFindByPk(User, userWithSpies)
 
     await sut.update(users[0].id, { name: 'teste2' })
 
-    expect(setSpy).toHaveBeenCalledWith({ name: 'teste2' })
-    expect(saveSpy).toBeCalled()
+    expect(userWithSpies.set).toHaveBeenCalledWith({ name: 'teste2' })
+    expect(userWithSpies.save).toBeCalled()
   })
 
   test('update: deve lançar erro NotFoundError caso o usuário não exista', async () => {
@@ -102,15 +99,14 @@ describe('Serviço de usuário', () => {
   })
 
   test('destroy: deve remover um usuário pelo id', async () => {
-    const destroySpy = jest.fn()
-    const userWithSpy = { ...users[0], destroy: destroySpy }
+    const userWithSpy = { ...users[0], destroy: jest.fn() }
 
     mockFindByPk(User, userWithSpy)
 
     const result = await sut.destroy(users[0].id)
 
     expect(result).toEqual(userWithSpy)
-    expect(destroySpy).toBeCalled()
+    expect(userWithSpy.destroy).toBeCalled()
   })
 
   test('destroy: deve lançar um erro NotFoundError caso o usuário não exista', async () => {

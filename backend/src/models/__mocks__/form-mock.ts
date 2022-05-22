@@ -1,20 +1,20 @@
-import { UserModel } from 'domain/models/user'
+import { FormField, FormModel } from 'models/form'
 import { faker } from '@faker-js/faker'
 
-export class UserMockBuilderBuilder {
-  private email = faker.internet.email()
+export class FormMockBuilder {
   private id = faker.datatype.number()
   private name = faker.word.noun()
+  private fields: FormField[] = []
 
   fill() {
-    this.email = faker.internet.email()
     this.id = faker.datatype.number()
     this.name = faker.word.noun()
+
     return this
   }
 
-  generate(quantity = 2) {
-    const result: UserModel[] = []
+  generate(quantity = 1) {
+    const result: FormModel[] = []
 
     for (let i = 0; i < quantity; i++) {
       result.push(this.fill().build())
@@ -23,11 +23,11 @@ export class UserMockBuilderBuilder {
     return result
   }
 
-  build(): UserModel {
+  build(): FormModel {
     return {
-      email: this.email,
       id: this.id,
-      name: this.name
+      name: this.name,
+      fields: this.fields
     }
   }
 }
