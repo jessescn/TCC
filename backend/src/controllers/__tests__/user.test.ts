@@ -1,10 +1,10 @@
 import { RemoteUser, UserController } from '../user'
-import User from 'models/user'
+import { UserService } from 'services/user-service'
 import {
   makeRequest,
   makeResponse,
   makeStatusSpy
-} from 'jest/helpers/controllers'
+} from '../../jest/helpers/controllers'
 import { UserMock } from 'models/mocks/user-mock'
 import { HttpStatusCode } from 'types/express'
 
@@ -20,20 +20,28 @@ describe('UserController', () => {
 
   const sut = UserController
 
-  const mockUserFindOne = (value: any) => {
-    jest.spyOn(User, 'findOne').mockResolvedValue(value)
+  const mockUserGetByEmail = (value: any) => {
+    jest.spyOn(UserService, 'getByEmail').mockResolvedValue(value)
   }
 
   const mockUserCreate = (value: any) => {
-    jest.spyOn(User, 'create').mockResolvedValue(value)
+    jest.spyOn(UserService, 'create').mockResolvedValue(value)
   }
 
-  const mockUserFindAll = (value: any) => {
-    jest.spyOn(User, 'findAll').mockResolvedValue(value)
+  const mockUserUpdate = (value: any) => {
+    jest.spyOn(UserService, 'update').mockResolvedValue(value)
   }
 
-  const mockUserFindByPk = (value: any) => {
-    jest.spyOn(User, 'findByPk').mockResolvedValue(value)
+  const mockUserDestroy = (value: any) => {
+    jest.spyOn(UserService, 'destroy').mockResolvedValue(value)
+  }
+
+  const mockUserGetAll = (value: any) => {
+    jest.spyOn(UserService, 'getAll').mockResolvedValue(value)
+  }
+
+  const mockUserGetById = (value: any) => {
+    jest.spyOn(UserService, 'getById').mockResolvedValue(value)
   }
 
   test('create: deve criar um novo usuário e retorná-lo com status 201 (created)', async () => {
@@ -42,7 +50,7 @@ describe('UserController', () => {
     const request = makeRequest({ body: newUser })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserFindOne(null) // email not used yet
+    mockUserGetByEmail(null) // email not used yet
     mockUserCreate(userMock)
 
     await sut.create(request, response)
@@ -57,7 +65,7 @@ describe('UserController', () => {
     const request = makeRequest({ body: newUser })
     const response = makeResponse({ status: statusSpy })
 
-    mockUserFindOne(userMock) // email already exists
+    mockUserGetByEmail(userMock) // email already exists
 
     await sut.create(request, response)
 
@@ -108,7 +116,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: {} })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserFindAll(usersMock)
+    mockUserGetAll(usersMock)
 
     await sut.read(request, response)
 
@@ -120,7 +128,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: { id: 1 } })
     const response = makeResponse({ json: jsonSpy })
 
-    mockUserFindByPk(userMock)
+    mockUserGetById(userMock)
 
     await sut.read(request, response)
 
@@ -132,14 +140,14 @@ describe('UserController', () => {
     const request = makeRequest({ params: { id: 1 } })
     const response = makeResponse({ status: statusSpy })
 
-    mockUserFindByPk(null)
+    mockUserGetById(null)
 
     await sut.read(request, response)
 
     expect(statusSpy).toHaveBeenCalledWith(HttpStatusCode.notFound)
   })
 
-  test('read: deve retorar status 500 (server error) caso seja lançada uma exceção', async () => {
+  test('read: deve retornar status 500 (server error) caso seja lançada uma exceção', async () => {
     const statusSpy = makeStatusSpy()
     const request = makeRequest({}) // should throw exception because params was not defined
     const response = makeResponse({ status: statusSpy })
@@ -150,24 +158,24 @@ describe('UserController', () => {
   })
 
   test('update: deve atualizar um usuário pelo id', async () => {
-    const setSpy = jest.fn()
+    const jsonSpy = jest.fn()
     const userModifiedMock = { ...userMock, name: 'teste' }
     const request = makeRequest({ params: { id: 1 }, body: userModifiedMock })
-    const response = makeResponse({ json: jest.fn() })
+    const response = makeResponse({ json: jsonSpy })
 
-    mockUserFindByPk({ ...userMock, set: setSpy, save: jest.fn() })
+    mockUserUpdate(userModifiedMock)
 
     await sut.update(request, response)
 
-    expect(setSpy).toHaveBeenCalledWith(userModifiedMock)
+    expect(jsonSpy).toHaveBeenCalledWith(userModifiedMock)
   })
 
   test('update: deve retornar status 404 (not found) caso o usuário não seja encontrado', async () => {
     const statusSpy = makeStatusSpy()
-    const request = makeRequest({ params: { id: 1 } })
+    const request = makeRequest({ params: { id: 1 }, body: {} })
     const response = makeResponse({ status: statusSpy })
 
-    mockUserFindByPk(null)
+    mockUserUpdate(null)
 
     await sut.update(request, response)
 
@@ -176,10 +184,8 @@ describe('UserController', () => {
 
   test('update: deve retornar status 400 (bad request) não seja passado alterações', async () => {
     const statusSpy = makeStatusSpy()
-    const request = makeRequest({ params: { id: 1 } })
+    const request = makeRequest({ params: { id: 1 }, body: null })
     const response = makeResponse({ status: statusSpy })
-
-    mockUserFindByPk(userMock)
 
     await sut.update(request, response)
 
@@ -198,17 +204,14 @@ describe('UserController', () => {
 
   test('delete: deve remover um usuário', async () => {
     const jsonSpy = jest.fn()
-    const destroySpy = jest.fn()
     const request = makeRequest({ params: { id: 1 } })
     const response = makeResponse({ json: jsonSpy })
-    const userWithDestroy = { ...userMock, destroy: destroySpy }
 
-    mockUserFindByPk(userWithDestroy)
+    mockUserDestroy(userMock)
 
     await sut.delete(request, response)
 
-    expect(destroySpy).toHaveBeenCalled()
-    expect(jsonSpy).toHaveBeenCalledWith(userWithDestroy)
+    expect(jsonSpy).toHaveBeenCalledWith(userMock)
   })
 
   test('delete: deve retornar status 404 (not found) caso o usuário não exista', async () => {
@@ -217,7 +220,7 @@ describe('UserController', () => {
     const request = makeRequest({ params: { id: 1 } })
     const response = makeResponse({ status: statusSpy })
 
-    mockUserFindByPk(null)
+    mockUserDestroy(null)
 
     await sut.delete(request, response)
 

@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_PATH=src nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "NODE_PATH=src jest",
+    "test:watch": "NODE_PATH=src jest --watch --coverage",
     "lint": "eslint --ext .js,.ts .",
-    "coverage": "jest --coverage"
+    "coverage": "NODE_PATH=src jest --coverage"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",

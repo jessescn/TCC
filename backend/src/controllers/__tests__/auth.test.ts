@@ -7,7 +7,7 @@ import {
   makeResponse,
   makeStatusSpy,
   mockJwtSign
-} from 'jest/helpers/controllers'
+} from '../../jest/helpers/controllers'
 
 describe('AuthController', () => {
   const sut = AuthController
