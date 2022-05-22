@@ -1,4 +1,4 @@
-import { Request, Response } from '../types/express'
+import { Request, Response } from 'types/express'
 
 export interface CrudController {
   create: (req: Request, res: Response) => Promise<void>

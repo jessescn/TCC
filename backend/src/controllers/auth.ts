@@ -1,7 +1,7 @@
-import { HttpStatusCode, Request, Response } from '../types/express'
+import { HttpStatusCode, Request, Response } from 'types/express'
 
-import User from '../models/user'
 import jwt from 'jsonwebtoken'
+import { UserService } from 'services/user-service'
 
 type Credentials = {
   email: string
@@ -18,7 +18,7 @@ export const AuthController = {
         return
       }
 
-      const user = await User.findOne({ where: { email: data.email } })
+      const user = await UserService.getByEmail(data.email)
 
       if (!user) {
         res.status(HttpStatusCode.notFound).send()
@@ -36,6 +36,8 @@ export const AuthController = {
 
       res.json({ token, expiresIn: process.env.JWT_TOKEN_EXPIRATION })
     } catch (error) {
+      console.log(error)
+
       res.status(HttpStatusCode.serverError).send(error)
     }
   },

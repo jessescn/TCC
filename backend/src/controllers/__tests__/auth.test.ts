@@ -1,13 +1,13 @@
-import { UserMock } from '../../models/mocks/user-mock'
-import User from '../../models/user'
-import { HttpStatusCode } from '../../types/express'
+import { UserMock } from 'models/mocks/user-mock'
+import User from 'models/user'
+import { HttpStatusCode } from 'types/express'
 import { AuthController } from '../auth'
 import {
   makeRequest,
   makeResponse,
   makeStatusSpy,
   mockJwtSign
-} from '../../jest/helpers/controllers'
+} from 'jest/helpers/controllers'
 
 describe('AuthController', () => {
   const sut = AuthController

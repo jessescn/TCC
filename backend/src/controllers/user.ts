@@ -1,6 +1,7 @@
-import { Request, Response, HttpStatusCode } from '../types/express'
-import User from '../models/user'
+import { Request, Response, HttpStatusCode } from 'types/express'
 import { CrudController } from './crud'
+import { UserModel } from 'types/user'
+import { UserService } from 'services/user-service'
 
 export type RemoteUser = {
   name: string
@@ -18,16 +19,14 @@ export const UserController: CrudController = {
         return
       }
 
-      const emailAlreadyUsed = await User.findOne({
-        where: { email: data.email }
-      })
+      const emailAlreadyUsed = await UserService.getByEmail(data.email)
 
       if (emailAlreadyUsed) {
         res.status(HttpStatusCode.badRequest).send('email already used')
         return
       }
 
-      const user = await User.create(data)
+      const user = await UserService.create(data)
 
       res.json(user)
     } catch (error) {
@@ -40,13 +39,13 @@ export const UserController: CrudController = {
       const { id } = req.params
 
       if (!id) {
-        const users = await User.findAll()
+        const users = await UserService.getAll()
 
         res.json(users)
         return
       }
 
-      const user = await User.findByPk(id)
+      const user = await UserService.getById(Number(id))
 
       if (!user) {
         res.status(HttpStatusCode.notFound).send()
@@ -62,29 +61,21 @@ export const UserController: CrudController = {
   update: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
-      const data: User = req.body
-
-      const userExists = await User.findByPk(id)
-
-      if (!userExists) {
-        res.status(HttpStatusCode.notFound).send()
-        return
-      }
+      const data: UserModel = req.body
 
       if (!data) {
         res.status(HttpStatusCode.badRequest).send()
         return
       }
 
-      delete data.password // should not change password from here
+      const updatedUser = await UserService.update(Number(id), data)
 
-      userExists.set({
-        ...data
-      })
+      if (!updatedUser) {
+        res.status(HttpStatusCode.notFound).send()
+        return
+      }
 
-      await userExists.save()
-
-      res.json(userExists)
+      res.json(updatedUser)
     } catch (error) {
       res.status(HttpStatusCode.serverError).send()
     }
@@ -94,16 +85,14 @@ export const UserController: CrudController = {
     try {
       const { id } = req.params
 
-      const user = await User.findByPk(id)
+      const userDestroyed = await UserService.destroy(Number(id))
 
-      if (!user) {
+      if (!userDestroyed) {
         res.status(HttpStatusCode.notFound).send()
         return
       }
 
-      user.destroy()
-
-      res.json(user)
+      res.json(userDestroyed)
     } catch (error) {
       res.status(HttpStatusCode.serverError).send()
     }

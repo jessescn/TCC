@@ -7,7 +7,7 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { sequelize } from '../database'
+import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -55,8 +55,18 @@ User.init(
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   },
-  { tableName: 'users', sequelize }
+  {
+    tableName: 'users',
+    sequelize
+  }
 )
+
+User.prototype.toJSON = function () {
+  const values = Object.assign({}, this.get())
+
+  delete values.password
+  return values
+}
 
 User.beforeCreate(async (user, options) => {
   try {

@@ -1,5 +1,5 @@
 import { NextFunction } from 'express'
-import { Request, Response } from '../types/express'
+import { Request, Response } from 'types/express'
 
 const routes = {
   token: {

@@ -5,7 +5,7 @@
     "**/*.test.ts"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "src",
     "target": "es2017",
     "types": [
       "node",

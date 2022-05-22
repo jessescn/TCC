@@ -1,4 +1,4 @@
-import { Request, Response } from '../../types/express'
+import { Request, Response } from 'types/express'
 import jwt from 'jsonwebtoken'
 
 export const makeRequest = (content: any = {}) => {

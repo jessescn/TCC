@@ -1,4 +1,4 @@
-import { Response } from '../../types/express'
+import { Response } from 'types/express'
 
 export const responseMock = {
   json: jest.fn().mockResolvedValue((value: any) => value),

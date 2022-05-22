@@ -1,12 +1,12 @@
 import { RemoteUser, UserController } from '../user'
-import User from '../../models/user'
+import User from 'models/user'
 import {
   makeRequest,
   makeResponse,
   makeStatusSpy
-} from '../../jest/helpers/controllers'
-import { UserMock } from '../../models/mocks/user-mock'
-import { HttpStatusCode } from '../../types/express'
+} from 'jest/helpers/controllers'
+import { UserMock } from 'models/mocks/user-mock'
+import { HttpStatusCode } from 'types/express'
 
 describe('UserController', () => {
   const newUser: RemoteUser = {

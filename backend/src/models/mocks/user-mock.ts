@@ -1,4 +1,4 @@
-import { UserModel } from 'src/types/user'
+import { UserModel } from 'types/user'
 
 import { faker } from '@faker-js/faker'
 
