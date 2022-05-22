@@ -16,6 +16,13 @@ const routes = {
   }
 }
 
+export const allPermissions = {
+  user_create: 'all',
+  user_read: 'all',
+  user_update: 'all',
+  user_delete: 'all'
+}
+
 const PermissionsMiddleware = (
   req: Request,
   res: Response,

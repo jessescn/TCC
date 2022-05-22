@@ -12,7 +12,7 @@ import { actions } from './slice'
 
 export const sagas = [takeLatest(actions.login.type, authUser)]
 
-function* authUser(action: PayloadAction<Credentials>) {
+export function* authUser(action: PayloadAction<Credentials>) {
   try {
     const response: AxiosResponse<CredentialsResponse> = yield call(() =>
       AuthService.token(action.payload)

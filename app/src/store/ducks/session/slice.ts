@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from '../../../domain/models/user'
 import { Credentials } from '../../../services/auth'
 
-type LoginStatus = 'pristine' | 'loading' | 'success' | 'failure'
+export type LoginStatus = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
   currentUser: UserModel | null

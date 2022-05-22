@@ -9,6 +9,7 @@ import {
 } from 'sequelize'
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
+import { allPermissions } from 'middlewares/permissions'
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   id: number
@@ -75,6 +76,12 @@ User.beforeCreate(async (user, options) => {
   } catch (error) {
     throw new Error(error)
   }
+})
+
+User.create({
+  password: 'admin',
+  email: 'admin@admin.com',
+  permissions: { ...allPermissions }
 })
 
 export default User
