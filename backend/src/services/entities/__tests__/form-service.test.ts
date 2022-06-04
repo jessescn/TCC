@@ -1,11 +1,7 @@
 import Form from 'models/form'
 import { FormMockBuilder } from 'models/__mocks__/form-mock'
-import { FormService, RemoteForm } from 'services/form-service'
-import {
-  mockCreate,
-  mockFindAll,
-  mockFindByPk
-} from 'services/__mocks__/models-mock'
+import { FormService, RemoteForm } from '../form-service'
+import { mockCreate, mockFindAll, mockFindByPk } from '../__mocks__/models-mock'
 import { NotFoundError } from 'types/express/errors'
 
 describe('Serviço de formulário', () => {

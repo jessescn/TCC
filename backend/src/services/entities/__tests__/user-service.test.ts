@@ -1,11 +1,11 @@
-import { RemoteUser, UserService } from 'services/user-service'
+import { RemoteUser, UserService } from '../user-service'
 import User from 'models/user'
 import {
   mockCreate,
   mockFindAll,
   mockFindByPk,
   mockFindOne
-} from 'services/__mocks__/models-mock'
+} from '../__mocks__/models-mock'
 import { UserMockBuilder } from 'models/__mocks__/user-mock'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 

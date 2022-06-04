@@ -1,6 +1,6 @@
 import { CrudController, errorResponseHandler } from 'controllers'
 import { FormField } from 'models/form'
-import { FormService } from 'services/form-service'
+import { FormService } from 'services/entities/form-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'

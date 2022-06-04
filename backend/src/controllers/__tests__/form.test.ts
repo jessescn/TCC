@@ -11,7 +11,7 @@ import {
   mockServiceUpdate
 } from '../../jest/__mocks__/services'
 import { FormMockBuilder } from 'models/__mocks__/form-mock'
-import { FormService, RemoteForm } from 'services/form-service'
+import { FormService, RemoteForm } from 'services/entities/form-service'
 import { HttpStatusCode } from 'types/express'
 import { FormController } from '../form'
 

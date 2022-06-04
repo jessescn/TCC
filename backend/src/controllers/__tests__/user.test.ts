@@ -1,5 +1,5 @@
 import { UserController } from '../user'
-import { RemoteUser, UserService } from 'services/user-service'
+import { RemoteUser, UserService } from 'services/entities/user-service'
 import {
   makeRequest,
   makeResponse,

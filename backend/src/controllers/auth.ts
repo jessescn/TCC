@@ -1,6 +1,6 @@
 import { errorResponseHandler } from 'controllers'
 import jwt from 'jsonwebtoken'
-import { UserService } from 'services/user-service'
+import { UserService } from 'services/entities/user-service'
 import { Request, Response } from 'types/express'
 import {
   BadRequestError,

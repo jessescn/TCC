@@ -1,6 +1,6 @@
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { CrudController, errorResponseHandler } from 'controllers'
-import { RemoteUser, UserService } from 'services/user-service'
+import { RemoteUser, UserService } from 'services/entities/user-service'
 import { BadRequestError } from 'types/express/errors'
 
 export const UserController: CrudController = {
