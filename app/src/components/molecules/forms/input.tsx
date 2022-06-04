@@ -27,7 +27,13 @@ type Props = InputProps & {
 const FormInput = ({ label, errors = [], register, ...inputProps }: Props) => {
   return (
     <FormControl label={label.text} {...label.props}>
-      <Input {...register} {...inputProps} />
+      <Input
+        color="initial.black"
+        borderColor="secondary.dark"
+        _placeholder={{ color: 'secondary.dark' }}
+        {...register}
+        {...inputProps}
+      />
       {errors.map(error => {
         return !error.condition ? null : (
           <Text

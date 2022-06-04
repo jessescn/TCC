@@ -6,6 +6,7 @@ const colors = {
     dark: '#31498F'
   },
   secondary: {
+    light: '#F7F7F7',
     default: '#EFEFEF',
     dark: '#BCBCBC'
   },

@@ -10,7 +10,6 @@ import {
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
 import { Admin } from 'types/auth/actors'
-
 export interface UserModel {
   id: number
   name: string
@@ -69,6 +68,7 @@ User.init(
   },
   {
     tableName: 'users',
+    freezeTableName: true,
     sequelize
   }
 )

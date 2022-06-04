@@ -5,6 +5,7 @@ export class FormMockBuilder {
   private id = faker.datatype.number()
   private name = faker.word.noun()
   private fields: FormField[] = []
+  private status = 'inativo'
 
   fill() {
     this.id = faker.datatype.number()
@@ -27,7 +28,8 @@ export class FormMockBuilder {
     return {
       id: this.id,
       name: this.name,
-      fields: this.fields
+      fields: this.fields,
+      status: this.status
     }
   }
 }

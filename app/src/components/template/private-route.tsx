@@ -1,3 +1,4 @@
+import Header from 'components/organisms/header'
 import { Navigate, useLocation } from 'react-router-dom'
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
@@ -9,7 +10,12 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  return children
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  )
 }
 
 export default PrivateRoute

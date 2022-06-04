@@ -129,7 +129,7 @@ export default function Register() {
   ]
 
   return (
-    <Screen>
+    <Screen noHeader>
       <Flex
         w="100%"
         maxW="800px"

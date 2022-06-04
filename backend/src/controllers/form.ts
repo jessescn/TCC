@@ -19,7 +19,7 @@ export const FormController: CrudController = {
         throw new BadRequestError()
       }
 
-      const form = await FormService.create(data)
+      const form = await FormService.create({ ...data, status: 'inativo' })
 
       res.status(HttpStatusCode.created).json(form)
     } catch (error) {

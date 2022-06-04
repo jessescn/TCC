@@ -4,6 +4,9 @@
     "**/*.spec.ts",
     "**/*.test.ts"
   ],
+  "exclude": [
+    ".sequelizerc"
+  ],
   "compilerOptions": {
     "baseUrl": "src",
     "target": "es2017",

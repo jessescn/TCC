@@ -27,7 +27,7 @@ export default function Login() {
 
   useEffect(() => {
     if (status === 'success') {
-      navigate('/home')
+      navigate('/')
     }
   }, [status])
 
@@ -36,7 +36,7 @@ export default function Login() {
   }
 
   return (
-    <Screen>
+    <Screen noHeader>
       <Flex
         w="100%"
         maxW="800px"

@@ -47,13 +47,13 @@ describe('Página Login', () => {
     })
   })
 
-  test('deve redirecionar para /home caso o loginStatus seja success', async () => {
+  test('deve redirecionar para / caso o loginStatus seja success', async () => {
     jest.spyOn(store, 'useSelector').mockReturnValue('success')
 
     customRender()
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/home')
+      expect(mockNavigate).toHaveBeenCalledWith('/')
     })
   })
 

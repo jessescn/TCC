@@ -5,6 +5,7 @@ import AuthRedirect from './components/template/auth-redirect'
 import Login from './pages/login'
 import Register from './pages/register'
 import Home from './pages/home'
+import Forms from 'pages/forms'
 
 function App() {
   return (
@@ -26,10 +27,18 @@ function App() {
         }
       />
       <Route
-        path="/home"
+        path="/"
         element={
           <PrivateRoute>
             <Home />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/formularios"
+        element={
+          <PrivateRoute>
+            <Forms />
           </PrivateRoute>
         }
       />

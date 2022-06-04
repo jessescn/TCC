@@ -19,6 +19,7 @@ export type FormField = {
 export interface FormModel {
   id: number
   name: string
+  status: string // 'ativo' | 'inativo'
   fields: FormField[]
   createdAt?: Date
   updatedAt?: Date
@@ -27,6 +28,7 @@ export interface FormModel {
 class Form extends Model<InferAttributes<Form>, InferCreationAttributes<Form>> {
   id: number
   name: string
+  status: string
   fields: FormField[]
   createdAt: Date
   updatedAt: Date
@@ -43,6 +45,10 @@ Form.init(
       type: DataTypes.STRING,
       allowNull: false
     },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     fields: {
       type: DataTypes.ARRAY(DataTypes.JSON),
       allowNull: false
@@ -50,7 +56,15 @@ Form.init(
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   },
-  { sequelize, tableName: 'forms' }
+  { sequelize, tableName: 'forms', freezeTableName: true }
 )
+
+// Form.belongsTo(User)
+// User.hasMany(Form, {
+//   foreignKey: {
+//     name: 'user',
+//     allowNull: false
+//   }
+// })
 
 export default Form
