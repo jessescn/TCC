@@ -6,5 +6,9 @@ export const Admin = {
   form_create: 'all',
   form_read: 'all',
   form_update: 'all',
-  form_delete: 'all'
+  form_delete: 'all',
+  process_create: 'all',
+  process_read: 'all',
+  process_update: 'all',
+  process_delete: 'all'
 }

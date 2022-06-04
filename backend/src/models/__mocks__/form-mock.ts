@@ -1,15 +1,15 @@
-import { FormField, FormModel } from 'models/form'
+import { FormField, FormModel, FormularioStatus } from 'models/formulario'
 import { faker } from '@faker-js/faker'
 
-export class FormMockBuilder {
+export class FormularioMockBuilder {
   private id = faker.datatype.number()
-  private name = faker.word.noun()
-  private fields: FormField[] = []
-  private status = 'inativo'
+  private nome = faker.word.noun()
+  private campos: FormField[] = []
+  private status: FormularioStatus = 'inativo'
 
   fill() {
     this.id = faker.datatype.number()
-    this.name = faker.word.noun()
+    this.nome = faker.word.noun()
 
     return this
   }
@@ -27,8 +27,8 @@ export class FormMockBuilder {
   build(): FormModel {
     return {
       id: this.id,
-      name: this.name,
-      fields: this.fields,
+      nome: this.nome,
+      campos: this.campos,
       status: this.status
     }
   }

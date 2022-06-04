@@ -20,7 +20,7 @@ export const getFormsBySearch = createSelector([getRoot], state => {
       let includes = false
 
       terms.forEach(term => {
-        if (form.name.includes(term)) {
+        if (form.nome.includes(term)) {
           includes = true
         }
       })

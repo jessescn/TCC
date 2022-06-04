@@ -1,15 +1,15 @@
-import Form, { FormField } from 'models/form'
+import Formulario, { FormField } from 'models/formulario'
 import { NotFoundError } from 'types/express/errors'
 import { BaseService } from './base-service'
 
-export type RemoteForm = {
-  name: string
-  fields: FormField[]
+export type RemoteFormulario = {
+  nome: string
+  campos: FormField[]
 }
 
-export const FormService: BaseService<Form> = {
+export const FormService: BaseService<Formulario> = {
   getById: async function (id: number) {
-    const form = await Form.findByPk(id)
+    const form = await Formulario.findByPk(id)
 
     if (!form) {
       throw new NotFoundError()
@@ -18,15 +18,15 @@ export const FormService: BaseService<Form> = {
     return form
   },
   getAll: async function () {
-    const forms = await Form.findAll()
+    const forms = await Formulario.findAll()
     return forms
   },
-  create: async function (data: RemoteForm) {
-    const newForm = await Form.create(data)
+  create: async function (data: RemoteFormulario) {
+    const newForm = await Formulario.create(data)
     return newForm
   },
   update: async function (id: number, data: any) {
-    const form = await Form.findByPk(id)
+    const form = await Formulario.findByPk(id)
 
     if (!form) {
       throw new NotFoundError()
@@ -39,7 +39,7 @@ export const FormService: BaseService<Form> = {
     return form
   },
   destroy: async function (id: number) {
-    const form = await Form.findByPk(id)
+    const form = await Formulario.findByPk(id)
 
     if (!form) {
       throw new NotFoundError()

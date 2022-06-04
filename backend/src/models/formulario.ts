@@ -16,32 +16,37 @@ export type FormField = {
   type: string
 }
 
+export type FormularioStatus = 'ativo' | 'inativo' | 'rascunho'
+
 export interface FormModel {
   id: number
-  name: string
-  status: string // 'ativo' | 'inativo'
-  fields: FormField[]
+  nome: string
+  status: FormularioStatus // 'ativo' | 'inativo'
+  campos: FormField[]
   createdAt?: Date
   updatedAt?: Date
 }
 
-class Form extends Model<InferAttributes<Form>, InferCreationAttributes<Form>> {
+class Formulario extends Model<
+  InferAttributes<Formulario>,
+  InferCreationAttributes<Formulario>
+> {
   id: number
-  name: string
+  nome: string
   status: string
-  fields: FormField[]
+  campos: FormField[]
   createdAt: Date
   updatedAt: Date
 }
 
-Form.init(
+Formulario.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    name: {
+    nome: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -49,14 +54,14 @@ Form.init(
       type: DataTypes.STRING,
       allowNull: false
     },
-    fields: {
+    campos: {
       type: DataTypes.ARRAY(DataTypes.JSON),
       allowNull: false
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   },
-  { sequelize, tableName: 'forms', freezeTableName: true }
+  { sequelize, tableName: 'formularios', freezeTableName: true }
 )
 
 // Form.belongsTo(User)
@@ -67,4 +72,4 @@ Form.init(
 //   }
 // })
 
-export default Form
+export default Formulario

@@ -10,14 +10,14 @@ import {
   mockServiceGetById,
   mockServiceUpdate
 } from '../../jest/__mocks__/services'
-import { FormMockBuilder } from 'models/__mocks__/form-mock'
+import { FormularioMockBuilder } from 'models/__mocks__/form-mock'
 import { FormService, RemoteForm } from 'services/entities/form-service'
 import { HttpStatusCode } from 'types/express'
-import { FormController } from '../form'
+import { FormularioController } from '../formulario'
 
 describe('Controller de formulário', () => {
-  const formMock = new FormMockBuilder().generate()
-  const forms = new FormMockBuilder().generate(2)
+  const formMock = new FormularioMockBuilder().generate()
+  const forms = new FormularioMockBuilder().generate(2)
   const newForm: RemoteForm = {
     name: 'form 1',
     fields: [
@@ -32,7 +32,7 @@ describe('Controller de formulário', () => {
   }
 
   const baseRequest = makeRequest()
-  const sut = FormController
+  const sut = FormularioController
 
   test('create: deve criar e retornar um novo usuário', async () => {
     const jsonSpy = jest.fn()
@@ -52,16 +52,16 @@ describe('Controller de formulário', () => {
   test('create: deve lançar um BadRequestError caso algum dado não seja fornecido', async () => {
     const statusSpy = makeStatusSpy()
 
-    const requestWithoutFields = makeRequest({ body: { name: 'form' } }) // fields not provided
-    const requestWithoutName = makeRequest({ body: { fields: [] } }) // fields not provided
+    const requestWithoutCampos = makeRequest({ body: { nome: 'form' } }) // campos not provided
+    const requestWithoutNome = makeRequest({ body: { campos: [] } }) // nome not provided
 
     const response = makeResponse({ status: statusSpy })
 
-    await sut.create(requestWithoutFields, response)
+    await sut.create(requestWithoutCampos, response)
 
     expect(statusSpy).toBeCalledWith(HttpStatusCode.badRequest)
 
-    await sut.create(requestWithoutName, response)
+    await sut.create(requestWithoutNome, response)
 
     expect(statusSpy).toBeCalledWith(HttpStatusCode.badRequest)
   })
@@ -116,7 +116,7 @@ describe('Controller de formulário', () => {
   test('update: deve atualizar as informações de um formulário', async () => {
     const updateSpy = mockServiceUpdate(FormService, formMock)
 
-    const data = { name: 'form new name' }
+    const data = { nome: 'form new name' }
     const request = makeRequest({ params: { id: '1' }, body: data })
 
     const jsonSpy = jest.fn()
@@ -129,7 +129,7 @@ describe('Controller de formulário', () => {
   })
 
   test('update: deve lançar BadRequestError caso  não seja passado alteração ou o id não seja number', async () => {
-    const data = { name: 'form new name' }
+    const data = { nome: 'form new name' }
     const requestWithInvalidId = makeRequest({
       params: { id: '1dwdw' },
       body: data

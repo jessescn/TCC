@@ -10,15 +10,15 @@ export interface FormField {
 
 export interface FormModel {
   id: number
-  name: string
-  fields: FormField[]
+  nome: string
+  campos: FormField[]
   status: FormStatus
   createdAt?: string
   updatedAt?: string
 }
 
 export interface UpdateFormModel {
-  name?: string
-  fields?: FormField[]
+  nome?: string
+  campos?: FormField[]
   status?: FormStatus
 }

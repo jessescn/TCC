@@ -1,36 +1,46 @@
 import { CrudController, errorResponseHandler } from 'controllers'
-import { FormField } from 'models/form'
-import { FormService } from 'services/entities/form-service'
+import {
+  RemoteCreateProcesso,
+  ProcessoService
+} from 'services/entities/processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
 
-type RemoteForm = {
-  name: string
-  fields: FormField[]
-}
-
-export const FormController: CrudController = {
+export const ProcessoController: CrudController = {
   create: async (req: Request, res: Response) => {
     try {
-      const data: RemoteForm = req.body
+      const data: RemoteCreateProcesso = req.body
 
-      if (!data.name || !data.fields) {
-        throw new BadRequestError()
-      }
+      const mandatoryFields = [
+        'nome',
+        'data_inicio',
+        'data_fim',
+        'formulario',
+        'dados_preenchidos'
+      ]
 
-      const form = await FormService.create({ ...data, status: 'inativo' })
+      mandatoryFields.forEach(field => {
+        if (!(field in data)) {
+          throw new BadRequestError()
+        }
+      })
 
-      res.status(HttpStatusCode.created).json(form)
+      const process = await ProcessoService.create({
+        ...data,
+        usuario: req.user.id
+      })
+
+      res.status(HttpStatusCode.created).json(process)
     } catch (error) {
       errorResponseHandler(res, error)
     }
   },
   read: async (req: Request, res: Response) => {
     try {
-      const forms = await FormService.getAll()
+      const processes = await ProcessoService.getAll()
 
-      res.send(forms)
+      res.send(processes)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -43,9 +53,9 @@ export const FormController: CrudController = {
         throw new BadRequestError()
       }
 
-      const form = await FormService.getById(Number(id))
+      const process = await ProcessoService.getById(Number(id))
 
-      res.json(form)
+      res.json(process)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -59,9 +69,9 @@ export const FormController: CrudController = {
         throw new BadRequestError()
       }
 
-      const updatedForm = await FormService.update(Number(id), data)
+      const updatedProcess = await ProcessoService.update(Number(id), data)
 
-      res.json(updatedForm)
+      res.json(updatedProcess)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -74,9 +84,9 @@ export const FormController: CrudController = {
         throw new BadRequestError()
       }
 
-      const deletedForm = await FormService.destroy(Number(id))
+      const deletedProcess = await ProcessoService.destroy(Number(id))
 
-      res.json(deletedForm)
+      res.json(deletedProcess)
     } catch (error) {
       errorResponseHandler(res, error)
     }

@@ -151,7 +151,7 @@ export default function Forms() {
             ]}
             rows={forms.map(form => [
               { content: form.id },
-              { content: form.name },
+              { content: form.nome },
               { content: form.status },
               {
                 content: format(new Date(form.createdAt || ''), 'dd/MM/yyyy')
