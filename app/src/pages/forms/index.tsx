@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   Icon,
@@ -17,11 +18,16 @@ import SimpleTable from 'components/organisms/simple-table'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { AiFillEdit } from 'react-icons/ai'
+import { MdSearchOff } from 'react-icons/md'
+
 import { selectors, useSelector, store, actions } from 'store'
 import { UpdateForm } from 'services/forms'
 import { FormModel } from 'domain/models/form'
+import { useNavigate } from 'react-router-dom'
 
 export default function Forms() {
+  const navigate = useNavigate()
+
   const [currentPage, setCurrentPage] = useState(1)
   const [term, setTerm] = useState('')
 
@@ -54,7 +60,9 @@ export default function Forms() {
           icon={<Icon as={AiFillEdit} />}
         />
         <MenuList>
-          <MenuItem>Editar</MenuItem>
+          <MenuItem onClick={() => navigate(`/formularios/edit?id=${form.id}`)}>
+            Editar
+          </MenuItem>
           {form.status !== 'rascunho' && (
             <MenuItem
               onClick={() =>
@@ -74,16 +82,6 @@ export default function Forms() {
     setCurrentPage(1)
     setTerm(termo)
   }
-
-  useEffect(() => {
-    const timer: NodeJS.Timeout = setTimeout(() => {
-      handleSearch(term)
-    }, 300)
-
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [term])
 
   return (
     <Screen py="24px">
@@ -126,40 +124,51 @@ export default function Forms() {
             color="initial.white"
             bgColor="primary.dark"
             fontSize="14px"
+            onClick={() => navigate('/formularios/edit')}
             _hover={{ bgColor: 'primary.default' }}
           >
             Novo Formulário
           </Button>
         </Flex>
-        <Box
-          mt="24px"
-          borderColor="secondary.dark"
-          borderWidth="1px"
-          borderRadius="8px"
-          p="16px"
-        >
-          <SimpleTable
-            currentPage={currentPage}
-            totalPages={Math.ceil(forms.length / 5)}
-            onChangePage={setCurrentPage}
-            columns={[
-              { content: 'ID', props: { width: '10%' } },
-              { content: 'Nome', props: { width: '60%' } },
-              { content: 'Status', props: { width: '10%' } },
-              { content: 'Criado em', props: { width: '15%' } },
-              { content: '', props: { width: '5%' } }
-            ]}
-            rows={forms.map(form => [
-              { content: form.id },
-              { content: form.nome },
-              { content: form.status },
-              {
-                content: format(new Date(form.createdAt || ''), 'dd/MM/yyyy')
-              },
-              { content: getEditMenu(form) }
-            ])}
-          />
-        </Box>
+        {forms.length > 0 ? (
+          <Box
+            mt="24px"
+            borderColor="secondary.dark"
+            borderWidth="1px"
+            borderRadius="8px"
+            p="16px"
+          >
+            <SimpleTable
+              currentPage={currentPage}
+              totalPages={Math.ceil(forms.length / 5)}
+              onChangePage={setCurrentPage}
+              columns={[
+                { content: 'ID', props: { width: '10%' } },
+                { content: 'Nome', props: { width: '60%' } },
+                { content: 'Status', props: { width: '10%' } },
+                { content: 'Criado em', props: { width: '15%' } },
+                { content: '', props: { width: '5%' } }
+              ]}
+              rows={forms.map(form => [
+                { content: form.id },
+                { content: form.nome },
+                { content: form.status },
+                {
+                  content: format(new Date(form.createdAt || ''), 'dd/MM/yyyy')
+                },
+                { content: getEditMenu(form) }
+              ])}
+            />
+          </Box>
+        ) : (
+          <Center flexDir="column" h="40vh">
+            <Icon fontSize="45px" as={MdSearchOff} />
+            <Text textAlign="center" maxW="300px" fontSize="14px">
+              Nenhum formulário encontrado. Clique em 'Novo Formulário' para
+              construir um novo modelo
+            </Text>
+          </Center>
+        )}
       </Box>
     </Screen>
   )

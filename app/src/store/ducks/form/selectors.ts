@@ -9,6 +9,12 @@ export const getForms = createSelector([getRoot], state => {
   return state.forms
 })
 
+export const getFormById = createSelector([getForms], forms => (id: number) => {
+  console.log(forms)
+
+  return forms.find(form => form.id === id)
+})
+
 export const getFormsBySearch = createSelector([getRoot], state => {
   return (search: string) =>
     state.forms.filter(form => {

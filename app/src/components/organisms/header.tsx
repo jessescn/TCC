@@ -58,7 +58,7 @@ export default function Header() {
             <MenuList>
               <MenuItem onClick={handleLogout}>
                 <Icon as={BiLogOut} />
-                Logout
+                <Text ml={4}>Logout</Text>
               </MenuItem>
             </MenuList>
           </Menu>

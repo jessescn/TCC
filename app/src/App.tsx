@@ -6,6 +6,7 @@ import Login from './pages/login'
 import Register from './pages/register'
 import Home from './pages/home'
 import Forms from 'pages/forms'
+import Form from 'pages/forms/form'
 
 function App() {
   return (
@@ -39,6 +40,14 @@ function App() {
         element={
           <PrivateRoute>
             <Forms />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/formularios/edit"
+        element={
+          <PrivateRoute>
+            <Form />
           </PrivateRoute>
         }
       />
