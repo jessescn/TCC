@@ -17,7 +17,7 @@ export const routesPermissionsMap = {
     put: ['form_update'],
     delete: ['form_delete']
   },
-  process: {
+  processos: {
     post: ['process_create'],
     get: ['process_read'],
     put: ['process_update'],

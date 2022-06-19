@@ -14,10 +14,10 @@ export const ProcessoController: CrudController = {
 
       const mandatoryFields = [
         'nome',
-        'data_inicio',
-        'data_fim',
+        'dataInicio',
+        'dataFim',
         'formulario',
-        'dados_preenchidos'
+        'dadosPreenchidos'
       ]
 
       mandatoryFields.forEach(field => {
@@ -26,21 +26,27 @@ export const ProcessoController: CrudController = {
         }
       })
 
-      const process = await ProcessoService.create({
-        ...data,
-        usuario: req.user.id
+      const { nome, dataFim, dataInicio, formulario, dadosPreenchidos } = data
+
+      const processo = await ProcessoService.create({
+        nome,
+        dataFim,
+        dataInicio,
+        dadosPreenchidos,
+        formularioId: formulario,
+        usuarioId: req.user.id
       })
 
-      res.status(HttpStatusCode.created).json(process)
+      res.status(HttpStatusCode.created).json(processo)
     } catch (error) {
       errorResponseHandler(res, error)
     }
   },
   read: async (req: Request, res: Response) => {
     try {
-      const processes = await ProcessoService.getAll()
+      const processos = await ProcessoService.getAll()
 
-      res.send(processes)
+      res.send(processos)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -53,9 +59,9 @@ export const ProcessoController: CrudController = {
         throw new BadRequestError()
       }
 
-      const process = await ProcessoService.getById(Number(id))
+      const processo = await ProcessoService.getById(Number(id))
 
-      res.json(process)
+      res.json(processo)
     } catch (error) {
       errorResponseHandler(res, error)
     }

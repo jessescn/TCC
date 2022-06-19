@@ -1,25 +1,18 @@
-import Processo, { CampoInvalido } from 'models/processo'
+import Formulario from 'models/formulario'
+import Processo, { ProcessoModel } from 'models/processo'
 import { NotFoundError } from 'types/express/errors'
 import { BaseService } from './base-service'
 
 export type RemoteCreateProcesso = {
   nome: string
-  data_inicio: Date
-  data_fim: Date
+  dataInicio: Date
+  dataFim: Date
   usuario: number
   formulario: number
-  dados_preenchidos: string
+  dadosPreenchidos: string
 }
 
-export type NewProcessoModel = RemoteCreateProcesso & {
-  status: string
-  dados_preenchidos: string // JSON.stringify do formulario preenchido
-  campos_invalidos: CampoInvalido[]
-  comentarios: string[] // TODO: linkar quando implementar a entidade comentário
-  deleted: boolean
-}
-
-export const ProcessoService: BaseService<Processo> = {
+export const ProcessoService: BaseService<ProcessoModel> = {
   getById: async function (id: number) {
     const processo = await Processo.findByPk(id)
 
@@ -30,20 +23,16 @@ export const ProcessoService: BaseService<Processo> = {
     return processo
   },
   getAll: async function () {
-    const processos = await Processo.findAll()
+    const processos = await Processo.findAll({ include: Formulario })
     return processos
   },
   create: async function (data: RemoteCreateProcesso) {
-    const content: NewProcessoModel = {
+    const newProcesso = await Processo.create({
       ...data,
-      status: 'criado',
-      campos_invalidos: [],
-      comentarios: [],
-      deleted: false
-    }
-
-    const newProcess = await Processo.create(content)
-    return newProcess
+      camposInvalidos: [],
+      comentarios: []
+    })
+    return newProcesso
   },
   update: async function (id: number, data: any) {
     const processo = await Processo.findByPk(id)

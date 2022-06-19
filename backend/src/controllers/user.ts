@@ -8,7 +8,7 @@ export const UserController: CrudController = {
     try {
       const data: RemoteUser = req.body
 
-      if (!data.email || !data.name || !data.password) {
+      if (!data.email || !data.nome || !data.senha) {
         throw new BadRequestError()
       }
 

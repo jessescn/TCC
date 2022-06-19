@@ -13,7 +13,10 @@ export const FormularioController: CrudController = {
         throw new BadRequestError()
       }
 
-      const form = await FormService.create({ ...data, status: 'inativo' })
+      const form = await FormService.create({
+        ...data,
+        userId: req.user.id
+      })
 
       res.status(HttpStatusCode.created).json(form)
     } catch (error) {

@@ -28,7 +28,10 @@ export const AuthController = {
         throw new NotFoundError()
       }
 
-      const isPasswordValid = await user.validPassword(data.password)
+      const isPasswordValid = await UserService.validPassword(
+        data.password,
+        user.senha
+      )
 
       if (!isPasswordValid) {
         throw new UnauthorizedError()

@@ -6,7 +6,8 @@ const password = process.env.POSTGRES_PASSWORD
 const database = process.env.POSTGRES_DB
 
 const sequelize = new Sequelize(
-  `postgresql://${username}:${password}@localhost:5432/${database}`
+  `postgresql://${username}:${password}@localhost:5432/${database}`,
+  { dialect: 'postgres' }
 )
 
 const connect = async () => {

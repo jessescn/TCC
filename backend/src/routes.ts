@@ -28,10 +28,10 @@ routes.post('/forms', FormularioController.create)
 routes.put('/forms/:id', FormularioController.update)
 routes.delete('/forms/:id', FormularioController.delete)
 
-routes.get('/process', ProcessoController.read)
-routes.get('/process/:id', ProcessoController.readById)
-routes.post('/process', ProcessoController.create)
-routes.put('/process/:id', ProcessoController.update)
-routes.delete('/process/:id', ProcessoController.delete)
+routes.get('/processos', ProcessoController.read)
+routes.get('/processos/:id', ProcessoController.readById)
+routes.post('/processos', ProcessoController.create)
+routes.put('/processos/:id', ProcessoController.update)
+routes.delete('/processos/:id', ProcessoController.delete)
 
 export { routes }

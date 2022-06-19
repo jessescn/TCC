@@ -6,14 +6,13 @@ import { routes } from './routes'
 
 const app = express()
 
-database.connect()
-
 app.use(parser.json())
 app.use(cors())
 app.use(routes)
 
 const port = process.env.PORT || 8080
 
-app.listen(port, () => {
+app.listen(port, async () => {
+  await database.connect()
   console.log(`[SERVER] Server listening on port ${port}`)
 })

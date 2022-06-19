@@ -1,18 +1,14 @@
 import User from 'models/user'
 import { ConflictError, NotFoundError } from 'types/express/errors'
-import { BaseService } from './base-service'
+import bcrypt from 'bcrypt'
 
 export type RemoteUser = {
-  name: string
+  nome: string
   email: string
-  password: string
+  senha: string
 }
 
-export type TUserService = BaseService<User> & {
-  getByEmail: (email: string) => Promise<User | null>
-}
-
-export const UserService: TUserService = {
+export const UserService = {
   getAll: async function () {
     const resource = await User.findAll()
     return resource
@@ -50,7 +46,7 @@ export const UserService: TUserService = {
       throw new NotFoundError()
     }
 
-    delete data.password
+    delete data.senha
 
     user.set({ ...data })
 
@@ -68,5 +64,8 @@ export const UserService: TUserService = {
     user.destroy()
 
     return user
+  },
+  validPassword: async function (password: string, encrypted: string) {
+    return bcrypt.compare(password, encrypted)
   }
 }

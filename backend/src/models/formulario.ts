@@ -1,12 +1,14 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import {
+  CreationOptional,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
   Model
 } from 'sequelize'
 import { sequelize } from 'database'
+import User from 'models/user'
 
 export type FormField = {
   name: string
@@ -18,58 +20,54 @@ export type FormField = {
 
 export type FormularioStatus = 'ativo' | 'inativo' | 'rascunho'
 
-export interface FormModel {
-  id: number
+export interface FormularioModel
+  extends Model<
+    InferAttributes<FormularioModel>,
+    InferCreationAttributes<FormularioModel>
+  > {
+  id: CreationOptional<number>
   nome: string
-  status: FormularioStatus // 'ativo' | 'inativo'
+  descricao: CreationOptional<string>
+  status: CreationOptional<FormularioStatus>
   campos: FormField[]
+  deleted: CreationOptional<boolean>
   createdAt?: Date
   updatedAt?: Date
 }
 
-class Formulario extends Model<
-  InferAttributes<Formulario>,
-  InferCreationAttributes<Formulario>
-> {
-  id: number
-  nome: string
-  status: string
-  campos: FormField[]
-  createdAt: Date
-  updatedAt: Date
-}
-
-Formulario.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    nome: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    status: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    campos: {
-      type: DataTypes.ARRAY(DataTypes.JSON),
-      allowNull: false
-    },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE
+const Formulario = sequelize.define<FormularioModel>('formulario', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
   },
-  { sequelize, tableName: 'formularios', freezeTableName: true }
-)
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  descricao: {
+    type: DataTypes.STRING
+  },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'inativo'
+  },
+  campos: {
+    type: DataTypes.ARRAY(DataTypes.JSON),
+    allowNull: false
+  },
+  deleted: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  createdAt: DataTypes.DATE,
+  updatedAt: DataTypes.DATE
+})
 
-// Form.belongsTo(User)
-// User.hasMany(Form, {
-//   foreignKey: {
-//     name: 'user',
-//     allowNull: false
-//   }
-// })
+Formulario.belongsTo(User, { constraints: true })
+
+User.hasMany(Formulario)
 
 export default Formulario

@@ -7,7 +7,7 @@ const PermissionsMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const { permissions: userPrivileges } = req
+  const { permissoes: userPrivileges } = req
 
   const resource = req.originalUrl.split('/')[1]
   const method = req.method.toLowerCase()

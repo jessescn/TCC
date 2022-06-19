@@ -18,7 +18,7 @@ const AuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const { payload } = jwt.verify(token, process.env.JWT_SECRET_KEY, {
       complete: true
     }) as JwtPayload
-    req.permissions = payload.data?.permissions || {}
+    req.permissoes = payload.data?.permissoes || {}
     req.user = payload.data
   } catch (error) {
     return res.status(401).send(error.message)

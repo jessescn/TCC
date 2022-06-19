@@ -1,4 +1,5 @@
-import Formulario, { FormField } from 'models/formulario'
+import Formulario, { FormField, FormularioModel } from 'models/formulario'
+import User from 'models/user'
 import { NotFoundError } from 'types/express/errors'
 import { BaseService } from './base-service'
 
@@ -7,7 +8,7 @@ export type RemoteFormulario = {
   campos: FormField[]
 }
 
-export const FormService: BaseService<Formulario> = {
+export const FormService: BaseService<FormularioModel> = {
   getById: async function (id: number) {
     const form = await Formulario.findByPk(id)
 
@@ -18,7 +19,7 @@ export const FormService: BaseService<Formulario> = {
     return form
   },
   getAll: async function () {
-    const forms = await Formulario.findAll()
+    const forms = await Formulario.findAll({ include: User })
     return forms
   },
   create: async function (data: RemoteFormulario) {
