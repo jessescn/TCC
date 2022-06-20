@@ -1,3 +1,4 @@
+import { ComentarioController } from './controllers/comentario'
 import { FormularioController } from 'controllers/formulario'
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
@@ -33,5 +34,11 @@ routes.get('/processos/:id', ProcessoController.readById)
 routes.post('/processos', ProcessoController.create)
 routes.put('/processos/:id', ProcessoController.update)
 routes.delete('/processos/:id', ProcessoController.delete)
+
+routes.get('/comentarios', ComentarioController.read)
+routes.get('/comentarios/:id', ComentarioController.readById)
+routes.post('/comentarios', ComentarioController.create)
+routes.put('/comentarios/:id', ComentarioController.update)
+routes.delete('/comentarios/:id', ComentarioController.delete)
 
 export { routes }
