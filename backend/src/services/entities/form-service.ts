@@ -12,14 +12,17 @@ export const FormService: BaseService<FormularioModel> = {
   getById: async function (id: number) {
     const form = await Formulario.findByPk(id)
 
-    if (!form) {
+    if (!form || form.deleted) {
       throw new NotFoundError()
     }
 
     return form
   },
   getAll: async function () {
-    const forms = await Formulario.findAll({ include: User })
+    const forms = await Formulario.findAll({
+      include: User,
+      where: { deleted: false }
+    })
     return forms
   },
   create: async function (data: RemoteFormulario) {
@@ -29,7 +32,7 @@ export const FormService: BaseService<FormularioModel> = {
   update: async function (id: number, data: any) {
     const form = await Formulario.findByPk(id)
 
-    if (!form) {
+    if (!form || form.deleted) {
       throw new NotFoundError()
     }
 
@@ -42,11 +45,13 @@ export const FormService: BaseService<FormularioModel> = {
   destroy: async function (id: number) {
     const form = await Formulario.findByPk(id)
 
-    if (!form) {
+    if (!form || form.deleted) {
       throw new NotFoundError()
     }
 
-    await form.destroy()
+    form.set({ deleted: true })
+
+    await form.save()
 
     return form
   }

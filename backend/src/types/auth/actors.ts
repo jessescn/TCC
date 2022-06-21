@@ -10,5 +10,9 @@ export const Admin = {
   process_create: 'all',
   process_read: 'all',
   process_update: 'all',
-  process_delete: 'all'
+  process_delete: 'all',
+  comment_create: 'all',
+  comment_read: 'all',
+  comment_update: 'all',
+  comment_delete: 'all'
 }

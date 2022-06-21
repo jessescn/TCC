@@ -8,6 +8,7 @@ import {
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
 import { Admin } from 'types/auth/actors'
+import { ProcessoModel } from './processo'
 
 export interface UserModel
   extends Model<
@@ -20,6 +21,7 @@ export interface UserModel
   senha: string
   deleted: CreationOptional<boolean>
   permissoes: Record<string, string>
+  processos?: ProcessoModel[]
   createdAt?: Date
   updatedAt?: Date
 }

@@ -1,32 +1,39 @@
 import Formulario from 'models/formulario'
-import Processo, { ProcessoModel } from 'models/processo'
+import Processo from 'models/processo'
+import User from 'models/user'
 import { NotFoundError } from 'types/express/errors'
-import { BaseService } from './base-service'
 
-export type RemoteCreateProcesso = {
+export type CreateProcesso = {
   nome: string
   dataInicio: Date
   dataFim: Date
-  usuario: number
-  formulario: number
+  userId: number
+  formularioId: number
   dadosPreenchidos: string
 }
 
-export const ProcessoService: BaseService<ProcessoModel> = {
+export const ProcessoService = {
   getById: async function (id: number) {
     const processo = await Processo.findByPk(id)
 
-    if (!processo) {
+    if (!processo || processo.deleted) {
       throw new NotFoundError()
     }
 
     return processo
   },
   getAll: async function () {
-    const processos = await Processo.findAll({ include: Formulario })
+    const processos = await Processo.findAll({
+      include: Formulario,
+      where: { deleted: false }
+    })
     return processos
   },
-  create: async function (data: RemoteCreateProcesso) {
+  getAllByUser: async function (userId: number) {
+    const usuario = await User.findByPk(userId, { include: Processo })
+    return usuario.processos.filter(processo => !processo.deleted)
+  },
+  create: async function (data: CreateProcesso) {
     const newProcesso = await Processo.create({
       ...data,
       camposInvalidos: [],
@@ -37,7 +44,7 @@ export const ProcessoService: BaseService<ProcessoModel> = {
   update: async function (id: number, data: any) {
     const processo = await Processo.findByPk(id)
 
-    if (!processo) {
+    if (!processo || processo.deleted) {
       throw new NotFoundError()
     }
 
@@ -50,11 +57,13 @@ export const ProcessoService: BaseService<ProcessoModel> = {
   destroy: async function (id: number) {
     const processo = await Processo.findByPk(id)
 
-    if (!processo) {
+    if (!processo || processo.deleted) {
       throw new NotFoundError()
     }
 
-    await processo.destroy()
+    processo.set({ deleted: true })
+
+    await processo.save()
 
     return processo
   }

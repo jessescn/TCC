@@ -22,7 +22,10 @@ export const UserController: CrudController = {
 
   read: async (req: Request, res: Response) => {
     try {
-      const users = await UserService.getAll()
+      const users =
+        req.user.permissoes.user_read === 'all'
+          ? await UserService.getAll()
+          : await UserService.getById(req.user.id)
 
       res.json(users)
     } catch (error) {
@@ -62,9 +65,9 @@ export const UserController: CrudController = {
     try {
       const { id } = req.params
 
-      const userDestroyed = await UserService.destroy(Number(id))
+      const user = await UserService.destroy(Number(id))
 
-      res.json(userDestroyed)
+      res.json(user)
     } catch (error) {
       errorResponseHandler(res, error)
     }

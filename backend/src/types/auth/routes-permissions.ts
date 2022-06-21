@@ -22,5 +22,11 @@ export const routesPermissionsMap = {
     get: ['process_read'],
     put: ['process_update'],
     delete: ['process_delete']
+  },
+  comentarios: {
+    post: ['comment_create'],
+    get: ['comment_read'],
+    put: ['comment_update'],
+    delete: ['comment_delete']
   }
 }

@@ -73,6 +73,7 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
 })
 
 Processo.belongsTo(Formulario)
-Processo.belongsTo(User, { constraints: true })
+Processo.belongsTo(User)
+User.hasMany(Processo)
 
 export default Processo

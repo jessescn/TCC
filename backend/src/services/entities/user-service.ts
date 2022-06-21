@@ -10,13 +10,13 @@ export type RemoteUser = {
 
 export const UserService = {
   getAll: async function () {
-    const resource = await User.findAll()
+    const resource = await User.findAll({ where: { deleted: false } })
     return resource
   },
   getById: async function (id: number) {
     const user = await User.findByPk(id)
 
-    if (!user) {
+    if (!user || user.deleted) {
       throw new NotFoundError()
     }
 
@@ -42,7 +42,7 @@ export const UserService = {
   update: async function (id: number, data: any) {
     const user = await User.findByPk(id)
 
-    if (!user) {
+    if (!user || user.deleted) {
       throw new NotFoundError()
     }
 
@@ -57,11 +57,13 @@ export const UserService = {
   destroy: async function (id: number) {
     const user = await User.findByPk(id)
 
-    if (!user) {
+    if (!user || user.deleted) {
       throw new NotFoundError()
     }
 
-    user.destroy()
+    user.set({ deleted: true })
+
+    await user.save()
 
     return user
   },

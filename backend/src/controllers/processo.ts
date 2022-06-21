@@ -1,13 +1,18 @@
-import { CrudController, errorResponseHandler } from 'controllers'
-import {
-  RemoteCreateProcesso,
-  ProcessoService
-} from 'services/entities/processo-service'
+import { errorResponseHandler } from 'controllers'
+import { ProcessoService } from 'services/entities/processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
 
-export const ProcessoController: CrudController = {
+export type RemoteCreateProcesso = {
+  nome: string
+  dataInicio: Date
+  dataFim: Date
+  formulario: number
+  dadosPreenchidos: string
+}
+
+export const ProcessoController = {
   create: async (req: Request, res: Response) => {
     try {
       const data: RemoteCreateProcesso = req.body
@@ -34,7 +39,7 @@ export const ProcessoController: CrudController = {
         dataInicio,
         dadosPreenchidos,
         formularioId: formulario,
-        usuarioId: req.user.id
+        userId: req.user.id
       })
 
       res.status(HttpStatusCode.created).json(processo)
@@ -44,9 +49,12 @@ export const ProcessoController: CrudController = {
   },
   read: async (req: Request, res: Response) => {
     try {
-      const processos = await ProcessoService.getAll()
+      const processos =
+        req.user.permissoes.process_read === 'all'
+          ? await ProcessoService.getAll()
+          : await ProcessoService.getAllByUser(req.user.id)
 
-      res.send(processos)
+      return res.send(processos)
     } catch (error) {
       errorResponseHandler(res, error)
     }
