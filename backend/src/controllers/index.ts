@@ -1,5 +1,5 @@
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { RequestError } from 'types/express/errors'
+import { RequestError, UnauthorizedError } from 'types/express/errors'
 
 export interface CrudController {
   create: (req: Request, res: Response) => Promise<void>
@@ -16,4 +16,10 @@ export const errorResponseHandler = (res: Response, error: any) => {
   }
 
   res.status(HttpStatusCode.serverError).send()
+}
+
+export const checkPermissionResource = (permission: string, req: Request) => {
+  if (permission === 'owned' && req.user.id !== Number(req.params.id)) {
+    throw new UnauthorizedError()
+  }
 }

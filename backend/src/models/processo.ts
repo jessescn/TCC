@@ -1,6 +1,8 @@
 import Formulario from 'models/formulario'
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
+import { sequelize } from 'database'
+import User from 'models/user'
 import {
   CreationOptional,
   DataTypes,
@@ -8,8 +10,6 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { sequelize } from 'database'
-import User from 'models/user'
 
 export type CampoInvalido = {
   order: number
@@ -29,7 +29,6 @@ export interface ProcessoModel
   status: CreationOptional<string>
   dadosPreenchidos: string // JSON.stringify do formulario preenchido
   camposInvalidos: CampoInvalido[]
-  comentarios: string[] // TODO: linkar quando implementar a entidade comentário
   deleted: CreationOptional<boolean>
   createdAt?: Date
   updatedAt?: Date
@@ -49,10 +48,6 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
     type: DataTypes.STRING,
     allowNull: false,
     defaultValue: 'criado'
-  },
-  comentarios: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false
   },
   dadosPreenchidos: {
     type: DataTypes.STRING

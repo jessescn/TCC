@@ -29,19 +29,20 @@ const Comentario = sequelize.define<ComentarioModel>('comentario', {
     autoIncrement: true,
     primaryKey: true
   },
+  conteudo: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   deleted: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
-  },
-  conteudo: {
-    type: DataTypes.STRING,
-    allowNull: false
   }
 })
 
 Comentario.belongsTo(Processo)
 Comentario.belongsTo(User)
+Processo.hasMany(Comentario)
 Comentario.hasMany(Comentario, { foreignKey: 'comentarioMae' })
 
 export default Comentario

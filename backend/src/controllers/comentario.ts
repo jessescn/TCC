@@ -33,7 +33,6 @@ export const ComentarioController: CrudController = {
   read: async (req: Request, res: Response) => {
     try {
       const comentarios = await ComentarioService.getAll()
-
       res.send(comentarios)
     } catch (error) {
       errorResponseHandler(res, error)

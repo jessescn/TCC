@@ -1,6 +1,11 @@
-import { HttpStatusCode, Request, Response } from 'types/express'
-import { CrudController, errorResponseHandler } from 'controllers'
+import {
+  checkPermissionResource,
+  CrudController,
+  errorResponseHandler
+} from 'controllers'
 import { RemoteUser, UserService } from 'services/entities/user-service'
+import { Default } from 'types/auth/actors'
+import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 
 export const UserController: CrudController = {
@@ -12,7 +17,7 @@ export const UserController: CrudController = {
         throw new BadRequestError()
       }
 
-      const user = await UserService.create(data)
+      const user = await UserService.create({ ...data, permissoes: Default })
 
       res.status(HttpStatusCode.created).json(user)
     } catch (error) {
@@ -22,10 +27,11 @@ export const UserController: CrudController = {
 
   read: async (req: Request, res: Response) => {
     try {
-      const users =
-        req.user.permissoes.user_read === 'all'
-          ? await UserService.getAll()
-          : await UserService.getById(req.user.id)
+      const permission = req.user.permissoes.user_read
+
+      const query = permission === 'owned' ? { id: req.user.id } : {}
+
+      const users = await UserService.getAll(query)
 
       res.json(users)
     } catch (error) {
@@ -36,6 +42,9 @@ export const UserController: CrudController = {
   readById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+      const permission = req.user.permissoes.user_read
+
+      checkPermissionResource(permission, req)
 
       const user = await UserService.getById(Number(id))
 
@@ -48,6 +57,10 @@ export const UserController: CrudController = {
     try {
       const { id } = req.params
       const data = req.body
+
+      const permission = req.user.permissoes.user_update
+
+      checkPermissionResource(permission, req)
 
       if (!data) {
         throw new BadRequestError()
@@ -64,6 +77,10 @@ export const UserController: CrudController = {
   delete: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      const permission = req.user.permissoes.user_delete
+
+      checkPermissionResource(permission, req)
 
       const user = await UserService.destroy(Number(id))
 

@@ -1,6 +1,7 @@
+import Comentario from 'models/comentario'
 import Formulario from 'models/formulario'
-import Processo from 'models/processo'
-import User from 'models/user'
+import Processo, { ProcessoModel } from 'models/processo'
+import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
 export type CreateProcesso = {
@@ -22,22 +23,19 @@ export const ProcessoService = {
 
     return processo
   },
-  getAll: async function () {
+  getAll: async function (
+    query: WhereOptions<InferAttributes<ProcessoModel>> = {}
+  ) {
     const processos = await Processo.findAll({
-      include: Formulario,
-      where: { deleted: false }
+      include: [Formulario, Comentario],
+      where: { deleted: false, ...query }
     })
     return processos
-  },
-  getAllByUser: async function (userId: number) {
-    const usuario = await User.findByPk(userId, { include: Processo })
-    return usuario.processos.filter(processo => !processo.deleted)
   },
   create: async function (data: CreateProcesso) {
     const newProcesso = await Processo.create({
       ...data,
-      camposInvalidos: [],
-      comentarios: []
+      camposInvalidos: []
     })
     return newProcesso
   },

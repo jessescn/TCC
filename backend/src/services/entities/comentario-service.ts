@@ -1,16 +1,15 @@
-import Comentario, { ComentarioModel } from 'models/comentario'
-import Processo from 'models/processo'
+import Comentario from 'models/comentario'
 import User from 'models/user'
 import { NotFoundError } from 'types/express/errors'
-import { BaseService } from './base-service'
 
 export type CreateComentario = {
   conteudo: string
   processoId: number
+  userId: number
   comentarioMae?: number
 }
 
-export const ComentarioService: BaseService<ComentarioModel> = {
+export const ComentarioService = {
   getById: async function (id: number) {
     const comentario = await Comentario.findByPk(id)
 
@@ -22,7 +21,7 @@ export const ComentarioService: BaseService<ComentarioModel> = {
   },
   getAll: async function () {
     const comentarios = await Comentario.findAll({
-      include: [User, Comentario, Processo],
+      include: [User, Comentario],
       where: { deleted: false }
     })
     return comentarios

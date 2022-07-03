@@ -1,16 +1,20 @@
-import User from 'models/user'
+import User, { UserModel } from 'models/user'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 import bcrypt from 'bcrypt'
+import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type RemoteUser = {
   nome: string
   email: string
   senha: string
+  permissoes?: any
 }
 
 export const UserService = {
-  getAll: async function () {
-    const resource = await User.findAll({ where: { deleted: false } })
+  getAll: async function (
+    query: WhereOptions<InferAttributes<UserModel>> = {}
+  ) {
+    const resource = await User.findAll({ where: { deleted: false, ...query } })
     return resource
   },
   getById: async function (id: number) {

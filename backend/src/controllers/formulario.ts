@@ -1,4 +1,8 @@
-import { CrudController, errorResponseHandler } from 'controllers'
+import {
+  checkPermissionResource,
+  CrudController,
+  errorResponseHandler
+} from 'controllers'
 import { FormService, RemoteFormulario } from 'services/entities/form-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
@@ -25,7 +29,11 @@ export const FormularioController: CrudController = {
   },
   read: async (req: Request, res: Response) => {
     try {
-      const forms = await FormService.getAll()
+      const permission = req.user.permissoes.form_read
+
+      const query = permission === 'owned' ? { userId: req.user.id } : {}
+
+      const forms = await FormService.getAll(query)
 
       res.send(forms)
     } catch (error) {
@@ -35,6 +43,10 @@ export const FormularioController: CrudController = {
   readById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      const permission = req.user.permissoes.form_read
+
+      checkPermissionResource(permission, req)
 
       if (!isNumber(id)) {
         throw new BadRequestError()
@@ -52,6 +64,10 @@ export const FormularioController: CrudController = {
       const { id } = req.params
       const data = req.body
 
+      const permission = req.user.permissoes.form_update
+
+      checkPermissionResource(permission, req)
+
       if (!data || !isNumber(id)) {
         throw new BadRequestError()
       }
@@ -66,6 +82,10 @@ export const FormularioController: CrudController = {
   delete: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      const permission = req.user.permissoes.form_delete
+
+      checkPermissionResource(permission, req)
 
       if (!isNumber(id)) {
         throw new BadRequestError()

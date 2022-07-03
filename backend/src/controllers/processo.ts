@@ -1,4 +1,4 @@
-import { errorResponseHandler } from 'controllers'
+import { checkPermissionResource, errorResponseHandler } from 'controllers'
 import { ProcessoService } from 'services/entities/processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
@@ -49,10 +49,11 @@ export const ProcessoController = {
   },
   read: async (req: Request, res: Response) => {
     try {
-      const processos =
-        req.user.permissoes.process_read === 'all'
-          ? await ProcessoService.getAll()
-          : await ProcessoService.getAllByUser(req.user.id)
+      const permissions = req.user.permissoes.process_read
+
+      const query = permissions === 'owned' ? { userId: req.user.id } : {}
+
+      const processos = await ProcessoService.getAll(query)
 
       return res.send(processos)
     } catch (error) {
@@ -62,6 +63,10 @@ export const ProcessoController = {
   readById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      const permission = req.user.permissoes.process_read
+
+      checkPermissionResource(permission, req)
 
       if (!isNumber(id)) {
         throw new BadRequestError()
@@ -79,6 +84,10 @@ export const ProcessoController = {
       const { id } = req.params
       const data = req.body
 
+      const permission = req.user.permissoes.process_update
+
+      checkPermissionResource(permission, req)
+
       if (!data || !isNumber(id)) {
         throw new BadRequestError()
       }
@@ -93,6 +102,10 @@ export const ProcessoController = {
   delete: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      const permission = req.user.permissoes.process_delete
+
+      checkPermissionResource(permission, req)
 
       if (!isNumber(id)) {
         throw new BadRequestError()

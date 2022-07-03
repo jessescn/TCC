@@ -1,14 +1,15 @@
 import Formulario, { FormField, FormularioModel } from 'models/formulario'
 import User from 'models/user'
+import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
-import { BaseService } from './base-service'
 
 export type RemoteFormulario = {
   nome: string
   campos: FormField[]
+  userId: number
 }
 
-export const FormService: BaseService<FormularioModel> = {
+export const FormService = {
   getById: async function (id: number) {
     const form = await Formulario.findByPk(id)
 
@@ -18,10 +19,12 @@ export const FormService: BaseService<FormularioModel> = {
 
     return form
   },
-  getAll: async function () {
+  getAll: async function (
+    query: WhereOptions<InferAttributes<FormularioModel>> = {}
+  ) {
     const forms = await Formulario.findAll({
       include: User,
-      where: { deleted: false }
+      where: { deleted: false, ...query }
     })
     return forms
   },
