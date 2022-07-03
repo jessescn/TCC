@@ -1,12 +1,13 @@
 import { Route, Routes } from 'react-router-dom'
-import PrivateRoute from './components/template/private-route'
 import AuthRedirect from './components/template/auth-redirect'
+import PrivateRoute from './components/template/private-route'
 
-import Login from './pages/login'
-import Register from './pages/register'
-import Home from './pages/home'
 import Forms from 'pages/forms'
 import Form from 'pages/forms/form'
+import MeusProcessos from 'pages/meus-processos'
+import Home from './pages/home'
+import Login from './pages/login'
+import Register from './pages/register'
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
         element={
           <PrivateRoute>
             <Form />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/meus-processos"
+        element={
+          <PrivateRoute>
+            <MeusProcessos />
           </PrivateRoute>
         }
       />

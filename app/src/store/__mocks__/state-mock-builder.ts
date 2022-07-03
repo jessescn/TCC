@@ -7,11 +7,13 @@ import { State as FormState } from 'store/ducks/form'
 import { SessionStateMockBuilder } from './session-state-mock'
 import { UserStateMockBuilder } from './user-state-mock'
 import { FormStateMockBuilder } from './form-state-mock'
+import { ProcessoStateMockBuilder } from './processo-state-mock'
 
 export class StateMockBuilder {
   private sessionState = new SessionStateMockBuilder().build()
   private userState = new UserStateMockBuilder().build()
   private formState = new FormStateMockBuilder().build()
+  private processoState = new ProcessoStateMockBuilder().build()
 
   withSessionState(value: SessionState) {
     this.sessionState = value
@@ -32,7 +34,8 @@ export class StateMockBuilder {
     return {
       session: this.sessionState,
       user: this.userState,
-      form: this.formState
+      form: this.formState,
+      processo: this.processoState
     }
   }
 }

@@ -7,6 +7,7 @@ export type LoginStatus = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
   currentUser: UserModel | null
+  isSidebarOpen: boolean
   loginStatus: LoginStatus
 }
 
@@ -14,6 +15,7 @@ const userLocalStorage = localStorage.getItem('session_user')
 
 export const initialState: State = {
   loginStatus: 'pristine',
+  isSidebarOpen: false,
   currentUser: userLocalStorage ? JSON.parse(userLocalStorage) : null
 }
 
@@ -33,6 +35,12 @@ const reducers = {
     localStorage.removeItem('access_token')
 
     document.location.reload()
+  },
+  toggleSidebar: (state: State) => {
+    state.isSidebarOpen = !state.isSidebarOpen
+  },
+  closeSidebar: (state: State) => {
+    state.isSidebarOpen = false
   }
 }
 

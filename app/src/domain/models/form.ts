@@ -11,14 +11,15 @@ export interface FormField {
 export interface FormModel {
   id: number
   nome: string
+  descricao?: string
   campos: FormField[]
   status: FormStatus
   createdAt?: string
   updatedAt?: string
 }
 
-export interface UpdateFormModel {
-  nome?: string
-  campos?: FormField[]
+export interface NewForm {
+  nome: string
+  campos: FormField[]
   status?: FormStatus
 }

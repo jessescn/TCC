@@ -1,4 +1,6 @@
+import { Flex } from '@chakra-ui/react'
 import Header from 'components/organisms/header'
+import Sidebar from 'components/organisms/sidebar'
 import { Navigate, useLocation } from 'react-router-dom'
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
@@ -13,7 +15,8 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
   return (
     <>
       <Header />
-      {children}
+      <Sidebar />
+      <Flex>{children}</Flex>
     </>
   )
 }

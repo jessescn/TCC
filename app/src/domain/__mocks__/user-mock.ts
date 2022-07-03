@@ -4,12 +4,12 @@ import { faker } from '@faker-js/faker'
 export class UserMockBuilderBuilder {
   private email = faker.internet.email()
   private id = faker.datatype.number()
-  private name = faker.word.noun()
+  private nome = faker.word.noun()
 
   fill() {
     this.email = faker.internet.email()
     this.id = faker.datatype.number()
-    this.name = faker.word.noun()
+    this.nome = faker.word.noun()
     return this
   }
 
@@ -27,7 +27,7 @@ export class UserMockBuilderBuilder {
     return {
       email: this.email,
       id: this.id,
-      name: this.name
+      nome: this.nome
     }
   }
 }

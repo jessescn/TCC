@@ -15,9 +15,9 @@ export const getFormById = createSelector([getForms], forms => (id: number) => {
   return forms.find(form => form.id === id)
 })
 
-export const getFormsBySearch = createSelector([getRoot], state => {
+export const getFormsBySearch = createSelector([getForms], forms => {
   return (search: string) =>
-    state.forms.filter(form => {
+    forms.filter(form => {
       if (search.localeCompare(String(form.id)) === 0) return true
 
       if (search.includes(form.status)) return true

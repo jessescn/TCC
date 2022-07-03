@@ -16,14 +16,13 @@ import Screen from 'components/atoms/screen'
 import FormInput from 'components/molecules/forms/input'
 import SimpleTable from 'components/organisms/simple-table'
 import { useEffect, useState } from 'react'
-import { format } from 'date-fns'
 import { AiFillEdit } from 'react-icons/ai'
 import { MdSearchOff } from 'react-icons/md'
 
-import { selectors, useSelector, store, actions } from 'store'
-import { UpdateForm } from 'services/forms'
 import { FormModel } from 'domain/models/form'
 import { useNavigate } from 'react-router-dom'
+import { actions, selectors, store, useSelector } from 'store'
+import { formatDate } from 'utils/format'
 
 export default function Forms() {
   const navigate = useNavigate()
@@ -43,7 +42,7 @@ export default function Forms() {
     store.dispatch(actions.form.delete(id))
   }
 
-  const handleUpdate = (id: number, data: UpdateForm) => {
+  const handleUpdate = (id: number, data: Partial<FormModel>) => {
     store.dispatch(actions.form.update({ id, data }))
   }
 
@@ -154,7 +153,7 @@ export default function Forms() {
                 { content: form.nome },
                 { content: form.status },
                 {
-                  content: format(new Date(form.createdAt || ''), 'dd/MM/yyyy')
+                  content: !form.createdAt ? '' : formatDate(form.createdAt)
                 },
                 { content: getEditMenu(form) }
               ])}

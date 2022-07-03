@@ -1,8 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { FormModel, UpdateFormModel } from 'domain/models/form'
+import { FormModel, NewForm } from 'domain/models/form'
 import { httpClient } from './config'
-
-export type UpdateForm = Record<keyof UpdateFormModel, any>
 
 export const FormService = {
   list: () => {
@@ -11,7 +9,14 @@ export const FormService = {
       url: '/forms'
     })
   },
-  update: (formId: number, update: UpdateForm) => {
+  create: (payload: NewForm) => {
+    return httpClient.request<AxiosResponse<FormModel[]>>({
+      method: 'post',
+      url: '/forms',
+      body: payload
+    })
+  },
+  update: (formId: number, update: Partial<FormModel>) => {
     return httpClient.request<AxiosResponse<FormModel>>({
       method: 'put',
       url: `/forms/${formId}`,

@@ -6,12 +6,12 @@ import { FormService } from 'services/forms'
 import { actions, UpdatePayload } from './slice'
 
 export const sagas = [
-  takeLatest(actions.list.type, listForms),
-  takeLatest(actions.update.type, updateForm),
-  takeLatest(actions.delete.type, deleteForm)
+  takeLatest(actions.list.type, listFormsSaga),
+  takeLatest(actions.update.type, updateFormSaga),
+  takeLatest(actions.delete.type, deleteFormSaga)
 ]
 
-function* listForms() {
+function* listFormsSaga() {
   try {
     const forms: AxiosResponse<FormModel[]> = yield call(FormService.list)
 
@@ -21,7 +21,7 @@ function* listForms() {
   }
 }
 
-function* updateForm(action: PayloadAction<UpdatePayload>) {
+function* updateFormSaga(action: PayloadAction<UpdatePayload>) {
   try {
     const form: AxiosResponse<FormModel> = yield call(() =>
       FormService.update(action.payload.id, action.payload.data)
@@ -33,7 +33,7 @@ function* updateForm(action: PayloadAction<UpdatePayload>) {
   }
 }
 
-function* deleteForm(action: PayloadAction<number>) {
+function* deleteFormSaga(action: PayloadAction<number>) {
   try {
     const form: AxiosResponse<FormModel> = yield call(() =>
       FormService.delete(action.payload)
