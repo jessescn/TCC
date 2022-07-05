@@ -8,6 +8,7 @@ import MeusProcessos from 'pages/meus-processos'
 import Home from './pages/home'
 import Login from './pages/login'
 import Register from './pages/register'
+import DetalhesProcesso from 'pages/detalhes-processo'
 
 function App() {
   return (
@@ -57,6 +58,14 @@ function App() {
         element={
           <PrivateRoute>
             <MeusProcessos />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/meus-processos/:id"
+        element={
+          <PrivateRoute>
+            <DetalhesProcesso />
           </PrivateRoute>
         }
       />

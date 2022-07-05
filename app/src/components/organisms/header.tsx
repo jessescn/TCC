@@ -18,6 +18,7 @@ export default function Header() {
     >
       <Flex alignItems="center">
         <IconButton
+          _focus={{ boxShadow: 'none' }}
           aria-label=""
           bgColor="transparent"
           _hover={{ bgColor: 'transparent' }}

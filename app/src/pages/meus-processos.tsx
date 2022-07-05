@@ -1,12 +1,11 @@
 import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import FormInput from 'components/molecules/forms/input'
-import SimpleTable from 'components/organisms/simple-table'
+import Table from 'components/pages/meus-processos/table'
 import { useEffect, useState } from 'react'
 import { MdSearchOff } from 'react-icons/md'
 
 import { actions, selectors, store, useSelector } from 'store'
-import { formatDate } from 'utils/format'
 
 export default function MeusProcessos() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -21,8 +20,6 @@ export default function MeusProcessos() {
   }, [])
 
   const handleSearch = (termo: string) => {
-    console.log(termo)
-
     setCurrentPage(1)
     setTerm(termo)
   }
@@ -66,35 +63,11 @@ export default function MeusProcessos() {
           />
         </Flex>
         {processos.length > 0 ? (
-          <Box
-            mt="24px"
-            borderColor="secondary.dark"
-            borderWidth="1px"
-            borderRadius="8px"
-            p="16px"
-          >
-            <SimpleTable
-              currentPage={currentPage}
-              totalPages={Math.ceil(processos.length / 5)}
-              onChangePage={setCurrentPage}
-              columns={[
-                { content: 'ID', props: { width: '10%' } },
-                { content: 'Nome', props: { width: '60%' } },
-                { content: 'Status', props: { width: '10%' } },
-                { content: 'Criado em', props: { width: '15%' } }
-              ]}
-              rows={processos.map(processo => [
-                { content: processo.id },
-                { content: processo.nome },
-                { content: processo.status },
-                {
-                  content: !processo.createdAt
-                    ? ''
-                    : formatDate(processo.createdAt)
-                }
-              ])}
-            />
-          </Box>
+          <Table
+            processos={processos}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         ) : (
           <Center flexDir="column" h="40vh">
             <Icon fontSize="45px" as={MdSearchOff} />

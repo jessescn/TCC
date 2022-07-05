@@ -30,7 +30,7 @@ export default function NavSubItems({ icon, title, items }: Props) {
               padding={0}
               w="100%"
               _hover={{ bgColor: 'none' }}
-              _pressed={{ outline: 'none' }}
+              _focus={{ boxShadow: 'none' }}
             >
               <Flex mt={30} flexDir="column" w="100%" alignItems={'flex-start'}>
                 <Menu placement="right">

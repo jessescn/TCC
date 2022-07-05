@@ -87,6 +87,7 @@ const Sidebar = () => {
           <Flex alignItems="center" mb="24px">
             <IconButton
               aria-label=""
+              _focus={{ boxShadow: 'none' }}
               bgColor="transparent"
               _hover={{ bgColor: 'transparent' }}
               _active={{ bgColor: 'transparent' }}

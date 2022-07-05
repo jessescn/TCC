@@ -23,6 +23,7 @@ type Props = {
   totalPages: number
   numberRows?: number
   onChangePage: (page: number) => void
+  onClickRow?: (row: Cell[]) => void
 }
 
 const SimpleTable = ({
@@ -30,6 +31,7 @@ const SimpleTable = ({
   rows,
   currentPage,
   onChangePage,
+  onClickRow,
   numberRows = 5,
   totalPages
 }: Props) => {
@@ -61,6 +63,8 @@ const SimpleTable = ({
         <Tbody>
           {visibleRows.map((row, rowIdx) => (
             <Tr
+              cursor={onClickRow ? 'pointer' : 'inherit'}
+              onClick={onClickRow ? () => onClickRow(row) : undefined}
               _even={{
                 bgColor: 'secondary.default'
               }}
