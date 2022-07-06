@@ -1,3 +1,4 @@
+import { TipoProcessoController } from './controllers/tipo-processo'
 import { ComentarioController } from './controllers/comentario'
 import { FormularioController } from 'controllers/formulario'
 import { Router } from 'express'
@@ -34,6 +35,12 @@ routes.get('/processos/:id', ProcessoController.readById)
 routes.post('/processos', ProcessoController.create)
 routes.put('/processos/:id', ProcessoController.update)
 routes.delete('/processos/:id', ProcessoController.delete)
+
+routes.get('/tipo-processos', TipoProcessoController.read)
+routes.get('/tipo-processos/:id', TipoProcessoController.readById)
+routes.post('/tipo-processos', TipoProcessoController.create)
+routes.put('/tipo-processos/:id', TipoProcessoController.update)
+routes.delete('/tipo-processos/:id', TipoProcessoController.delete)
 
 routes.get('/comentarios', ComentarioController.read)
 routes.get('/comentarios/:id', ComentarioController.readById)

@@ -17,16 +17,22 @@ export const routesPermissionsMap = {
     put: ['form_update'],
     delete: ['form_delete']
   },
+  'tipo-processos': {
+    post: ['tipo_processo_create'],
+    get: ['tipo_processo_read'],
+    put: ['tipo_processo_update'],
+    delete: ['tipo_processo_delete']
+  },
   processos: {
-    post: ['process_create'],
-    get: ['process_read'],
-    put: ['process_update'],
-    delete: ['process_delete']
+    post: ['processo_create'],
+    get: ['processo_read'],
+    put: ['processo_update'],
+    delete: ['processo_delete']
   },
   comentarios: {
-    post: ['comment_create'],
-    get: ['comment_read'],
-    put: ['comment_update'],
-    delete: ['comment_delete']
+    post: ['comentario_create'],
+    get: ['comentario_read'],
+    put: ['comentario_update'],
+    delete: ['comentario_delete']
   }
 }

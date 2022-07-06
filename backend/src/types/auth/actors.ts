@@ -9,15 +9,20 @@ export const Admin = {
   form_update: 'all',
   form_delete: 'all',
 
-  process_create: 'all',
-  process_read: 'all',
-  process_update: 'all',
-  process_delete: 'all',
+  processo_create: 'all',
+  processo_read: 'all',
+  processo_update: 'all',
+  processo_delete: 'all',
 
-  comment_create: 'all',
-  comment_read: 'all',
-  comment_update: 'all',
-  comment_delete: 'all'
+  tipo_processo_create: 'all',
+  tipo_processo_read: 'all',
+  tipo_processo_update: 'all',
+  tipo_processo_delete: 'all',
+
+  comentario_create: 'all',
+  comentario_read: 'all',
+  comentario_update: 'all',
+  comentario_delete: 'all'
 }
 
 export const Default = {
@@ -30,13 +35,18 @@ export const Default = {
   form_update: 'owned',
   form_delete: 'owned',
 
-  process_create: 'owned',
-  process_read: 'owned',
-  process_update: 'owned',
-  process_delete: 'owned',
+  processo_create: 'owned',
+  processo_read: 'owned',
+  processo_update: 'owned',
+  processo_delete: 'owned',
 
-  comment_create: 'owned',
-  comment_read: 'owned',
-  comment_update: 'owned',
-  comment_delete: 'owned'
+  tipo_processo_create: 'owned',
+  tipo_processo_read: 'owned',
+  tipo_processo_update: 'owned',
+  tipo_processo_delete: 'owned',
+
+  comentario_create: 'owned',
+  comentario_read: 'owned',
+  comentario_update: 'owned',
+  comentario_delete: 'owned'
 }

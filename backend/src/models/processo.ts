@@ -1,4 +1,3 @@
-import Formulario from 'models/formulario'
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
@@ -10,11 +9,18 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
+import TipoProcesso from './tipo-processo'
 
 export type CampoInvalido = {
   order: number
   comentario: string
   autor: number
+}
+
+export type VotoProcesso = {
+  aprovado: boolean
+  autor: number
+  data: Date
 }
 
 export interface ProcessoModel
@@ -23,13 +29,11 @@ export interface ProcessoModel
     InferCreationAttributes<ProcessoModel>
   > {
   id: CreationOptional<number>
-  nome: string
-  dataFim: Date
-  dataInicio: Date
-  status: CreationOptional<string>
-  dadosPreenchidos: string // JSON.stringify do formulario preenchido
+  status: string
   camposInvalidos: CampoInvalido[]
-  deleted: CreationOptional<boolean>
+  resposta: string
+  votos?: VotoProcesso[]
+  deleted: boolean
   createdAt?: Date
   updatedAt?: Date
 }
@@ -40,35 +44,30 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
     autoIncrement: true,
     primaryKey: true
   },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   status: {
     type: DataTypes.STRING,
     allowNull: false,
     defaultValue: 'criado'
   },
-  dadosPreenchidos: {
+  resposta: {
     type: DataTypes.STRING
   },
   camposInvalidos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
-    allowNull: false
+    allowNull: false,
+    defaultValue: []
   },
   deleted: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
   },
-  dataInicio: DataTypes.DATE,
-  dataFim: DataTypes.DATE,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE
 })
 
-Processo.belongsTo(Formulario)
-Processo.belongsTo(User)
+Processo.belongsTo(TipoProcesso, { foreignKey: 'tipo' })
+Processo.belongsTo(User, { foreignKey: 'autor' })
 User.hasMany(Processo)
 
 export default Processo

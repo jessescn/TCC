@@ -1,22 +1,26 @@
-import { checkPermissionResource, errorResponseHandler } from 'controllers'
-import { ProcessoService } from 'services/entities/processo-service'
+import {
+  checkPermissionResource,
+  CrudController,
+  errorResponseHandler
+} from 'controllers'
+import { RemoteTipoProcesso } from 'services/entities/tipo-processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
+import { TipoProcessoService } from './../services/entities/tipo-processo-service'
 
-export const ProcessoController = {
+export const TipoProcessoController: CrudController = {
   create: async (req: Request, res: Response) => {
     try {
-      const data = req.body
+      const data: RemoteTipoProcesso = req.body
 
-      if (!data.resposta || !data.tipo_processo) {
+      if (!data.nome || !data.campos) {
         throw new BadRequestError()
       }
 
-      const newResource = await ProcessoService.create({
-        autor: req.user.id,
-        tipo: req.body.tipo_processo,
-        resposta: req.body.resposta
+      const newResource = await TipoProcessoService.create({
+        ...data,
+        createdBy: req.user.id
       })
 
       res.status(HttpStatusCode.created).json(newResource)
@@ -26,13 +30,13 @@ export const ProcessoController = {
   },
   read: async (req: Request, res: Response) => {
     try {
-      const permissions = req.user.permissoes.processo_read
+      const permission = req.user.permissoes.tipo_processo_read
 
-      const query = permissions === 'owned' ? { userId: req.user.id } : {}
+      const query = permission === 'owned' ? { createdBy: req.user.id } : {}
 
-      const resources = await ProcessoService.getAll(query)
+      const resources = await TipoProcessoService.getAll(query)
 
-      return res.send(resources)
+      res.send(resources)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -41,7 +45,7 @@ export const ProcessoController = {
     try {
       const { id } = req.params
 
-      const permission = req.user.permissoes.processo_read
+      const permission = req.user.permissoes.tipo_processo_read
 
       checkPermissionResource(permission, req)
 
@@ -49,7 +53,7 @@ export const ProcessoController = {
         throw new BadRequestError()
       }
 
-      const resource = await ProcessoService.getById(Number(id))
+      const resource = await TipoProcessoService.getById(Number(id))
 
       res.json(resource)
     } catch (error) {
@@ -61,7 +65,7 @@ export const ProcessoController = {
       const { id } = req.params
       const data = req.body
 
-      const permission = req.user.permissoes.processo_update
+      const permission = req.user.permissoes.tipo_processo_update
 
       checkPermissionResource(permission, req)
 
@@ -69,7 +73,7 @@ export const ProcessoController = {
         throw new BadRequestError()
       }
 
-      const updatedResource = await ProcessoService.update(Number(id), data)
+      const updatedResource = await TipoProcessoService.update(Number(id), data)
 
       res.json(updatedResource)
     } catch (error) {
@@ -80,7 +84,7 @@ export const ProcessoController = {
     try {
       const { id } = req.params
 
-      const permission = req.user.permissoes.process_delete
+      const permission = req.user.permissoes.tipo_processo_delete
 
       checkPermissionResource(permission, req)
 
@@ -88,7 +92,7 @@ export const ProcessoController = {
         throw new BadRequestError()
       }
 
-      const deletedResource = await ProcessoService.destroy(Number(id))
+      const deletedResource = await TipoProcessoService.destroy(Number(id))
 
       res.json(deletedResource)
     } catch (error) {

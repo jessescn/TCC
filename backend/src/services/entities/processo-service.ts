@@ -1,16 +1,14 @@
 import Comentario from 'models/comentario'
-import Formulario from 'models/formulario'
-import Processo, { ProcessoModel } from 'models/processo'
+import Processo, { ProcessoModel, VotoProcesso } from 'models/processo'
+import TipoProcesso from 'models/tipo-processo'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
-export type CreateProcesso = {
-  nome: string
-  dataInicio: Date
-  dataFim: Date
-  userId: number
-  formularioId: number
-  dadosPreenchidos: string
+export type RemoteProcesso = {
+  autor: number
+  tipo: number
+  resposta: string
+  votos?: VotoProcesso[]
 }
 
 export const ProcessoService = {
@@ -27,17 +25,14 @@ export const ProcessoService = {
     query: WhereOptions<InferAttributes<ProcessoModel>> = {}
   ) {
     const processos = await Processo.findAll({
-      include: [Formulario, Comentario],
+      include: [TipoProcesso, Comentario],
       where: { deleted: false, ...query }
     })
     return processos
   },
-  create: async function (data: CreateProcesso) {
-    const newProcesso = await Processo.create({
-      ...data,
-      camposInvalidos: []
-    })
-    return newProcesso
+  create: async function (data: RemoteProcesso) {
+    const novoProcesso = await Processo.create(data)
+    return novoProcesso
   },
   update: async function (id: number, data: any) {
     const processo = await Processo.findByPk(id)
