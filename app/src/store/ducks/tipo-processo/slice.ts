@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { FormModel } from 'domain/models/form'
-import { ProcessoModel } from 'domain/models/processo'
+import { TipoProcessoModel } from 'domain/models/tipo-processo'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
-  forms: FormModel[]
+  tipoProcessos: TipoProcessoModel[]
   status: Status
 }
 
 export type UpdatePayload = {
-  data: Partial<FormModel>
+  data: Partial<TipoProcessoModel>
   id: number
 }
 
 export const initialState: State = {
-  forms: [],
+  tipoProcessos: [],
   status: 'pristine'
 }
 
@@ -24,9 +23,9 @@ const reducers = {
   list: (state: State) => {
     state.status = 'loading'
   },
-  listSuccess: (state: State, action: PayloadAction<FormModel[]>) => {
+  listSuccess: (state: State, action: PayloadAction<TipoProcessoModel[]>) => {
     state.status = 'success'
-    state.forms = action.payload
+    state.tipoProcessos = action.payload
   },
   listFailure: (state: State) => {
     state.status = 'failure'
@@ -34,11 +33,13 @@ const reducers = {
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
     state.status = 'loading'
   },
-  updateSuccess: (state: State, action: PayloadAction<FormModel>) => {
+  updateSuccess: (state: State, action: PayloadAction<TipoProcessoModel>) => {
     state.status = 'success'
 
-    const indexof = state.forms.map(elm => elm.id).indexOf(action.payload.id)
-    state.forms.splice(indexof, 1, action.payload)
+    const indexof = state.tipoProcessos
+      .map(elm => elm.id)
+      .indexOf(action.payload.id)
+    state.tipoProcessos.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
     state.status = 'failure'
@@ -46,20 +47,22 @@ const reducers = {
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'
   },
-  deleteSuccess: (state: State, action: PayloadAction<FormModel>) => {
+  deleteSuccess: (state: State, action: PayloadAction<TipoProcessoModel>) => {
     state.status = 'success'
-    state.forms = state.forms.filter(form => form.id !== action.payload.id)
+    state.tipoProcessos = state.tipoProcessos.filter(
+      tipo => tipo.id !== action.payload.id
+    )
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'
   }
 }
 
-const form = createSlice({
-  name: 'form',
+const tipoProcesso = createSlice({
+  name: 'tipoProcesso',
   initialState,
   reducers
 })
 
-export const actions = form.actions
-export const reducer = form.reducer
+export const actions = tipoProcesso.actions
+export const reducer = tipoProcesso.reducer

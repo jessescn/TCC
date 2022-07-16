@@ -1,6 +1,5 @@
 import {
   Box,
-  Flex,
   Icon,
   IconButton,
   Input,

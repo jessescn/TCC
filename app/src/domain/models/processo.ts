@@ -1,29 +1,52 @@
-import { ComentarioModel } from './comentario'
-import { FormField, FormStatus } from './form'
+import { TipoProcessoModel } from './tipo-processo'
+import { UserModel } from './user'
 
 export type ProcessoStatus = 'criado' | ''
 
-interface FormModel {
-  id: number
-  nome: string
-  descricao?: string
-  campos: FormField[]
-  status: FormStatus
-  createdAt?: string
-  updatedAt?: string
+export type CampoInvalido = {
+  formulario: number
+  ordem: number
+  comentario: string
+  autor: number
+}
+
+export type RespostaCampo = {
+  valor: any
+  ordem: number
+}
+
+export type Resposta = {
+  formulario: number
+  campos: RespostaCampo[]
+}
+
+export type VotoProcesso = {
+  aprovado: boolean
+  autor: number
+  data: Date
 }
 
 export interface ProcessoModel {
   id: number
-  nome: string
   status: string
-  dadosPreenchidos: string
-  dataInicio: string
-  dataFim: string
-  formulario: FormModel
-  comentarios: ComentarioModel[]
+  camposInvalidos: CampoInvalido[]
+  respostas: Resposta[]
+  votos?: VotoProcesso[]
+  tipo?: TipoProcessoModel
+  createdBy?: UserModel
   createdAt?: string
-  updatedAt?: string
+}
+
+export interface RemoteProcessoModel {
+  id: number
+  status: string
+  camposInvalidos: CampoInvalido[]
+  resposta: string
+  votos?: VotoProcesso[]
+  deleted: boolean
+  createdAt?: string
+  upstringdAt?: string
+  tipo_processo?: TipoProcessoModel
 }
 
 export interface NewProcesso {

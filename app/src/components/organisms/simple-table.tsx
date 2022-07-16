@@ -13,6 +13,8 @@ import { ReactNode, useEffect, useState } from 'react'
 
 export type Cell = {
   content: ReactNode
+  data?: any
+  render?: (data: Cell) => ReactNode
   props?: StyleProps
 }
 
@@ -55,7 +57,7 @@ const SimpleTable = ({
                 key={`header-${index}`}
                 {...column.props}
               >
-                {column.content}
+                {column.render ? column.render(column) : column.content}
               </Th>
             ))}
           </Tr>
@@ -78,7 +80,7 @@ const SimpleTable = ({
                   key={`row-${rowIdx}-cell-${cellIdx}`}
                   {...cell.props}
                 >
-                  {cell.content}
+                  {cell.render ? cell.render(cell) : cell.content}
                 </Td>
               ))}
             </Tr>

@@ -1,4 +1,4 @@
-import { Box, Divider, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Input, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -6,9 +6,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
 import EditableText from 'components/molecules/forms/editable-text'
-import Header from './header'
+import Header from 'components/pages/tipo-processo/header'
 
-export default function Form() {
+export default function TipoProcesso() {
   const navigate = useNavigate()
   const formControls = useForm()
 
@@ -16,12 +16,12 @@ export default function Form() {
 
   const id = Number(searchParams.get('id'))
 
-  const form = !isNaN(id)
-    ? useSelector(selectors.form.getFormById)(id)
+  const tipoProcesso = !isNaN(id)
+    ? useSelector(selectors.tipoProcesso.getTipoProcessoById)(id)
     : undefined
 
   useEffect(() => {
-    store.dispatch(actions.form.list())
+    store.dispatch(actions.tipoProcesso.list())
   }, [])
 
   return (
@@ -37,10 +37,10 @@ export default function Form() {
       >
         <FormProvider {...formControls}>
           <form>
-            <Header form={form} />
+            <Header tipo={tipoProcesso} />
             <Divider my="24px" borderColor="secondary.dark" />
             <EditableText
-              defaultValue={form?.nome || 'Novo formulário'}
+              defaultValue={tipoProcesso?.nome || 'Novo formulário'}
               styleProps={{ mb: 2 }}
               register={formControls.register('nome', { required: true })}
             >
@@ -56,6 +56,14 @@ export default function Form() {
                 Descricão:
               </Text>
             </EditableText>
+            <Flex alignItems="center">
+              <Text mr="8px">Data Início</Text>
+              <Input type="datetime-local" maxW="200px" />
+            </Flex>
+            <Flex alignItems="center">
+              <Text mr="8px">Data Fim</Text>
+              <Input type="datetime-local" maxW="200px" />
+            </Flex>
           </form>
         </FormProvider>
       </Box>

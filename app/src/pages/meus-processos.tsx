@@ -40,7 +40,7 @@ export default function MeusProcessos() {
             Meus Processos
           </Text>
           <Text my="16px" fontSize="14px">
-            Acompanhe os seus processos em aberto ou finalizados
+            Acompanhe os seus processos dentro do sistema
           </Text>
         </Box>
         <Divider my="24px" borderColor="secondary.dark" />

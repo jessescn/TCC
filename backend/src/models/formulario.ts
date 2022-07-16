@@ -24,6 +24,7 @@ export interface FormularioModel
     InferCreationAttributes<FormularioModel>
   > {
   id: CreationOptional<number>
+  nome: string
   campos: CampoFormulario[]
   deleted: CreationOptional<boolean>
   createdAt?: Date
@@ -36,6 +37,10 @@ const Formulario = sequelize.define<FormularioModel>('formulario', {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
+  },
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   campos: {
     type: DataTypes.ARRAY(DataTypes.JSON),

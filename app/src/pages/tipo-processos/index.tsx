@@ -19,30 +19,37 @@ import { useEffect, useState } from 'react'
 import { AiFillEdit } from 'react-icons/ai'
 import { MdSearchOff } from 'react-icons/md'
 
-import { FormularioModel } from 'domain/models/formulario'
+import { format } from 'date-fns'
+import { TipoProcessoModel } from 'domain/models/tipo-processo'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
-import { formatDate } from 'utils/format'
 
-export default function Forms() {
+export default function TipoProcessos() {
   const navigate = useNavigate()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [term, setTerm] = useState('')
 
-  const forms = useSelector(state =>
-    selectors.form.getFormsBySearch(state)(term)
+  const tipoProcessos = useSelector(state =>
+    selectors.tipoProcesso.getTipoProcessosBySearch(state)(term)
   )
 
   useEffect(() => {
-    store.dispatch(actions.form.list())
+    store.dispatch(actions.tipoProcesso.list())
   }, [])
 
   const handleDelete = (id: number) => {
-    store.dispatch(actions.form.delete(id))
+    store.dispatch(actions.tipoProcesso.delete(id))
   }
 
-  const getEditMenu = (form: FormularioModel) => {
+  const handleUpdate = (id: number, data: Partial<TipoProcessoModel>) => {
+    store.dispatch(actions.tipoProcesso.update({ id, data }))
+  }
+
+  const getEditMenu = (tipo: TipoProcessoModel) => {
+    const statusLabel = tipo.status === 'ativo' ? 'Inativar' : 'Ativar'
+    const nextStatus = tipo.status === 'ativo' ? 'inativo' : 'ativo'
+
     return (
       <Menu>
         <MenuButton
@@ -52,10 +59,21 @@ export default function Forms() {
           icon={<Icon as={AiFillEdit} />}
         />
         <MenuList>
-          <MenuItem onClick={() => navigate(`/formularios/edit?id=${form.id}`)}>
+          <MenuItem
+            onClick={() => navigate(`/tipo-processos/edit?id=${tipo.id}`)}
+          >
             Editar
           </MenuItem>
-          <MenuItem onClick={() => handleDelete(form.id)}>Excluir</MenuItem>
+          {tipo.status !== 'rascunho' && (
+            <MenuItem
+              onClick={() =>
+                handleUpdate(tipo.id, { ...tipo, status: nextStatus })
+              }
+            >
+              {statusLabel}
+            </MenuItem>
+          )}
+          <MenuItem onClick={() => handleDelete(tipo.id)}>Excluir</MenuItem>
         </MenuList>
       </Menu>
     )
@@ -79,10 +97,11 @@ export default function Forms() {
       >
         <Box>
           <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-            Formulários
+            Processos Cadastrados
           </Text>
           <Text my="16px" fontSize="14px">
-            Crie um modelo de formulário para utilizar em processos
+            Lista dos processos cadastrados no sistema. Edite um processo aberto
+            ou crie um novo para ser acessado pelos usuários
           </Text>
         </Box>
         <Divider my="24px" borderColor="secondary.dark" />
@@ -92,10 +111,10 @@ export default function Forms() {
             maxW="365px"
             height="35px"
             fontSize="14px"
-            placeholder="Ex.Busca por ID, nome, autor e status"
+            placeholder="Ex.Busca por ID, nome e status"
             onChange={e => handleSearch(e.target.value)}
             label={{
-              text: 'Buscar formulários',
+              text: 'Buscar processos cadastrados',
               props: {
                 htmlFor: 'search',
                 fontSize: '14px',
@@ -107,13 +126,13 @@ export default function Forms() {
             color="initial.white"
             bgColor="primary.dark"
             fontSize="14px"
-            onClick={() => navigate('/formularios/edit')}
+            onClick={() => navigate('/tipo-processos/edit')}
             _hover={{ bgColor: 'primary.default' }}
           >
-            Novo Formulário
+            Criar Novo Processo
           </Button>
         </Flex>
-        {forms.length > 0 ? (
+        {tipoProcessos.length > 0 ? (
           <Box
             mt="24px"
             borderColor="secondary.dark"
@@ -123,21 +142,39 @@ export default function Forms() {
           >
             <SimpleTable
               currentPage={currentPage}
-              totalPages={Math.ceil(forms.length / 5)}
+              totalPages={Math.ceil(tipoProcessos.length / 5)}
               onChangePage={setCurrentPage}
               columns={[
-                { content: 'ID', props: { width: '10%' } },
-                { content: 'Nome', props: { width: '60%' } },
-                { content: 'Criado em', props: { width: '15%' } },
+                { content: 'ID', props: { width: '5%' } },
+                { content: 'Nome', props: { width: '40%' } },
+                { content: 'Status', props: { width: '5%' } },
+                { content: 'Colegiado', props: { width: '10%' } },
+                { content: 'Prazo Início', props: { width: '10%' } },
+                { content: 'Prazo Fim', props: { width: '10%' } },
+                { content: 'Criado', props: { width: '10%' } },
                 { content: '', props: { width: '5%' } }
               ]}
-              rows={forms.map(form => [
-                { content: form.id },
-                { content: form.nome },
+              rows={tipoProcessos.map(tipo => [
+                { content: tipo.id },
+                { content: tipo.nome },
+                { content: tipo.status },
+                { content: tipo.colegiado ? 'Sim' : 'Não' },
                 {
-                  content: !form.createdAt ? '' : formatDate(form.createdAt)
+                  content: !tipo.dataInicio
+                    ? '-'
+                    : format(new Date(tipo.dataInicio), 'dd/MM/yyyy')
                 },
-                { content: getEditMenu(form) }
+                {
+                  content: !tipo.dataFim
+                    ? '-'
+                    : format(new Date(tipo.dataFim), 'dd/MM/yyyy')
+                },
+                {
+                  content: !tipo.createdAt
+                    ? '-'
+                    : format(new Date(tipo.createdAt), 'dd/MM/yyyy')
+                },
+                { content: getEditMenu(tipo) }
               ])}
             />
           </Box>

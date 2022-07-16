@@ -1,22 +1,22 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { format } from 'date-fns'
-import { FormularioModel } from 'domain/models/formulario'
+import { TipoProcessoModel } from 'domain/models/tipo-processo'
 
 type Props = {
-  form?: FormularioModel
+  tipo?: TipoProcessoModel
 }
 
-export default function Header({ form }: Props) {
+export default function Header({ tipo }: Props) {
   return (
     <Flex justifyContent="space-between">
       <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-        {form ? 'Editar Formulário' : 'Novo Formulário'}
+        {tipo ? 'Editar Formulário' : 'Novo Formulário'}
       </Text>
-      {form && (
+      {tipo && (
         <Text fontSize="20px">
           Ultima edição:{' '}
           <Text as="span" fontWeight="bold" fontSize="24px">
-            {format(new Date(form.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
+            {format(new Date(tipo.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
           </Text>
         </Text>
       )}

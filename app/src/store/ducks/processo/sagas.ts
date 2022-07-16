@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
-import { ProcessoModel } from 'domain/models/processo'
+import { RemoteProcessoModel } from 'domain/models/processo'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { ProcessoService } from 'services/processos'
 import { actions, UpdatePayload } from './slice'
@@ -13,11 +13,20 @@ export const sagas = [
 
 function* listProcessosSaga() {
   try {
-    const processos: AxiosResponse<ProcessoModel[]> = yield call(
+    const response: AxiosResponse<RemoteProcessoModel[]> = yield call(
       ProcessoService.list
     )
 
-    yield put(actions.listSuccess(processos.data))
+    console.log(typeof response.data[0].resposta)
+
+    yield put(
+      actions.listSuccess(
+        response.data.map(processo => ({
+          ...processo,
+          respostas: JSON.parse(processo.resposta)
+        }))
+      )
+    )
   } catch (error) {
     yield put(actions.listFailure())
   }
@@ -25,11 +34,16 @@ function* listProcessosSaga() {
 
 function* updateProcessoSaga(action: PayloadAction<UpdatePayload>) {
   try {
-    const processo: AxiosResponse<ProcessoModel> = yield call(() =>
+    const response: AxiosResponse<RemoteProcessoModel> = yield call(() =>
       ProcessoService.update(action.payload.id, action.payload.data)
     )
 
-    yield put(actions.updateSuccess(processo.data))
+    yield put(
+      actions.updateSuccess({
+        ...response.data,
+        respostas: JSON.parse(response.data.resposta)
+      })
+    )
   } catch (error) {
     yield put(actions.updateFailure())
   }
@@ -37,11 +51,16 @@ function* updateProcessoSaga(action: PayloadAction<UpdatePayload>) {
 
 function* deleteProcessoSaga(action: PayloadAction<number>) {
   try {
-    const processo: AxiosResponse<ProcessoModel> = yield call(() =>
+    const response: AxiosResponse<RemoteProcessoModel> = yield call(() =>
       ProcessoService.delete(action.payload)
     )
 
-    yield put(actions.deleteSuccess(processo.data))
+    yield put(
+      actions.deleteSuccess({
+        ...response.data,
+        respostas: JSON.parse(response.data.resposta)
+      })
+    )
   } catch (error) {
     yield put(actions.deleteFailure())
   }

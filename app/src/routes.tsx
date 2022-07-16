@@ -1,18 +1,21 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes as RoutesWrapper } from 'react-router-dom'
 import AuthRedirect from './components/template/auth-redirect'
 import PrivateRoute from './components/template/private-route'
 
-import Forms from 'pages/forms'
-import Form from 'pages/forms/form'
+import DetalhesProcesso from 'pages/detalhes-processo'
 import MeusProcessos from 'pages/meus-processos'
+import TipoProcessos from 'pages/tipo-processos'
 import Home from './pages/home'
 import Login from './pages/login'
 import Register from './pages/register'
-import DetalhesProcesso from 'pages/detalhes-processo'
+import Formularios from './pages/forms'
+import Formulario from './pages/forms/form'
 
-function App() {
+import TipoProcesso from 'pages/tipo-processos/tipo-processo'
+
+export default function Routes() {
   return (
-    <Routes>
+    <RoutesWrapper>
       <Route
         path="/login"
         element={
@@ -41,7 +44,7 @@ function App() {
         path="/formularios"
         element={
           <PrivateRoute>
-            <Forms />
+            <Formularios />
           </PrivateRoute>
         }
       />
@@ -49,7 +52,23 @@ function App() {
         path="/formularios/edit"
         element={
           <PrivateRoute>
-            <Form />
+            <Formulario />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/tipo-processos"
+        element={
+          <PrivateRoute>
+            <TipoProcessos />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/tipo-processos/edit"
+        element={
+          <PrivateRoute>
+            <TipoProcesso />
           </PrivateRoute>
         }
       />
@@ -69,8 +88,6 @@ function App() {
           </PrivateRoute>
         }
       />
-    </Routes>
+    </RoutesWrapper>
   )
 }
-
-export default App

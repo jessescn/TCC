@@ -20,8 +20,6 @@ export const getFormsBySearch = createSelector([getForms], forms => {
     forms.filter(form => {
       if (search.localeCompare(String(form.id)) === 0) return true
 
-      if (search.includes(form.status)) return true
-
       const terms = search.split(' ')
       let includes = false
 

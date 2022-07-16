@@ -20,7 +20,7 @@ import { actions, selectors, store, useSelector } from 'store'
 import NavItem from './nav-item'
 import NavSubItems from './nav-subitems'
 
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineFileAdd } from 'react-icons/ai'
 
 export const invisibleStyle = {
   '&::-webkit-scrollbar': {
@@ -117,7 +117,7 @@ const Sidebar = () => {
           />
           <NavSubItems
             icon={BsListCheck}
-            title="Novo Processo"
+            title="Abrir Processo"
             items={[
               {
                 title: 'Homologacão de banca examinadora (mestrado)',
@@ -132,9 +132,15 @@ const Sidebar = () => {
             ]}
           />
           <NavItem
-            icon={FaWpforms}
+            icon={AiOutlineFileAdd}
             title="Formulários"
             url="/formularios"
+            adminOnly
+          />
+          <NavItem
+            icon={AiOutlineFileAdd}
+            title="Processos Cadastrados"
+            url="/tipo-processos"
             adminOnly
           />
           <NavItem icon={FiUser} title="Usuários" url="/usuarios" adminOnly />

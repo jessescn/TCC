@@ -29,7 +29,7 @@ export const getProcessosBySearch = createSelector(
         let includes = false
 
         terms.forEach(term => {
-          if (processo.nome.includes(term)) {
+          if (processo.tipo?.nome.includes(term)) {
             includes = true
           }
         })

@@ -34,15 +34,13 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
-          { content: 'Nome', props: { width: '25%' } },
-          { content: 'Formulário', props: { width: '35%' } },
-          { content: 'Status', props: { width: '10%' } },
-          { content: 'Criado em', props: { width: '15%' } }
+          { content: 'Nome', props: { width: '55%' } },
+          { content: 'Status', props: { width: '15%' } },
+          { content: 'Criado em', props: { width: '20%' } }
         ]}
         rows={processos.map(processo => [
           { content: processo.id },
-          { content: processo.nome },
-          { content: processo.formulario.nome },
+          { content: processo.tipo?.nome },
           { content: processo.status },
           {
             content: !processo.createdAt ? '' : formatDate(processo.createdAt)

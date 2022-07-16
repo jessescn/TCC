@@ -1,8 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
-import { FormModel } from 'domain/models/form'
+import { FormularioModel } from 'domain/models/formulario'
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { FormService } from 'services/forms'
+import { FormService } from 'services/formularios'
 import { actions, UpdatePayload } from './slice'
 
 export const sagas = [
@@ -13,7 +13,7 @@ export const sagas = [
 
 function* listFormsSaga() {
   try {
-    const forms: AxiosResponse<FormModel[]> = yield call(FormService.list)
+    const forms: AxiosResponse<FormularioModel[]> = yield call(FormService.list)
 
     yield put(actions.listSuccess(forms.data))
   } catch (error) {
@@ -23,7 +23,7 @@ function* listFormsSaga() {
 
 function* updateFormSaga(action: PayloadAction<UpdatePayload>) {
   try {
-    const form: AxiosResponse<FormModel> = yield call(() =>
+    const form: AxiosResponse<FormularioModel> = yield call(() =>
       FormService.update(action.payload.id, action.payload.data)
     )
 
@@ -35,7 +35,7 @@ function* updateFormSaga(action: PayloadAction<UpdatePayload>) {
 
 function* deleteFormSaga(action: PayloadAction<number>) {
   try {
-    const form: AxiosResponse<FormModel> = yield call(() =>
+    const form: AxiosResponse<FormularioModel> = yield call(() =>
       FormService.delete(action.payload)
     )
 

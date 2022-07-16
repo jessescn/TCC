@@ -1,8 +1,10 @@
 import { Box, Divider, Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import Comments from 'components/pages/detalhes-processo/comments'
+import Content from 'components/pages/detalhes-processo/content'
 import Footer from 'components/pages/detalhes-processo/footer'
 import Header from 'components/pages/detalhes-processo/header'
+import { CampoFormulario } from 'domain/models/formulario'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
@@ -19,6 +21,7 @@ const DetalhesProcesso = () => {
   }, [])
 
   const [showComments, setShowComments] = useState(true)
+  const [invalidos, setInvalidos] = useState<CampoFormulario[]>([])
 
   const handleToggleComments = () => {
     setShowComments(prev => !prev)
@@ -46,12 +49,25 @@ const DetalhesProcesso = () => {
             px="24px"
             py="32px"
           >
-            <Header processoId={processo.id} status={processo.status} />
+            <Box height="50px">
+              <Header processoId={processo.id} status={processo.status} />
+            </Box>
             <Divider borderWidth="2px" borderColor="#EEE" my="16px" />
-            <Footer
-              onTogleComments={handleToggleComments}
-              isCommentsVisible={showComments}
-            />
+            <Box height="calc(100% - 130px)">
+              <Content
+                processo={processo}
+                invalidos={invalidos}
+                setInvalidos={setInvalidos}
+                formulario={{} as any}
+              />
+            </Box>
+            <Box height="80px">
+              <Footer
+                invalidFields={invalidos}
+                onTogleComments={handleToggleComments}
+                isCommentsVisible={showComments}
+              />
+            </Box>
           </Box>
           {showComments && (
             <Box height="40%" w="100%" maxW="1392px">
