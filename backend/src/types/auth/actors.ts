@@ -25,10 +25,16 @@ export const Admin = {
   comentario_delete: 'all'
 }
 
-export const Default = {
+export type PermissionKeys = Record<
+  keyof typeof Admin,
+  'owned' | 'all' | 'not_allowed'
+>
+
+export const Default: PermissionKeys = {
   user_create: 'all',
   user_read: 'owned',
   user_update: 'owned',
+  user_delete: 'not_allowed',
 
   form_create: 'owned',
   form_read: 'owned',

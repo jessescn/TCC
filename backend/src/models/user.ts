@@ -7,7 +7,7 @@ import {
 } from 'sequelize'
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
-import { Admin } from 'types/auth/actors'
+import { Admin, PermissionKeys } from 'types/auth/actors'
 import { ProcessoModel } from './processo'
 
 export interface UserModel
@@ -20,7 +20,7 @@ export interface UserModel
   email: string
   senha: string
   deleted: CreationOptional<boolean>
-  permissoes: Record<string, string>
+  permissoes: PermissionKeys
   processos?: ProcessoModel[]
   createdAt?: Date
   updatedAt?: Date
@@ -78,7 +78,7 @@ User.findOrCreate({
   defaults: {
     senha: process.env.ADMIN_PASSWORD,
     email: process.env.ADMIN_EMAIL,
-    permissoes: { ...Admin }
+    permissoes: { ...Admin } as any
   }
 })
 

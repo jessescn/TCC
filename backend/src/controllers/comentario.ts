@@ -2,7 +2,11 @@ import { ComentarioService } from 'services/entities/comentario-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
-import { CrudController, errorResponseHandler } from './'
+import {
+  CrudController,
+  errorResponseHandler,
+  validateMandatoryFields
+} from './'
 
 type RemoteComentario = {
   conteudo: string
@@ -15,14 +19,14 @@ export const ComentarioController: CrudController = {
     try {
       const data: RemoteComentario = req.body
 
-      if (!data.conteudo || !data.processo) {
-        throw new BadRequestError()
-      }
+      const mandatoryFields = ['conteudo', 'processo']
+
+      validateMandatoryFields(mandatoryFields, data)
 
       const comentario = await ComentarioService.create({
         ...data,
         processoId: data.processo,
-        userId: req.user.id
+        createdBy: req.user.id
       })
 
       res.status(HttpStatusCode.created).json(comentario)

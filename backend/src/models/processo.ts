@@ -12,9 +12,20 @@ import {
 import TipoProcesso from './tipo-processo'
 
 export type CampoInvalido = {
-  order: number
+  formulario: number
+  ordem: number
   comentario: string
   autor: number
+}
+
+export type RespostaCampo = {
+  valor: any
+  ordem: number
+}
+
+export type Resposta = {
+  formulario: number
+  campos: RespostaCampo[]
 }
 
 export type VotoProcesso = {
@@ -31,11 +42,12 @@ export interface ProcessoModel
   id: CreationOptional<number>
   status: string
   camposInvalidos: CampoInvalido[]
-  resposta: string
+  respostas: Resposta[]
   votos?: VotoProcesso[]
   deleted: boolean
   createdAt?: Date
   updatedAt?: Date
+  createdBy?: number
 }
 
 const Processo = sequelize.define<ProcessoModel>('processo', {
@@ -49,8 +61,10 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
     allowNull: false,
     defaultValue: 'criado'
   },
-  resposta: {
-    type: DataTypes.STRING
+  respostas: {
+    type: DataTypes.ARRAY(DataTypes.JSON),
+    allowNull: false,
+    defaultValue: []
   },
   camposInvalidos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
@@ -67,7 +81,8 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
 })
 
 Processo.belongsTo(TipoProcesso, { foreignKey: 'tipo' })
-Processo.belongsTo(User, { foreignKey: 'autor' })
+Processo.belongsTo(User, { foreignKey: 'createdBy' })
+
 User.hasMany(Processo)
 
 export default Processo

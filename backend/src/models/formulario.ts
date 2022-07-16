@@ -10,15 +10,13 @@ import {
 import { sequelize } from 'database'
 import User from 'models/user'
 
-export type FormField = {
-  name: string
-  placeholder: string
-  order: number
-  required: boolean
-  type: string
+export type CampoFormulario = {
+  ordem: number
+  pergunta?: string
+  descricao?: string
+  obrigatorio: boolean
+  outros?: any
 }
-
-export type FormularioStatus = 'ativo' | 'inativo' | 'rascunho'
 
 export interface FormularioModel
   extends Model<
@@ -26,13 +24,11 @@ export interface FormularioModel
     InferCreationAttributes<FormularioModel>
   > {
   id: CreationOptional<number>
-  nome: string
-  descricao: CreationOptional<string>
-  status: CreationOptional<FormularioStatus>
-  campos: FormField[]
+  campos: CampoFormulario[]
   deleted: CreationOptional<boolean>
   createdAt?: Date
   updatedAt?: Date
+  createdBy?: number
 }
 
 const Formulario = sequelize.define<FormularioModel>('formulario', {
@@ -40,18 +36,6 @@ const Formulario = sequelize.define<FormularioModel>('formulario', {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
-  },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  descricao: {
-    type: DataTypes.STRING
-  },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'inativo'
   },
   campos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
@@ -66,8 +50,7 @@ const Formulario = sequelize.define<FormularioModel>('formulario', {
   updatedAt: DataTypes.DATE
 })
 
-Formulario.belongsTo(User, { constraints: true })
-
+Formulario.belongsTo(User, { foreignKey: 'createdBy' })
 User.hasMany(Formulario)
 
 export default Formulario

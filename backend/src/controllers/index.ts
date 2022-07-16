@@ -1,5 +1,9 @@
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { RequestError, UnauthorizedError } from 'types/express/errors'
+import {
+  BadRequestError,
+  RequestError,
+  UnauthorizedError
+} from 'types/express/errors'
 
 export interface CrudController {
   create: (req: Request, res: Response) => Promise<void>
@@ -22,4 +26,12 @@ export const checkPermissionResource = (permission: string, req: Request) => {
   if (permission === 'owned' && req.user.id !== Number(req.params.id)) {
     throw new UnauthorizedError()
   }
+}
+
+export const validateMandatoryFields = (fields: string[], data: any) => {
+  fields.forEach(field => {
+    if (!data[field]) {
+      throw new BadRequestError()
+    }
+  })
 }

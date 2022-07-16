@@ -10,14 +10,6 @@ import {
 import { sequelize } from 'database'
 import User from './user'
 
-export type CampoTipoProcesso = {
-  ordem: number
-  pergunta?: string
-  descricao?: string
-  obrigatorio: boolean
-  outros?: any
-}
-
 export type TipoProcessoStatus = 'ativo' | 'inativo' | 'rascunho'
 
 export interface TipoProcessoModel
@@ -32,7 +24,7 @@ export interface TipoProcessoModel
   dataInicio: CreationOptional<Date>
   dataFim: CreationOptional<Date>
   escopo: string
-  campos: CampoTipoProcesso[]
+  formularios: number[]
   colegiado: boolean
   deleted: boolean
   createdAt?: Date
@@ -62,9 +54,10 @@ const TipoProcesso = sequelize.define<TipoProcessoModel>('tipo_processo', {
     allowNull: false,
     defaultValue: 'privado'
   },
-  campos: {
-    type: DataTypes.ARRAY(DataTypes.JSON),
-    allowNull: false
+  formularios: {
+    type: DataTypes.ARRAY(DataTypes.NUMBER),
+    allowNull: false,
+    defaultValue: []
   },
   colegiado: {
     type: DataTypes.BOOLEAN,

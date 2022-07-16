@@ -10,17 +10,17 @@ export type RemoteUser = {
   permissoes?: any
 }
 
+export type UserQuery = WhereOptions<InferAttributes<UserModel>>
+
 export const UserService = {
-  getAll: async function (
-    query: WhereOptions<InferAttributes<UserModel>> = {}
-  ) {
+  getAll: async function (query: UserQuery = {}) {
     const resource = await User.findAll({ where: { deleted: false, ...query } })
     return resource
   },
   getById: async function (id: number) {
-    const user = await User.findByPk(id)
+    const user = await User.findOne({ where: { id, deleted: false } })
 
-    if (!user || user.deleted) {
+    if (!user) {
       throw new NotFoundError()
     }
 
@@ -33,9 +33,9 @@ export const UserService = {
   },
 
   create: async function (data: RemoteUser) {
-    const emailAlreadyUsed = await this.getByEmail(data.email)
+    const resourceAlreadyCreated = await this.getByEmail(data.email)
 
-    if (emailAlreadyUsed) {
+    if (resourceAlreadyCreated) {
       throw new ConflictError()
     }
 
@@ -44,32 +44,32 @@ export const UserService = {
   },
 
   update: async function (id: number, data: any) {
-    const user = await User.findByPk(id)
+    const resource = await User.findOne({ where: { id, deleted: false } })
 
-    if (!user || user.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
     delete data.senha
 
-    user.set({ ...data })
+    resource.set({ ...data })
 
-    await user.save()
+    await resource.save()
 
-    return user
+    return resource
   },
   destroy: async function (id: number) {
-    const user = await User.findByPk(id)
+    const resource = await User.findOne({ where: { id, deleted: false } })
 
-    if (!user || user.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    user.set({ deleted: true })
+    resource.set({ deleted: true })
 
-    await user.save()
+    await resource.save()
 
-    return user
+    return resource
   },
   validPassword: async function (password: string, encrypted: string) {
     return bcrypt.compare(password, encrypted)

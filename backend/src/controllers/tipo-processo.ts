@@ -1,22 +1,31 @@
 import {
   checkPermissionResource,
   CrudController,
-  errorResponseHandler
+  errorResponseHandler,
+  validateMandatoryFields
 } from 'controllers'
-import { RemoteTipoProcesso } from 'services/entities/tipo-processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
 import { TipoProcessoService } from './../services/entities/tipo-processo-service'
+
+export type RemoteTipoProcesso = {
+  nome: string
+  descricao?: string
+  dataInicio?: Date
+  dataFim?: Date
+  escopo: string
+  colegiado: boolean
+}
 
 export const TipoProcessoController: CrudController = {
   create: async (req: Request, res: Response) => {
     try {
       const data: RemoteTipoProcesso = req.body
 
-      if (!data.nome || !data.campos) {
-        throw new BadRequestError()
-      }
+      const mandatoryFields = ['nome', 'escopo', 'colegiado']
+
+      validateMandatoryFields(mandatoryFields, data)
 
       const newResource = await TipoProcessoService.create({
         ...data,

@@ -5,55 +5,57 @@ import { NotFoundError } from 'types/express/errors'
 export type CreateComentario = {
   conteudo: string
   processoId: number
-  userId: number
+  createdBy: number
   comentarioMae?: number
 }
 
 export const ComentarioService = {
   getById: async function (id: number) {
-    const comentario = await Comentario.findByPk(id)
+    const resource = await Comentario.findOne({ where: { id, deleted: false } })
 
-    if (!comentario || comentario.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    return comentario
+    return resource
   },
   getAll: async function () {
-    const comentarios = await Comentario.findAll({
+    const resources = await Comentario.findAll({
       include: [User, Comentario],
       where: { deleted: false }
     })
-    return comentarios
+    return resources
   },
   create: async function (data: CreateComentario) {
-    const newComentario = await Comentario.create(data)
-    return newComentario
+    const newResource = await Comentario.create(data)
+    return newResource
   },
   update: async function (id: number, data: any) {
-    const comentario = await Comentario.findByPk(id)
+    const resource = await Comentario.findOne({ where: { id, deleted: false } })
 
-    if (!comentario || comentario.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    comentario.set({ ...data })
+    resource.set({ ...data })
 
-    await comentario.save()
+    await resource.save()
 
-    return comentario
+    return resource
   },
   destroy: async function (id: number) {
-    const comentario = await Comentario.findByPk(id)
+    const resource = await Comentario.findOne({
+      where: { id, deleted: false }
+    })
 
-    if (!comentario || comentario.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    comentario.set({ deleted: true })
+    resource.set({ deleted: true })
 
-    await comentario.save()
+    await resource.save()
 
-    return comentario
+    return resource
   }
 }

@@ -1,20 +1,38 @@
-import { checkPermissionResource, errorResponseHandler } from 'controllers'
-import { ProcessoService } from 'services/entities/processo-service'
+import {
+  checkPermissionResource,
+  errorResponseHandler,
+  validateMandatoryFields
+} from 'controllers'
+import { VotoProcesso } from 'models/processo'
+import {
+  ProcessoQuery,
+  ProcessoService
+} from 'services/entities/processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
 
+export type RemoteProcesso = {
+  tipo: number
+  resposta: string
+  votos?: VotoProcesso[]
+}
+
 export const ProcessoController = {
   create: async (req: Request, res: Response) => {
     try {
-      const data = req.body
+      const permission = req.user.permissoes.processo_create
 
-      if (!data.resposta || !data.tipo_processo) {
-        throw new BadRequestError()
-      }
+      checkPermissionResource(permission, req)
+
+      const data: RemoteProcesso = req.body
+
+      const mandatoryFields = ['resposta', 'tipo']
+
+      validateMandatoryFields(mandatoryFields, data)
 
       const newResource = await ProcessoService.create({
-        autor: req.user.id,
+        createdBy: req.user.id,
         tipo: req.body.tipo_processo,
         resposta: req.body.resposta
       })
@@ -26,9 +44,10 @@ export const ProcessoController = {
   },
   read: async (req: Request, res: Response) => {
     try {
-      const permissions = req.user.permissoes.processo_read
+      const permission = req.user.permissoes.processo_read
 
-      const query = permissions === 'owned' ? { userId: req.user.id } : {}
+      const query: ProcessoQuery =
+        permission === 'owned' ? { createdBy: req.user.id } : {}
 
       const resources = await ProcessoService.getAll(query)
 
@@ -80,7 +99,7 @@ export const ProcessoController = {
     try {
       const { id } = req.params
 
-      const permission = req.user.permissoes.process_delete
+      const permission = req.user.permissoes.processo_delete
 
       checkPermissionResource(permission, req)
 

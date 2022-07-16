@@ -41,7 +41,7 @@ const Comentario = sequelize.define<ComentarioModel>('comentario', {
 })
 
 Comentario.belongsTo(Processo)
-Comentario.belongsTo(User)
+Comentario.belongsTo(User, { foreignKey: 'createdBy' })
 Processo.hasMany(Comentario)
 Comentario.hasMany(Comentario, { foreignKey: 'comentarioMae' })
 

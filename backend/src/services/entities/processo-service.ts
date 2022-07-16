@@ -5,59 +5,59 @@ import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
 export type RemoteProcesso = {
-  autor: number
   tipo: number
   resposta: string
   votos?: VotoProcesso[]
+  createdBy: number
 }
+
+export type ProcessoQuery = WhereOptions<InferAttributes<ProcessoModel>>
 
 export const ProcessoService = {
   getById: async function (id: number) {
-    const processo = await Processo.findByPk(id)
+    const resource = await Processo.findOne({ where: { id, deleted: false } })
 
-    if (!processo || processo.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    return processo
+    return resource
   },
-  getAll: async function (
-    query: WhereOptions<InferAttributes<ProcessoModel>> = {}
-  ) {
-    const processos = await Processo.findAll({
+  getAll: async function (query: ProcessoQuery = {}) {
+    const resources = await Processo.findAll({
       include: [TipoProcesso, Comentario],
       where: { deleted: false, ...query }
     })
-    return processos
+    return resources
   },
   create: async function (data: RemoteProcesso) {
-    const novoProcesso = await Processo.create(data)
-    return novoProcesso
+    const newResource = await Processo.create(data)
+    return newResource
   },
   update: async function (id: number, data: any) {
-    const processo = await Processo.findByPk(id)
+    const resource = await Processo.findOne({ where: { id, deleted: false } })
 
-    if (!processo || processo.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    processo.set({ ...data })
+    resource.set({ ...data })
 
-    await processo.save()
+    await resource.save()
 
-    return processo
+    return resource
   },
   destroy: async function (id: number) {
-    const processo = await Processo.findByPk(id)
+    const resource = await Processo.findOne({ where: { id, deleted: false } })
 
-    if (!processo || processo.deleted) {
+    if (!resource) {
       throw new NotFoundError()
     }
 
-    processo.set({ deleted: true })
+    resource.set({ deleted: true })
 
-    await processo.save()
+    await resource.save()
 
-    return processo
+    return resource
   }
 }

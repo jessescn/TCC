@@ -1,6 +1,6 @@
 import Form from 'models/form'
 import { FormMockBuilder } from 'models/__mocks__/form-mock'
-import { FormService, RemoteForm } from '../form-service'
+import { FormService, RemoteForm } from '../formulario-service'
 import { mockCreate, mockFindAll, mockFindByPk } from '../__mocks__/models-mock'
 import { NotFoundError } from 'types/express/errors'
 

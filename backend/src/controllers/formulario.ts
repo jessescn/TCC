@@ -1,28 +1,42 @@
 import {
   checkPermissionResource,
   CrudController,
-  errorResponseHandler
+  errorResponseHandler,
+  validateMandatoryFields
 } from 'controllers'
-import { FormService, RemoteFormulario } from 'services/entities/form-service'
+import { CampoFormulario } from 'models/formulario'
+import {
+  FormularioQuery,
+  FormularioService
+} from 'services/entities/formulario-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
 
+export type RemoteFormulario = {
+  nome: string
+  campos: CampoFormulario[]
+}
+
 export const FormularioController: CrudController = {
   create: async (req: Request, res: Response) => {
     try {
+      const permission = req.user.permissoes.form_create
+
+      checkPermissionResource(permission, req)
+
       const data: RemoteFormulario = req.body
 
-      if (!data.nome || !data.campos) {
-        throw new BadRequestError()
-      }
+      const mandatoryFields = ['nome', 'campos']
 
-      const form = await FormService.create({
+      validateMandatoryFields(mandatoryFields, data)
+
+      const newResource = await FormularioService.create({
         ...data,
-        userId: req.user.id
+        createdBy: req.user.id
       })
 
-      res.status(HttpStatusCode.created).json(form)
+      res.status(HttpStatusCode.created).json(newResource)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -31,11 +45,12 @@ export const FormularioController: CrudController = {
     try {
       const permission = req.user.permissoes.form_read
 
-      const query = permission === 'owned' ? { userId: req.user.id } : {}
+      const query: FormularioQuery =
+        permission === 'owned' ? { createdBy: req.user.id } : {}
 
-      const forms = await FormService.getAll(query)
+      const resource = await FormularioService.getAll(query)
 
-      res.send(forms)
+      res.json(resource)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -52,9 +67,9 @@ export const FormularioController: CrudController = {
         throw new BadRequestError()
       }
 
-      const form = await FormService.getById(Number(id))
+      const resource = await FormularioService.getById(Number(id))
 
-      res.json(form)
+      res.json(resource)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -72,9 +87,9 @@ export const FormularioController: CrudController = {
         throw new BadRequestError()
       }
 
-      const updatedForm = await FormService.update(Number(id), data)
+      const updatedResource = await FormularioService.update(Number(id), data)
 
-      res.json(updatedForm)
+      res.json(updatedResource)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -91,9 +106,9 @@ export const FormularioController: CrudController = {
         throw new BadRequestError()
       }
 
-      const deletedForm = await FormService.destroy(Number(id))
+      const deletedResource = await FormularioService.destroy(Number(id))
 
-      res.json(deletedForm)
+      res.json(deletedResource)
     } catch (error) {
       errorResponseHandler(res, error)
     }

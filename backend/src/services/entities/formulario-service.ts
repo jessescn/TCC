@@ -1,24 +1,19 @@
-import TipoProcesso from 'models/tipo-processo'
+import Formulario, { FormularioModel, CampoFormulario } from 'models/formulario'
 import User from 'models/user'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
-import { TipoProcessoModel } from './../../models/tipo-processo'
 
-export type CreateTipoProcesso = {
+export type CreateFormulario = {
   nome: string
-  descricao?: string
-  dataInicio?: Date
-  dataFim?: Date
-  escopo: string
-  colegiado: boolean
+  campos: CampoFormulario[]
   createdBy: number
 }
 
-export const TipoProcessoService = {
+export type FormularioQuery = WhereOptions<InferAttributes<FormularioModel>>
+
+export const FormularioService = {
   getById: async function (id: number) {
-    const resource = await TipoProcesso.findOne({
-      where: { id, deleted: false }
-    })
+    const resource = await Formulario.findOne({ where: { id, deleted: false } })
 
     if (!resource) {
       throw new NotFoundError()
@@ -26,23 +21,19 @@ export const TipoProcessoService = {
 
     return resource
   },
-  getAll: async function (
-    query: WhereOptions<InferAttributes<TipoProcessoModel>> = {}
-  ) {
-    const resources = await TipoProcesso.findAll({
+  getAll: async function (query: FormularioQuery = {}) {
+    const resources = await Formulario.findAll({
       include: User,
       where: { deleted: false, ...query }
     })
     return resources
   },
-  create: async function (data: CreateTipoProcesso) {
-    const newResource = await TipoProcesso.create(data)
+  create: async function (data: CreateFormulario) {
+    const newResource = await Formulario.create(data)
     return newResource
   },
   update: async function (id: number, data: any) {
-    const resource = await TipoProcesso.findOne({
-      where: { id, deleted: false }
-    })
+    const resource = await Formulario.findOne({ where: { id, deleted: false } })
 
     if (!resource) {
       throw new NotFoundError()
@@ -55,9 +46,7 @@ export const TipoProcessoService = {
     return resource
   },
   destroy: async function (id: number) {
-    const resource = await TipoProcesso.findOne({
-      where: { id, deleted: false }
-    })
+    const resource = await Formulario.findOne({ where: { id, deleted: false } })
 
     if (!resource) {
       throw new NotFoundError()

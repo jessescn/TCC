@@ -1,9 +1,14 @@
 import {
   checkPermissionResource,
   CrudController,
-  errorResponseHandler
+  errorResponseHandler,
+  validateMandatoryFields
 } from 'controllers'
-import { RemoteUser, UserService } from 'services/entities/user-service'
+import {
+  RemoteUser,
+  UserQuery,
+  UserService
+} from 'services/entities/user-service'
 import { Default } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
@@ -13,9 +18,9 @@ export const UserController: CrudController = {
     try {
       const data: RemoteUser = req.body
 
-      if (!data.email || !data.nome || !data.senha) {
-        throw new BadRequestError()
-      }
+      const mandatoryFields = ['email', 'nome', 'senha']
+
+      validateMandatoryFields(mandatoryFields, data)
 
       const user = await UserService.create({ ...data, permissoes: Default })
 
@@ -29,7 +34,7 @@ export const UserController: CrudController = {
     try {
       const permission = req.user.permissoes.user_read
 
-      const query = permission === 'owned' ? { id: req.user.id } : {}
+      const query: UserQuery = permission === 'owned' ? { id: req.user.id } : {}
 
       const users = await UserService.getAll(query)
 
