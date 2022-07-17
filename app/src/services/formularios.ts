@@ -11,27 +11,27 @@ export const FormService = {
   list: () => {
     return httpClient.request<AxiosResponse<FormularioModel[]>>({
       method: 'get',
-      url: '/forms'
+      url: '/formularios'
     })
   },
   create: (payload: FormularioModel) => {
     return httpClient.request<AxiosResponse<FormularioModel[]>>({
       method: 'post',
-      url: '/forms',
+      url: '/formularios',
       body: payload
     })
   },
   update: (formId: number, update: Partial<FormularioModel>) => {
     return httpClient.request<AxiosResponse<FormularioModel>>({
       method: 'put',
-      url: `/forms/${formId}`,
+      url: `/formularios/${formId}`,
       body: update
     })
   },
   delete: (formId: number) => {
     return httpClient.request<AxiosResponse<FormularioModel>>({
       method: 'delete',
-      url: `/forms/${formId}`
+      url: `/formularios/${formId}`
     })
   }
 }

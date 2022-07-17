@@ -47,7 +47,7 @@ export default function InvalidFieldsModal({
           <UnorderedList p="16px">
             {invalidFields.map(field => (
               <ListItem key={field.ordem} fontSize="14px">
-                {field.pergunta}
+                {''}
               </ListItem>
             ))}
           </UnorderedList>

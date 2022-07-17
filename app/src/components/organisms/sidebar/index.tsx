@@ -12,7 +12,6 @@ import { useState } from 'react'
 
 import { motion } from 'framer-motion'
 import { BsCardChecklist, BsListCheck } from 'react-icons/bs'
-import { FaWpforms } from 'react-icons/fa'
 import { FiCornerDownRight, FiHome, FiUser } from 'react-icons/fi'
 
 import { BiLogOut } from 'react-icons/bi'
@@ -121,12 +120,12 @@ const Sidebar = () => {
             items={[
               {
                 title: 'Homologacão de banca examinadora (mestrado)',
-                url: '/novo-processo',
+                url: '/novo-processo/1',
                 icon: FiCornerDownRight
               },
               {
                 title: 'Homologacão de banca examinadora (doutorado)',
-                url: '/novo-processo',
+                url: '/novo-processo/2',
                 icon: FiCornerDownRight
               }
             ]}

@@ -22,7 +22,7 @@ const Answer = ({ answer, question, isInvalid, onInvalidate }: AnswerProps) => {
   return (
     <Flex align="center">
       <Text mr="8px" fontWeight="bold">
-        {question.pergunta}:
+        {''}:
       </Text>
       <Input
         width="fit-content"

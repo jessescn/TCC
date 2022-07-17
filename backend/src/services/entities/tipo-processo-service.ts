@@ -7,11 +7,12 @@ import { TipoProcessoModel } from './../../models/tipo-processo'
 export type CreateTipoProcesso = {
   nome: string
   descricao?: string
-  dataInicio?: Date
-  dataFim?: Date
+  dataInicio?: string
+  dataFim?: string
   escopo: string
   colegiado: boolean
   createdBy: number
+  formularios: number[]
 }
 
 export const TipoProcessoService = {

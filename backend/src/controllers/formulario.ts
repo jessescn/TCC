@@ -15,6 +15,7 @@ import { isNumber } from 'utils/value'
 
 export type RemoteFormulario = {
   nome: string
+  descricao?: string
   campos: CampoFormulario[]
 }
 

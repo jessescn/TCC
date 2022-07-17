@@ -10,12 +10,24 @@ import {
 import { sequelize } from 'database'
 import User from 'models/user'
 
+import mock from 'types/campos-formulario/modelo-mockado'
+
+type TipoCampoFormulario =
+  | 'paragrafo'
+  | 'resposta'
+  | 'data'
+  | 'hora'
+  | 'ficheiro'
+  | 'escolha_multipla'
+  | 'caixa_verificacao'
+  | 'grelha_multipla'
+  | 'grelha_verificacao'
+
 export type CampoFormulario = {
   ordem: number
-  pergunta?: string
-  descricao?: string
-  obrigatorio: boolean
-  outros?: any
+  tipo: TipoCampoFormulario
+  obrigatorio?: boolean
+  configuracao_campo?: any
 }
 
 export interface FormularioModel
@@ -25,6 +37,7 @@ export interface FormularioModel
   > {
   id: CreationOptional<number>
   nome: string
+  descricao: CreationOptional<string>
   campos: CampoFormulario[]
   deleted: CreationOptional<boolean>
   createdAt?: Date
@@ -42,6 +55,9 @@ const Formulario = sequelize.define<FormularioModel>('formulario', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  descricao: {
+    type: DataTypes.STRING
+  },
   campos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
     allowNull: false
@@ -57,5 +73,12 @@ const Formulario = sequelize.define<FormularioModel>('formulario', {
 
 Formulario.belongsTo(User, { foreignKey: 'createdBy' })
 User.hasMany(Formulario)
+
+Formulario.findOrCreate({
+  where: {
+    nome: mock.formulario.nome
+  },
+  defaults: mock.formulario
+})
 
 export default Formulario

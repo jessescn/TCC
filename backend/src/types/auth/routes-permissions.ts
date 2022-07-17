@@ -11,7 +11,7 @@ export const routesPermissionsMap = {
     put: ['user_update'],
     delete: ['user_delete']
   },
-  forms: {
+  formularios: {
     post: ['form_create'],
     get: ['form_read'],
     put: ['form_update'],

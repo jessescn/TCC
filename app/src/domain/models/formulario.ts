@@ -1,11 +1,19 @@
-export type FormStatus = 'ativo' | 'inativo' | 'rascunho'
+export type TipoCampoFormulario =
+  | 'paragrafo'
+  | 'resposta'
+  | 'data'
+  | 'hora'
+  | 'ficheiro'
+  | 'escolha_multipla'
+  | 'caixa_verificacao'
+  | 'grelha_multipla'
+  | 'grelha_verificacao'
 
-export type CampoFormulario = {
+export type CampoFormulario<T = any> = {
   ordem: number
-  pergunta?: string
-  descricao?: string
-  obrigatorio: boolean
-  outros?: any
+  tipo: TipoCampoFormulario
+  obrigatorio?: boolean
+  configuracao_campo: T
 }
 
 export interface FormularioModel {

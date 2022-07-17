@@ -17,7 +17,7 @@ export default function TipoProcesso() {
   const id = Number(searchParams.get('id'))
 
   const tipoProcesso = !isNaN(id)
-    ? useSelector(selectors.tipoProcesso.getTipoProcessoById)(id)
+    ? useSelector(selectors.tipoProcesso.getTipoProcesso)(id)
     : undefined
 
   useEffect(() => {

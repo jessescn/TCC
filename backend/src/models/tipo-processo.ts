@@ -10,6 +10,8 @@ import {
 import { sequelize } from 'database'
 import User from './user'
 
+import mock from 'types/campos-formulario/modelo-mockado'
+
 export type TipoProcessoStatus = 'ativo' | 'inativo' | 'rascunho'
 
 export interface TipoProcessoModel
@@ -21,8 +23,8 @@ export interface TipoProcessoModel
   nome: string
   descricao: CreationOptional<string>
   status: CreationOptional<TipoProcessoStatus>
-  dataInicio: CreationOptional<Date>
-  dataFim: CreationOptional<Date>
+  dataInicio: CreationOptional<string>
+  dataFim: CreationOptional<string>
   escopo: string
   formularios: number[]
   colegiado: boolean
@@ -55,7 +57,7 @@ const TipoProcesso = sequelize.define<TipoProcessoModel>('tipo_processo', {
     defaultValue: 'privado'
   },
   formularios: {
-    type: DataTypes.ARRAY(DataTypes.NUMBER),
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
     allowNull: false,
     defaultValue: []
   },
@@ -69,12 +71,19 @@ const TipoProcesso = sequelize.define<TipoProcessoModel>('tipo_processo', {
     allowNull: false,
     defaultValue: false
   },
-  dataInicio: DataTypes.DATE,
-  dataFim: DataTypes.DATE,
+  dataInicio: DataTypes.STRING,
+  dataFim: DataTypes.STRING,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE
 })
 
 TipoProcesso.belongsTo(User, { foreignKey: 'createdBy' })
+
+TipoProcesso.findOrCreate({
+  where: {
+    nome: mock.tipoProcesso.nome
+  },
+  defaults: mock.tipoProcesso
+})
 
 export default TipoProcesso

@@ -9,10 +9,10 @@ export const getTipoProcessos = createSelector([getRoot], state => {
   return state.tipoProcessos
 })
 
-export const getTipoProcessoById = createSelector(
+export const getTipoProcesso = createSelector(
   [getTipoProcessos],
-  tipos => (id: number) => {
-    return tipos.find(tipo => tipo.id === id)
+  tipoProcessos => (id: number) => {
+    return tipoProcessos.find(tipo => tipo.id === id)
   }
 )
 

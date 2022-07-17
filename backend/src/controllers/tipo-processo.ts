@@ -12,10 +12,11 @@ import { TipoProcessoService } from './../services/entities/tipo-processo-servic
 export type RemoteTipoProcesso = {
   nome: string
   descricao?: string
-  dataInicio?: Date
-  dataFim?: Date
+  dataInicio?: string
+  dataFim?: string
   escopo: string
   colegiado: boolean
+  formularios: number[]
 }
 
 export const TipoProcessoController: CrudController = {
