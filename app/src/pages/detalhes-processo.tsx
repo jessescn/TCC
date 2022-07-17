@@ -13,14 +13,19 @@ const DetalhesProcesso = () => {
   const { id } = useParams()
 
   const processo = useSelector(state =>
-    !id ? undefined : selectors.processo.getProcessoById(state)(+id)
+    selectors.processo.getProcessoById(state)(Number(id))
+  )
+
+  const formularios = useSelector(state =>
+    selectors.form.getFormulariosByProcesso(state)(processo)
   )
 
   useEffect(() => {
     store.dispatch(actions.processo.list())
+    store.dispatch(actions.form.list())
   }, [])
 
-  const [showComments, setShowComments] = useState(true)
+  const [showComments, setShowComments] = useState(false)
   const [invalidos, setInvalidos] = useState<CampoFormulario[]>([])
 
   const handleToggleComments = () => {
@@ -58,7 +63,7 @@ const DetalhesProcesso = () => {
                 processo={processo}
                 invalidos={invalidos}
                 setInvalidos={setInvalidos}
-                formulario={{} as any}
+                formularios={formularios}
               />
             </Box>
             <Box height="80px">

@@ -13,6 +13,8 @@ export function CampoHora(props: Props) {
     <Box>
       <CampoParagrafo {...paragrafoProps} />
       <Input
+        mt="16px"
+        size="sm"
         type="time"
         placeholder="Resposta"
         maxW="fit-content"

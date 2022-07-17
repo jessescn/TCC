@@ -2,7 +2,7 @@ import { Box, Stack } from '@chakra-ui/react'
 import { campoComponente } from 'components/molecules/forms/fields'
 import { FormularioModel } from 'domain/models/formulario'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import Footer from './footer'
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 export default function RenderFormulario({ formulario }: Props) {
   const { campos } = formulario
 
-  const { register, handleSubmit, formState } = useForm()
+  const methods = useForm()
 
   function handleClear() {
     return null
@@ -22,29 +22,47 @@ export default function RenderFormulario({ formulario }: Props) {
     console.log(data)
   }
 
-  useEffect(() => {
-    console.log(formState)
-  }, [formState])
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing="16px" overflowY="auto">
-        {campos.map(campo => {
-          const Componente = campoComponente[campo.tipo]
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <Stack spacing="16px">
+          {campos.map(campo => {
+            const Componente = campoComponente[campo.tipo]
 
-          return (
-            <Box bgColor="initial.white" px="24px" py="32px" borderRadius="8px">
-              <Componente
-                {...campo}
-                register={register(`campo ${campo.ordem}`, {
-                  required: campo.obrigatorio
-                })}
-              />
-            </Box>
-          )
-        })}
-      </Stack>
-      <Footer onClear={handleClear} />
-    </form>
+            if (campo.tipo === 'paragrafo') {
+              return (
+                <Box
+                  key={campo.ordem}
+                  bgColor="initial.white"
+                  py="16px"
+                  px="24px"
+                  borderRadius="8px"
+                >
+                  <Componente {...campo} obrigatorio={false} />
+                </Box>
+              )
+            }
+
+            return (
+              <Box
+                key={campo.ordem}
+                bgColor="initial.white"
+                px="24px"
+                py="32px"
+                borderRadius="8px"
+              >
+                <Componente
+                  {...campo}
+                  register={methods.register(`campo ${campo.ordem}`, {
+                    required: campo.obrigatorio
+                  })}
+                />
+              </Box>
+            )
+          })}
+        </Stack>
+        <Footer onClear={handleClear} />
+      </form>
+    </FormProvider>
   )
 }

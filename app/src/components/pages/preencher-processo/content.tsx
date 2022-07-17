@@ -16,10 +16,10 @@ type Props = {
 
 export default function Content({ formularios }: Props) {
   return (
-    <Tabs variant="enclosed">
+    <Tabs variant="enclosed" isFitted>
       <TabList>
         {formularios.map(formulario => (
-          <Tab maxW="30%">
+          <Tab maxW="50%" key={formulario.id} _selected={{ bgColor: '#fff' }}>
             <Tooltip label={formulario.nome}>
               <Text noOfLines={1}>{formulario.nome}</Text>
             </Tooltip>
@@ -28,7 +28,7 @@ export default function Content({ formularios }: Props) {
       </TabList>
       <TabPanels>
         {formularios.map(formulario => (
-          <TabPanel>
+          <TabPanel key={formulario.id} px={0}>
             <RenderFormulario formulario={formulario} />
           </TabPanel>
         ))}

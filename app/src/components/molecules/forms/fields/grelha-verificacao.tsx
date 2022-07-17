@@ -17,11 +17,13 @@ import { CampoParagrafo } from './paragrafo'
 type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaVerificacao>
 
 export function CampoGrelhaVerificacao(props: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { register, ...paragrafoProps } = props
   const { colunas, linhas } = props.configuracao_campo
 
   return (
     <Box>
-      <CampoParagrafo {...props} />
+      <CampoParagrafo {...paragrafoProps} />
       <Table>
         <Thead>
           <Tr>

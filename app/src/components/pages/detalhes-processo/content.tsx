@@ -1,69 +1,25 @@
-import {
-  Flex,
-  Grid,
-  GridItem,
-  Icon,
-  IconButton,
-  Input,
-  Text
-} from '@chakra-ui/react'
+import { Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import { ProcessoModel, RespostaCampo } from 'domain/models/processo'
-import { AiFillWarning } from 'react-icons/ai'
-
-type AnswerProps = {
-  answer: RespostaCampo
-  question: CampoFormulario
-  isInvalid: boolean
-  onInvalidate: (question: CampoFormulario) => void
-}
-
-const Answer = ({ answer, question, isInvalid, onInvalidate }: AnswerProps) => {
-  return (
-    <Flex align="center">
-      <Text mr="8px" fontWeight="bold">
-        {''}:
-      </Text>
-      <Input
-        width="fit-content"
-        isDisabled
-        value={answer.valor}
-        _disabled={{
-          color: 'secondary.dark',
-          fontWeight: 'bold',
-          opacity: 1,
-          bgColor: 'secondary.default'
-        }}
-      />
-      <IconButton
-        onClick={() => onInvalidate(question)}
-        aria-label=""
-        bgColor="initial.white"
-        ml="8px"
-        variant="unstyled"
-        icon={
-          <Icon
-            as={AiFillWarning}
-            color={isInvalid ? 'info.error' : 'initial.black'}
-          />
-        }
-      />
-    </Flex>
-  )
-}
+import { ProcessoModel } from 'domain/models/processo'
+import { useState } from 'react'
+import RenderFormulario from './render-formulario'
 
 type Props = {
   processo: ProcessoModel
   invalidos: CampoFormulario[]
   setInvalidos: React.Dispatch<React.SetStateAction<CampoFormulario[]>>
-  formulario: FormularioModel
+  formularios: FormularioModel[]
 }
 
-const Content = ({ processo, invalidos, setInvalidos, formulario }: Props) => {
-  const { respostas, camposInvalidos } = processo
-  const perguntas = formulario.campos
+const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
+  const [formularioSelecionado, setFormularioSelecionado] = useState(
+    formularios[0]
+  )
 
-  const resposta = respostas.find(value => value.formulario === formulario.id)
+  function handleSelectFormulario(option: any) {
+    console.log(option)
+    return null
+  }
 
   function handleInvalidate(question: CampoFormulario) {
     const alreadyInvalid = invalidos.find(
@@ -79,23 +35,36 @@ const Content = ({ processo, invalidos, setInvalidos, formulario }: Props) => {
   }
 
   return (
-    <Grid templateColumns="repeat(12, 1fr)" gap={6}>
-      {resposta?.campos.map(valor => {
-        const question = perguntas.find(campo => campo.ordem === valor.ordem)
-        const isInvalid = invalidos.find(campo => campo.ordem === valor.ordem)
-
-        return !question ? null : (
-          <GridItem colSpan={6}>
-            <Answer
-              question={question}
-              answer={valor}
-              isInvalid={!!isInvalid}
-              onInvalidate={handleInvalidate}
-            />
-          </GridItem>
-        )
-      })}
-    </Grid>
+    <>
+      <Stack spacing="16px">
+        <Flex alignItems="center">
+          <Text fontSize="14px" mr="8px" fontWeight="bold">
+            Nome:
+          </Text>
+          <Text fontSize="12px">{processo.tipo_processo?.nome}</Text>
+        </Flex>
+        <Flex alignItems="center">
+          <Text fontSize="14px" fontWeight="bold" mr="8px">
+            Formulário:
+          </Text>
+          <Select size="xs" maxW="600px" onChange={handleSelectFormulario}>
+            {formularios.map(formulario => (
+              <option value={formulario.id} key={formulario.id}>
+                {formulario.nome}
+              </option>
+            ))}
+          </Select>
+        </Flex>
+      </Stack>
+      <Divider borderWidth="2px" borderColor="#EEE" my="16px" />
+      {formularioSelecionado && (
+        <RenderFormulario
+          formulario={formularioSelecionado}
+          processo={processo}
+          handleInvalidate={handleInvalidate}
+        />
+      )}
+    </>
   )
 }
 

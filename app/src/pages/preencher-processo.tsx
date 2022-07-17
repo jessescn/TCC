@@ -13,7 +13,7 @@ export default function PreencherProcesso() {
     selectors.tipoProcesso.getTipoProcesso(state)(Number(id))
   )
   const formularios = useSelector(state =>
-    selectors.form.getFormsByTipoProcesso(state)(tipoProcesso)
+    selectors.form.getFormulariosByTipoProcesso(state)(tipoProcesso)
   )
 
   useEffect(() => {

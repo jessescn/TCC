@@ -1,6 +1,5 @@
-import { Box, Stack } from '@chakra-ui/react'
+import { Box, Center, Image, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import { CampoParagrafo } from 'components/molecules/forms/fields/paragrafo'
 
 export default function Home() {
   return (
@@ -14,110 +13,35 @@ export default function Home() {
         px="24px"
         py="32px"
       >
-        <Box>
-          <Stack spacing="24px" maxW="600px">
-            <CampoParagrafo
-              ordem={0}
-              tipo="paragrafo"
-              configuracao_campo={{ titulo: 'Dados do candidato' }}
-            />
-            {/* <CampoResposta
-              ordem={1}
-              obrigatorio
-              tipo="resposta"
-              configuracao_campo={{
-                titulo: 'Dados da defesa',
-                descricao:
-                  'A solicitação deve ser encaminhada com antecedência mínima de 28 dias para a data da defesa; tempo necessário para análise, homologação e trâmites necessários a defesa. Pedidos enviados fora do prazo poderão não ser atendidos. '
-              }}
-            />
-            <CampoData
-              ordem={1}
-              obrigatorio
-              tipo="data"
-              configuracao_campo={{
-                titulo: 'Data',
-                descricao:
-                  'Já combinada com a banca. Caso necessário, perguntar à secretaria se há disponibilidade do auditório do CEEI. Considerar apenas dias úteis (segunda a sexta) em acordo com o calendário da UFCG.'
-              }}
-            />
-            <CampoHora
-              ordem={1}
-              obrigatorio
-              tipo="hora"
-              configuracao_campo={{
-                titulo: 'Horário',
-                descricao:
-                  'Já combinado com a banca. Favor usar o padrão 24h; por exemplo, 14:00 ao invés de 02:00. Favor evitar horários após 9h no turno da manhã ou após 14h30 no turno da tarde. Considerar apenas horário comercial.'
-              }}
-            />
-            <CampoFicheiro
-              ordem={1}
-              obrigatorio
-              tipo="ficheiro"
-              configuracao_campo={{
-                quantidade_arquivos: 2,
-                tamanho_maximo: 10,
-                titulo: 'Comprovante de Reserva do Local para a Defesa',
-                descricao:
-                  'Anexe aqui qualquer documento que confirme que o local da defesa está reservado no horário e data indicados e com o propósito da defesa. Pode ser: cópia de e-mail, printscreen de tela ou cópia de formulário de reserva.'
-              }}
-            />
-            <CampoEscolhaMultipla
-              ordem={1}
-              obrigatorio
-              tipo="escolha_multipla"
-              configuracao_campo={{
-                opcoes: [
-                  'Docente credenciado no PPGCC',
-                  'Ter experiência na área do trabalho a ser defendido, comprovada através de publicações, orientações acadêmicas ou experiência profissional.'
-                ],
-                outro: true,
-                titulo: 'Comprovante de Reserva do Local para a Defesa',
-                descricao:
-                  'Anexe aqui qualquer documento que confirme que o local da defesa está reservado no horário e data indicados e com o propósito da defesa. Pode ser: cópia de e-mail, printscreen de tela ou cópia de formulário de reserva.'
-              }}
-            />
-            <CampoCaixaVerificacao
-              ordem={1}
-              tipo="caixa_verificacao"
-              configuracao_campo={{
-                opcoes: [
-                  'Possuir Título de Doutor',
-                  'Ter experiência na área do trabalho a ser defendido, comprovada através de publicações, orientações acadêmicas ou experiência profissional.'
-                ],
-                outro: false,
-                titulo:
-                  'Informar que requisitos da Norma Complementar do PPGCC 001/2019 o membro externo 2 atende:'
-              }}
-            />
-            <CampoGrelhaMultipla
-              ordem={1}
-              tipo="grelha_multipla"
-              configuracao_campo={{
-                linhas: [
-                  'Orientador Principal',
-                  'Orientador Secundário (se existir)'
-                ],
-                colunas: ['Presencial', 'Video-conferencia'],
-                titulo:
-                  'Informar que requisitos da Norma Complementar do PPGCC 001/2019 o membro externo 2 atende:'
-              }}
-            />
-            <CampoGrelhaVerificacao
-              ordem={1}
-              tipo="grelha_verificacao"
-              configuracao_campo={{
-                linhas: [
-                  'Orientador Principal',
-                  'Orientador Secundário (se existir)'
-                ],
-                colunas: ['Presencial', 'Video-conferencia'],
-                titulo:
-                  'Informar que requisitos da Norma Complementar do PPGCC 001/2019 o membro externo 2 atende:'
-              }}
-            /> */}
-          </Stack>
+        <Center flexDir="column">
+          <Image
+            alt="ufcg logo image"
+            src="./logo_ufcg.png"
+            maxW={{ base: '50px', md: '100px' }}
+            mr="16px"
+          />
+          <Text mt="16px" fontSize="28px" textAlign="center" maxW="800px">
+            Universidade Federal de Campina Grande Pró-Reitoria de Ensino
+            Coordenação de Controle Acadêmico Histórico Acadêmico
+          </Text>
+        </Center>
+        <Box mt="50px">
+          <Text color="primary.dark" fontSize="18px" fontWeight="bold">
+            Novo Sistema de Processos da Pós-Graduacão
+          </Text>
+          <Text my="16px" fontSize="14px">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a
+            semper tortor. Fusce ut laoreet dui, sed ultricies mauris. Nulla ut
+            elementum leo, non suscipit mi. Duis posuere euismod tempor. Donec
+            faucibus sed lectus ut imperdiet. In vitae elementum risus, vitae
+            maximus tortor. Aliquam erat volutpat. Mauris rhoncus suscipit nisl
+            in cursus. Maecenas facilisis velit nibh, ac vestibulum ligula
+            facilisis sit amet. Mauris nec ipsum tortor. Aliquam erat volutpat.
+            Vivamus pulvinar velit ut risus malesuada sagittis. Aliquam in lacus
+            in risus luctus egestas sed ac tellus. Cras sit amet risus non
+            tortor eleifend placerat. Aliquam fringilla ligula at facilisis
+            varius.
+          </Text>
         </Box>
       </Box>
     </Screen>

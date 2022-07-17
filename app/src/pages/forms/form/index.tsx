@@ -16,9 +16,9 @@ export default function Form() {
 
   const id = Number(searchParams.get('id'))
 
-  const form = !isNaN(id)
-    ? useSelector(selectors.form.getFormById)(id)
-    : undefined
+  const form = useSelector(state =>
+    selectors.form.getFormularioById(state)(Number(id))
+  )
 
   useEffect(() => {
     store.dispatch(actions.form.list())

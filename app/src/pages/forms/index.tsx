@@ -31,10 +31,8 @@ export default function Formularios() {
   const [term, setTerm] = useState('')
 
   const forms = useSelector(state =>
-    selectors.form.getFormsBySearch(state)(term)
+    selectors.form.getFormulariosBySearch(state)(term)
   )
-
-  console.log(forms)
 
   useEffect(() => {
     store.dispatch(actions.form.list())

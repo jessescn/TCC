@@ -12,7 +12,7 @@ export function CampoParagrafo({ obrigatorio, configuracao_campo }: Props) {
       {titulo && (
         <Text fontWeight="bold" mb="8px">
           {titulo}
-          <Text as="span" color="info.error" hidden={!obrigatorio}>
+          <Text ml="4px" as="span" color="info.error" hidden={!obrigatorio}>
             *
           </Text>
         </Text>

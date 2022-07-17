@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { ProcessoModel } from 'domain/models/processo'
 import { State } from '..'
 
 export const getRoot = (state: State) => {
@@ -13,6 +14,17 @@ export const getTipoProcesso = createSelector(
   [getTipoProcessos],
   tipoProcessos => (id: number) => {
     return tipoProcessos.find(tipo => tipo.id === id)
+  }
+)
+
+export const getTipoProcessoByProcesso = createSelector(
+  [getTipoProcessos],
+  tipoProcessos => (processo?: ProcessoModel) => {
+    if (!processo) {
+      return
+    }
+
+    return tipoProcessos.find(tipo => tipo.id === processo.id)
   }
 )
 

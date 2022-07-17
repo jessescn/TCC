@@ -34,8 +34,6 @@ export default function TipoProcessos() {
     selectors.tipoProcesso.getTipoProcessosBySearch(state)(term)
   )
 
-  console.log(tipoProcessos)
-
   useEffect(() => {
     store.dispatch(actions.tipoProcesso.list())
   }, [])

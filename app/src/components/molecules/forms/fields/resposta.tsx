@@ -13,6 +13,8 @@ export function CampoResposta(props: Props) {
     <Box>
       <CampoParagrafo {...paragrafoProps} />
       <Input
+        mt="24px"
+        size="sm"
         variant="unstyled"
         placeholder="Resposta"
         borderBottom="1px solid #BCBCBC"

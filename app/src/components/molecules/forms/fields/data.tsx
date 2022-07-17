@@ -13,6 +13,8 @@ export function CampoData(props: Props) {
     <Box>
       <CampoParagrafo {...paragrafoProps} />
       <Input
+        mt="16px"
+        size="sm"
         type="date"
         placeholder="Resposta"
         maxW="fit-content"
