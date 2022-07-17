@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { TipoProcessoModel } from 'domain/models/tipo-processo'
 import { State } from '..'
 
 export const getRoot = (state: State) => {
@@ -32,3 +33,18 @@ export const getFormsBySearch = createSelector([getForms], forms => {
       return includes
     })
 })
+
+export const getFormsByTipoProcesso = createSelector(
+  [getForms],
+  formularios => {
+    return (tipoProcesso?: TipoProcessoModel) => {
+      if (!tipoProcesso) {
+        return []
+      }
+
+      return formularios.filter(formulario =>
+        tipoProcesso.formularios.includes(formulario.id)
+      )
+    }
+  }
+)

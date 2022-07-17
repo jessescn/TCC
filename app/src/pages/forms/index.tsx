@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
 
-export default function Forms() {
+export default function Formularios() {
   const navigate = useNavigate()
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -33,6 +33,8 @@ export default function Forms() {
   const forms = useSelector(state =>
     selectors.form.getFormsBySearch(state)(term)
   )
+
+  console.log(forms)
 
   useEffect(() => {
     store.dispatch(actions.form.list())
@@ -127,15 +129,17 @@ export default function Forms() {
               onChangePage={setCurrentPage}
               columns={[
                 { content: 'ID', props: { width: '10%' } },
-                { content: 'Nome', props: { width: '60%' } },
-                { content: 'Criado em', props: { width: '15%' } },
+                { content: 'Nome', props: { width: '45%' } },
+                { content: 'Criado por', props: { width: '15%' } },
+                { content: 'Última atualizacão', props: { width: '15%' } },
                 { content: '', props: { width: '5%' } }
               ]}
               rows={forms.map(form => [
                 { content: form.id },
                 { content: form.nome },
+                { content: form.createdBy?.nome },
                 {
-                  content: !form.createdAt ? '' : formatDate(form.createdAt)
+                  content: !form.updatedAt ? '' : formatDate(form.updatedAt)
                 },
                 { content: getEditMenu(form) }
               ])}

@@ -17,16 +17,12 @@ function* listProcessosSaga() {
       ProcessoService.list
     )
 
-    console.log(typeof response.data[0].resposta)
+    // const processos = response.data.map(processo => ({
+    //   ...processo,
+    //   respostas: JSON.parse(processo.resposta)
+    // }))
 
-    yield put(
-      actions.listSuccess(
-        response.data.map(processo => ({
-          ...processo,
-          respostas: JSON.parse(processo.resposta)
-        }))
-      )
-    )
+    yield put(actions.listSuccess(response.data as any))
   } catch (error) {
     yield put(actions.listFailure())
   }

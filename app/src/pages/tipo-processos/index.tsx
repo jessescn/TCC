@@ -34,6 +34,8 @@ export default function TipoProcessos() {
     selectors.tipoProcesso.getTipoProcessosBySearch(state)(term)
   )
 
+  console.log(tipoProcessos)
+
   useEffect(() => {
     store.dispatch(actions.tipoProcesso.list())
   }, [])
@@ -151,7 +153,7 @@ export default function TipoProcessos() {
                 { content: 'Colegiado', props: { width: '10%' } },
                 { content: 'Prazo Início', props: { width: '10%' } },
                 { content: 'Prazo Fim', props: { width: '10%' } },
-                { content: 'Criado', props: { width: '10%' } },
+                { content: 'Última atualizacão', props: { width: '10%' } },
                 { content: '', props: { width: '5%' } }
               ]}
               rows={tipoProcessos.map(tipo => [
@@ -170,9 +172,9 @@ export default function TipoProcessos() {
                     : format(new Date(tipo.dataFim), 'dd/MM/yyyy')
                 },
                 {
-                  content: !tipo.createdAt
+                  content: !tipo.updatedAt
                     ? '-'
-                    : format(new Date(tipo.createdAt), 'dd/MM/yyyy')
+                    : format(new Date(tipo.updatedAt), 'dd/MM/yyyy')
                 },
                 { content: getEditMenu(tipo) }
               ])}

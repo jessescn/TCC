@@ -1,23 +1,30 @@
 import { Box, Checkbox, CheckboxGroup, Flex, Input } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoCaixaVerificacao } from 'domain/types/campo-tipos'
-import { CampoParagrafo } from './patagrafo'
+import { BaseCampoProps } from '.'
+import { CampoParagrafo } from './paragrafo'
 
-type Props = CampoFormulario<CampoTipoCaixaVerificacao>
+type Props = BaseCampoProps & CampoFormulario<CampoTipoCaixaVerificacao>
 
 export function CampoCaixaVerificacao(props: Props) {
+  const { register, ...paragrafoProps } = props
   const { opcoes, outro } = props.configuracao_campo
 
   return (
     <Box>
-      <CampoParagrafo {...props} />
-      <CheckboxGroup>
+      <CampoParagrafo {...paragrafoProps} />
+      <CheckboxGroup
+        {...register}
+        onChange={value => register.onChange({ target: { value } })}
+      >
         {opcoes.map(opcao => (
-          <Checkbox>{opcao}</Checkbox>
+          <Checkbox key={opcao} value={opcao}>
+            {opcao}
+          </Checkbox>
         ))}
         {outro && (
           <Flex>
-            <Checkbox>Outro:</Checkbox>
+            <Checkbox value={'outro'}>Outro:</Checkbox>
             <Input
               ml="16px"
               variant="unstyled"

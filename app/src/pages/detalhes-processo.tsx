@@ -32,7 +32,7 @@ const DetalhesProcesso = () => {
   }
 
   return (
-    <Screen py="24px" flexDir="column">
+    <Screen py="24px" flexDir="column" alignItems="center">
       {!processo ? (
         <Flex justifyContent="center">
           <Spinner />

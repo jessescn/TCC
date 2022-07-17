@@ -21,7 +21,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
   }
 
   return (
-    <Box overflow="hidden">
+    <Box>
       <Header />
       <Sidebar />
       <Flex onClick={closeSidebar}>{children}</Flex>

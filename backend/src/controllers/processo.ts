@@ -33,7 +33,7 @@ export const ProcessoController = {
 
       const newResource = await ProcessoService.create({
         createdBy: req.user.id,
-        tipo: req.body.tipo_processo,
+        tipo: req.body.tipo,
         resposta: req.body.resposta
       })
 

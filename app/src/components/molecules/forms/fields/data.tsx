@@ -1,15 +1,23 @@
 import { Box, Input } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoData } from 'domain/types/campo-tipos'
-import { CampoParagrafo } from './patagrafo'
+import { BaseCampoProps } from '.'
+import { CampoParagrafo } from './paragrafo'
 
-type Props = CampoFormulario<CampoTipoData>
+type Props = BaseCampoProps & CampoFormulario<CampoTipoData>
 
 export function CampoData(props: Props) {
+  const { register, ...paragrafoProps } = props
+
   return (
     <Box>
-      <CampoParagrafo {...props} />
-      <Input type="date" placeholder="Resposta" maxW="fit-content" />
+      <CampoParagrafo {...paragrafoProps} />
+      <Input
+        type="date"
+        placeholder="Resposta"
+        maxW="fit-content"
+        {...register}
+      />
     </Box>
   )
 }

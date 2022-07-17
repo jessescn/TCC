@@ -32,7 +32,7 @@ export interface ProcessoModel {
   camposInvalidos: CampoInvalido[]
   respostas: Resposta[]
   votos?: VotoProcesso[]
-  tipo?: TipoProcessoModel
+  tipo_processo?: TipoProcessoModel
   createdBy?: UserModel
   createdAt?: string
 }

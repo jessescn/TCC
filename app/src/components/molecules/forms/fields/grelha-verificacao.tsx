@@ -11,9 +11,10 @@ import {
 } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoGrelhaVerificacao } from 'domain/types/campo-tipos'
-import { CampoParagrafo } from './patagrafo'
+import { BaseCampoProps } from '.'
+import { CampoParagrafo } from './paragrafo'
 
-type Props = CampoFormulario<CampoTipoGrelhaVerificacao>
+type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaVerificacao>
 
 export function CampoGrelhaVerificacao(props: Props) {
   const { colunas, linhas } = props.configuracao_campo

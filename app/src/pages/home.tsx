@@ -1,14 +1,6 @@
 import { Box, Stack } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import { CampoCaixaVerificacao } from 'components/molecules/forms/fields/caixa-verificacao'
-import { CampoData } from 'components/molecules/forms/fields/data'
-import { CampoEscolhaMultipla } from 'components/molecules/forms/fields/escolha-multipla'
-import { CampoFicheiro } from 'components/molecules/forms/fields/ficheiro'
-import { CampoGrelhaMultipla } from 'components/molecules/forms/fields/grelha-multipla'
-import { CampoGrelhaVerificacao } from 'components/molecules/forms/fields/grelha-verificacao'
-import { CampoHora } from 'components/molecules/forms/fields/hora'
-import { CampoParagrafo } from 'components/molecules/forms/fields/patagrafo'
-import { CampoResposta } from 'components/molecules/forms/fields/resposta'
+import { CampoParagrafo } from 'components/molecules/forms/fields/paragrafo'
 
 export default function Home() {
   return (
@@ -29,7 +21,7 @@ export default function Home() {
               tipo="paragrafo"
               configuracao_campo={{ titulo: 'Dados do candidato' }}
             />
-            <CampoResposta
+            {/* <CampoResposta
               ordem={1}
               obrigatorio
               tipo="resposta"
@@ -124,7 +116,7 @@ export default function Home() {
                 titulo:
                   'Informar que requisitos da Norma Complementar do PPGCC 001/2019 o membro externo 2 atende:'
               }}
-            />
+            /> */}
           </Stack>
         </Box>
       </Box>

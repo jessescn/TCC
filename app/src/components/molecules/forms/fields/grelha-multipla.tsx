@@ -11,9 +11,10 @@ import {
 } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoGrelhaMultipla } from 'domain/types/campo-tipos'
-import { CampoParagrafo } from './patagrafo'
+import { BaseCampoProps } from '.'
+import { CampoParagrafo } from './paragrafo'
 
-type Props = CampoFormulario<CampoTipoGrelhaMultipla>
+type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaMultipla>
 
 export function CampoGrelhaMultipla(props: Props) {
   const { colunas, linhas } = props.configuracao_campo
@@ -25,18 +26,20 @@ export function CampoGrelhaMultipla(props: Props) {
         <Thead>
           <Tr>
             <Th></Th>
-            {colunas.map(coluna => (
-              <Th textAlign="center">{coluna}</Th>
+            {colunas.map((coluna, idx) => (
+              <Th key={`coluna-${idx}`} textAlign="center">
+                {coluna}
+              </Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          {linhas.map(linha => (
+          {linhas.map((linha, idx) => (
             <RadioGroup as="tr">
-              <Td>{linha}</Td>
-              {colunas.map(() => (
-                <Td textAlign="center">
-                  <Radio />
+              <Td key={`linha-${idx}`}>{linha}</Td>
+              {colunas.map((_, colunaIdx) => (
+                <Td textAlign="center" key={`linha-${idx}-${colunaIdx}`}>
+                  <Radio value={`${idx}-${colunaIdx}`} />
                 </Td>
               ))}
             </RadioGroup>

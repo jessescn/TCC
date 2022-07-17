@@ -1,3 +1,5 @@
+import { UserModel } from './user'
+
 export type TipoCampoFormulario =
   | 'paragrafo'
   | 'resposta'
@@ -22,4 +24,5 @@ export interface FormularioModel {
   campos: CampoFormulario[]
   createdAt?: string
   updatedAt?: string
+  createdBy?: UserModel
 }

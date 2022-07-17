@@ -20,6 +20,10 @@ export const getProcessosBySearch = createSelector(
   [getProcessos],
   processos => {
     return (search: string) => {
+      if (search.trim().length === 0) {
+        return processos
+      }
+
       return processos.filter(processo => {
         if (search.localeCompare(String(processo.id)) === 0) return true
 
@@ -29,7 +33,7 @@ export const getProcessosBySearch = createSelector(
         let includes = false
 
         terms.forEach(term => {
-          if (processo.tipo?.nome.includes(term)) {
+          if (processo.tipo_processo?.nome.includes(term)) {
             includes = true
           }
         })

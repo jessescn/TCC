@@ -1,19 +1,20 @@
-import { Box } from '@chakra-ui/react'
+import { Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Footer from 'components/pages/preencher-processo/footer'
+import Content from 'components/pages/preencher-processo/content'
 import Header from 'components/pages/preencher-processo/header'
-import RenderFormulario from 'components/pages/preencher-processo/render-formulario'
 import { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
 export default function PreencherProcesso() {
-  const [searchParams] = useSearchParams()
+  const { id } = useParams()
 
-  const id = Number(searchParams.get('id'))
-
-  const tipoProcessos = useSelector(selectors.tipoProcesso.getTipoProcessos)
-  const formularios = useSelector(selectors.form.getForms)
+  const tipoProcesso = useSelector(state =>
+    selectors.tipoProcesso.getTipoProcesso(state)(Number(id))
+  )
+  const formularios = useSelector(state =>
+    selectors.form.getFormsByTipoProcesso(state)(tipoProcesso)
+  )
 
   useEffect(() => {
     store.dispatch(actions.tipoProcesso.list())
@@ -21,14 +22,15 @@ export default function PreencherProcesso() {
   }, [])
 
   return (
-    <Screen py="24px">
-      <Box w="100%" h="100%" boxSize="border-box" maxW="800px">
-        {tipoProcessos.length > 0 && <Header tipoProcesso={tipoProcessos[0]} />}
-        {formularios.length > 0 && (
-          <RenderFormulario formulario={formularios[0]} />
-        )}
-        <Footer />
-      </Box>
+    <Screen py="24px" h="100%">
+      {!tipoProcesso ? (
+        <Spinner />
+      ) : (
+        <Flex w="100%" h="100%" maxW="900px" flexDir="column">
+          <Header tipoProcesso={tipoProcesso} />
+          <Content formularios={formularios} />
+        </Flex>
+      )}
     </Screen>
   )
 }
