@@ -25,11 +25,16 @@ export default function Home() {
             Coordenação de Controle Acadêmico Histórico Acadêmico
           </Text>
         </Center>
-        <Box mt="50px">
-          <Text color="primary.dark" fontSize="18px" fontWeight="bold">
+        <Box mt="90px">
+          <Text
+            textAlign="center"
+            color="primary.dark"
+            fontSize="18px"
+            fontWeight="bold"
+          >
             Novo Sistema de Processos da Pós-Graduacão
           </Text>
-          <Text my="16px" fontSize="14px">
+          <Text my="16px" textAlign="justify" fontSize="14px">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a
             semper tortor. Fusce ut laoreet dui, sed ultricies mauris. Nulla ut
             elementum leo, non suscipit mi. Duis posuere euismod tempor. Donec

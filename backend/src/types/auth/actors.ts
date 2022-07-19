@@ -1,3 +1,10 @@
+export type Roles =
+  | 'usuario'
+  | 'admin '
+  | 'coordenador'
+  | 'secretaria'
+  | 'colegiado'
+
 export const Admin = {
   user_create: 'all',
   user_read: 'all',

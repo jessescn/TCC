@@ -7,7 +7,7 @@ import {
 } from 'sequelize'
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
-import { Admin, PermissionKeys } from 'types/auth/actors'
+import { Admin, PermissionKeys, Roles } from 'types/auth/actors'
 import { ProcessoModel } from './processo'
 
 export interface UserModel
@@ -21,6 +21,7 @@ export interface UserModel
   senha: string
   deleted: CreationOptional<boolean>
   permissoes: PermissionKeys
+  roles: Roles[]
   processos?: ProcessoModel[]
   createdAt?: Date
   updatedAt?: Date
@@ -52,6 +53,11 @@ const User = sequelize.define<UserModel>('user', {
     type: DataTypes.JSON,
     allowNull: false,
     defaultValue: {}
+  },
+  roles: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: false,
+    defaultValue: ['usuario']
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE
