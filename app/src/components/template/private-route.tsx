@@ -1,10 +1,17 @@
 import { Box, Flex } from '@chakra-ui/react'
 import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
+import { UserModel } from 'domain/models/user'
+import { Roles } from 'domain/types/actors'
 import { Navigate, useLocation } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
-function PrivateRoute({ children }: { children: JSX.Element }) {
+type Props = {
+  children: JSX.Element
+  requiredRoles?: Roles[]
+}
+
+function PrivateRoute({ children, requiredRoles = [] }: Props) {
   const location = useLocation()
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
 
@@ -12,6 +19,22 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  const userModel: UserModel = JSON.parse(user)
+
+  const haveRequiredRoles = requiredRoles.reduce((havePermission, role) => {
+    const haveRole = userModel.roles.includes(role)
+
+    if (!haveRole) {
+      return false
+    }
+
+    return havePermission && haveRole
+  }, true)
+
+  if (!haveRequiredRoles) {
+    return <Navigate to="/" state={{ from: location }} replace />
   }
 
   function closeSidebar() {

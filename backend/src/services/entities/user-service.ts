@@ -2,12 +2,14 @@ import User, { UserModel } from 'models/user'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 import bcrypt from 'bcrypt'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { Roles } from 'types/auth/actors'
 
 export type RemoteUser = {
   nome: string
   email: string
   senha: string
   permissoes?: any
+  roles?: Roles[]
 }
 
 export type UserQuery = WhereOptions<InferAttributes<UserModel>>
