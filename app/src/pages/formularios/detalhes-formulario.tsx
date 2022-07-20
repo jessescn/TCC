@@ -6,7 +6,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
 import EditableText from 'components/molecules/forms/editable-text'
-import Header from './header'
+import Header from '../../components/pages/detalhes-formulario/header'
+import Content from 'components/pages/detalhes-formulario/content'
 
 export default function Form() {
   const navigate = useNavigate()
@@ -16,7 +17,7 @@ export default function Form() {
 
   const id = Number(searchParams.get('id'))
 
-  const form = useSelector(state =>
+  const formulario = useSelector(state =>
     selectors.form.getFormularioById(state)(Number(id))
   )
 
@@ -29,7 +30,7 @@ export default function Form() {
       <Box
         w="100%"
         h="100%"
-        maxW="1392px"
+        maxW="900px"
         bgColor="initial.white"
         borderRadius="8px"
         px="24px"
@@ -37,25 +38,9 @@ export default function Form() {
       >
         <FormProvider {...formControls}>
           <form>
-            <Header form={form} />
+            <Header formulario={formulario} />
             <Divider my="24px" borderColor="secondary.dark" />
-            <EditableText
-              defaultValue={form?.nome || 'Novo formulário'}
-              styleProps={{ mb: 2 }}
-              register={formControls.register('nome', { required: true })}
-            >
-              <Text mr="16px" fontSize="14px">
-                Nome:
-              </Text>
-            </EditableText>
-            <EditableText
-              defaultValue="descricão do formulário"
-              register={formControls.register('descricao', { required: true })}
-            >
-              <Text mr="16px" fontSize="14px">
-                Descricão:
-              </Text>
-            </EditableText>
+            <Content formulario={formulario} />
           </form>
         </FormProvider>
       </Box>

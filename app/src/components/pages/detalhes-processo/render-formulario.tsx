@@ -31,7 +31,7 @@ const Resposta = ({
     pergunta.configuracao_campo.descricao ||
     ''
 
-  return (
+  return pergunta.tipo == 'paragrafo' ? null : (
     <Box>
       <Tooltip label={textoPergunta}>
         <Text

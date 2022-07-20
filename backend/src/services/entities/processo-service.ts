@@ -1,12 +1,16 @@
 import Comentario from 'models/comentario'
-import Processo, { ProcessoModel, VotoProcesso } from 'models/processo'
+import Processo, {
+  ProcessoModel,
+  Resposta,
+  VotoProcesso
+} from 'models/processo'
 import TipoProcesso from 'models/tipo-processo'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
 export type RemoteProcesso = {
   tipo: number
-  resposta: string
+  respostas: Resposta[]
   votos?: VotoProcesso[]
   createdBy: number
 }

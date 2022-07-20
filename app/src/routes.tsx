@@ -2,17 +2,17 @@ import { Route, Routes as RoutesWrapper } from 'react-router-dom'
 import AuthRedirect from './components/template/auth-redirect'
 import PrivateRoute from './components/template/private-route'
 
-import DetalhesProcesso from 'pages/detalhes-processo'
-import MeusProcessos from 'pages/meus-processos'
-import TipoProcessos from 'pages/tipo-processos'
+import DetalhesProcesso from 'pages/processos/detalhes-processo'
+import MeusProcessos from 'pages/processos/meus-processos'
+import ListaTipoProcessos from 'pages/tipo-processos/lista-tipo-processos'
 import Home from './pages/home'
 import Login from './pages/login'
 import Register from './pages/register'
-import Formularios from './pages/forms'
-import Formulario from './pages/forms/form'
+import ListaFormularios from './pages/formularios/lista-formularios'
+import DetalhesFormulario from './pages/formularios/detalhes-formulario'
 
-import TipoProcesso from 'pages/tipo-processos/tipo-processo'
-import PreencherProcesso from 'pages/preencher-processo'
+import DetalhesTipoProcesso from 'pages/tipo-processos/detalhes-tipo-processo'
+import PreencherProcesso from 'pages/processos/preencher-processo'
 
 export default function Routes() {
   return (
@@ -45,7 +45,7 @@ export default function Routes() {
         path="/formularios"
         element={
           <PrivateRoute>
-            <Formularios />
+            <ListaFormularios />
           </PrivateRoute>
         }
       />
@@ -53,7 +53,7 @@ export default function Routes() {
         path="/formularios/edit"
         element={
           <PrivateRoute>
-            <Formulario />
+            <DetalhesFormulario />
           </PrivateRoute>
         }
       />
@@ -61,7 +61,7 @@ export default function Routes() {
         path="/tipo-processos"
         element={
           <PrivateRoute>
-            <TipoProcessos />
+            <ListaTipoProcessos />
           </PrivateRoute>
         }
       />
@@ -69,7 +69,7 @@ export default function Routes() {
         path="/tipo-processos/edit"
         element={
           <PrivateRoute>
-            <TipoProcesso />
+            <DetalhesTipoProcesso />
           </PrivateRoute>
         }
       />

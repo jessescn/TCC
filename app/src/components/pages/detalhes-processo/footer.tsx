@@ -3,7 +3,7 @@ import { Button, Flex, Link, useDisclosure } from '@chakra-ui/react'
 import Votes, { VoteOption } from 'components/molecules/votes'
 import { CampoFormulario } from 'domain/models/formulario'
 import { useCallback, useState } from 'react'
-import InvalidFieldsModal from '../modals/invalid-fields'
+import InvalidFieldsModal from '../../organisms/modals/invalid-fields'
 
 type Props = {
   isCommentsVisible: boolean

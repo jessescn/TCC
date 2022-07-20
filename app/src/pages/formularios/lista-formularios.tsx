@@ -5,24 +5,16 @@ import {
   Divider,
   Flex,
   Icon,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Text
 } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import FormInput from 'components/molecules/forms/input'
-import SimpleTable from 'components/organisms/simple-table'
 import { useEffect, useState } from 'react'
-import { AiFillEdit } from 'react-icons/ai'
 import { MdSearchOff } from 'react-icons/md'
 
-import { FormularioModel } from 'domain/models/formulario'
+import FormulariosTable from 'components/pages/formularios/table'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
-import { formatDate } from 'utils/format'
 
 export default function Formularios() {
   const navigate = useNavigate()
@@ -30,36 +22,13 @@ export default function Formularios() {
   const [currentPage, setCurrentPage] = useState(1)
   const [term, setTerm] = useState('')
 
-  const forms = useSelector(state =>
+  const formularios = useSelector(state =>
     selectors.form.getFormulariosBySearch(state)(term)
   )
 
   useEffect(() => {
     store.dispatch(actions.form.list())
   }, [])
-
-  const handleDelete = (id: number) => {
-    store.dispatch(actions.form.delete(id))
-  }
-
-  const getEditMenu = (form: FormularioModel) => {
-    return (
-      <Menu>
-        <MenuButton
-          as={IconButton}
-          variant="unstyled"
-          size="lg"
-          icon={<Icon as={AiFillEdit} />}
-        />
-        <MenuList>
-          <MenuItem onClick={() => navigate(`/formularios/edit?id=${form.id}`)}>
-            Editar
-          </MenuItem>
-          <MenuItem onClick={() => handleDelete(form.id)}>Excluir</MenuItem>
-        </MenuList>
-      </Menu>
-    )
-  }
 
   const handleSearch = (termo: string) => {
     setCurrentPage(1)
@@ -113,7 +82,7 @@ export default function Formularios() {
             Novo Formulário
           </Button>
         </Flex>
-        {forms.length > 0 ? (
+        {formularios.length > 0 ? (
           <Box
             mt="24px"
             borderColor="secondary.dark"
@@ -121,26 +90,10 @@ export default function Formularios() {
             borderRadius="8px"
             p="16px"
           >
-            <SimpleTable
+            <FormulariosTable
+              formularios={formularios}
               currentPage={currentPage}
-              totalPages={Math.ceil(forms.length / 5)}
-              onChangePage={setCurrentPage}
-              columns={[
-                { content: 'ID', props: { width: '10%' } },
-                { content: 'Nome', props: { width: '45%' } },
-                { content: 'Criado por', props: { width: '15%' } },
-                { content: 'Última atualizacão', props: { width: '15%' } },
-                { content: '', props: { width: '5%' } }
-              ]}
-              rows={forms.map(form => [
-                { content: form.id },
-                { content: form.nome },
-                { content: form.createdBy?.nome },
-                {
-                  content: !form.updatedAt ? '' : formatDate(form.updatedAt)
-                },
-                { content: getEditMenu(form) }
-              ])}
+              setCurrentPage={setCurrentPage}
             />
           </Box>
         ) : (

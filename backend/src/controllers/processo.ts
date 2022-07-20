@@ -3,7 +3,7 @@ import {
   errorResponseHandler,
   validateMandatoryFields
 } from 'controllers'
-import { VotoProcesso } from 'models/processo'
+import { Resposta, VotoProcesso } from 'models/processo'
 import {
   ProcessoQuery,
   ProcessoService
@@ -14,7 +14,7 @@ import { isNumber } from 'utils/value'
 
 export type RemoteProcesso = {
   tipo: number
-  resposta: string
+  resposta: Resposta[]
   votos?: VotoProcesso[]
 }
 
@@ -27,14 +27,14 @@ export const ProcessoController = {
 
       const data: RemoteProcesso = req.body
 
-      const mandatoryFields = ['resposta', 'tipo']
+      const mandatoryFields = ['respostas', 'tipo']
 
       validateMandatoryFields(mandatoryFields, data)
 
       const newResource = await ProcessoService.create({
         createdBy: req.user.id,
         tipo: req.body.tipo,
-        resposta: req.body.resposta
+        respostas: req.body.respostas
       })
 
       res.status(HttpStatusCode.created).json(newResource)
