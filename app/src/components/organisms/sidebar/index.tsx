@@ -142,13 +142,13 @@ const Sidebar = () => {
             url="/tipo-processos"
             adminOnly
           />
-          <NavItem icon={FiUser} title="Usuários" url="/usuarios" adminOnly />
-          <NavItem
+          {/* <NavItem icon={FiUser} title="Usuários" url="/usuarios" adminOnly /> */}
+          {/* <NavItem
             icon={BsCardChecklist}
             url="/processos"
             title="Processos - Curso"
             adminOnly
-          />
+          /> */}
         </Flex>
         <Flex p="5%" flexDir="column" w="100%" alignItems={'flex-start'} mb={4}>
           <Divider display={'flex'} />

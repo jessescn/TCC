@@ -21,6 +21,7 @@ export type CampoFormulario<T = any> = {
 export interface FormularioModel {
   id: number
   nome: string
+  descricao?: string
   campos: CampoFormulario[]
   createdAt?: string
   updatedAt?: string

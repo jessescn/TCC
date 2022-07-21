@@ -8,14 +8,14 @@ type Props = {
 
 export default function Header({ formulario }: Props) {
   return (
-    <Flex justifyContent="space-between">
-      <Text fontWeight="bold" fontSize="28px" color="primary.dark">
+    <Flex justifyContent="space-between" alignItems="center">
+      <Text fontWeight="bold" fontSize="24px" color="primary.dark">
         {formulario ? 'Editar Formulário' : 'Novo Formulário'}
       </Text>
       {formulario && (
-        <Text fontSize="20px">
+        <Text>
           Ultima edição:{' '}
-          <Text as="span" fontWeight="bold" fontSize="24px">
+          <Text as="span" fontWeight="bold" fontSize="20px">
             {format(new Date(formulario.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
           </Text>
         </Text>

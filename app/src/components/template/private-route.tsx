@@ -1,6 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react'
 import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
+import { User } from 'domain/entity/user'
 import { UserModel } from 'domain/models/user'
 import { Roles } from 'domain/types/actors'
 import { Navigate, useLocation } from 'react-router-dom'
@@ -23,15 +24,7 @@ function PrivateRoute({ children, requiredRoles = [] }: Props) {
 
   const userModel: UserModel = JSON.parse(user)
 
-  const haveRequiredRoles = requiredRoles.reduce((havePermission, role) => {
-    const haveRole = userModel.roles.includes(role)
-
-    if (!haveRole) {
-      return false
-    }
-
-    return havePermission && haveRole
-  }, true)
+  const haveRequiredRoles = User.haveRoles(userModel, requiredRoles)
 
   if (!haveRequiredRoles) {
     return <Navigate to="/" state={{ from: location }} replace />

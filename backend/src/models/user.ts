@@ -7,7 +7,7 @@ import {
 } from 'sequelize'
 import { sequelize } from 'database'
 import bcrypt from 'bcrypt'
-import { Admin, PermissionKeys, Roles } from 'types/auth/actors'
+import { Admin, Default, PermissionKeys, Roles } from 'types/auth/actors'
 import { ProcessoModel } from './processo'
 
 export interface UserModel
@@ -84,8 +84,18 @@ User.findOrCreate({
   defaults: {
     senha: process.env.ADMIN_PASSWORD,
     email: process.env.ADMIN_EMAIL,
-    roles: ['usuario', 'admin '],
+    roles: ['usuario', 'admin'],
     permissoes: { ...Admin } as any
+  }
+})
+
+User.findOrCreate({
+  where: { email: process.env.DEFAULT_USER_EMAIL },
+  defaults: {
+    senha: process.env.DEFAULT_USER_PASSWORD,
+    email: process.env.DEFAULT_USER_EMAIL,
+    roles: ['usuario'],
+    permissoes: { ...Default } as any
   }
 })
 

@@ -45,14 +45,14 @@ export default function NavSubItems({ icon, title, items }: Props) {
                     <MenuButton as="div" w="100%">
                       <Flex justifyContent="space-between" alignItems="center">
                         <Flex alignItems="center">
-                          <Icon as={icon} fontSize="xl" />
-                          <Text ml={3} display={'flex'}>
+                          <Icon as={icon} fontSize="lg" />
+                          <Text ml={3} display={'flex'} fontSize="14px">
                             {title}
                           </Text>
                         </Flex>
                         <Icon
                           as={isExpanded ? AiOutlineUp : AiOutlineDown}
-                          fontSize="sm"
+                          fontSize="xs"
                         />
                       </Flex>
                     </MenuButton>
@@ -63,11 +63,12 @@ export default function NavSubItems({ icon, title, items }: Props) {
             <AccordionPanel>
               {items.map(item => (
                 <NavItem
+                  isSubitem
                   key={item.title}
                   icon={item.icon}
                   title={item.title}
                   url={item.url}
-                  style={{ marginTop: 0 }}
+                  style={{ marginTop: '8px' }}
                 />
               ))}
             </AccordionPanel>

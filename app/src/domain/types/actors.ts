@@ -1,6 +1,6 @@
 export type Roles =
   | 'usuario'
-  | 'admin '
+  | 'admin'
   | 'coordenador'
   | 'secretaria'
   | 'colegiado'

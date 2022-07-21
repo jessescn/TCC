@@ -31,32 +31,45 @@ export default function Content({ formulario }: Props) {
 
   return (
     <Box>
-      <Button
-        display="block"
-        variant="unstyled"
-        px={0}
-        mb="8px"
-        onClick={handleToggleGeneral}
-        _focus={{ boxShadow: 'none' }}
-        leftIcon={
-          <Icon as={showGeneral ? MdOutlineExpandLess : MdOutlineExpandMore} />
-        }
-      >
-        Configuracões Gerais
-      </Button>
+      <Flex justifyContent="space-between">
+        <Button
+          display="block"
+          variant="unstyled"
+          px={0}
+          mb="8px"
+          onClick={handleToggleGeneral}
+          _focus={{ boxShadow: 'none' }}
+          leftIcon={
+            <Icon
+              as={showGeneral ? MdOutlineExpandLess : MdOutlineExpandMore}
+            />
+          }
+        >
+          Configuracões Gerais
+        </Button>
+        <Button
+          bgColor="primary.dark"
+          color="initial.white"
+          display="block"
+          size="sm"
+          mb="8px"
+        >
+          Salvar
+        </Button>
+      </Flex>
       <Collapse in={showGeneral} animateOpacity>
         <Stack spacing="16px">
           <Box alignItems="center">
             <Text fontSize="14px" mb="8px" fontWeight="bold">
               Nome:
             </Text>
-            <Input size="sm" />
+            <Input size="sm" value={formulario?.nome} />
           </Box>
           <Box>
             <Text fontSize="14px" mb="8px" fontWeight="bold">
               Descricão:
             </Text>
-            <Textarea size="sm" />
+            <Textarea size="sm" value={formulario?.descricao} />
           </Box>
         </Stack>
       </Collapse>

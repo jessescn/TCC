@@ -12,7 +12,8 @@ const Screen = ({ children, noHeader = false, ...boxProps }: Props) => {
       bgColor="secondary.default"
       w="100vw"
       minH={noHeader ? '100vh' : 'calc(100vh - 72px)'}
-      h={noHeader ? '100vh' : 'calc(100vh - 72px)'}
+      // h={noHeader ? '100vh' : 'calc(100vh - 72px)'}
+      h="fit-content"
       px={{ base: '8px', md: '0' }}
       alignItems="flex-start"
       {...boxProps}
