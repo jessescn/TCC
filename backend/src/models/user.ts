@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt'
+import { sequelize } from 'database'
 import {
   CreationOptional,
   DataTypes,
@@ -5,9 +7,7 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { sequelize } from 'database'
-import bcrypt from 'bcrypt'
-import { Admin, Default, PermissionKeys, Roles } from 'types/auth/actors'
+import { PermissionKeys, Roles } from 'types/auth/actors'
 import { ProcessoModel } from './processo'
 
 export interface UserModel
@@ -79,24 +79,28 @@ User.beforeCreate(async (user, options) => {
   }
 })
 
-User.findOrCreate({
-  where: { email: process.env.ADMIN_EMAIL },
-  defaults: {
-    senha: process.env.ADMIN_PASSWORD,
-    email: process.env.ADMIN_EMAIL,
-    roles: ['usuario', 'admin'],
-    permissoes: { ...Admin } as any
-  }
-})
+type InitialUser = {
+  senha: string
+  email: string
+  roles: Roles[]
+  permissoes: PermissionKeys
+}
 
-User.findOrCreate({
-  where: { email: process.env.DEFAULT_USER_EMAIL },
-  defaults: {
-    senha: process.env.DEFAULT_USER_PASSWORD,
-    email: process.env.DEFAULT_USER_EMAIL,
-    roles: ['usuario'],
-    permissoes: { ...Default } as any
-  }
-})
+export const createInitialUser = async ({
+  email,
+  permissoes,
+  roles,
+  senha
+}: InitialUser) => {
+  await User.findOrCreate({
+    where: { email },
+    defaults: {
+      senha,
+      email,
+      roles,
+      permissoes
+    }
+  })
+}
 
 export default User

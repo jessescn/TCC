@@ -1,5 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
+import { sequelize } from 'database'
+import User from 'models/user'
 import {
   CreationOptional,
   DataTypes,
@@ -7,10 +9,8 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { sequelize } from 'database'
-import User from 'models/user'
 
-import mock from 'types/campos-formulario/modelo-mockado'
+import { RemoteFormulario } from 'controllers/formulario'
 
 type TipoCampoFormulario =
   | 'paragrafo'
@@ -74,11 +74,13 @@ const Formulario = sequelize.define<FormularioModel>('formulario', {
 Formulario.belongsTo(User, { foreignKey: 'createdBy' })
 User.hasMany(Formulario)
 
-Formulario.findOrCreate({
-  where: {
-    nome: mock.formulario.nome
-  },
-  defaults: mock.formulario
-})
+export const createInitialFormulario = async (formulario: RemoteFormulario) => {
+  Formulario.findOrCreate({
+    where: {
+      nome: formulario.nome
+    },
+    defaults: formulario
+  })
+}
 
 export default Formulario

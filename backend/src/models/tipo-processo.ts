@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
+import { sequelize } from 'database'
 import {
   CreationOptional,
   DataTypes,
@@ -7,10 +8,9 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { sequelize } from 'database'
 import User from './user'
 
-import mock from 'types/campos-formulario/modelo-mockado'
+import { RemoteTipoProcesso } from 'controllers/tipo-processo'
 
 export type TipoProcessoStatus = 'ativo' | 'inativo' | 'rascunho'
 
@@ -79,11 +79,15 @@ const TipoProcesso = sequelize.define<TipoProcessoModel>('tipo_processo', {
 
 TipoProcesso.belongsTo(User, { foreignKey: 'createdBy' })
 
-TipoProcesso.findOrCreate({
-  where: {
-    nome: mock.tipoProcesso.nome
-  },
-  defaults: mock.tipoProcesso
-})
+export const createInitialTipoProcesso = async (
+  tipoProcesso: RemoteTipoProcesso
+) => {
+  await TipoProcesso.findOrCreate({
+    where: {
+      nome: tipoProcesso.nome
+    },
+    defaults: tipoProcesso
+  })
+}
 
 export default TipoProcesso
