@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { FormularioModel } from 'domain/models/formulario'
+import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
@@ -12,6 +12,12 @@ export type State = {
 export type UpdatePayload = {
   data: Partial<FormularioModel>
   id: number
+}
+
+export type CreatePayload = {
+  nome: string
+  descricao?: string
+  campos: CampoFormulario[]
 }
 
 export const initialState: State = {
@@ -28,6 +34,16 @@ const reducers = {
     state.forms = action.payload
   },
   listFailure: (state: State) => {
+    state.status = 'failure'
+  },
+  create: (state: State, action: PayloadAction<CreatePayload>) => {
+    state.status = 'loading'
+  },
+  createSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
+    state.status = 'success'
+    state.forms = [...state.forms, action.payload]
+  },
+  createFailure: (state: State) => {
     state.status = 'failure'
   },
   update: (state: State, action: PayloadAction<UpdatePayload>) => {

@@ -4,6 +4,7 @@ import { httpClient } from './config'
 
 export type NovoFormulario = {
   nome: string
+  descricao?: string
   campos: CampoFormulario[]
 }
 
@@ -14,7 +15,7 @@ export const FormService = {
       url: '/formularios'
     })
   },
-  create: (payload: FormularioModel) => {
+  create: (payload: NovoFormulario) => {
     return httpClient.request<AxiosResponse<FormularioModel[]>>({
       method: 'post',
       url: '/formularios',

@@ -14,42 +14,53 @@ import {
 import CaixaVerificacaoBuilder from 'components/molecules/forms/build-fields/caixa-verificacao'
 import EscolhaMultiplaBuilder from 'components/molecules/forms/build-fields/escolha-multipla'
 import RespostaBuilder from 'components/molecules/forms/build-fields/resposta'
-import { useState } from 'react'
+import { TipoCampoFormulario } from 'domain/models/formulario'
+import { CampoTipoBase } from 'domain/types/campo-tipos'
+import { useCallback, useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi'
 import { RiDeleteBinLine } from 'react-icons/ri'
 
 type CampoProps = {
-  campo: TipoCampo
+  campo: CampoFormulario
   onDelete: (ordem: number) => void
+  onUpdate: (campo: CampoFormulario) => void
 }
+const opcoesCampos = new Map([
+  ['paragrafo', { label: 'Parágrafo', render: CaixaVerificacaoBuilder }],
+  ['resposta', { label: 'Resposta', render: RespostaBuilder }],
+  ['data', { label: 'Data', render: CaixaVerificacaoBuilder }],
+  ['hora', { label: 'Hora', render: CaixaVerificacaoBuilder }],
+  ['ficheiro', { label: 'Ficheiro', render: CaixaVerificacaoBuilder }],
+  [
+    'escolha_multipla',
+    { label: 'Escolha Múltipla', render: EscolhaMultiplaBuilder }
+  ],
+  [
+    'caixa_verificacao',
+    { label: 'Caixa Verificacão', render: CaixaVerificacaoBuilder }
+  ],
+  [
+    'grelha_multipla',
+    { label: 'Grelha Múltipla', render: CaixaVerificacaoBuilder }
+  ],
+  [
+    'grelha_verificacao',
+    { label: 'Grelha Verificacão', render: CaixaVerificacaoBuilder }
+  ]
+])
 
-const Campo = ({ campo, onDelete }: CampoProps) => {
-  const opcoesCampos = new Map([
-    ['Parágrafo', { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }],
-    ['Resposta', { key: 'paragrafo', render: <RespostaBuilder /> }],
-    ['Data', { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }],
-    ['Hora', { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }],
-    ['Ficheiro', { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }],
-    [
-      'Escolha Múltipla',
-      { key: 'paragrafo', render: <EscolhaMultiplaBuilder /> }
-    ],
-    [
-      'Campo Verificacão',
-      { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }
-    ],
-    [
-      'Grelha Múltipla',
-      { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }
-    ],
-    [
-      'Grelha Verificacão',
-      { key: 'paragrafo', render: <CaixaVerificacaoBuilder /> }
-    ]
-  ])
+const Campo = ({ campo, onDelete, onUpdate }: CampoProps) => {
+  // console.log('check infinity loop')
+  function handleUpdateTitle(title: string) {
+    onUpdate({
+      ...campo,
+      configuracao_campo: { ...campo.configuracao_campo, titulo: title }
+    })
+  }
 
-  const [content, setContent] = useState('Parágrafo')
+  const Componente = opcoesCampos.get(campo.tipo)?.render
 
   return (
     <Box borderColor="secondary.dark" borderWidth="1px" borderRadius="4px">
@@ -58,26 +69,38 @@ const Campo = ({ campo, onDelete }: CampoProps) => {
           <Text mr="8px" fontSize="14px" color="initial.black">
             obrigatório
           </Text>
-          <Switch />
+          <Switch
+            defaultChecked={campo.obrigatorio}
+            onChange={() =>
+              onUpdate({ ...campo, obrigatorio: !campo.obrigatorio })
+            }
+          />
         </Flex>
       </Flex>
       <Stack direction="row" spacing="16px" my="8px" px="16px">
-        <Input placeholder="Pergunta" size="sm" />
+        <Input
+          placeholder="Pergunta"
+          size="sm"
+          onChange={ev => handleUpdateTitle(ev.target.value)}
+        />
         <Select
           size="sm"
           ml="8px"
-          onChange={e => setContent(e.target.value as any)}
+          defaultValue={campo.tipo}
+          onChange={e => onUpdate({ ...campo, tipo: e.target.value as any })}
         >
           {Array.from(opcoesCampos.keys()).map(opcaoKey => (
-            <option key={opcoesCampos.get(opcaoKey)?.key} value={opcaoKey}>
-              {opcaoKey}
+            <option key={opcaoKey} value={opcaoKey}>
+              {opcoesCampos.get(opcaoKey)?.label}
             </option>
           ))}
         </Select>
       </Stack>
-      <Box px="16px" my="16px">
-        {opcoesCampos.get(content)?.render}
-      </Box>
+      {Componente && (
+        <Box px="16px" my="16px">
+          <Componente onUpdate={onUpdate} campo={campo} />
+        </Box>
+      )}
       <Flex
         bgColor="secondary.default"
         justifyContent="flex-end"
@@ -105,20 +128,46 @@ const Campo = ({ campo, onDelete }: CampoProps) => {
   )
 }
 
-type TipoCampo = {
+export type CampoFormulario = {
   ordem: number
+  tipo: TipoCampoFormulario
+  obrigatorio?: boolean
+  configuracao_campo: CampoTipoBase
 }
 
 export default function EditForm() {
-  const [campos, setCampos] = useState<TipoCampo[]>([])
+  const { setValue, watch } = useFormContext()
 
-  function addField() {
-    setCampos([...campos, { ordem: campos.length + 1 }])
-  }
+  const campos: CampoFormulario[] = watch('campos') || []
 
-  function handleDelete(ordem: number) {
-    setCampos(prev => prev.filter(campo => campo.ordem !== ordem))
-  }
+  const handleAddCampo = useCallback(() => {
+    const ordem = new Date().valueOf()
+    setValue('campos', [
+      ...campos,
+      { ordem, tipo: 'resposta', obrigatorio: false, configuracao_campo: {} }
+    ])
+  }, [])
+
+  const handleDelete = useCallback((ordem: number) => {
+    setValue(
+      'campos',
+      campos.filter(campo => campo.ordem !== ordem)
+    )
+  }, [])
+
+  const handleUpdate = useCallback((campo: CampoFormulario) => {
+    const camposCopy = [...campos]
+
+    const idx = camposCopy.findIndex(el => el.ordem === campo.ordem)
+
+    if (idx === -1) {
+      return
+    }
+
+    camposCopy.splice(idx, 1, campo)
+
+    setValue('campos', camposCopy)
+  }, [])
 
   return (
     <Box>
@@ -129,14 +178,18 @@ export default function EditForm() {
           aria-label=""
           size="xs"
           leftIcon={<Icon as={AiOutlinePlus} />}
-          onClick={addField}
+          onClick={handleAddCampo}
         >
           Adicionar Campo
         </Button>
       </Flex>
       <Stack spacing="24px">
         {campos.map(campo => (
-          <Campo campo={campo} onDelete={handleDelete} />
+          <Campo
+            campo={campo}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+          />
         ))}
       </Stack>
     </Box>

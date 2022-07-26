@@ -1,9 +1,7 @@
 import { Input } from '@chakra-ui/react'
-import { useState } from 'react'
+import { BaseBuildFieldProps } from '.'
 
-export default function RespostaBuilder() {
-  const [value, setValue] = useState()
-
+export default function RespostaBuilder({ onUpdate }: BaseBuildFieldProps) {
   return (
     <Input
       border="none"

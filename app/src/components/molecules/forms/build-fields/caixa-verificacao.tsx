@@ -6,25 +6,36 @@ import {
   IconButton,
   Input
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
+import { BaseBuildFieldProps } from '.'
 
-export default function CaixaVerificacaoBuilder() {
-  const [campos, setCampos] = useState(['Opcão 1'])
+export default function CaixaVerificacaoBuilder({
+  onUpdate,
+  campo
+}: BaseBuildFieldProps) {
+  const [caixas, setCaixas] = useState(['Opcão 1'])
 
-  function handleDelete(idx: number) {
-    const filtered = [...campos]
+  function handleDeleteCaixa(idx: number) {
+    const filtered = [...caixas]
     filtered.splice(idx, 1)
-    setCampos(filtered)
+    setCaixas(filtered)
   }
 
-  function handleAdd() {
-    setCampos([...campos, `Opcão ${campos.length + 1}`])
+  function handleAddCaixa() {
+    setCaixas([...caixas, `Opcão ${caixas.length + 1}`])
   }
+
+  useEffect(() => {
+    onUpdate({
+      ...campo,
+      configuracao_campo: { ...campo.configuracao_campo, opcoes: caixas }
+    })
+  }, [caixas])
 
   return (
     <CheckboxGroup>
-      {campos.map((campo, idx) => (
+      {caixas.map((campo, idx) => (
         <Flex my="8px">
           <Checkbox isDisabled size="lg" key={`${campo}-${idx}`} />
           <Input
@@ -38,7 +49,7 @@ export default function CaixaVerificacaoBuilder() {
           <IconButton
             aria-label=""
             size="sm"
-            onClick={() => handleDelete(idx)}
+            onClick={() => handleDeleteCaixa(idx)}
             bgColor="transparent"
             icon={<Icon as={AiOutlineClose} />}
           />
@@ -50,7 +61,7 @@ export default function CaixaVerificacaoBuilder() {
           aria-label=""
           mt="8px"
           size="sm"
-          onClick={handleAdd}
+          onClick={handleAddCaixa}
           icon={<Icon as={AiOutlinePlus} />}
         />
       </Flex>

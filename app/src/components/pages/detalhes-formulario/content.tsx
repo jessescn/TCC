@@ -1,28 +1,27 @@
-import { FormularioModel } from 'domain/models/formulario'
 import {
   Box,
   Button,
   Collapse,
-  Divider,
   Flex,
   Icon,
   Input,
-  Select,
   Stack,
   Text,
-  Textarea,
-  useDisclosure
+  Textarea
 } from '@chakra-ui/react'
+import { FormularioModel } from 'domain/models/formulario'
 import { useState } from 'react'
-import { GrDrag } from 'react-icons/gr'
-import EditForm from './edit-form'
+import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
+import EditForm from './edit-form'
 
 type Props = {
   formulario?: FormularioModel
 }
 
 export default function Content({ formulario }: Props) {
+  const { register } = useFormContext()
+
   const [showGeneral, setShowGeneral] = useState(true)
   const [showForm, setShowForm] = useState(true)
 
@@ -53,6 +52,7 @@ export default function Content({ formulario }: Props) {
           display="block"
           size="sm"
           mb="8px"
+          type="submit"
         >
           Salvar
         </Button>
@@ -63,13 +63,17 @@ export default function Content({ formulario }: Props) {
             <Text fontSize="14px" mb="8px" fontWeight="bold">
               Nome:
             </Text>
-            <Input size="sm" value={formulario?.nome} />
+            <Input size="sm" value={formulario?.nome} {...register('nome')} />
           </Box>
           <Box>
             <Text fontSize="14px" mb="8px" fontWeight="bold">
               Descricão:
             </Text>
-            <Textarea size="sm" value={formulario?.descricao} />
+            <Textarea
+              size="sm"
+              value={formulario?.descricao}
+              {...register('descricao')}
+            />
           </Box>
         </Stack>
       </Collapse>

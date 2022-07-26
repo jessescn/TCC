@@ -1,4 +1,4 @@
-type CampoTipoBase = {
+export type CampoTipoBase = {
   titulo?: string
   descricao?: string
 }

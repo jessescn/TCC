@@ -1,6 +1,4 @@
 import {
-  Checkbox,
-  CheckboxGroup,
   Flex,
   Icon,
   IconButton,
@@ -8,25 +6,36 @@ import {
   Radio,
   RadioGroup
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
+import { BaseBuildFieldProps } from '.'
 
-export default function EscolhaMultiplaBuilder() {
-  const [campos, setCampos] = useState(['Opcão 1'])
+export default function EscolhaMultiplaBuilder({
+  campo,
+  onUpdate
+}: BaseBuildFieldProps) {
+  const [opcoes, setOpcoes] = useState(['Opcão 1'])
 
-  function handleDelete(idx: number) {
-    const filtered = [...campos]
+  function handleDeleteOpcao(idx: number) {
+    const filtered = [...opcoes]
     filtered.splice(idx, 1)
-    setCampos(filtered)
+    setOpcoes(filtered)
   }
 
-  function handleAdd() {
-    setCampos([...campos, `Opcão ${campos.length + 1}`])
+  function handleAddOpcao() {
+    setOpcoes([...opcoes, `Opcão ${opcoes.length + 1}`])
   }
+
+  useEffect(() => {
+    onUpdate({
+      ...campo,
+      configuracao_campo: { ...campo.configuracao_campo, opcoes: opcoes }
+    })
+  }, [opcoes])
 
   return (
     <RadioGroup>
-      {campos.map((campo, idx) => (
+      {opcoes.map((campo, idx) => (
         <Flex my="8px">
           <Radio isDisabled size="lg" key={`${campo}-${idx}`} />
           <Input
@@ -40,7 +49,7 @@ export default function EscolhaMultiplaBuilder() {
           <IconButton
             aria-label=""
             size="sm"
-            onClick={() => handleDelete(idx)}
+            onClick={() => handleDeleteOpcao(idx)}
             bgColor="transparent"
             icon={<Icon as={AiOutlineClose} />}
           />
@@ -52,7 +61,7 @@ export default function EscolhaMultiplaBuilder() {
           aria-label=""
           mt="8px"
           size="sm"
-          onClick={handleAdd}
+          onClick={handleAddOpcao}
           icon={<Icon as={AiOutlinePlus} />}
         />
       </Flex>
