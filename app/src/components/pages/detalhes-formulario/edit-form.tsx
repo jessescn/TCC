@@ -12,11 +12,17 @@ import {
   Tooltip
 } from '@chakra-ui/react'
 import CaixaVerificacaoBuilder from 'components/molecules/forms/build-fields/caixa-verificacao'
+import DataBuilder from 'components/molecules/forms/build-fields/data'
 import EscolhaMultiplaBuilder from 'components/molecules/forms/build-fields/escolha-multipla'
+import FicheiroBuilder from 'components/molecules/forms/build-fields/ficheiro'
+import GrelhaMultiplaBuilder from 'components/molecules/forms/build-fields/grelha-multipla'
+import GrelhaVerificacaoBuilder from 'components/molecules/forms/build-fields/grelha-verificacao'
+import HoraBuilder from 'components/molecules/forms/build-fields/hora'
+import ParagrafoBuilder from 'components/molecules/forms/build-fields/paragrafo'
 import RespostaBuilder from 'components/molecules/forms/build-fields/resposta'
 import { TipoCampoFormulario } from 'domain/models/formulario'
 import { CampoTipoBase } from 'domain/types/campo-tipos'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi'
@@ -28,11 +34,11 @@ type CampoProps = {
   onUpdate: (campo: CampoFormulario) => void
 }
 const opcoesCampos = new Map([
-  ['paragrafo', { label: 'Parágrafo', render: CaixaVerificacaoBuilder }],
+  ['paragrafo', { label: 'Parágrafo', render: ParagrafoBuilder }],
   ['resposta', { label: 'Resposta', render: RespostaBuilder }],
-  ['data', { label: 'Data', render: CaixaVerificacaoBuilder }],
-  ['hora', { label: 'Hora', render: CaixaVerificacaoBuilder }],
-  ['ficheiro', { label: 'Ficheiro', render: CaixaVerificacaoBuilder }],
+  ['data', { label: 'Data', render: DataBuilder }],
+  ['hora', { label: 'Hora', render: HoraBuilder }],
+  ['ficheiro', { label: 'Ficheiro', render: FicheiroBuilder }],
   [
     'escolha_multipla',
     { label: 'Escolha Múltipla', render: EscolhaMultiplaBuilder }
@@ -43,11 +49,11 @@ const opcoesCampos = new Map([
   ],
   [
     'grelha_multipla',
-    { label: 'Grelha Múltipla', render: CaixaVerificacaoBuilder }
+    { label: 'Grelha Múltipla', render: GrelhaMultiplaBuilder }
   ],
   [
     'grelha_verificacao',
-    { label: 'Grelha Verificacão', render: CaixaVerificacaoBuilder }
+    { label: 'Grelha Verificacão', render: GrelhaVerificacaoBuilder }
   ]
 ])
 
@@ -78,16 +84,25 @@ const Campo = ({ campo, onDelete, onUpdate }: CampoProps) => {
         </Flex>
       </Flex>
       <Stack direction="row" spacing="16px" my="8px" px="16px">
-        <Input
-          placeholder="Pergunta"
-          size="sm"
-          onChange={ev => handleUpdateTitle(ev.target.value)}
-        />
+        {campo.tipo !== 'paragrafo' && (
+          <Input
+            placeholder="Pergunta"
+            size="sm"
+            value={campo.configuracao_campo.titulo}
+            onChange={ev => handleUpdateTitle(ev.target.value)}
+          />
+        )}
         <Select
           size="sm"
           ml="8px"
           defaultValue={campo.tipo}
-          onChange={e => onUpdate({ ...campo, tipo: e.target.value as any })}
+          onChange={e =>
+            onUpdate({
+              ...campo,
+              tipo: e.target.value as any,
+              configuracao_campo: {}
+            })
+          }
         >
           {Array.from(opcoesCampos.keys()).map(opcaoKey => (
             <option key={opcaoKey} value={opcaoKey}>

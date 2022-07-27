@@ -14,7 +14,8 @@ export default function EscolhaMultiplaBuilder({
   campo,
   onUpdate
 }: BaseBuildFieldProps) {
-  const [opcoes, setOpcoes] = useState(['Opcão 1'])
+  const initialValue: string[] = campo.configuracao_campo?.opcoes || ['Opcão 1']
+  const [opcoes, setOpcoes] = useState(initialValue)
 
   function handleDeleteOpcao(idx: number) {
     const filtered = [...opcoes]

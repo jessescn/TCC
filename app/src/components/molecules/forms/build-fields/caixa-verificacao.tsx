@@ -14,7 +14,8 @@ export default function CaixaVerificacaoBuilder({
   onUpdate,
   campo
 }: BaseBuildFieldProps) {
-  const [caixas, setCaixas] = useState(['Opcão 1'])
+  const initialValue: string[] = campo.configuracao_campo?.opcoes || ['Opcão 1']
+  const [caixas, setCaixas] = useState(initialValue)
 
   function handleDeleteCaixa(idx: number) {
     const filtered = [...caixas]

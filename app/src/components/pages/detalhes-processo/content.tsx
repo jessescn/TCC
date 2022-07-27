@@ -17,7 +17,6 @@ const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
   )
 
   function handleSelectFormulario(option: any) {
-    console.log(option)
     return null
   }
 
