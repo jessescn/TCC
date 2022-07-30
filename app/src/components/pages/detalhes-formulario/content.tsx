@@ -20,7 +20,10 @@ type Props = {
 }
 
 export default function Content({ formulario }: Props) {
-  const { register } = useFormContext()
+  const {
+    register,
+    formState: { isDirty }
+  } = useFormContext()
 
   const [showGeneral, setShowGeneral] = useState(true)
   const [showForm, setShowForm] = useState(true)
@@ -52,6 +55,7 @@ export default function Content({ formulario }: Props) {
           display="block"
           size="sm"
           mb="8px"
+          disabled={!isDirty}
           type="submit"
         >
           Salvar
@@ -63,7 +67,11 @@ export default function Content({ formulario }: Props) {
             <Text fontSize="14px" mb="8px" fontWeight="bold">
               Nome:
             </Text>
-            <Input size="sm" value={formulario?.nome} {...register('nome')} />
+            <Input
+              size="sm"
+              defaultValue={formulario?.nome}
+              {...register('nome')}
+            />
           </Box>
           <Box>
             <Text fontSize="14px" mb="8px" fontWeight="bold">
@@ -71,7 +79,7 @@ export default function Content({ formulario }: Props) {
             </Text>
             <Textarea
               size="sm"
-              value={formulario?.descricao}
+              defaultValue={formulario?.descricao}
               {...register('descricao')}
             />
           </Box>

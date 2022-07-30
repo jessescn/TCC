@@ -6,6 +6,7 @@ import {
   Radio,
   RadioGroup
 } from '@chakra-ui/react'
+import { debounce } from 'lodash'
 import { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
 import { BaseBuildFieldProps } from '.'
@@ -27,6 +28,15 @@ export default function EscolhaMultiplaBuilder({
     setOpcoes([...opcoes, `Opcão ${opcoes.length + 1}`])
   }
 
+  const handleUpdateOpcao = debounce(
+    (ev: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+      const filtered = [...opcoes]
+      filtered.splice(idx, 1, ev.target.value)
+      setOpcoes(filtered)
+    },
+    400
+  )
+
   useEffect(() => {
     onUpdate({
       ...campo,
@@ -45,7 +55,8 @@ export default function EscolhaMultiplaBuilder({
             borderBottom="1px solid #BCBCBC"
             _focus={{ boxShadow: 'none' }}
             size="sm"
-            value={campo}
+            defaultValue={campo}
+            onChange={ev => handleUpdateOpcao(ev, idx)}
           />
           <IconButton
             aria-label=""

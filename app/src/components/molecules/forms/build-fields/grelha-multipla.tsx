@@ -10,6 +10,7 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react'
+import { debounce } from 'lodash'
 import { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
 import { BaseBuildFieldProps } from '.'
@@ -28,7 +29,7 @@ export default function GrelhaMultiplaBuilder({
   ]
   const [colunas, setColunas] = useState(initialColunas)
 
-  function handleUpdateColuna(idx: number, newValue?: string) {
+  const handleUpdateColuna = debounce((idx: number, newValue?: string) => {
     const colunasCopy = [...colunas]
 
     if (newValue) {
@@ -38,9 +39,9 @@ export default function GrelhaMultiplaBuilder({
     }
 
     setColunas(colunasCopy)
-  }
+  }, 400)
 
-  function handleUpdateLinha(idx: number, newValue?: string) {
+  const handleUpdateLinha = debounce((idx: number, newValue?: string) => {
     const linhasCopy = [...linhas]
 
     if (newValue) {
@@ -50,7 +51,7 @@ export default function GrelhaMultiplaBuilder({
     }
 
     setLinhas(linhasCopy)
-  }
+  }, 400)
 
   useEffect(() => {
     onUpdate({ ...campo, configuracao_campo: { linhas, colunas } })

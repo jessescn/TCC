@@ -1,4 +1,5 @@
 import { Flex, Input, Stack, Text } from '@chakra-ui/react'
+import { debounce } from 'lodash'
 import { BaseBuildFieldProps } from '.'
 
 type ConfiguracaoCampoFicheiro = {
@@ -11,12 +12,15 @@ export default function FicheiroBuilder({
   campo
 }: BaseBuildFieldProps) {
   // TODO: aplicar um debounce nos inputs para não dar trigger a cada mudanca no input
-  const handleUpdateCampo = (alteracao: Partial<ConfiguracaoCampoFicheiro>) => {
-    onUpdate({
-      ...campo,
-      configuracao_campo: { ...campo.configuracao_campo, ...alteracao }
-    })
-  }
+  const handleUpdateCampo = debounce(
+    (alteracao: Partial<ConfiguracaoCampoFicheiro>) => {
+      onUpdate({
+        ...campo,
+        configuracao_campo: { ...campo.configuracao_campo, ...alteracao }
+      })
+    },
+    400
+  )
 
   return (
     <Stack spacing="16px">
@@ -27,8 +31,7 @@ export default function FicheiroBuilder({
         <Input
           size="sm"
           type="number"
-          defaultValue={1}
-          value={campo.configuracao_campo?.quantidade_arquivos || 1}
+          defaultValue={campo.configuracao_campo?.quantidade_arquivos || 1}
           onChange={ev =>
             handleUpdateCampo({ quantidade_arquivos: Number(ev.target.value) })
           }
@@ -44,8 +47,7 @@ export default function FicheiroBuilder({
         <Input
           size="sm"
           type="number"
-          defaultValue={1}
-          value={campo.configuracao_campo?.tamanho_maximo || 1}
+          defaultValue={campo.configuracao_campo?.tamanho_maximo || 1}
           onChange={ev =>
             handleUpdateCampo({ tamanho_maximo: Number(ev.target.value) })
           }

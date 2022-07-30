@@ -11,6 +11,7 @@ import {
   Text,
   Tooltip
 } from '@chakra-ui/react'
+import { debounce } from 'lodash'
 import CaixaVerificacaoBuilder from 'components/molecules/forms/build-fields/caixa-verificacao'
 import DataBuilder from 'components/molecules/forms/build-fields/data'
 import EscolhaMultiplaBuilder from 'components/molecules/forms/build-fields/escolha-multipla'
@@ -59,12 +60,18 @@ const opcoesCampos = new Map([
 
 const Campo = ({ campo, onDelete, onUpdate }: CampoProps) => {
   // console.log('check infinity loop')
-  function handleUpdateTitle(title: string) {
-    onUpdate({
-      ...campo,
-      configuracao_campo: { ...campo.configuracao_campo, titulo: title }
-    })
-  }
+  const handleUpdateTitle = debounce(
+    (ev: React.ChangeEvent<HTMLInputElement>) => {
+      onUpdate({
+        ...campo,
+        configuracao_campo: {
+          ...campo.configuracao_campo,
+          titulo: ev.target.value
+        }
+      })
+    },
+    400
+  )
 
   const Componente = opcoesCampos.get(campo.tipo)?.render
 
@@ -88,8 +95,8 @@ const Campo = ({ campo, onDelete, onUpdate }: CampoProps) => {
           <Input
             placeholder="Pergunta"
             size="sm"
-            value={campo.configuracao_campo.titulo}
-            onChange={ev => handleUpdateTitle(ev.target.value)}
+            defaultValue={campo.configuracao_campo.titulo}
+            onChange={handleUpdateTitle}
           />
         )}
         <Select
@@ -170,7 +177,9 @@ export default function EditForm() {
     )
   }, [])
 
-  const handleUpdate = useCallback((campo: CampoFormulario) => {
+  const handleUpdate = (campo: CampoFormulario) => {
+    console.log(campo)
+
     const camposCopy = [...campos]
 
     const idx = camposCopy.findIndex(el => el.ordem === campo.ordem)
@@ -182,7 +191,7 @@ export default function EditForm() {
     camposCopy.splice(idx, 1, campo)
 
     setValue('campos', camposCopy)
-  }, [])
+  }
 
   return (
     <Box>

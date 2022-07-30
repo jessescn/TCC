@@ -6,7 +6,8 @@ import {
   IconButton,
   Input
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { debounce } from 'lodash'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
 import { BaseBuildFieldProps } from '.'
 
@@ -27,6 +28,15 @@ export default function CaixaVerificacaoBuilder({
     setCaixas([...caixas, `Opcão ${caixas.length + 1}`])
   }
 
+  const handleUpdateCaixa = debounce(
+    (ev: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+      const filtered = [...caixas]
+      filtered.splice(idx, 1, ev.target.value)
+      setCaixas(filtered)
+    },
+    400
+  )
+
   useEffect(() => {
     onUpdate({
       ...campo,
@@ -45,7 +55,8 @@ export default function CaixaVerificacaoBuilder({
             borderBottom="1px solid #BCBCBC"
             _focus={{ boxShadow: 'none' }}
             size="sm"
-            value={campo}
+            onChange={ev => handleUpdateCaixa(ev, idx)}
+            defaultValue={campo}
           />
           <IconButton
             aria-label=""
