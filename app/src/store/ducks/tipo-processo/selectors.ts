@@ -1,3 +1,4 @@
+import { TipoProcesso } from 'domain/entity/tipo-processo'
 import { createSelector } from '@reduxjs/toolkit'
 import { ProcessoModel } from 'domain/models/processo'
 import { State } from '..'
@@ -14,6 +15,13 @@ export const getTipoProcesso = createSelector(
   [getTipoProcessos],
   tipoProcessos => (id: number) => {
     return tipoProcessos.find(tipo => tipo.id === id)
+  }
+)
+
+export const getTipoProcessosAbertos = createSelector(
+  [getTipoProcessos],
+  tipoProcessos => {
+    return TipoProcesso.getTipoProcessosAbertos(tipoProcessos)
   }
 )
 

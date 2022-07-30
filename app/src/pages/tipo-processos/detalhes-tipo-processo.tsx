@@ -77,8 +77,6 @@ export default function TipoProcesso() {
         : data.dataInicio
     }
 
-    console.log(updateTipoProcesso)
-
     store.dispatch(
       actions.tipoProcesso.update({
         id: tipoProcesso.id,
@@ -114,7 +112,6 @@ export default function TipoProcesso() {
             <Content tipoProcesso={tipoProcesso} />
             <Flex justifyContent="flex-end">
               <Button
-                isLoading={status === 'loading'}
                 bgColor="initial.white"
                 borderColor="primary.dark"
                 borderWidth={1}

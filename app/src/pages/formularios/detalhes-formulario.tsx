@@ -29,8 +29,6 @@ export default function Form() {
   const formControls = useForm<FormularioForm>()
 
   const onSubmit = (data: FormularioForm) => {
-    console.log(data)
-
     if (!formulario) {
       store.dispatch(actions.form.create(data))
       return

@@ -36,6 +36,10 @@ export const invisibleStyle = {
 const Sidebar = () => {
   const currentUser = useSelector(selectors.session.getCurrentUser)
 
+  const processosAbertos = useSelector(
+    selectors.tipoProcesso.getTipoProcessosAbertos
+  )
+
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
   const [hidden, setHidden] = useState(!isSidebarOpen)
 
@@ -114,32 +118,27 @@ const Sidebar = () => {
             title="Meus processos"
             url="/meus-processos"
           />
-          <NavSubItems
-            icon={BsListCheck}
-            title="Abrir Processo"
-            items={[
-              {
-                title: 'Homologacão de banca examinadora (mestrado)',
-                url: '/novo-processo/1',
+          {processosAbertos.length > 0 && (
+            <NavSubItems
+              icon={BsListCheck}
+              title="Abrir Processo"
+              items={processosAbertos.map(tipoProcesso => ({
+                title: tipoProcesso.nome,
+                url: `/novo-processo/${tipoProcesso.id}`,
                 icon: FiCornerDownRight
-              },
-              {
-                title: 'Homologacão de banca examinadora (doutorado)',
-                url: '/novo-processo/2',
-                icon: FiCornerDownRight
-              }
-            ]}
+              }))}
+            />
+          )}
+          <NavItem
+            icon={AiOutlineFileAdd}
+            title="Processos Cadastrados"
+            url="/tipo-processos"
+            adminOnly
           />
           <NavItem
             icon={AiOutlineFileAdd}
             title="Formulários"
             url="/formularios"
-            adminOnly
-          />
-          <NavItem
-            icon={AiOutlineFileAdd}
-            title="Processos Cadastrados"
-            url="/tipo-processos"
             adminOnly
           />
           {/* <NavItem icon={FiUser} title="Usuários" url="/usuarios" adminOnly /> */}

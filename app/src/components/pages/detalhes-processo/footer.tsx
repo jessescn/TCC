@@ -27,7 +27,6 @@ const Footer = ({
   }, [])
 
   const handleSendFeedback = useCallback((feedback: string) => {
-    console.log(feedback)
     invalidFieldsModalControls.onClose()
   }, [])
 

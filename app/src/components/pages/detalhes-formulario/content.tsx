@@ -13,6 +13,7 @@ import { FormularioModel } from 'domain/models/formulario'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
 import EditForm from './edit-form'
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
 }
 
 export default function Content({ formulario }: Props) {
+  const navigate = useNavigate()
   const {
     register,
     formState: { isDirty }
@@ -48,17 +50,6 @@ export default function Content({ formulario }: Props) {
           }
         >
           Configuracões Gerais
-        </Button>
-        <Button
-          bgColor="primary.dark"
-          color="initial.white"
-          display="block"
-          size="sm"
-          mb="8px"
-          disabled={!isDirty}
-          type="submit"
-        >
-          Salvar
         </Button>
       </Flex>
       <Collapse in={showGeneral} animateOpacity>
@@ -101,6 +92,29 @@ export default function Content({ formulario }: Props) {
       <Collapse in={showForm} animateOpacity>
         <EditForm />
       </Collapse>
+      <Flex justifyContent="flex-end">
+        <Button
+          bgColor="initial.white"
+          borderColor="primary.dark"
+          borderWidth={1}
+          color="primary.dark"
+          size="sm"
+          mr="8px"
+          onClick={() => navigate('/formularios')}
+        >
+          Voltar
+        </Button>
+        <Button
+          bgColor="primary.dark"
+          color="initial.white"
+          display="block"
+          size="sm"
+          disabled={!isDirty}
+          type="submit"
+        >
+          Salvar
+        </Button>
+      </Flex>
     </Box>
   )
 }
