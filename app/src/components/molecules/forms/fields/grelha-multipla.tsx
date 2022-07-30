@@ -21,9 +21,9 @@ export function CampoGrelhaMultipla(props: Props) {
   const { setValue, watch } = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { register, ...paragrafoProps } = props
+  const { onUpdateResposta, ...paragrafoProps } = props
 
-  const currentValue: number[][] = watch(`campo ${props.ordem}`) || []
+  const currentValue: number[][] = watch(`resposta`) || []
 
   const { colunas, linhas } = props.configuracao_campo
 

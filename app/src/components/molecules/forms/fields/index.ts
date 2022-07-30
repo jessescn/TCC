@@ -1,5 +1,4 @@
 import { TipoCampoFormulario } from 'domain/models/formulario'
-import { UseFormRegisterReturn } from 'react-hook-form'
 import { CampoCaixaVerificacao } from './caixa-verificacao'
 import { CampoData } from './data'
 import { CampoEscolhaMultipla } from './escolha-multipla'
@@ -13,7 +12,7 @@ import { CampoResposta } from './resposta'
 type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>
 
 export type BaseCampoProps = {
-  register: UseFormRegisterReturn
+  onUpdateResposta: (ordem: number, data: any) => void
 }
 
 export const campoComponente: CampoComponente = {

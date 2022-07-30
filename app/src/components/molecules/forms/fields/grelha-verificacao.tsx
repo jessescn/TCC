@@ -18,7 +18,7 @@ type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaVerificacao>
 
 export function CampoGrelhaVerificacao(props: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { register, ...paragrafoProps } = props
+  const { onUpdateResposta, ...paragrafoProps } = props
   const { colunas, linhas } = props.configuracao_campo
 
   return (

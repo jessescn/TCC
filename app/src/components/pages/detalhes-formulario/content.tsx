@@ -22,10 +22,7 @@ type Props = {
 
 export default function Content({ formulario }: Props) {
   const navigate = useNavigate()
-  const {
-    register,
-    formState: { isDirty }
-  } = useFormContext()
+  const { register } = useFormContext()
 
   const [showGeneral, setShowGeneral] = useState(true)
   const [showForm, setShowForm] = useState(true)
@@ -109,7 +106,6 @@ export default function Content({ formulario }: Props) {
           color="initial.white"
           display="block"
           size="sm"
-          disabled={!isDirty}
           type="submit"
         >
           Salvar

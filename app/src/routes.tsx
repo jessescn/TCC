@@ -12,7 +12,7 @@ import ListaFormularios from './pages/formularios/lista-formularios'
 import DetalhesFormulario from './pages/formularios/detalhes-formulario'
 
 import DetalhesTipoProcesso from 'pages/tipo-processos/detalhes-tipo-processo'
-import PreencherProcesso from 'pages/processos/preencher-processo'
+import NovoProcesso from 'pages/processos/novo-processo'
 
 export default function Routes() {
   return (
@@ -93,7 +93,7 @@ export default function Routes() {
         path="/novo-processo/:id"
         element={
           <PrivateRoute>
-            <PreencherProcesso />
+            <NovoProcesso />
           </PrivateRoute>
         }
       />

@@ -1,21 +1,18 @@
 import { Box, Flex, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoEscolhaMultipla } from 'domain/types/campo-tipos'
-import { useFormContext } from 'react-hook-form'
 import { BaseCampoProps } from '.'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoEscolhaMultipla>
 
 export function CampoEscolhaMultipla(props: Props) {
-  const { setValue } = useFormContext()
+  const { onUpdateResposta, ...paragrafoProps } = props
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { register, ...paragrafoProps } = props
   const { opcoes, outro } = props.configuracao_campo
 
   function handleChange(value: any) {
-    setValue(`campo ${props.ordem}`, value)
+    onUpdateResposta(props.ordem, value)
   }
 
   return (

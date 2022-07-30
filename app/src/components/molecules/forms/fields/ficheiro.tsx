@@ -24,7 +24,7 @@ export function CampoFicheiro(props: Props) {
 
   const ref = useRef<HTMLInputElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { register, ...paragrafoProps } = props
+  const { onUpdateResposta, ...paragrafoProps } = props
   const { quantidade_arquivos } = props.configuracao_campo
 
   function handleUpload(fileInput: React.ChangeEvent<HTMLInputElement>) {

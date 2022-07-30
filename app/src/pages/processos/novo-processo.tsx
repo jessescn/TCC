@@ -1,12 +1,12 @@
 import { Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Content from 'components/pages/preencher-processo/content'
-import Header from 'components/pages/preencher-processo/header'
+import Content from 'components/pages/novo-processo/content'
+import Header from 'components/pages/novo-processo/header'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-export default function PreencherProcesso() {
+export default function NovoProcesso() {
   const { id } = useParams()
 
   const tipoProcesso = useSelector(state =>
@@ -28,7 +28,7 @@ export default function PreencherProcesso() {
       ) : (
         <Flex w="100%" h="100%" maxW="900px" flexDir="column">
           <Header tipoProcesso={tipoProcesso} />
-          <Content formularios={formularios} />
+          <Content formularios={formularios} tipoProcesso={tipoProcesso} />
         </Flex>
       )}
     </Screen>
