@@ -3,12 +3,13 @@ import { AxiosResponse } from 'axios'
 import { TipoProcessoModel } from 'domain/models/tipo-processo'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { TipoProcessoService } from 'services/tipo-processos'
-import { actions, UpdatePayload } from './slice'
+import { actions, CreatePayload, UpdatePayload } from './slice'
 
 export const sagas = [
   takeLatest(actions.list.type, listSaga),
   takeLatest(actions.update.type, updateSaga),
-  takeLatest(actions.delete.type, deleteSaga)
+  takeLatest(actions.delete.type, deleteSaga),
+  takeLatest(actions.create.type, createSaga)
 ]
 
 function* listSaga() {
@@ -20,6 +21,18 @@ function* listSaga() {
     yield put(actions.listSuccess(response.data))
   } catch (error) {
     yield put(actions.listFailure())
+  }
+}
+
+function* createSaga(action: PayloadAction<CreatePayload>) {
+  try {
+    const response: AxiosResponse<TipoProcessoModel> = yield call(() =>
+      TipoProcessoService.create(action.payload)
+    )
+
+    yield put(actions.createSuccess(response.data))
+  } catch (error) {
+    yield put(actions.createFailure())
   }
 }
 

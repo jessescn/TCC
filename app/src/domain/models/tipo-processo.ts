@@ -6,11 +6,11 @@ export interface TipoProcessoModel {
   descricao: string
   status: TipoProcessoStatus
   formularios: number[]
-  dataInicio: string
-  dataFim: string
+  dataInicio?: string
+  dataFim?: string
   escopo: string
   colegiado: boolean
-  deleted: boolean
+  deleted?: boolean
   createdAt?: string
   updatedAt?: string
 }

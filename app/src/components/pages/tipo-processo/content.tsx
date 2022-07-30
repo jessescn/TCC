@@ -7,61 +7,17 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
-import MultipleSelect from 'components/atoms/multiple-select'
-import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcessoModel } from 'domain/models/tipo-processo'
-import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { selectors, useSelector } from 'store'
+import { formatISODate } from 'utils/format'
+import FormularioSelect from './formularios-select'
 
 type Props = {
   tipoProcesso?: TipoProcessoModel
 }
 
 const Content = ({ tipoProcesso }: Props) => {
-  const {
-    register,
-    formState: { isDirty }
-  } = useFormContext()
-
-  const formularios = useSelector(selectors.form.getFormularios)
-
-  const formOptions = formularios.map(formulario => ({
-    value: formulario.id,
-    label: formulario.nome
-  }))
-
-  const populated = useRef(false)
-  const [selectedFormOptions, setSelectedFormOptions] = useState<any[]>([])
-
-  useEffect(() => {
-    if (populated.current || formOptions.length === 0) {
-      return
-    }
-
-    const options = formOptions.filter(option =>
-      tipoProcesso?.formularios.includes(Number(option.value))
-    )
-
-    setSelectedFormOptions(options)
-    populated.current = true
-  }, [formOptions])
-
-  const customStyles = {
-    control: (styles: any) => ({
-      ...styles,
-      width: '100%',
-      fontSize: '14px',
-      backgroundColor: 'white'
-    }),
-    option: (styles: any) => {
-      return {
-        ...styles,
-        width: '100%',
-        fontSize: '12px'
-      }
-    }
-  }
+  const { register } = useFormContext()
 
   return (
     <Stack spacing="24px">
@@ -86,12 +42,12 @@ const Content = ({ tipoProcesso }: Props) => {
           {...register('descricao')}
         />
       </Box>
-      <Flex>
-        <Flex alignItems="center" w="50%">
+      <Flex justifyContent="space-between">
+        <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
             Escopo:
           </Text>
-          <Select ml="8px" w="fit-content" size="sm">
+          <Select ml="8px" w="fit-content" size="sm" {...register('escopo')}>
             <option value="publico">Público</option>
             <option value="privado">Privado</option>
           </Select>
@@ -100,9 +56,18 @@ const Content = ({ tipoProcesso }: Props) => {
           <Text fontSize="14px" fontWeight="bold">
             Colegiado:
           </Text>
-          <Select ml="8px" w="fit-content" size="sm">
-            <option value="publico">Sim</option>
-            <option value="privado">Não</option>
+          <Select ml="8px" w="fit-content" size="sm" {...register('colegiado')}>
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </Select>
+        </Flex>
+        <Flex alignItems="center">
+          <Text fontSize="14px" fontWeight="bold">
+            Status:
+          </Text>
+          <Select ml="8px" w="fit-content" size="sm" {...register('status')}>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
           </Select>
         </Flex>
       </Flex>
@@ -111,27 +76,30 @@ const Content = ({ tipoProcesso }: Props) => {
           <Text fontSize="14px" fontWeight="bold">
             Data início:
           </Text>
-          <Input size="sm" ml="8px" w="fit-content" type="date" />
+          <Input
+            size="sm"
+            ml="8px"
+            w="fit-content"
+            type="date"
+            defaultValue={formatISODate(tipoProcesso?.dataInicio)}
+            {...register('dataInicio')}
+          />
         </Flex>
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
             Data Fim:
           </Text>
-          <Input size="sm" ml="8px" w="fit-content" type="date" />
+          <Input
+            size="sm"
+            ml="8px"
+            w="fit-content"
+            type="date"
+            defaultValue={formatISODate(tipoProcesso?.dataFim)}
+            {...register('dataFim')}
+          />
         </Flex>
       </Flex>
-      <Box>
-        <Text fontSize="14px" fontWeight="bold" mb="8px">
-          Formulários
-        </Text>
-        <MultipleSelect
-          isMulti
-          styles={customStyles}
-          options={formOptions}
-          value={selectedFormOptions}
-          onChange={value => setSelectedFormOptions(value as any)}
-        />
-      </Box>
+      <FormularioSelect tipoProcesso={tipoProcesso} />
     </Stack>
   )
 }

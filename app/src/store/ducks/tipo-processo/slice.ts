@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TipoProcessoModel } from 'domain/models/tipo-processo'
+import { NovoTipoProcesso } from 'services/tipo-processos'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
@@ -13,6 +14,8 @@ export type UpdatePayload = {
   data: Partial<TipoProcessoModel>
   id: number
 }
+
+export type CreatePayload = NovoTipoProcesso
 
 export const initialState: State = {
   tipoProcessos: [],
@@ -28,6 +31,16 @@ const reducers = {
     state.tipoProcessos = action.payload
   },
   listFailure: (state: State) => {
+    state.status = 'failure'
+  },
+  create: (state: State, action: PayloadAction<CreatePayload>) => {
+    state.status = 'loading'
+  },
+  createSuccess: (state: State, action: PayloadAction<TipoProcessoModel>) => {
+    state.status = 'success'
+    state.tipoProcessos = [...state.tipoProcessos, action.payload]
+  },
+  createFailure: (state: State) => {
     state.status = 'failure'
   },
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
