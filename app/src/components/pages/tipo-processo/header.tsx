@@ -8,14 +8,14 @@ type Props = {
 
 export default function Header({ tipo }: Props) {
   return (
-    <Flex justifyContent="space-between">
-      <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-        {tipo ? 'Editar Formulário' : 'Novo Formulário'}
+    <Flex justifyContent="space-between" alignItems="center">
+      <Text fontWeight="bold" fontSize="24px" color="primary.dark">
+        {tipo ? 'Editar Tipo Processo' : 'Novo Tipo Processo'}
       </Text>
       {tipo && (
-        <Text fontSize="20px">
+        <Text>
           Ultima edição:{' '}
-          <Text as="span" fontWeight="bold" fontSize="24px">
+          <Text as="span" fontWeight="bold" fontSize="20px">
             {format(new Date(tipo.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
           </Text>
         </Text>

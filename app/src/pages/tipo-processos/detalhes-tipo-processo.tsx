@@ -7,6 +7,8 @@ import { actions, selectors, store, useSelector } from 'store'
 
 import EditableText from 'components/molecules/forms/editable-text'
 import Header from 'components/pages/tipo-processo/header'
+import Content from 'components/pages/tipo-processo/content'
+import Footer from 'components/pages/tipo-processo/footer'
 
 export default function TipoProcesso() {
   const navigate = useNavigate()
@@ -22,6 +24,7 @@ export default function TipoProcesso() {
 
   useEffect(() => {
     store.dispatch(actions.tipoProcesso.list())
+    store.dispatch(actions.form.list())
   }, [])
 
   return (
@@ -29,7 +32,7 @@ export default function TipoProcesso() {
       <Box
         w="100%"
         h="100%"
-        maxW="1392px"
+        maxW="900px"
         bgColor="initial.white"
         borderRadius="8px"
         px="24px"
@@ -39,31 +42,8 @@ export default function TipoProcesso() {
           <form>
             <Header tipo={tipoProcesso} />
             <Divider my="24px" borderColor="secondary.dark" />
-            <EditableText
-              defaultValue={tipoProcesso?.nome || 'Novo formulário'}
-              styleProps={{ mb: 2 }}
-              register={formControls.register('nome', { required: true })}
-            >
-              <Text mr="16px" fontSize="14px">
-                Nome:
-              </Text>
-            </EditableText>
-            <EditableText
-              defaultValue="descricão do formulário"
-              register={formControls.register('descricao', { required: true })}
-            >
-              <Text mr="16px" fontSize="14px">
-                Descricão:
-              </Text>
-            </EditableText>
-            <Flex alignItems="center">
-              <Text mr="8px">Data Início</Text>
-              <Input type="datetime-local" maxW="200px" />
-            </Flex>
-            <Flex alignItems="center">
-              <Text mr="8px">Data Fim</Text>
-              <Input type="datetime-local" maxW="200px" />
-            </Flex>
+            <Content tipoProcesso={tipoProcesso} />
+            <Footer />
           </form>
         </FormProvider>
       </Box>
