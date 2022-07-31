@@ -11,19 +11,20 @@ import {
 } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoGrelhaMultipla } from 'domain/types/campo-tipos'
-import { useFormContext } from 'react-hook-form'
+import { useGetValorCampo } from 'hooks/useGetValorCampo'
 import { BaseCampoProps } from '.'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaMultipla>
 
-export function CampoGrelhaMultipla(props: Props) {
-  const { setValue, watch } = useFormContext()
+export function CampoGrelhaMultipla({
+  onUpdateResposta,
+  formulario,
+  ...props
+}: Props) {
+  const campo = useGetValorCampo(formulario, props.ordem)
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { onUpdateResposta, ...paragrafoProps } = props
-
-  const currentValue: number[][] = watch(`resposta`) || []
+  const currentValue: number[][] = campo?.valor || []
 
   const { colunas, linhas } = props.configuracao_campo
 
@@ -33,17 +34,32 @@ export function CampoGrelhaMultipla(props: Props) {
     const idx = currentValue.findIndex(value => value[0] === parsedValue[0])
 
     if (idx === -1) {
-      setValue(`campo ${props.ordem}`, [...currentValue, parsedValue])
+      onUpdateResposta({
+        ordem: props.ordem,
+        valor: [...currentValue, parsedValue]
+      })
       return
     }
 
-    currentValue.splice(idx, 1, parsedValue)
-    setValue(`campo ${props.ordem}`, currentValue)
+    const copyValue = [...currentValue]
+
+    copyValue.splice(idx, 1, parsedValue)
+    onUpdateResposta({
+      ordem: props.ordem,
+      valor: copyValue
+    })
+  }
+
+  function getCurrentValueByRow(rowIdx: number) {
+    const value =
+      campo?.valor.find((valor: number[]) => valor[0] === rowIdx) || []
+
+    return `[${value[0]},${value[1]}]`
   }
 
   return (
     <Box>
-      <CampoParagrafo {...paragrafoProps} />
+      <CampoParagrafo {...props} />
       <Table>
         <Thead>
           <Tr>
@@ -57,8 +73,13 @@ export function CampoGrelhaMultipla(props: Props) {
         </Thead>
         <Tbody>
           {linhas.map((linha, idx) => (
-            <RadioGroup as="tr" onChange={handleChange} key={`linha-${idx}`}>
-              <Td key={`linha-${idx}`}>{linha}</Td>
+            <RadioGroup
+              as="tr"
+              onChange={handleChange}
+              defaultValue={getCurrentValueByRow(idx)}
+              key={`linha-${idx}`}
+            >
+              <Td>{linha}</Td>
               {colunas.map((_, colunaIdx) => (
                 <Td textAlign="center" key={`linha-${idx}-${colunaIdx}`}>
                   <Radio value={`[${idx},${colunaIdx}]`} />

@@ -41,7 +41,7 @@ export interface RemoteProcessoModel {
   id: number
   status: string
   camposInvalidos: CampoInvalido[]
-  resposta: string
+  respostas: string
   votos?: VotoProcesso[]
   deleted: boolean
   createdAt?: string

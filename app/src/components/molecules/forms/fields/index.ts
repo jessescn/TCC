@@ -1,4 +1,5 @@
-import { TipoCampoFormulario } from 'domain/models/formulario'
+import { FormularioModel, TipoCampoFormulario } from 'domain/models/formulario'
+import { RespostaCampo } from 'domain/models/processo'
 import { CampoCaixaVerificacao } from './caixa-verificacao'
 import { CampoData } from './data'
 import { CampoEscolhaMultipla } from './escolha-multipla'
@@ -12,7 +13,8 @@ import { CampoResposta } from './resposta'
 type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>
 
 export type BaseCampoProps = {
-  onUpdateResposta: (ordem: number, data: any) => void
+  formulario: FormularioModel
+  onUpdateResposta: (novoCampo: RespostaCampo) => void
 }
 
 export const campoComponente: CampoComponente = {

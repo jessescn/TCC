@@ -1,6 +1,7 @@
 import { Box, Flex, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoEscolhaMultipla } from 'domain/types/campo-tipos'
+import { useState } from 'react'
 import { BaseCampoProps } from '.'
 import { CampoParagrafo } from './paragrafo'
 
@@ -9,10 +10,14 @@ type Props = BaseCampoProps & CampoFormulario<CampoTipoEscolhaMultipla>
 export function CampoEscolhaMultipla(props: Props) {
   const { onUpdateResposta, ...paragrafoProps } = props
 
+  const [valorOutro, setValorOutro] = useState('')
+
   const { opcoes, outro } = props.configuracao_campo
 
   function handleChange(value: any) {
-    onUpdateResposta(props.ordem, value)
+    const valor = value === 'outro' ? valorOutro : value
+
+    onUpdateResposta({ ordem: props.ordem, valor })
   }
 
   return (
@@ -34,6 +39,8 @@ export function CampoEscolhaMultipla(props: Props) {
                   variant="unstyled"
                   borderBottom="1px solid #000"
                   borderRadius={0}
+                  onChange={ev => setValorOutro(ev.target.value)}
+                  value={valorOutro}
                 />
               </Flex>
             )}

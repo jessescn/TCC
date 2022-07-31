@@ -1,6 +1,7 @@
 import { Box, Input } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoHora } from 'domain/types/campo-tipos'
+import { useGetValorCampo } from 'hooks/useGetValorCampo'
 import { debounce } from 'lodash'
 import { BaseCampoProps } from '.'
 import { CampoParagrafo } from './paragrafo'
@@ -8,11 +9,13 @@ import { CampoParagrafo } from './paragrafo'
 type Props = BaseCampoProps & CampoFormulario<CampoTipoHora>
 
 export function CampoHora(props: Props) {
-  const { onUpdateResposta, ...paragrafoProps } = props
+  const { onUpdateResposta, formulario, ...paragrafoProps } = props
+
+  const campo = useGetValorCampo(formulario, props.ordem)
 
   const handleChangeHora = debounce(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
-      onUpdateResposta(paragrafoProps.ordem, ev.target.value)
+      onUpdateResposta({ ordem: paragrafoProps.ordem, valor: ev.target.value })
     },
     400
   )
@@ -26,6 +29,7 @@ export function CampoHora(props: Props) {
         type="time"
         placeholder="Resposta"
         maxW="fit-content"
+        defaultValue={campo?.valor}
         onChange={handleChangeHora}
       />
     </Box>

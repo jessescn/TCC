@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 
-type Entitie = 'tipoProcesso' | 'form' | 'processo'
+type Entity = 'tipoProcesso' | 'form' | 'processo'
 
-export const useStore = (entities: Entitie[]) => {
+export const useStore = (entities: Entity[]) => {
   useEffect(() => {
     entities.forEach(entity => {
       store.dispatch(actions[entity].list())

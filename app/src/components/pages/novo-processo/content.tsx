@@ -3,6 +3,8 @@ import { Resposta } from 'domain/models/processo'
 import { TipoProcessoModel } from 'domain/models/tipo-processo'
 import { useCallback, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { NovoProcesso } from 'services/processos'
+import { actions, store } from 'store'
 import Footer from './footer'
 import RenderFormulario from './render-formulario'
 
@@ -13,20 +15,30 @@ type Props = {
 
 export type Processo = {
   tipo: number
-  resposta: Resposta[]
+  respostas: Resposta[]
 }
 
 export default function Content({ formularios, tipoProcesso }: Props) {
   const [currentIdx, setCurrentIdx] = useState(0)
 
   const methods = useForm<Processo>({
-    defaultValues: { tipo: tipoProcesso.id, resposta: [] }
+    defaultValues: {
+      tipo: tipoProcesso.id,
+      respostas: formularios.map(formulario => ({
+        campos: [],
+        formulario: formulario.id
+      }))
+    }
   })
 
   const { getValues, setValue } = methods
 
-  function onSubmit(data: any) {
-    console.log(data)
+  function onSubmit(data: Processo) {
+    const novoProcesso: NovoProcesso = {
+      ...data
+    }
+
+    store.dispatch(actions.processo.create(novoProcesso))
   }
 
   const handleSetCurrentIdx = useCallback(
@@ -43,11 +55,11 @@ export default function Content({ formularios, tipoProcesso }: Props) {
   const handleClear = useCallback(() => {
     const formularioId = formularios[currentIdx]?.id
 
-    const filtered = getValues('resposta').filter(
+    const updated = getValues('respostas').filter(
       resposta => resposta.formulario !== formularioId
     )
 
-    setValue('resposta', filtered)
+    setValue('respostas', updated)
   }, [getValues, setValue])
 
   const isLastForm = currentIdx === formularios.length - 1

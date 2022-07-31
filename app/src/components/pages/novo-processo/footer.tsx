@@ -1,4 +1,4 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex } from '@chakra-ui/react'
 
 type Props = {
   currentIdx: number
@@ -13,63 +13,34 @@ export default function Footer({
   isLastForm,
   onClear
 }: Props) {
-  const SubmitFooter = (
-    <Flex justifyContent="flex-end">
-      <Button
-        bgColor="initial.white"
-        borderColor="primary.dark"
-        borderWidth={1}
-        color="primary.dark"
-        size="sm"
-        mr="8px"
-        onClick={() => onChangeForm(currentIdx - 1)}
-        disabled={currentIdx <= 0}
-      >
-        Voltar
-      </Button>
-      <Button
-        bgColor="primary.dark"
-        color="initial.white"
-        display="block"
-        size="sm"
-        type="submit"
-      >
-        Submeter Processo
-      </Button>
-    </Flex>
+  const SubmitButton = (
+    <Button
+      bgColor="primary.dark"
+      color="initial.white"
+      display="block"
+      size="sm"
+      type="submit"
+    >
+      Submeter Processo
+    </Button>
   )
 
-  const CurrentFooter = (
-    <Flex justifyContent="flex-end">
-      {currentIdx > 0 && (
-        <Button
-          bgColor="initial.white"
-          borderColor="primary.dark"
-          borderWidth={1}
-          color="primary.dark"
-          size="sm"
-          mr="8px"
-          onClick={() => onChangeForm(currentIdx - 1)}
-        >
-          Voltar
-        </Button>
-      )}
-      <Button
-        bgColor="primary.dark"
-        color="initial.white"
-        display="block"
-        size="sm"
-        disabled={isLastForm}
-        onClick={() => onChangeForm(currentIdx + 1)}
-      >
-        Próximo Formulário
-      </Button>
-    </Flex>
+  const NextButton = (
+    <Button
+      as={Box}
+      bgColor="primary.dark"
+      color="initial.white"
+      cursor="pointer"
+      size="sm"
+      onClick={() => onChangeForm(currentIdx + 1)}
+    >
+      Próximo Formulário
+    </Button>
   )
 
   return (
-    <Flex justifyContent="space-between" mt="16px">
-      <Button
+    <Flex justifyContent="flex-end" mt="16px">
+      {/* <Button
         bgColor="initial.white"
         borderColor="primary.dark"
         borderWidth={1}
@@ -79,8 +50,23 @@ export default function Footer({
         onClick={onClear}
       >
         Limpar formulário
-      </Button>
-      {isLastForm ? SubmitFooter : CurrentFooter}
+      </Button> */}
+      <Flex justifyContent="flex-end">
+        {currentIdx > 0 && (
+          <Button
+            bgColor="initial.white"
+            borderColor="primary.dark"
+            borderWidth={1}
+            color="primary.dark"
+            size="sm"
+            mr="8px"
+            onClick={() => onChangeForm(currentIdx - 1)}
+          >
+            Voltar
+          </Button>
+        )}
+        {isLastForm ? SubmitButton : NextButton}
+      </Flex>
     </Flex>
   )
 }

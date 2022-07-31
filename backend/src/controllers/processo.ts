@@ -14,7 +14,7 @@ import { isNumber } from 'utils/value'
 
 export type RemoteProcesso = {
   tipo: number
-  resposta: Resposta[]
+  respostas: Resposta[]
   votos?: VotoProcesso[]
 }
 

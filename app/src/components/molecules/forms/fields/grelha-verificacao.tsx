@@ -11,19 +11,56 @@ import {
 } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoGrelhaVerificacao } from 'domain/types/campo-tipos'
+import { useGetValorCampo } from 'hooks/useGetValorCampo'
 import { BaseCampoProps } from '.'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaVerificacao>
 
-export function CampoGrelhaVerificacao(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { onUpdateResposta, ...paragrafoProps } = props
+export function CampoGrelhaVerificacao({
+  onUpdateResposta,
+  formulario,
+  ...props
+}: Props) {
+  const campo = useGetValorCampo(formulario, props.ordem)
+
+  const currentValue: number[][][] = campo?.valor || []
+
   const { colunas, linhas } = props.configuracao_campo
+
+  function handleChange(value: string[], row: number) {
+    const parsedValue: number[][] = value.map(stringValue =>
+      JSON.parse(stringValue)
+    )
+
+    const idx = currentValue.findIndex(value => value[0][0] === row)
+
+    if (idx === -1) {
+      onUpdateResposta({
+        ordem: props.ordem,
+        valor: [...currentValue, parsedValue]
+      })
+      return
+    }
+
+    const copyValue = [...currentValue]
+
+    copyValue.splice(idx, 1, parsedValue)
+    onUpdateResposta({
+      ordem: props.ordem,
+      valor: copyValue
+    })
+  }
+
+  function getCurrentValuesByRow(rowIdx: number) {
+    const values = currentValue.find(valor => valor[0][0] === rowIdx) || []
+
+    return values.map(value => `[${value[0]},${value[1]}]`)
+  }
 
   return (
     <Box>
-      <CampoParagrafo {...paragrafoProps} />
+      <CampoParagrafo {...props} />
       <Table>
         <Thead>
           <Tr>
@@ -34,13 +71,17 @@ export function CampoGrelhaVerificacao(props: Props) {
           </Tr>
         </Thead>
         <Tbody>
-          {linhas.map(linha => (
-            <CheckboxGroup>
+          {linhas.map((linha, idx) => (
+            <CheckboxGroup
+              key={`linha-${idx}`}
+              onChange={(value: string[]) => handleChange(value, idx)}
+              defaultValue={getCurrentValuesByRow(idx)}
+            >
               <Tr>
                 <Td>{linha}</Td>
-                {colunas.map(() => (
-                  <Td textAlign="center">
-                    <Checkbox />
+                {colunas.map((_, colunaIdx) => (
+                  <Td textAlign="center" key={`linha-${idx}-${colunaIdx}`}>
+                    <Checkbox value={`[${idx},${colunaIdx}]`} />
                   </Td>
                 ))}
               </Tr>

@@ -9,22 +9,24 @@ import {
 } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoFicheiro } from 'domain/types/campo-tipos'
+import { useGetValorCampo } from 'hooks/useGetValorCampo'
 import { useRef } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { AiOutlineClose, AiOutlineUpload } from 'react-icons/ai'
 import { BaseCampoProps } from '.'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoFicheiro>
 
-export function CampoFicheiro(props: Props) {
-  const { setValue, watch } = useFormContext()
+export function CampoFicheiro({
+  onUpdateResposta,
+  formulario,
+  ...props
+}: Props) {
+  const campo = useGetValorCampo(formulario, props.ordem)
 
-  const addedFiles: File[] = watch(`campo ${props.ordem}`) || []
+  const addedFiles: File[] = campo?.valor || []
 
   const ref = useRef<HTMLInputElement>(null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { onUpdateResposta, ...paragrafoProps } = props
   const { quantidade_arquivos } = props.configuracao_campo
 
   function handleUpload(fileInput: React.ChangeEvent<HTMLInputElement>) {
@@ -32,22 +34,21 @@ export function CampoFicheiro(props: Props) {
       ? Array.from(fileInput.target.files)
       : []
 
-    setValue(`campo ${props.ordem}`, files)
-
     if (ref.current?.value) {
       ref.current.value = ''
     }
+
+    onUpdateResposta({ ordem: props.ordem, valor: files })
   }
 
   function handleRemove(file: File) {
     const filteredFiles = addedFiles.filter(f => f.name !== file.name)
-
-    setValue(`campo ${props.ordem}`, filteredFiles)
+    onUpdateResposta({ ordem: props.ordem, valor: filteredFiles })
   }
 
   return (
     <Box>
-      <CampoParagrafo {...paragrafoProps} />
+      <CampoParagrafo {...props} />
       {addedFiles.length > 0 && (
         <Box mt="16px">
           {addedFiles.map(file => (
