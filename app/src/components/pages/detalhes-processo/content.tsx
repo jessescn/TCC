@@ -1,4 +1,4 @@
-import { Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import { ProcessoModel } from 'domain/models/processo'
 import { useState } from 'react'
@@ -16,8 +16,16 @@ const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
     formularios[0]
   )
 
-  function handleSelectFormulario(option: any) {
-    return null
+  function handleSelectFormulario(option: string) {
+    const novoFormularioSelecionado = formularios.find(
+      formulario => formulario.id === Number(option)
+    )
+
+    if (!novoFormularioSelecionado) {
+      return
+    }
+
+    setFormularioSelecionado(novoFormularioSelecionado)
   }
 
   function handleInvalidate(question: CampoFormulario) {
@@ -34,7 +42,7 @@ const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
   }
 
   return (
-    <>
+    <Box h="100%">
       <Stack spacing="16px">
         <Flex alignItems="center">
           <Text fontSize="14px" mr="8px" fontWeight="bold">
@@ -46,16 +54,20 @@ const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
           <Text fontSize="14px" fontWeight="bold" mr="8px">
             Formulário:
           </Text>
-          <Select size="xs" maxW="600px" onChange={handleSelectFormulario}>
+          <Select
+            size="xs"
+            maxW="600px"
+            onChange={e => handleSelectFormulario(e.target.value)}
+          >
             {formularios.map(formulario => (
-              <option value={formulario.id} key={formulario.id}>
+              <option value={`${formulario.id}`} key={formulario.id}>
                 {formulario.nome}
               </option>
             ))}
           </Select>
         </Flex>
       </Stack>
-      <Divider borderWidth="2px" borderColor="#EEE" my="16px" />
+      <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
       {formularioSelecionado && (
         <RenderFormulario
           formulario={formularioSelecionado}
@@ -63,7 +75,7 @@ const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
           handleInvalidate={handleInvalidate}
         />
       )}
-    </>
+    </Box>
   )
 }
 

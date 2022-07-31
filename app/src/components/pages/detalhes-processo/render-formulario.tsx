@@ -12,6 +12,7 @@ import {
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import { ProcessoModel, RespostaCampo } from 'domain/models/processo'
 import { AiFillWarning } from 'react-icons/ai'
+import { selectors, useSelector } from 'store'
 
 type RespostaProps = {
   resposta?: RespostaCampo
@@ -26,6 +27,7 @@ const Resposta = ({
   isInvalid,
   onInvalidate
 }: RespostaProps) => {
+  const isCoordenacao = useSelector(selectors.session.is)('coordenador')
   const textoPergunta =
     pergunta.configuracao_campo.titulo ||
     pergunta.configuracao_campo.descricao ||
@@ -57,19 +59,21 @@ const Resposta = ({
             bgColor: 'secondary.default'
           }}
         />
-        <IconButton
-          onClick={() => onInvalidate(pergunta)}
-          aria-label=""
-          bgColor="initial.white"
-          ml="8px"
-          variant="unstyled"
-          icon={
-            <Icon
-              as={AiFillWarning}
-              color={isInvalid ? 'info.error' : 'initial.black'}
-            />
-          }
-        />
+        {isCoordenacao && (
+          <IconButton
+            onClick={() => onInvalidate(pergunta)}
+            aria-label=""
+            bgColor="initial.white"
+            ml="8px"
+            variant="unstyled"
+            icon={
+              <Icon
+                as={AiFillWarning}
+                color={isInvalid ? 'info.error' : 'initial.black'}
+              />
+            }
+          />
+        )}
       </Flex>
     </Box>
   )
@@ -98,9 +102,9 @@ export default function RenderFormulario({
     <Grid
       templateColumns="repeat(12, 1fr)"
       gap={2}
-      overflowY="scroll"
+      overflowY="auto"
       maxH="500px"
-      h="100%"
+      h="fit-content"
       pr="10px"
     >
       {formulario.campos.map(pergunta => {
