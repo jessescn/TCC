@@ -9,12 +9,12 @@ import {
 } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import FormInput from 'components/molecules/forms/input'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { MdSearchOff } from 'react-icons/md'
 
 import FormulariosTable from 'components/pages/formularios/table'
 import { useNavigate } from 'react-router-dom'
-import { actions, selectors, store, useSelector } from 'store'
+import { selectors, useSelector } from 'store'
 
 export default function Formularios() {
   const navigate = useNavigate()
@@ -25,10 +25,6 @@ export default function Formularios() {
   const formularios = useSelector(state =>
     selectors.form.getFormulariosBySearch(state)(term)
   )
-
-  useEffect(() => {
-    store.dispatch(actions.form.list())
-  }, [])
 
   const handleSearch = (termo: string) => {
     setCurrentPage(1)

@@ -14,18 +14,6 @@ export default function Footer({
   onClear
 }: Props) {
   const SubmitFooter = (
-    <Button
-      bgColor="primary.dark"
-      color="initial.white"
-      display="block"
-      size="sm"
-      type="submit"
-    >
-      Submeter Processo
-    </Button>
-  )
-
-  const CurrentFooter = (
     <Flex justifyContent="flex-end">
       <Button
         bgColor="initial.white"
@@ -39,6 +27,33 @@ export default function Footer({
       >
         Voltar
       </Button>
+      <Button
+        bgColor="primary.dark"
+        color="initial.white"
+        display="block"
+        size="sm"
+        type="submit"
+      >
+        Submeter Processo
+      </Button>
+    </Flex>
+  )
+
+  const CurrentFooter = (
+    <Flex justifyContent="flex-end">
+      {currentIdx > 0 && (
+        <Button
+          bgColor="initial.white"
+          borderColor="primary.dark"
+          borderWidth={1}
+          color="primary.dark"
+          size="sm"
+          mr="8px"
+          onClick={() => onChangeForm(currentIdx - 1)}
+        >
+          Voltar
+        </Button>
+      )}
       <Button
         bgColor="primary.dark"
         color="initial.white"

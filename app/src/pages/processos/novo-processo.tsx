@@ -2,9 +2,8 @@ import { Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import Content from 'components/pages/novo-processo/content'
 import Header from 'components/pages/novo-processo/header'
-import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { actions, selectors, store, useSelector } from 'store'
+import { selectors, useSelector } from 'store'
 
 export default function NovoProcesso() {
   const { id } = useParams()
@@ -15,11 +14,6 @@ export default function NovoProcesso() {
   const formularios = useSelector(state =>
     selectors.form.getFormulariosByTipoProcesso(state)(tipoProcesso)
   )
-
-  useEffect(() => {
-    store.dispatch(actions.tipoProcesso.list())
-    store.dispatch(actions.form.list())
-  }, [])
 
   return (
     <Screen py="24px" h="100%">

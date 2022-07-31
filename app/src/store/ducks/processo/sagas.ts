@@ -6,12 +6,12 @@ import { ProcessoService } from 'services/processos'
 import { actions, UpdatePayload } from './slice'
 
 export const sagas = [
-  takeLatest(actions.list.type, listProcessosSaga),
-  takeLatest(actions.update.type, updateProcessoSaga),
-  takeLatest(actions.delete.type, deleteProcessoSaga)
+  takeLatest(actions.list.type, listSaga),
+  takeLatest(actions.update.type, updateSaga),
+  takeLatest(actions.delete.type, deleteSaga)
 ]
 
-function* listProcessosSaga() {
+function* listSaga() {
   try {
     const response: AxiosResponse<RemoteProcessoModel[]> = yield call(
       ProcessoService.list
@@ -28,7 +28,7 @@ function* listProcessosSaga() {
   }
 }
 
-function* updateProcessoSaga(action: PayloadAction<UpdatePayload>) {
+function* updateSaga(action: PayloadAction<UpdatePayload>) {
   try {
     const response: AxiosResponse<RemoteProcessoModel> = yield call(() =>
       ProcessoService.update(action.payload.id, action.payload.data)
@@ -45,7 +45,7 @@ function* updateProcessoSaga(action: PayloadAction<UpdatePayload>) {
   }
 }
 
-function* deleteProcessoSaga(action: PayloadAction<number>) {
+function* deleteSaga(action: PayloadAction<number>) {
   try {
     const response: AxiosResponse<RemoteProcessoModel> = yield call(() =>
       ProcessoService.delete(action.payload)

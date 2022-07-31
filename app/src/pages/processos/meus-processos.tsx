@@ -2,10 +2,10 @@ import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import FormInput from 'components/molecules/forms/input'
 import Table from 'components/pages/meus-processos/table'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { MdSearchOff } from 'react-icons/md'
 
-import { actions, selectors, store, useSelector } from 'store'
+import { selectors, useSelector } from 'store'
 
 export default function MeusProcessos() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -14,10 +14,6 @@ export default function MeusProcessos() {
   const processos = useSelector(state =>
     selectors.processo.getProcessosBySearch(state)(term)
   )
-
-  useEffect(() => {
-    store.dispatch(actions.processo.list())
-  }, [])
 
   const handleSearch = (termo: string) => {
     setCurrentPage(1)

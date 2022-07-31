@@ -34,10 +34,6 @@ export default function TipoProcessos() {
     selectors.tipoProcesso.getTipoProcessosBySearch(state)(term)
   )
 
-  useEffect(() => {
-    store.dispatch(actions.tipoProcesso.list())
-  }, [])
-
   const handleDelete = (id: number) => {
     store.dispatch(actions.tipoProcesso.delete(id))
   }

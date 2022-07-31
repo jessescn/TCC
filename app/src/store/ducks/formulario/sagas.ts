@@ -6,13 +6,13 @@ import { FormService } from 'services/formularios'
 import { actions, CreatePayload, UpdatePayload } from './slice'
 
 export const sagas = [
-  takeLatest(actions.list.type, listFormsSaga),
-  takeLatest(actions.create.type, createFormSaga),
-  takeLatest(actions.update.type, updateFormSaga),
-  takeLatest(actions.delete.type, deleteFormSaga)
+  takeLatest(actions.list.type, listSaga),
+  takeLatest(actions.create.type, createSaga),
+  takeLatest(actions.update.type, updateSaga),
+  takeLatest(actions.delete.type, deleteSaga)
 ]
 
-function* listFormsSaga() {
+function* listSaga() {
   try {
     const forms: AxiosResponse<FormularioModel[]> = yield call(FormService.list)
 
@@ -22,7 +22,7 @@ function* listFormsSaga() {
   }
 }
 
-function* createFormSaga(action: PayloadAction<CreatePayload>) {
+function* createSaga(action: PayloadAction<CreatePayload>) {
   try {
     const form: AxiosResponse<FormularioModel> = yield call(() =>
       FormService.create(action.payload)
@@ -34,7 +34,7 @@ function* createFormSaga(action: PayloadAction<CreatePayload>) {
   }
 }
 
-function* updateFormSaga(action: PayloadAction<UpdatePayload>) {
+function* updateSaga(action: PayloadAction<UpdatePayload>) {
   try {
     const form: AxiosResponse<FormularioModel> = yield call(() =>
       FormService.update(action.payload.id, action.payload.data)
@@ -46,7 +46,7 @@ function* updateFormSaga(action: PayloadAction<UpdatePayload>) {
   }
 }
 
-function* deleteFormSaga(action: PayloadAction<number>) {
+function* deleteSaga(action: PayloadAction<number>) {
   try {
     const form: AxiosResponse<FormularioModel> = yield call(() =>
       FormService.delete(action.payload)

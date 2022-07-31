@@ -5,9 +5,9 @@ import Content from 'components/pages/detalhes-processo/content'
 import Footer from 'components/pages/detalhes-processo/footer'
 import Header from 'components/pages/detalhes-processo/header'
 import { CampoFormulario } from 'domain/models/formulario'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { actions, selectors, store, useSelector } from 'store'
+import { selectors, useSelector } from 'store'
 
 const DetalhesProcesso = () => {
   const { id } = useParams()
@@ -19,11 +19,6 @@ const DetalhesProcesso = () => {
   const formularios = useSelector(state =>
     selectors.form.getFormulariosByProcesso(state)(processo)
   )
-
-  useEffect(() => {
-    store.dispatch(actions.processo.list())
-    store.dispatch(actions.form.list())
-  }, [])
 
   const [showComments, setShowComments] = useState(false)
   const [invalidos, setInvalidos] = useState<CampoFormulario[]>([])

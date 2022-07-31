@@ -27,11 +27,6 @@ export default function TipoProcesso() {
     : undefined
 
   useEffect(() => {
-    store.dispatch(actions.tipoProcesso.list())
-    store.dispatch(actions.form.list())
-  }, [])
-
-  useEffect(() => {
     if (!tipoProcesso || loadForm.current) {
       return
     }

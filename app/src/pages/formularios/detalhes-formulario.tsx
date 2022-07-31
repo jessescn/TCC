@@ -55,10 +55,6 @@ export default function Form() {
     alreadyInitializeForm.current = true
   }, [formulario])
 
-  useEffect(() => {
-    store.dispatch(actions.form.list())
-  }, [])
-
   return (
     <Screen py="24px">
       <Box
