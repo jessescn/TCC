@@ -64,7 +64,10 @@ const DetalhesProcesso = () => {
             position="relative"
           >
             <Box height="50px">
-              <Header processoId={processo.id} status={processo.status} />
+              <Header
+                processoId={processo.id}
+                status={processo.status[processo.status.length - 1]?.status}
+              />
             </Box>
             <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
             <Box height="calc(100% - 160px)">

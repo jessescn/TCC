@@ -34,13 +34,18 @@ export type VotoProcesso = {
   data: Date
 }
 
+export type Status = {
+  data: string
+  status: string
+}
+
 export interface ProcessoModel
   extends Model<
     InferAttributes<ProcessoModel>,
     InferCreationAttributes<ProcessoModel>
   > {
   id: CreationOptional<number>
-  status: string
+  status: Status[]
   camposInvalidos: CampoInvalido[]
   respostas: Resposta[]
   votos?: VotoProcesso[]
@@ -57,9 +62,9 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
     primaryKey: true
   },
   status: {
-    type: DataTypes.STRING,
+    type: DataTypes.ARRAY(DataTypes.JSON),
     allowNull: false,
-    defaultValue: 'criado'
+    defaultValue: []
   },
   respostas: {
     type: DataTypes.ARRAY(DataTypes.JSON),

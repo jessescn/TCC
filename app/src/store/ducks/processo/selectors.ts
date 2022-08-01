@@ -27,7 +27,9 @@ export const getProcessosBySearch = createSelector(
       return processos.filter(processo => {
         if (search.localeCompare(String(processo.id)) === 0) return true
 
-        if (search.includes(processo.status)) return true
+        const lastStatus = processo.status[processo.status.length - 1]?.status
+
+        if (search.includes(lastStatus)) return true
 
         const terms = search.split(' ')
         let includes = false

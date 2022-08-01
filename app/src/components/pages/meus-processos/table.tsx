@@ -48,7 +48,7 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
         rows={sorted.map(processo => [
           { content: processo.id },
           { content: processo.tipo_processo?.nome },
-          { content: processo.status },
+          { content: processo.status[processo.status.length - 1]?.status },
           { content: processo.tipo_processo?.formularios.length || 0 },
           {
             content: !processo.createdAt ? '' : formatDate(processo.createdAt)

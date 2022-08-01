@@ -26,9 +26,14 @@ export type VotoProcesso = {
   data: Date
 }
 
+export type Status = {
+  data: string
+  status: string
+}
+
 export interface ProcessoModel {
   id: number
-  status: string
+  status: Status[]
   camposInvalidos: CampoInvalido[]
   respostas: Resposta[]
   votos?: VotoProcesso[]

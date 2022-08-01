@@ -2,6 +2,7 @@ import Comentario from 'models/comentario'
 import Processo, {
   ProcessoModel,
   Resposta,
+  Status,
   VotoProcesso
 } from 'models/processo'
 import TipoProcesso from 'models/tipo-processo'
@@ -35,7 +36,8 @@ export const ProcessoService = {
     return resources
   },
   create: async function (data: RemoteProcesso) {
-    const newResource = await Processo.create(data)
+    const status: Status = { data: new Date().toISOString(), status: 'criado' }
+    const newResource = await Processo.create({ ...data, status: [status] })
     return newResource
   },
   update: async function (id: number, data: any) {
