@@ -11,6 +11,14 @@ import {
 } from 'sequelize'
 import TipoProcesso from './tipo-processo'
 
+type TStatus =
+  | 'criado'
+  | 'em_analise'
+  | 'em_homologacao'
+  | 'homologado'
+  | 'declinado'
+  | 'encaminhado'
+
 export type CampoInvalido = {
   formulario: number
   ordem: number
@@ -31,12 +39,12 @@ export type Resposta = {
 export type VotoProcesso = {
   aprovado: boolean
   autor: number
-  data: Date
+  data?: string
 }
 
 export type Status = {
   data: string
-  status: string
+  status: TStatus
 }
 
 export interface ProcessoModel
@@ -48,7 +56,7 @@ export interface ProcessoModel
   status: Status[]
   camposInvalidos: CampoInvalido[]
   respostas: Resposta[]
-  votos?: VotoProcesso[]
+  votos: VotoProcesso[]
   deleted: boolean
   createdAt?: Date
   updatedAt?: Date
@@ -72,6 +80,11 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
     defaultValue: []
   },
   camposInvalidos: {
+    type: DataTypes.ARRAY(DataTypes.JSON),
+    allowNull: false,
+    defaultValue: []
+  },
+  votos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
     allowNull: false,
     defaultValue: []

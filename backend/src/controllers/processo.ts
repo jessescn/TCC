@@ -113,5 +113,26 @@ export const ProcessoController = {
     } catch (error) {
       errorResponseHandler(res, error)
     }
+  },
+  vote: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+
+      const permission = req.user.permissoes.processo_vote
+
+      checkPermissionResource(permission, req)
+
+      if (!isNumber(id)) {
+        throw new BadRequestError()
+      }
+
+      const vote: VotoProcesso = req.body
+
+      const resource = await ProcessoService.vote(Number(id), vote)
+
+      res.json(resource)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
   }
 }

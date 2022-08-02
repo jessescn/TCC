@@ -27,7 +27,8 @@ export const routesPermissionsMap = {
     post: ['processo_create'],
     get: ['processo_read'],
     put: ['processo_update'],
-    delete: ['processo_delete']
+    delete: ['processo_delete'],
+    vote: ['processo_vote']
   },
   comentarios: {
     post: ['comentario_create'],

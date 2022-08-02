@@ -20,6 +20,7 @@ export const Admin = {
   processo_read: 'all',
   processo_update: 'all',
   processo_delete: 'all',
+  processo_vote: 'all',
 
   tipo_processo_create: 'all',
   tipo_processo_read: 'all',
@@ -52,6 +53,7 @@ export const Default: PermissionKeys = {
   processo_read: 'owned',
   processo_update: 'owned',
   processo_delete: 'owned',
+  processo_vote: 'not_allowed',
 
   tipo_processo_create: 'owned',
   tipo_processo_read: 'owned',

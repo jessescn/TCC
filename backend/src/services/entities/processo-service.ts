@@ -7,7 +7,8 @@ import Processo, {
 } from 'models/processo'
 import TipoProcesso from 'models/tipo-processo'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
-import { NotFoundError } from 'types/express/errors'
+import { ProcessoStatusService } from 'services/processo/status'
+import { BadRequestError, NotFoundError } from 'types/express/errors'
 
 export type RemoteProcesso = {
   tipo: number
@@ -17,6 +18,13 @@ export type RemoteProcesso = {
 }
 
 export type ProcessoQuery = WhereOptions<InferAttributes<ProcessoModel>>
+
+const isMaioria = (votes: VotoProcesso[]) => {
+  const numberOfColegiados = Number(process.env.COLEGIADO_QUANTITY) || 0
+  const numberOfVotes = votes.length
+
+  return numberOfVotes >= Math.floor(numberOfColegiados / 2) // TODO; O que acontece quando a quantidade for par?
+}
 
 export const ProcessoService = {
   getById: async function (id: number) {
@@ -61,6 +69,44 @@ export const ProcessoService = {
     }
 
     resource.set({ deleted: true })
+
+    await resource.save()
+
+    return resource
+  },
+  vote: async function (id: number, newVote: VotoProcesso) {
+    const resource = await Processo.findOne({ where: { id, deleted: false } })
+
+    if (!resource) {
+      throw new NotFoundError()
+    }
+
+    if (
+      resource.status[resource.status.length - 1]?.status !== 'em_homologacao'
+    ) {
+      throw new BadRequestError()
+    }
+
+    let votes = [...resource.votos]
+
+    const voteIdx = resource.votos.findIndex(
+      vote => vote.autor === newVote.autor
+    )
+
+    if (voteIdx === -1) {
+      votes = [...votes, newVote]
+    } else {
+      votes.splice(voteIdx, 1, newVote)
+    }
+
+    resource.set({ votos: votes })
+
+    const isMaioriaVotos = isMaioria(votes)
+
+    if (isMaioriaVotos) {
+      const novoStatus = await ProcessoStatusService.votado(resource)
+      resource.set({ status: [...resource.status, novoStatus] })
+    }
 
     await resource.save()
 
