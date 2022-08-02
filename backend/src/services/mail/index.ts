@@ -26,16 +26,16 @@ export class NodeMailer {
   }
 
   send(data: EmailTemplate) {
-    const mailOptions: SendMailOptions = { ...data, from: this.auth.user }
+    return new Promise((resolve, reject) => {
+      const mailOptions: SendMailOptions = { ...data, from: this.auth.user }
 
-    this.transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error(error)
-      }
+      this.transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          reject(error)
+        }
 
-      if (info) {
-        console.log(info.response)
-      }
+        resolve(info?.response)
+      })
     })
   }
 }

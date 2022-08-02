@@ -11,8 +11,18 @@ import {
 } from 'sequelize'
 import TipoProcesso from './tipo-processo'
 
-type TStatus =
+export const statusList = [
+  'criado',
+  'pendente',
+  'em_analise',
+  'em_homologacao',
+  'homologado',
+  'declinado',
+  'encaminhado'
+]
+export type TStatus =
   | 'criado'
+  | 'pendente'
   | 'em_analise'
   | 'em_homologacao'
   | 'homologado'

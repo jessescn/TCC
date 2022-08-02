@@ -36,6 +36,8 @@ routes.post('/processos', ProcessoController.create)
 routes.put('/processos/:id', ProcessoController.update)
 routes.delete('/processos/:id', ProcessoController.delete)
 routes.post('/processos/:id/vote', ProcessoController.vote)
+routes.post('/processos/:id/status', ProcessoController.updateStatus)
+routes.post('/processos/:id/homologacao', ProcessoController.homologate)
 
 routes.get('/tipo-processos', TipoProcessoController.read)
 routes.get('/tipo-processos/:id', TipoProcessoController.readById)

@@ -3,11 +3,15 @@ import Processo, {
   ProcessoModel,
   Resposta,
   Status,
+  TStatus,
   VotoProcesso
 } from 'models/processo'
 import TipoProcesso from 'models/tipo-processo'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
-import { ProcessoStatusService } from 'services/processo/status'
+import {
+  isProcessoAprovado,
+  ProcessoStatusService
+} from 'services/processo/status'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 
 export type RemoteProcesso = {
@@ -44,11 +48,23 @@ export const ProcessoService = {
     return resources
   },
   create: async function (data: RemoteProcesso) {
-    const status: Status = { data: new Date().toISOString(), status: 'criado' }
-    const newResource = await Processo.create({ ...data, status: [status] })
-    return newResource
+    const createStatus: Status = {
+      data: new Date().toISOString(),
+      status: 'criado'
+    }
+    const newResource = await Processo.create({
+      ...data,
+      status: [createStatus]
+    })
+
+    const processo = await ProcessoStatusService.handleChangeStatus(
+      newResource.id,
+      'em_analise'
+    )
+
+    return processo
   },
-  update: async function (id: number, data: any) {
+  update: async function (id: number, { status, ...data }: any) {
     const resource = await Processo.findOne({ where: { id, deleted: false } })
 
     if (!resource) {
@@ -101,14 +117,22 @@ export const ProcessoService = {
 
     resource.set({ votos: votes })
 
+    await resource.save()
+
     const isMaioriaVotos = isMaioria(votes)
 
     if (isMaioriaVotos) {
-      const novoStatus = await ProcessoStatusService.votado(resource)
-      resource.set({ status: [...resource.status, novoStatus] })
+      const novoStatus: TStatus = isProcessoAprovado(votes)
+        ? 'homologado'
+        : 'declinado'
+
+      await ProcessoStatusService.handleChangeStatus(resource.id, novoStatus)
     }
 
-    await resource.save()
+    return resource
+  },
+  updateStatus: async function (id: number, status: TStatus) {
+    const resource = await ProcessoStatusService.handleChangeStatus(id, status)
 
     return resource
   }

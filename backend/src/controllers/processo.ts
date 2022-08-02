@@ -3,7 +3,7 @@ import {
   errorResponseHandler,
   validateMandatoryFields
 } from 'controllers'
-import { Resposta, VotoProcesso } from 'models/processo'
+import { Resposta, statusList, VotoProcesso } from 'models/processo'
 import {
   ProcessoQuery,
   ProcessoService
@@ -129,6 +129,48 @@ export const ProcessoController = {
       const vote: VotoProcesso = req.body
 
       const resource = await ProcessoService.vote(Number(id), vote)
+
+      res.json(resource)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
+  updateStatus: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+      const { status } = req.body
+
+      const permission = req.user.permissoes.processo_status
+
+      checkPermissionResource(permission, req)
+
+      if (!isNumber(id) || !status || !statusList.includes(status)) {
+        throw new BadRequestError()
+      }
+
+      const resource = await ProcessoService.updateStatus(Number(id), status)
+
+      res.json(resource)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
+  homologate: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+
+      const permission = req.user.permissoes.processo_homologacao
+
+      checkPermissionResource(permission, req)
+
+      if (!isNumber(id)) {
+        throw new BadRequestError()
+      }
+
+      const resource = await ProcessoService.updateStatus(
+        Number(id),
+        'homologado'
+      )
 
       res.json(resource)
     } catch (error) {
