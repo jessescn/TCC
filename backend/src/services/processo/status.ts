@@ -40,7 +40,7 @@ export const ProcessoStatusService = {
     // Envia email aos membros do colegiado avisando que um novo processo está para ser votado
 
     const statusHomologacao: Status = {
-      status: 'em_analise',
+      status: 'em_homologacao',
       data: new Date().toISOString()
     }
 

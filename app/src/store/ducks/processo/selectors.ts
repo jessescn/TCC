@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { Processo } from 'domain/entity/processo'
 import { State } from '..'
 
 export const getRoot = (state: State) => {
@@ -16,32 +17,27 @@ export const getProcessoById = createSelector(
   }
 )
 
+export const getProcessosEmHomologacao = createSelector(
+  [getProcessos],
+  processos => {
+    return processos.filter(processo => {
+      const lastStatus = processo.status[processo.status.length - 1]?.status
+
+      return lastStatus === 'em_homologacao'
+    })
+  }
+)
+
+export const getProcessosEmHomologacaoBySearch = createSelector(
+  [getProcessosEmHomologacao],
+  processos => {
+    return (search: string) => Processo.search(processos, search)
+  }
+)
+
 export const getProcessosBySearch = createSelector(
   [getProcessos],
   processos => {
-    return (search: string) => {
-      if (search.trim().length === 0) {
-        return processos
-      }
-
-      return processos.filter(processo => {
-        if (search.localeCompare(String(processo.id)) === 0) return true
-
-        const lastStatus = processo.status[processo.status.length - 1]?.status
-
-        if (search.includes(lastStatus)) return true
-
-        const terms = search.split(' ')
-        let includes = false
-
-        terms.forEach(term => {
-          if (processo.tipo_processo?.nome.includes(term)) {
-            includes = true
-          }
-        })
-
-        return includes
-      })
-    }
+    return (search: string) => Processo.search(processos, search)
   }
 )

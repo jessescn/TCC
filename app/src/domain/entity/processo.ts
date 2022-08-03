@@ -1,8 +1,41 @@
-import { Resposta, RespostaCampo } from 'domain/models/processo'
+import { ProcessoModel, Resposta, RespostaCampo } from 'domain/models/processo'
 
 export class Processo {
   static getRespostaByFormulario(respostas: Resposta[], formularioId: number) {
     return respostas.find(resposta => resposta.formulario === formularioId)
+  }
+
+  static search(processos: ProcessoModel[], term: string) {
+    if (term.trim().length === 0) {
+      return processos
+    }
+
+    return processos.filter(processo => {
+      if (
+        term.toLowerCase().localeCompare(String(processo.id).toLowerCase()) ===
+        0
+      )
+        return true
+
+      const lastStatus = processo.status[processo.status.length - 1]?.status
+
+      if (term.includes(lastStatus)) return true
+
+      const terms = term.split(' ')
+      let includes = false
+
+      terms.forEach(term => {
+        if (
+          processo.tipo_processo?.nome
+            .toLowerCase()
+            .includes(term.toLowerCase())
+        ) {
+          includes = true
+        }
+      })
+
+      return includes
+    })
   }
 
   static getCampoByFormulario(

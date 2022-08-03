@@ -131,15 +131,21 @@ const Sidebar = () => {
           )}
           <NavItem
             icon={AiOutlineFileAdd}
+            title="Homologação"
+            url="/colegiado/processos"
+            roles={['admin', 'colegiado']}
+          />
+          <NavItem
+            icon={AiOutlineFileAdd}
             title="Processos Cadastrados"
             url="/tipo-processos"
-            adminOnly
+            roles={['admin']}
           />
           <NavItem
             icon={AiOutlineFileAdd}
             title="Formulários"
             url="/formularios"
-            adminOnly
+            roles={['admin']}
           />
           {/* <NavItem icon={FiUser} title="Usuários" url="/usuarios" adminOnly /> */}
           {/* <NavItem

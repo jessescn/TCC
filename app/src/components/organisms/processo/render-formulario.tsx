@@ -6,8 +6,7 @@ import {
   Icon,
   IconButton,
   Input,
-  Text,
-  Tooltip
+  Text
 } from '@chakra-ui/react'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import { ProcessoModel, RespostaCampo } from 'domain/models/processo'
@@ -18,7 +17,7 @@ type RespostaProps = {
   resposta?: RespostaCampo
   pergunta: CampoFormulario
   isInvalid: boolean
-  onInvalidate: (question: CampoFormulario) => void
+  onInvalidate?: (question: CampoFormulario) => void
 }
 
 const Resposta = ({
@@ -35,17 +34,9 @@ const Resposta = ({
 
   return pergunta.tipo == 'paragrafo' ? null : (
     <Box>
-      <Tooltip label={textoPergunta}>
-        <Text
-          noOfLines={2}
-          mr="8px"
-          fontWeight="bold"
-          fontSize="12px"
-          mb="12px"
-        >
-          {textoPergunta}:
-        </Text>
-      </Tooltip>
+      <Text noOfLines={2} mr="8px" fontWeight="bold" fontSize="12px" mb="12px">
+        {textoPergunta}:
+      </Text>
       <Flex>
         <Input
           w="100%"
@@ -59,9 +50,9 @@ const Resposta = ({
             bgColor: 'secondary.default'
           }}
         />
-        {isCoordenacao && (
+        {onInvalidate && (
           <IconButton
-            onClick={() => onInvalidate(pergunta)}
+            onClick={() => onInvalidate && onInvalidate(pergunta)}
             aria-label=""
             bgColor="initial.white"
             ml="8px"
@@ -82,16 +73,16 @@ const Resposta = ({
 type Props = {
   formulario: FormularioModel
   processo: ProcessoModel
-  handleInvalidate: (question: CampoFormulario) => void
+  invalidos: CampoFormulario[]
+  handleInvalidate?: (question: CampoFormulario) => void
 }
 
 export default function RenderFormulario({
   formulario,
   processo,
+  invalidos,
   handleInvalidate
 }: Props) {
-  const invalidos = processo.camposInvalidos
-
   const respostaFormulario = processo.respostas.find(
     resposta => resposta.formulario === formulario.id
   )

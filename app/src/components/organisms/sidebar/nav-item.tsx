@@ -8,6 +8,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import { User } from 'domain/entity/user'
+import { Roles } from 'domain/types/actors'
 import { IconType } from 'react-icons'
 import { GrUserAdmin } from 'react-icons/gr'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -17,7 +18,8 @@ export type NavItemProps = {
   icon?: IconType
   title: string
   url: string
-  adminOnly?: boolean
+  roles?: Roles[]
+  strict?: boolean
   style?: StyleProps
   isSubitem?: boolean
 }
@@ -26,7 +28,8 @@ export default function NavItem({
   icon,
   title,
   url,
-  adminOnly,
+  roles = [],
+  strict = false,
   style,
   isSubitem = false
 }: NavItemProps) {
@@ -49,8 +52,14 @@ export default function NavItem({
 
   const linkStyle = isCurrentRoute ? selectedStyle : {}
 
+  const validation = strict ? User.haveAllRoles : User.haveOneRole
+
   const havePermission =
-    !adminOnly || (currentUser ? User.haveRoles(currentUser, ['admin']) : false)
+    roles.length > 0
+      ? currentUser
+        ? validation(currentUser, roles)
+        : false
+      : true
 
   return !havePermission ? null : (
     <Flex
@@ -84,7 +93,6 @@ export default function NavItem({
                 >
                   {title}
                 </Text>
-                {adminOnly && <Icon as={GrUserAdmin} fontSize="md" ml="8px" />}
               </Flex>
             </Flex>
           </MenuButton>

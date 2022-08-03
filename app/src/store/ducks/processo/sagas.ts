@@ -1,15 +1,18 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
 import { ProcessoModel } from 'domain/models/processo'
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { UserModel } from 'domain/models/user'
+import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { ProcessoService } from 'services/processos'
-import { actions, CreatePayload, UpdatePayload } from './slice'
+import { selectors } from '..'
+import { actions, CreatePayload, UpdatePayload, VotePayload } from './slice'
 
 export const sagas = [
   takeLatest(actions.list.type, listSaga),
   takeLatest(actions.create.type, createSaga),
   takeLatest(actions.update.type, updateSaga),
-  takeLatest(actions.delete.type, deleteSaga)
+  takeLatest(actions.delete.type, deleteSaga),
+  takeLatest(actions.vote.type, voteSaga)
 ]
 
 function* listSaga() {
@@ -57,5 +60,28 @@ function* deleteSaga(action: PayloadAction<number>) {
     yield put(actions.deleteSuccess(response.data))
   } catch (error) {
     yield put(actions.deleteFailure())
+  }
+}
+
+function* voteSaga(action: PayloadAction<VotePayload>) {
+  try {
+    const currentUser: UserModel = yield select(
+      selectors.session.getCurrentUser
+    )
+
+    if (!currentUser) {
+      yield put(actions.voteFailure())
+    }
+
+    const response: AxiosResponse<ProcessoModel> = yield call(() =>
+      ProcessoService.vote(action.payload.processoId, {
+        aprovado: action.payload.aprovado,
+        autor: currentUser.id
+      })
+    )
+
+    yield put(actions.voteSuccess(response.data))
+  } catch (error) {
+    yield put(actions.voteFailure())
   }
 }

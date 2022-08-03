@@ -15,6 +15,11 @@ export type UpdatePayload = {
   id: number
 }
 
+export type VotePayload = {
+  aprovado: boolean
+  processoId: number
+}
+
 export type CreatePayload = NovoProcesso
 
 export const initialState: State = {
@@ -67,6 +72,19 @@ const reducers = {
     )
   },
   deleteFailure: (state: State) => {
+    state.status = 'failure'
+  },
+  vote: (state: State, action: PayloadAction<VotePayload>) => {
+    state.status = 'loading'
+  },
+  voteSuccess: (state: State, action: PayloadAction<ProcessoModel>) => {
+    state.status = 'success'
+    const indexof = state.processos
+      .map(elm => elm.id)
+      .indexOf(action.payload.id)
+    state.processos.splice(indexof, 1, action.payload)
+  },
+  voteFailure: (state: State) => {
     state.status = 'failure'
   }
 }

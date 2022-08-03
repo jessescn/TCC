@@ -1,15 +1,17 @@
 import { Box, Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
-import { FormularioModel } from 'domain/models/formulario'
+import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import { ProcessoModel } from 'domain/models/processo'
 import { useState } from 'react'
 import RenderFormulario from 'components/organisms/processo/render-formulario'
 
 type Props = {
   processo: ProcessoModel
+  invalidos: CampoFormulario[]
+  setInvalidos: React.Dispatch<React.SetStateAction<CampoFormulario[]>>
   formularios: FormularioModel[]
 }
 
-const Content = ({ processo, formularios }: Props) => {
+const Content = ({ processo, invalidos, setInvalidos, formularios }: Props) => {
   const [formularioSelecionado, setFormularioSelecionado] = useState(
     formularios[0]
   )
@@ -24,6 +26,19 @@ const Content = ({ processo, formularios }: Props) => {
     }
 
     setFormularioSelecionado(novoFormularioSelecionado)
+  }
+
+  function handleInvalidate(question: CampoFormulario) {
+    const alreadyInvalid = invalidos.find(
+      campo => campo.ordem === question.ordem
+    )
+
+    if (!alreadyInvalid) {
+      setInvalidos([...invalidos, question])
+      return
+    }
+
+    setInvalidos(prev => prev.filter(valor => valor.ordem !== question.ordem))
   }
 
   return (
@@ -57,7 +72,8 @@ const Content = ({ processo, formularios }: Props) => {
         <RenderFormulario
           formulario={formularioSelecionado}
           processo={processo}
-          invalidos={[]}
+          invalidos={invalidos}
+          handleInvalidate={handleInvalidate}
         />
       )}
     </Box>

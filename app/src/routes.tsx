@@ -13,6 +13,8 @@ import DetalhesFormulario from './pages/formularios/detalhes-formulario'
 
 import DetalhesTipoProcesso from 'pages/tipo-processos/detalhes-tipo-processo'
 import NovoProcesso from 'pages/processos/novo-processo'
+import HomologarProcesso from 'pages/colegiado/homologar-processo'
+import ListaHomologacao from 'pages/colegiado/lista-homologacao'
 
 export default function Routes() {
   return (
@@ -86,6 +88,22 @@ export default function Routes() {
         element={
           <PrivateRoute>
             <DetalhesProcesso />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/colegiado/processos/:id"
+        element={
+          <PrivateRoute>
+            <HomologarProcesso />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/colegiado/processos"
+        element={
+          <PrivateRoute>
+            <ListaHomologacao />
           </PrivateRoute>
         }
       />

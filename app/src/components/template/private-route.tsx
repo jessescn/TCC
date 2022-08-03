@@ -28,7 +28,7 @@ function PrivateRoute({ children, requiredRoles = [] }: Props) {
 
   const userModel: UserModel = JSON.parse(user)
 
-  const haveRequiredRoles = User.haveRoles(userModel, requiredRoles)
+  const haveRequiredRoles = User.haveAllRoles(userModel, requiredRoles)
 
   if (!haveRequiredRoles) {
     return <Navigate to="/" state={{ from: location }} replace />

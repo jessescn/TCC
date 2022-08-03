@@ -8,6 +8,11 @@ export type NovoProcesso = {
   votos?: VotoProcesso[]
 }
 
+export type Vote = {
+  autor: number
+  aprovado: boolean
+}
+
 export const ProcessoService = {
   list: () => {
     return httpClient.request<AxiosResponse<ProcessoModel[]>>({
@@ -22,17 +27,24 @@ export const ProcessoService = {
       body: payload
     })
   },
-  update: (formId: number, update: Partial<ProcessoModel>) => {
+  update: (processoId: number, update: Partial<ProcessoModel>) => {
     return httpClient.request<AxiosResponse<ProcessoModel>>({
       method: 'put',
-      url: `/processos/${formId}`,
+      url: `/processos/${processoId}`,
       body: update
     })
   },
-  delete: (formId: number) => {
+  delete: (processoId: number) => {
     return httpClient.request<AxiosResponse<ProcessoModel>>({
       method: 'delete',
-      url: `/processos/${formId}`
+      url: `/processos/${processoId}`
+    })
+  },
+  vote: (processoId: number, payload: Vote) => {
+    return httpClient.request<AxiosResponse<ProcessoModel>>({
+      method: 'post',
+      url: `/processos/${processoId}/vote`,
+      body: payload
     })
   }
 }

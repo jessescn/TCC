@@ -1,49 +1,56 @@
 import { Flex, Icon, IconButton, Text } from '@chakra-ui/react'
+import { ProcessoModel } from 'domain/models/processo'
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai'
+import { actions, selectors, store, useSelector } from 'store'
 
 export type VoteOption = 'yes' | 'no'
 
 type Props = {
-  currentVote?: VoteOption
-  onVote: (option: VoteOption) => void
-  votes: {
-    yes: number
-    no: number
-  }
+  processo: ProcessoModel
 }
 
-const Votes = ({ votes, currentVote, onVote }: Props) => {
-  const isPositiveVote = currentVote === 'yes'
-  const isNegativeVote = currentVote === 'no'
+const Votes = ({ processo }: Props) => {
+  const currentUser = useSelector(selectors.session.getCurrentUser)
 
-  const handleVote = (vote: VoteOption) => {
-    if (currentVote === vote) {
-      onVote('' as VoteOption)
-      return
-    }
+  const currentVote = processo.votos?.find(
+    voto => voto.autor === currentUser?.id
+  )
 
-    onVote(vote)
+  function handleVote(vote: boolean) {
+    store.dispatch(
+      actions.processo.vote({ processoId: processo.id, aprovado: vote })
+    )
   }
+
+  const isPositiveVote = currentVote
+  const isNegativeVote = currentVote !== undefined && !currentVote
+
+  const positiveCount = (processo.votos || []).filter(
+    voto => voto.aprovado
+  ).length
+  const negativeCount = (processo.votos || []).filter(
+    voto => voto.aprovado
+  ).length
 
   return (
     <Flex alignItems="center">
       <Flex>
         <Flex alignItems="center" mr="8px">
           <Text fontWeight="bold" mr="4px">
-            {votes.yes}
+            {positiveCount}
           </Text>
           <Icon as={AiOutlineCheck} color="info.success" />
         </Flex>
         <Flex alignItems={'center'}>
           <Text fontWeight="bold" mr="4px">
-            {votes.no}
+            {negativeCount}
           </Text>
           <Icon as={AiOutlineClose} color="info.error" />
         </Flex>
       </Flex>
       <Flex ml="16px">
         <IconButton
-          onClick={() => handleVote('yes')}
+          onClick={() => handleVote(true)}
           bgColor={isPositiveVote ? 'info.success' : 'transparent'}
           _focus={{ boxShadow: 'none' }}
           height="fit-content"
@@ -63,7 +70,7 @@ const Votes = ({ votes, currentVote, onVote }: Props) => {
           }
         />
         <IconButton
-          onClick={() => handleVote('no')}
+          onClick={() => handleVote(false)}
           bgColor={isNegativeVote ? 'info.error' : 'transparent'}
           _focus={{ boxShadow: 'none' }}
           height="fit-content"

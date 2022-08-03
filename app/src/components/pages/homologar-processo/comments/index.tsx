@@ -8,20 +8,21 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react'
+import { ProcessoModel } from 'domain/models/processo'
 import { useState } from 'react'
 import { FiSend } from 'react-icons/fi'
 import Comment from './comment'
 
 type Props = {
-  onComment: (comment: string) => void
+  processo: ProcessoModel
 }
 
-const Comments = ({ onComment }: Props) => {
+const Comments = ({ processo }: Props) => {
   const [value, setValue] = useState('')
 
   const handleComment = () => {
-    onComment(value)
     setValue('')
+    return null // TODO: call action to create comment
   }
 
   return (

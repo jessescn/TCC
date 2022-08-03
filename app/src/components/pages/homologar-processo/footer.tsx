@@ -1,28 +1,25 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Button, Flex, useDisclosure } from '@chakra-ui/react'
-import Votes, { VoteOption } from 'components/molecules/votes'
+import Votes from 'components/molecules/votes'
 import { CampoFormulario } from 'domain/models/formulario'
-import { useCallback, useState } from 'react'
-import { selectors, useSelector } from 'store'
+import { ProcessoModel } from 'domain/models/processo'
+import { useCallback } from 'react'
 import InvalidFieldsModal from '../../organisms/modals/invalid-fields'
 
 type Props = {
+  processo: ProcessoModel
   invalidFields: CampoFormulario[]
 }
 
-const Footer = ({ invalidFields }: Props) => {
-  const isColegiado = useSelector(selectors.session.is)('colegiado')
-  const isCoordenacao = useSelector(selectors.session.is)('coordenador')
+const Footer = ({ invalidFields, processo }: Props) => {
+  // const isColegiado = useSelector(selectors.session.is)('colegiado')
+  // const isCoordenacao = useSelector(selectors.session.is)('coordenador')
+  const isColegiado = true
+  const isCoordenacao = true
 
   const invalidFieldsModalControls = useDisclosure()
 
   const isProcessoInvalid = !invalidFields.length
-
-  const [currentVote, setCurrentVote] = useState('' as VoteOption)
-
-  const handleChangeVote = useCallback((vote: VoteOption) => {
-    setCurrentVote(vote)
-  }, [])
 
   const handleSendFeedback = useCallback((feedback: string) => {
     invalidFieldsModalControls.onClose()
@@ -51,13 +48,7 @@ const Footer = ({ invalidFields }: Props) => {
               Alertar
             </Button>
           )}
-          {isColegiado && (
-            <Votes
-              currentVote={currentVote}
-              onVote={handleChangeVote}
-              votes={{ no: 0, yes: 1 }}
-            />
-          )}
+          {isColegiado && <Votes processo={processo} />}
         </Flex>
       </Flex>
       <InvalidFieldsModal

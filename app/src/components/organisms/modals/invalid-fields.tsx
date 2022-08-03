@@ -36,7 +36,7 @@ export default function InvalidFieldsModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Text fontSize="24px">Campos Inválidos</Text>
+          <Text fontSize="20px">Campos Inválidos</Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody height="fit-content">
@@ -46,8 +46,8 @@ export default function InvalidFieldsModal({
           </Text>
           <UnorderedList p="16px">
             {invalidFields.map(field => (
-              <ListItem key={field.ordem} fontSize="14px">
-                {''}
+              <ListItem key={field.ordem} fontSize="10px">
+                {field.configuracao_campo?.titulo}
               </ListItem>
             ))}
           </UnorderedList>
