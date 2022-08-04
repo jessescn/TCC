@@ -11,15 +11,16 @@ import {
 import { useState } from 'react'
 
 import { motion } from 'framer-motion'
-import { BsCardChecklist, BsListCheck } from 'react-icons/bs'
-import { FiCornerDownRight, FiHome, FiUser } from 'react-icons/fi'
+import { BsCardChecklist, BsClipboardData, BsListCheck } from 'react-icons/bs'
+import { FiCornerDownRight, FiHome } from 'react-icons/fi'
+import { FaVoteYea } from 'react-icons/fa'
 
 import { BiLogOut } from 'react-icons/bi'
 import { actions, selectors, store, useSelector } from 'store'
 import NavItem from './nav-item'
 import NavSubItems from './nav-subitems'
 
-import { AiOutlineClose, AiOutlineFileAdd } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineFileAdd, AiOutlineForm } from 'react-icons/ai'
 
 export const invisibleStyle = {
   '&::-webkit-scrollbar': {
@@ -130,7 +131,7 @@ const Sidebar = () => {
             />
           )}
           <NavItem
-            icon={AiOutlineFileAdd}
+            icon={FaVoteYea}
             title="Homologação"
             url="/colegiado/processos"
             roles={['admin', 'colegiado']}
@@ -142,18 +143,28 @@ const Sidebar = () => {
             roles={['admin']}
           />
           <NavItem
-            icon={AiOutlineFileAdd}
+            icon={AiOutlineForm}
             title="Formulários"
             url="/formularios"
             roles={['admin']}
           />
-          {/* <NavItem icon={FiUser} title="Usuários" url="/usuarios" adminOnly /> */}
-          {/* <NavItem
-            icon={BsCardChecklist}
-            url="/processos"
-            title="Processos - Curso"
-            adminOnly
-          /> */}
+          <NavSubItems
+            icon={BsListCheck}
+            title="Coordenação"
+            roles={['admin', 'coordenador']}
+            items={[
+              {
+                title: 'Todos os Processos',
+                url: `/coordenacao/processos`,
+                icon: BsCardChecklist
+              },
+              {
+                title: 'Estatísticas Gerais',
+                url: `/coordenacao/estatisticas`,
+                icon: BsClipboardData
+              }
+            ]}
+          />
         </Flex>
         <Flex p="5%" flexDir="column" w="100%" alignItems={'flex-start'} mb={4}>
           <Divider display={'flex'} />

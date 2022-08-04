@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { Processo } from 'domain/entity/processo'
 import { State } from '..'
+import { getCurrentUser } from '../session/selectors'
 
 export const getRoot = (state: State) => {
   return state.processo
@@ -17,6 +18,17 @@ export const getProcessoById = createSelector(
   }
 )
 
+export const getMeusProcessos = createSelector(
+  [getCurrentUser, getProcessos],
+  (currentUser, processos) => {
+    if (!currentUser) {
+      return []
+    }
+
+    return Processo.filterByCreatedBy(processos, currentUser.id)
+  }
+)
+
 export const getProcessosEmHomologacao = createSelector(
   [getProcessos],
   processos => {
@@ -30,6 +42,13 @@ export const getProcessosEmHomologacao = createSelector(
 
 export const getProcessosEmHomologacaoBySearch = createSelector(
   [getProcessosEmHomologacao],
+  processos => {
+    return (search: string) => Processo.search(processos, search)
+  }
+)
+
+export const getMeusProcessosBySearch = createSelector(
+  [getMeusProcessos],
   processos => {
     return (search: string) => Processo.search(processos, search)
   }

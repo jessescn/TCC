@@ -53,7 +53,7 @@ const SimpleTable = ({
               <Th
                 color="initial.dark"
                 textTransform="initial"
-                fontSize="16px"
+                fontSize="14px"
                 key={`header-${index}`}
                 {...column.props}
               >
@@ -76,7 +76,7 @@ const SimpleTable = ({
               {row.map((cell, cellIdx) => (
                 <Td
                   py="12px"
-                  fontSize="14px"
+                  fontSize="12px"
                   key={`row-${rowIdx}-cell-${cellIdx}`}
                   {...cell.props}
                 >

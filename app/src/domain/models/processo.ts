@@ -41,7 +41,7 @@ export type Resposta = {
 export type VotoProcesso = {
   aprovado: boolean
   autor: number
-  data: Date
+  data: string
 }
 
 export type Status = {
@@ -57,7 +57,8 @@ export interface ProcessoModel {
   votos?: VotoProcesso[]
   tipo_processo?: TipoProcessoModel
   comentarios: ComentarioModel[]
-  createdBy?: UserModel
+  user?: UserModel
+  createdBy?: number
   createdAt?: string
 }
 

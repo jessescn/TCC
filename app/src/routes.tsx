@@ -15,6 +15,8 @@ import DetalhesTipoProcesso from 'pages/tipo-processos/detalhes-tipo-processo'
 import NovoProcesso from 'pages/processos/novo-processo'
 import HomologarProcesso from 'pages/colegiado/homologar-processo'
 import ListaHomologacao from 'pages/colegiado/lista-homologacao'
+import ProcessosCoordenacao from 'pages/coordenador/processos'
+import EstatisticasProcesso from 'pages/coordenador/estatisticas'
 
 export default function Routes() {
   return (
@@ -104,6 +106,22 @@ export default function Routes() {
         element={
           <PrivateRoute>
             <ListaHomologacao />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/coordenacao/processos"
+        element={
+          <PrivateRoute>
+            <ProcessosCoordenacao />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/coordenacao/estatisticas"
+        element={
+          <PrivateRoute>
+            <EstatisticasProcesso />
           </PrivateRoute>
         }
       />

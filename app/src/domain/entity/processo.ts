@@ -1,6 +1,10 @@
 import { ProcessoModel, Resposta, RespostaCampo } from 'domain/models/processo'
 
 export class Processo {
+  static filterByCreatedBy(processos: ProcessoModel[], createdBy: number) {
+    return processos.filter(processo => processo.createdBy === createdBy)
+  }
+
   static getRespostaByFormulario(respostas: Resposta[], formularioId: number) {
     return respostas.find(resposta => resposta.formulario === formularioId)
   }

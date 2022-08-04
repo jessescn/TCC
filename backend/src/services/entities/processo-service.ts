@@ -7,6 +7,7 @@ import Processo, {
   VotoProcesso
 } from 'models/processo'
 import TipoProcesso from 'models/tipo-processo'
+import User from 'models/user'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import {
   isProcessoAprovado,
@@ -42,7 +43,7 @@ export const ProcessoService = {
   },
   getAll: async function (query: ProcessoQuery = {}) {
     const resources = await Processo.findAll({
-      include: [TipoProcesso, Comentario],
+      include: [TipoProcesso, Comentario, User],
       where: { deleted: false, ...query }
     })
     return resources

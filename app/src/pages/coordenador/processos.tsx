@@ -7,12 +7,12 @@ import { MdSearchOff } from 'react-icons/md'
 
 import { selectors, useSelector } from 'store'
 
-export default function MeusProcessos() {
+export default function ProcessosCoordenacao() {
   const [currentPage, setCurrentPage] = useState(1)
   const [term, setTerm] = useState('')
 
   const processos = useSelector(state =>
-    selectors.processo.getMeusProcessosBySearch(state)(term)
+    selectors.processo.getProcessosBySearch(state)(term)
   )
 
   const handleSearch = (termo: string) => {
@@ -33,10 +33,10 @@ export default function MeusProcessos() {
       >
         <Box>
           <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-            Meus Processos
+            Processos
           </Text>
           <Text my="16px" fontSize="14px">
-            Acompanhe os seus processos dentro do sistema
+            Acompanhe todos os processos do sistema
           </Text>
         </Box>
         <Divider my="24px" borderColor="secondary.dark" />

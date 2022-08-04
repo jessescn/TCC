@@ -8,6 +8,7 @@ type Status = 'pristine' | 'loading' | 'success' | 'failure'
 export type State = {
   processos: ProcessoModel[]
   status: Status
+  statusVote: Status
 }
 
 export type UpdatePayload = {
@@ -24,6 +25,7 @@ export type CreatePayload = NovoProcesso
 
 export const initialState: State = {
   processos: [],
+  statusVote: 'pristine',
   status: 'pristine'
 }
 
@@ -75,17 +77,17 @@ const reducers = {
     state.status = 'failure'
   },
   vote: (state: State, action: PayloadAction<VotePayload>) => {
-    state.status = 'loading'
+    state.statusVote = 'loading'
   },
   voteSuccess: (state: State, action: PayloadAction<ProcessoModel>) => {
-    state.status = 'success'
+    state.statusVote = 'success'
     const indexof = state.processos
       .map(elm => elm.id)
       .indexOf(action.payload.id)
     state.processos.splice(indexof, 1, action.payload)
   },
   voteFailure: (state: State) => {
-    state.status = 'failure'
+    state.statusVote = 'failure'
   }
 }
 

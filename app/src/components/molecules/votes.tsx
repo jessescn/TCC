@@ -29,7 +29,7 @@ const Votes = ({ processo }: Props) => {
     voto => voto.aprovado
   ).length
   const negativeCount = (processo.votos || []).filter(
-    voto => voto.aprovado
+    voto => !voto.aprovado
   ).length
 
   return (
