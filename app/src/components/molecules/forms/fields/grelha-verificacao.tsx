@@ -81,7 +81,10 @@ export function CampoGrelhaVerificacao({
                 <Td>{linha}</Td>
                 {colunas.map((_, colunaIdx) => (
                   <Td textAlign="center" key={`linha-${idx}-${colunaIdx}`}>
-                    <Checkbox value={`[${idx},${colunaIdx}]`} />
+                    <Checkbox
+                      disabled={!props.editable}
+                      value={`[${idx},${colunaIdx}]`}
+                    />
                   </Td>
                 ))}
               </Tr>

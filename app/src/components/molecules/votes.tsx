@@ -34,7 +34,10 @@ const Votes = ({ processo }: Props) => {
 
   return (
     <Flex alignItems="center">
-      <Flex>
+      <Flex alignItems="flex-end">
+        <Text fontSize="12px" mr="8px">
+          Votos:
+        </Text>
         <Flex alignItems="center" mr="8px">
           <Text fontWeight="bold" mr="4px">
             {positiveCount}

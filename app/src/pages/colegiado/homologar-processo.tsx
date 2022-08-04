@@ -51,7 +51,7 @@ const HomologarProcesso = () => {
             boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.2)"
             w="100%"
             h="100%"
-            maxW="1392px"
+            maxW="1200px"
             bgColor="initial.white"
             borderRadius="8px"
             px="24px"
@@ -65,6 +65,9 @@ const HomologarProcesso = () => {
               />
             </Box>
             <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
+            <Box height="50px" mb="8px">
+              <Footer processo={processo} invalidFields={invalidos} />
+            </Box>
             <Box height="calc(100% - 160px)">
               <Content
                 processo={processo}
@@ -110,9 +113,6 @@ const HomologarProcesso = () => {
                 </Box>
               </motion.div>
             </Flex>
-            <Box height="50px" mt="8px">
-              <Footer processo={processo} invalidFields={invalidos} />
-            </Box>
           </Box>
         </>
       )}

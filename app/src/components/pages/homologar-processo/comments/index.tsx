@@ -8,9 +8,12 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react'
+import { ComentarioModel } from 'domain/models/comentario'
 import { ProcessoModel } from 'domain/models/processo'
-import { useState } from 'react'
+import { KeyboardEvent, KeyboardEventHandler, useEffect, useState } from 'react'
 import { FiSend } from 'react-icons/fi'
+import { ComentarioService } from 'services/comentario'
+import { ProcessoService } from 'services/processos'
 import Comment from './comment'
 
 type Props = {
@@ -18,12 +21,47 @@ type Props = {
 }
 
 const Comments = ({ processo }: Props) => {
+  const [comentarios, setComentarios] = useState<ComentarioModel[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const [value, setValue] = useState('')
 
-  const handleComment = () => {
+  const handleComment = async () => {
+    setIsLoading(true)
+    const response = await ComentarioService.create({
+      conteudo: value,
+      processo: processo.id
+    })
+
+    const novoComentario = response.data as any
+
+    console.log(novoComentario)
+
+    setComentarios(prev => [...prev, novoComentario])
+    setIsLoading(false)
     setValue('')
-    return null // TODO: call action to create comment
   }
+
+  const handleEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleComment()
+    }
+  }
+
+  useEffect(() => {
+    const getCommentsByProcesso = async () => {
+      try {
+        const response = await ProcessoService.comments(processo.id)
+
+        const comentarios = response.data as any
+
+        return comentarios
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    getCommentsByProcesso().then(data => setComentarios(data))
+  }, [])
 
   return (
     <Box py="8px" height="100%">
@@ -31,18 +69,18 @@ const Comments = ({ processo }: Props) => {
         Comentários
       </Text>
       <Stack spacing="16px" overflowY="auto" height="90%" w="100%" pr="8px">
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
+        {comentarios.map(comentario => (
+          <Comment comentario={comentario} />
+        ))}
       </Stack>
       <InputGroup mt="8px">
         <Input
           w="100%"
           size="xs"
+          disabled={isLoading}
           _focus={{ boxShadow: 'none' }}
           value={value}
+          onKeyDown={handleEnter}
           onChange={e => setValue(e.target.value)}
           borderColor="#000"
           borderWidth="1px"

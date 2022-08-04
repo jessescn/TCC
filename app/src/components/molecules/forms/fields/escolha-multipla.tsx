@@ -7,9 +7,7 @@ import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoEscolhaMultipla>
 
-export function CampoEscolhaMultipla(props: Props) {
-  const { onUpdateResposta, ...paragrafoProps } = props
-
+export function CampoEscolhaMultipla({ onUpdateResposta, ...props }: Props) {
   const [valorOutro, setValorOutro] = useState('')
 
   const { opcoes, outro } = props.configuracao_campo
@@ -22,19 +20,27 @@ export function CampoEscolhaMultipla(props: Props) {
 
   return (
     <Box>
-      <CampoParagrafo {...paragrafoProps} />
+      <CampoParagrafo {...props} />
       <Box mt="16px">
         <RadioGroup onChange={handleChange}>
           <Stack spacing="16px">
             {opcoes.map(opcao => (
-              <Radio value={opcao} key={opcao} display="block">
+              <Radio
+                isDisabled={!props.editable}
+                value={opcao}
+                key={opcao}
+                display="block"
+              >
                 {opcao}
               </Radio>
             ))}
             {outro && (
               <Flex>
-                <Radio value="outro">Outro:</Radio>
+                <Radio value="outro" isDisabled={!props.editable}>
+                  Outro:
+                </Radio>
                 <Input
+                  disabled={!props.editable}
                   ml="16px"
                   variant="unstyled"
                   borderBottom="1px solid #000"

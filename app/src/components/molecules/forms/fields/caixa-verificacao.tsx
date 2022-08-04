@@ -40,15 +40,18 @@ export function CampoCaixaVerificacao({
         >
           <Stack spacing="16px">
             {opcoes.map(opcao => (
-              <Checkbox key={opcao} value={opcao}>
+              <Checkbox disabled={!props.editable} key={opcao} value={opcao}>
                 {opcao}
               </Checkbox>
             ))}
             {outro && (
               <Flex>
-                <Checkbox value={'outro'}>Outro:</Checkbox>
+                <Checkbox disabled={!props.editable} value={'outro'}>
+                  Outro:
+                </Checkbox>
                 <Input
                   ml="16px"
+                  disabled={!props.editable}
                   variant="unstyled"
                   borderBottom="1px solid #000"
                   borderRadius={0}

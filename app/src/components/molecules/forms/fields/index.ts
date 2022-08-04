@@ -14,6 +14,7 @@ type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>
 
 export type BaseCampoProps = {
   formulario: FormularioModel
+  editable: boolean
   onUpdateResposta: (novoCampo: RespostaCampo) => void
 }
 

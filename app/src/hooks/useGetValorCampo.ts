@@ -10,7 +10,6 @@ export const useGetValorCampo = (
   const { watch } = useFormContext()
 
   const respostas: Resposta[] = watch('respostas') || []
-  console.log(respostas)
 
   const campo = Processo.getCampoByFormulario(respostas, formulario.id, ordem)
 

@@ -34,14 +34,13 @@ const Footer = ({ invalidFields, processo }: Props) => {
               bgColor="transparent"
               color="info.error"
               borderWidth="2px"
+              size="sm"
               fontSize="12px"
               borderColor="info.error"
               _hover={{
                 color: 'initial.white',
                 bgColor: 'info.error'
               }}
-              px="20px"
-              py="6px"
               isDisabled={isProcessoInvalid}
               onClick={() => invalidFieldsModalControls.onOpen()}
             >

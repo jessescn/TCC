@@ -36,7 +36,7 @@ export default function Formularios() {
       <Box
         w="100%"
         h="100%"
-        maxW="1392px"
+        maxW="1200px"
         bgColor="initial.white"
         borderRadius="8px"
         px="24px"

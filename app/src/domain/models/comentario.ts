@@ -3,9 +3,8 @@ import { UserModel } from './user'
 export interface ComentarioModel {
   id: number
   conteudo: string
-  comentarioMae?: number
   user: UserModel
-  comentarios: ComentarioModel[]
+  createdAt: string
 }
 
 export interface NewComentario {

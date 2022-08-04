@@ -10,7 +10,7 @@ export function CampoParagrafo({ obrigatorio, configuracao_campo }: Props) {
   return (
     <Box>
       {titulo && (
-        <Text fontWeight="bold" mb="8px">
+        <Text fontWeight="bold" mb="8px" fontSize="14px">
           {titulo}
           <Text ml="4px" as="span" color="info.error" hidden={!obrigatorio}>
             *

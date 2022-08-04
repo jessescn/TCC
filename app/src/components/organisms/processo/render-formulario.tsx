@@ -1,120 +1,71 @@
-import {
-  Box,
-  Flex,
-  Grid,
-  GridItem,
-  Icon,
-  IconButton,
-  Input,
-  Text
-} from '@chakra-ui/react'
-import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import { ProcessoModel, RespostaCampo } from 'domain/models/processo'
-import { AiFillWarning } from 'react-icons/ai'
-import { selectors, useSelector } from 'store'
-
-type RespostaProps = {
-  resposta?: RespostaCampo
-  pergunta: CampoFormulario
-  isInvalid: boolean
-  onInvalidate?: (question: CampoFormulario) => void
-}
-
-const Resposta = ({
-  resposta,
-  pergunta,
-  isInvalid,
-  onInvalidate
-}: RespostaProps) => {
-  const isCoordenacao = useSelector(selectors.session.is)('coordenador')
-  const textoPergunta =
-    pergunta.configuracao_campo.titulo ||
-    pergunta.configuracao_campo.descricao ||
-    ''
-
-  return pergunta.tipo == 'paragrafo' ? null : (
-    <Box>
-      <Text noOfLines={2} mr="8px" fontWeight="bold" fontSize="12px" mb="12px">
-        {textoPergunta}:
-      </Text>
-      <Flex>
-        <Input
-          w="100%"
-          size="sm"
-          isDisabled
-          value={resposta?.valor || ''}
-          _disabled={{
-            color: 'secondary.dark',
-            fontWeight: 'bold',
-            opacity: 1,
-            bgColor: 'secondary.default'
-          }}
-        />
-        {onInvalidate && (
-          <IconButton
-            onClick={() => onInvalidate && onInvalidate(pergunta)}
-            aria-label=""
-            bgColor="initial.white"
-            ml="8px"
-            variant="unstyled"
-            icon={
-              <Icon
-                as={AiFillWarning}
-                color={isInvalid ? 'info.error' : 'initial.black'}
-              />
-            }
-          />
-        )}
-      </Flex>
-    </Box>
-  )
-}
+import { Box, Button, Flex, Stack } from '@chakra-ui/react'
+import { campoComponente } from 'components/molecules/forms/fields'
+import { Processo } from 'domain/entity/processo'
+import { FormularioModel } from 'domain/models/formulario'
+import { Resposta, RespostaCampo } from 'domain/models/processo'
+import { useCallback } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 type Props = {
   formulario: FormularioModel
-  processo: ProcessoModel
-  invalidos: CampoFormulario[]
-  handleInvalidate?: (question: CampoFormulario) => void
+  editable?: boolean
 }
 
 export default function RenderFormulario({
   formulario,
-  processo,
-  invalidos,
-  handleInvalidate
+  editable = false
 }: Props) {
-  const respostaFormulario = processo.respostas.find(
-    resposta => resposta.formulario === formulario.id
+  const { getValues, setValue } = useFormContext()
+
+  const handleUpdateResposta = useCallback(
+    (novoCampo: RespostaCampo) => {
+      const respostas: Resposta[] = getValues('respostas') || []
+      const respostasAtualizadas = Processo.updateRespostaCampoByFormulario(
+        respostas,
+        novoCampo,
+        formulario.id
+      )
+
+      setValue('respostas', respostasAtualizadas)
+    },
+    [getValues, formulario, setValue]
   )
 
-  const respostas = respostaFormulario?.campos || []
-
   return (
-    <Grid
-      templateColumns="repeat(12, 1fr)"
-      gap={2}
-      overflowY="auto"
-      maxH="500px"
-      h="fit-content"
-      pr="10px"
+    <Stack
+      height="100%"
+      spacing="8px"
+      bgColor="secondary.default"
+      p="8px"
+      opacity={editable ? 1 : 0.5}
     >
-      {formulario.campos.map(pergunta => {
-        const resposta = respostas.find(campo => campo.ordem === pergunta.ordem)
-        const isInvalid = invalidos.find(
-          campo => campo.ordem === pergunta.ordem
-        )
+      {formulario.campos.map(campo => {
+        const Componente = campoComponente[campo.tipo]
 
         return (
-          <GridItem colSpan={12}>
-            <Resposta
-              pergunta={pergunta}
-              resposta={resposta}
-              isInvalid={!!isInvalid}
-              onInvalidate={handleInvalidate}
+          <Box key={campo.ordem} bgColor="initial.white" p="16px">
+            <Componente
+              {...campo}
+              editable={editable}
+              onUpdateResposta={handleUpdateResposta}
+              formulario={formulario}
             />
-          </GridItem>
+          </Box>
         )
       })}
-    </Grid>
+      {editable && (
+        <Flex justifyContent="flex-end">
+          <Button
+            bgColor="primary.dark"
+            color="initial.white"
+            display="block"
+            size="sm"
+            type="submit"
+          >
+            Salvar alterações
+          </Button>
+        </Flex>
+      )}
+    </Stack>
   )
 }

@@ -9,24 +9,27 @@ import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoResposta>
 
-export function CampoResposta(props: Props) {
-  const { onUpdateResposta, formulario, ...paragrafoProps } = props
-
+export function CampoResposta({
+  onUpdateResposta,
+  formulario,
+  ...props
+}: Props) {
   const campo = useGetValorCampo(formulario, props.ordem)
 
   const handleChangeResposta = debounce(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
-      onUpdateResposta({ ordem: paragrafoProps.ordem, valor: ev.target.value })
+      onUpdateResposta({ ordem: props.ordem, valor: ev.target.value })
     },
     400
   )
 
   return (
     <Box>
-      <CampoParagrafo {...paragrafoProps} />
+      <CampoParagrafo {...props} />
       <Input
         mt="24px"
         size="sm"
+        disabled={!props.editable}
         variant="unstyled"
         placeholder="Resposta"
         borderBottom="1px solid #BCBCBC"

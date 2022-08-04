@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+import { ComentarioModel } from 'domain/models/comentario'
 import { ProcessoModel, Resposta, VotoProcesso } from 'domain/models/processo'
 import { httpClient } from './config'
 
@@ -45,6 +46,12 @@ export const ProcessoService = {
       method: 'post',
       url: `/processos/${processoId}/vote`,
       body: payload
+    })
+  },
+  comments: (processoId: number) => {
+    return httpClient.request<AxiosResponse<ComentarioModel[]>>({
+      method: 'get',
+      url: `/processos/${processoId}/comentarios`
     })
   }
 }

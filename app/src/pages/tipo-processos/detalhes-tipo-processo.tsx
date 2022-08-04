@@ -94,7 +94,7 @@ export default function TipoProcesso() {
       <Box
         w="100%"
         h="100%"
-        maxW="900px"
+        maxW="1200px"
         bgColor="initial.white"
         borderRadius="8px"
         px="24px"

@@ -1,13 +1,15 @@
-import Comentario from 'models/comentario'
+import Comentario, { ComentarioModel } from 'models/comentario'
 import User from 'models/user'
+import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
 export type CreateComentario = {
   conteudo: string
   processoId: number
   createdBy: number
-  comentarioMae?: number
 }
+
+export type ComentarioQuery = WhereOptions<InferAttributes<ComentarioModel>>
 
 export const ComentarioService = {
   getById: async function (id: number) {
@@ -19,10 +21,10 @@ export const ComentarioService = {
 
     return resource
   },
-  getAll: async function () {
+  getAll: async function (query: ComentarioQuery = {}) {
     const resources = await Comentario.findAll({
-      include: [User, Comentario],
-      where: { deleted: false }
+      include: [User],
+      where: { deleted: false, ...query }
     })
     return resources
   },

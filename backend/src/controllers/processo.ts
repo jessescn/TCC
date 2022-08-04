@@ -1,3 +1,4 @@
+import { ComentarioService } from 'services/entities/comentario-service'
 import {
   checkPermissionResource,
   errorResponseHandler,
@@ -173,6 +174,25 @@ export const ProcessoController = {
       )
 
       res.json(resource)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
+  comentarios: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+
+      const permission = req.user.permissoes.processo_comentarios
+
+      checkPermissionResource(permission, req)
+
+      if (!isNumber(id)) {
+        throw new BadRequestError()
+      }
+
+      const comentarios = await ComentarioService.getAll({ processoId: id })
+
+      res.json(comentarios)
     } catch (error) {
       errorResponseHandler(res, error)
     }

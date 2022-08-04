@@ -1,16 +1,23 @@
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
+import { ComentarioModel } from 'domain/models/comentario'
 
-const Comment = () => {
+import { formatDate } from 'utils/format'
+
+type Props = {
+  comentario: ComentarioModel
+}
+
+const Comment = ({ comentario }: Props) => {
   return (
     <Flex w="100%">
       <Avatar size="xs" mr="12px" />
-      <Box bgColor="initial.white">
+      <Box w="100%">
         <Flex alignItems="center">
           <Text fontSize="10px" fontWeight="bold" mr="8px">
-            Jessé Souza
+            {comentario?.user.nome || 'Anônimo'}
           </Text>
           <Text fontSize="10px" color="secondary.dark">
-            jesse.neto@ccc.ufcg.edu.br
+            {comentario?.user.email}
           </Text>
         </Flex>
         <Text
@@ -21,13 +28,11 @@ const Comment = () => {
             wordWrap: 'break-word'
           }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet
-          euismod cursus. Donec id rhoncus erat. In condimentum euismod purus ac
-          eleifend. Aliquam erat volutpat
+          {comentario.conteudo}
         </Text>
         <Flex justifyContent="flex-end">
           <Text fontSize="10px" color="secondary.dark">
-            07/12/2020 - 09:28
+            {formatDate(comentario.createdAt)}
           </Text>
         </Flex>
       </Box>

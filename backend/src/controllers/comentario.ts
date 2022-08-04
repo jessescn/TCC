@@ -23,13 +23,17 @@ export const ComentarioController: CrudController = {
 
       validateMandatoryFields(mandatoryFields, data)
 
-      const comentario = await ComentarioService.create({
+      const resource = await ComentarioService.create({
         ...data,
         processoId: data.processo,
         createdBy: req.user.id
       })
 
-      res.status(HttpStatusCode.created).json(comentario)
+      console.log(req.user)
+
+      const comentario = resource.toJSON()
+
+      res.status(HttpStatusCode.created).send({ ...comentario, user: req.user })
     } catch (error) {
       errorResponseHandler(res, error)
     }

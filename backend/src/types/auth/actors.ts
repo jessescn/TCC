@@ -23,6 +23,7 @@ export const Admin = {
   processo_vote: 'all',
   processo_status: 'all',
   processo_homologacao: 'all',
+  processo_comentarios: 'all',
 
   tipo_processo_create: 'all',
   tipo_processo_read: 'all',
@@ -58,6 +59,7 @@ export const Default: PermissionKeys = {
   processo_vote: 'not_allowed',
   processo_status: 'not_allowed',
   processo_homologacao: 'not_allowed',
+  processo_comentarios: 'not_allowed',
 
   tipo_processo_create: 'owned',
   tipo_processo_read: 'owned',

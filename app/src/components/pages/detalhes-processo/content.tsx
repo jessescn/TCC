@@ -3,6 +3,7 @@ import { FormularioModel } from 'domain/models/formulario'
 import { ProcessoModel } from 'domain/models/processo'
 import { useState } from 'react'
 import RenderFormulario from 'components/organisms/processo/render-formulario'
+import Formulario from 'components/organisms/processo/formulario'
 
 type Props = {
   processo: ProcessoModel
@@ -53,13 +54,16 @@ const Content = ({ processo, formularios }: Props) => {
         </Flex>
       </Stack>
       <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-      {formularioSelecionado && (
-        <RenderFormulario
-          formulario={formularioSelecionado}
-          processo={processo}
-          invalidos={[]}
-        />
-      )}
+      <Box height="100%" overflowY="auto">
+        {formularioSelecionado && (
+          <Formulario
+            editable
+            formulario={formularioSelecionado}
+            processo={processo}
+            invalidos={[]}
+          />
+        )}
+      </Box>
     </Box>
   )
 }

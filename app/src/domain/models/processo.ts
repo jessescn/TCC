@@ -1,3 +1,4 @@
+import { ComentarioModel } from './comentario'
 import { TipoProcessoModel } from './tipo-processo'
 import { UserModel } from './user'
 
@@ -55,6 +56,7 @@ export interface ProcessoModel {
   respostas: Resposta[]
   votos?: VotoProcesso[]
   tipo_processo?: TipoProcessoModel
+  comentarios: ComentarioModel[]
   createdBy?: UserModel
   createdAt?: string
 }

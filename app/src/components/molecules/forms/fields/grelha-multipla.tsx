@@ -82,7 +82,10 @@ export function CampoGrelhaMultipla({
               <Td>{linha}</Td>
               {colunas.map((_, colunaIdx) => (
                 <Td textAlign="center" key={`linha-${idx}-${colunaIdx}`}>
-                  <Radio value={`[${idx},${colunaIdx}]`} />
+                  <Radio
+                    disabled={!props.editable}
+                    value={`[${idx},${colunaIdx}]`}
+                  />
                 </Td>
               ))}
             </RadioGroup>

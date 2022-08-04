@@ -70,6 +70,7 @@ export function CampoFicheiro({
       <Button
         mt="16px"
         aria-label=""
+        disabled={!props.editable}
         size="sm"
         color="initial.white"
         bgColor="primary.dark"

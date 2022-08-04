@@ -1,5 +1,8 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
+import { sequelize } from 'database'
+import Processo from 'models/processo'
+import User from 'models/user'
 import {
   CreationOptional,
   DataTypes,
@@ -7,9 +10,6 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { sequelize } from 'database'
-import Processo from 'models/processo'
-import User from 'models/user'
 
 export interface ComentarioModel
   extends Model<
@@ -17,6 +17,7 @@ export interface ComentarioModel
     InferCreationAttributes<ComentarioModel>
   > {
   id: CreationOptional<number>
+  processoId: CreationOptional<number>
   conteudo: string
   deleted: CreationOptional<boolean>
   createdAt?: Date
@@ -28,6 +29,9 @@ const Comentario = sequelize.define<ComentarioModel>('comentario', {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
+  },
+  processoId: {
+    type: DataTypes.INTEGER
   },
   conteudo: {
     type: DataTypes.STRING,
@@ -43,6 +47,5 @@ const Comentario = sequelize.define<ComentarioModel>('comentario', {
 Comentario.belongsTo(Processo)
 Comentario.belongsTo(User, { foreignKey: 'createdBy' })
 Processo.hasMany(Comentario)
-Comentario.hasMany(Comentario, { foreignKey: 'comentarioMae' })
 
 export default Comentario
