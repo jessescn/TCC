@@ -1,9 +1,5 @@
 export const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric'
-  })
+  return new Date(date).toLocaleDateString('en-GB')
 }
 
 export const formatISODate = (date?: string) => {

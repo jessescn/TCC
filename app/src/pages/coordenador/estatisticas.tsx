@@ -1,5 +1,6 @@
 import { Box, Divider, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
+import Content from 'components/pages/estatisticas/content'
 
 export default function EstatisticasProcesso() {
   return (
@@ -22,6 +23,9 @@ export default function EstatisticasProcesso() {
             futuras.
           </Text>
           <Divider my="24px" borderColor="secondary.dark" />
+        </Box>
+        <Box>
+          <Content />
         </Box>
       </Box>
     </Screen>

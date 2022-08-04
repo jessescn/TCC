@@ -60,6 +60,7 @@ export interface ProcessoModel {
   user?: UserModel
   createdBy?: number
   createdAt?: string
+  updatedAt?: string
 }
 
 export interface RemoteProcessoModel {

@@ -47,9 +47,9 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
         rows={sorted.map(processo => [
           { content: processo.id },
           { content: processo.tipo_processo?.nome },
-          { content: processo.user?.nome },
+          { content: processo.user?.nome || '-' },
           {
-            content: !processo.createdAt ? '' : formatDate(processo.createdAt)
+            content: !processo.createdAt ? '-' : formatDate(processo.createdAt)
           }
         ])}
       />

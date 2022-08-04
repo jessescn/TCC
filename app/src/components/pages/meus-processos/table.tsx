@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
-import { ProcessoModel } from 'domain/models/processo'
+import { ProcessoModel, statusList } from 'domain/models/processo'
 import { useNavigate } from 'react-router-dom'
 import { formatDate } from 'utils/format'
 
@@ -42,18 +42,30 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
           { content: 'ID', props: { width: '10%' } },
           { content: 'Nome', props: { width: '40%' } },
           { content: 'Status', props: { width: '15%' } },
-          { content: 'Qtd Formulários', props: { width: '15%' } },
-          { content: 'Criado em', props: { width: '20%' } }
+          { content: 'Formulários', props: { width: '15%' } },
+          { content: 'Última atualizacão', props: { width: '15%' } },
+          { content: 'Criado em', props: { width: '15%' } }
         ]}
-        rows={sorted.map(processo => [
-          { content: processo.id },
-          { content: processo.tipo_processo?.nome },
-          { content: processo.status[processo.status.length - 1]?.status },
-          { content: processo.tipo_processo?.formularios.length || 0 },
-          {
-            content: !processo.createdAt ? '' : formatDate(processo.createdAt)
-          }
-        ])}
+        rows={sorted.map(processo => {
+          const status = processo.status[processo.status.length - 1]?.status
+
+          return [
+            { content: processo.id },
+            { content: processo.tipo_processo?.nome },
+            { content: statusList[status].label },
+            { content: processo.tipo_processo?.formularios.length || 0 },
+            {
+              content: !processo.updatedAt
+                ? '-'
+                : formatDate(processo.updatedAt)
+            },
+            {
+              content: !processo.createdAt
+                ? '-'
+                : formatDate(processo.createdAt)
+            }
+          ]
+        })}
       />
     </Box>
   )
