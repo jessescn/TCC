@@ -14,6 +14,7 @@ import {
   changeProcedimentoStatus
 } from 'services/processo/status'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
+import { getCurrentStatus } from 'utils/procedimento'
 
 export type RemoteProcesso = {
   tipo: number
@@ -98,9 +99,9 @@ export const ProcessoService = {
       throw new NotFoundError()
     }
 
-    if (
-      resource.status[resource.status.length - 1]?.status !== 'em_homologacao'
-    ) {
+    const status = getCurrentStatus(resource)
+
+    if (status !== 'em_homologacao') {
       throw new BadRequestError()
     }
 
@@ -120,6 +121,8 @@ export const ProcessoService = {
 
     await resource.save()
 
+    let updatedResource = resource
+
     const isMaioriaVotos = isMaioria(votes)
 
     if (isMaioriaVotos) {
@@ -127,8 +130,29 @@ export const ProcessoService = {
         ? 'deferido'
         : 'indeferido'
 
-      await changeProcedimentoStatus(resource.id, novoStatus)
+      updatedResource = await changeProcedimentoStatus(resource.id, novoStatus)
     }
+
+    return updatedResource
+  },
+  removeVote: async function (id: number, autor: number) {
+    const resource = await Processo.findOne({ where: { id, deleted: false } })
+
+    if (!resource) {
+      throw new NotFoundError()
+    }
+
+    const status = getCurrentStatus(resource)
+
+    if (status !== 'em_homologacao') {
+      throw new BadRequestError()
+    }
+
+    const filteredVotes = resource.votos.filter(voto => voto.autor !== autor)
+
+    resource.set({ votos: filteredVotes })
+
+    await resource.save()
 
     return resource
   },

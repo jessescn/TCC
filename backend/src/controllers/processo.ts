@@ -136,6 +136,28 @@ export const ProcessoController = {
       errorResponseHandler(res, error)
     }
   },
+  deleteVote: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+
+      const permission = req.user.permissoes.processo_vote
+
+      checkPermissionResource(permission, req)
+
+      if (!isNumber(id) || !req.body.autor) {
+        throw new BadRequestError()
+      }
+
+      const resource = await ProcessoService.removeVote(
+        Number(id),
+        req.body.autor
+      )
+
+      res.json(resource)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
   updateStatus: async (req: Request, res: Response) => {
     try {
       const { id } = req.params

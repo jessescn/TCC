@@ -133,7 +133,7 @@ export const changeProcedimentoStatus = async (
 
   await processo.save()
 
-  await sendUpdateStatusEmail(autor, processo, status)
+  sendUpdateStatusEmail(autor, processo, status)
 
   return processo
 }
