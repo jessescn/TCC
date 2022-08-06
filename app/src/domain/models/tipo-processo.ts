@@ -9,6 +9,7 @@ export interface TipoProcessoModel {
   dataInicio?: string
   dataFim?: string
   escopo: string
+  publicos: string[]
   colegiado: boolean
   deleted?: boolean
   createdAt?: string

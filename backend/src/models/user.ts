@@ -22,6 +22,7 @@ export interface UserModel
   deleted: CreationOptional<boolean>
   permissoes: PermissionKeys
   roles: Roles[]
+  publico: string[]
   processos?: ProcessoModel[]
   createdAt?: Date
   updatedAt?: Date
@@ -58,6 +59,11 @@ const User = sequelize.define<UserModel>('user', {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
     defaultValue: ['usuario']
+  },
+  publico: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: false,
+    defaultValue: []
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE

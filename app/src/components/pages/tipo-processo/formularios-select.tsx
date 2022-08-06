@@ -28,7 +28,7 @@ export default function FormularioSelect({ tipoProcesso }: Props) {
   }))
 
   useEffect(() => {
-    if (initialPopulated.current || formOptions.length === 0) {
+    if (initialPopulated.current || !tipoProcesso || formOptions.length === 0) {
       return
     }
 
@@ -38,7 +38,7 @@ export default function FormularioSelect({ tipoProcesso }: Props) {
 
     setSelectedFormOptions(options)
     initialPopulated.current = true
-  }, [formOptions])
+  }, [formOptions, tipoProcesso])
 
   useEffect(() => {
     const ids = selectedFormOptions.map(formOption => formOption.value)

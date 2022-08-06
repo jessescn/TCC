@@ -1,6 +1,5 @@
 import {
   checkPermissionResource,
-  CrudController,
   errorResponseHandler,
   validateMandatoryFields
 } from 'controllers'
@@ -13,7 +12,7 @@ import { Default } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 
-export const UserController: CrudController = {
+export const UserController = {
   create: async (req: Request, res: Response) => {
     try {
       const data: RemoteUser = req.body
@@ -90,6 +89,17 @@ export const UserController: CrudController = {
       const user = await UserService.destroy(Number(id))
 
       res.json(user)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
+  publicos: async (req: Request, res: Response) => {
+    try {
+      console.log('chegou aqui')
+
+      const publicos = await UserService.getAllPublicos()
+
+      return res.json(publicos)
     } catch (error) {
       errorResponseHandler(res, error)
     }

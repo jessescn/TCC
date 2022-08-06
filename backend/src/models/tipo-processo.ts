@@ -27,6 +27,7 @@ export interface TipoProcessoModel
   dataFim: CreationOptional<string>
   escopo: string
   formularios: number[]
+  publicos: string[]
   colegiado: boolean
   deleted: boolean
   createdAt?: Date
@@ -58,6 +59,11 @@ const TipoProcesso = sequelize.define<TipoProcessoModel>('tipo_processo', {
   },
   formularios: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
+    allowNull: false,
+    defaultValue: []
+  },
+  publicos: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
     defaultValue: []
   },

@@ -10,6 +10,7 @@ export type CreateTipoProcesso = {
   dataInicio?: string
   dataFim?: string
   escopo: string
+  publicos: string[]
   colegiado: boolean
   createdBy: number
   formularios: number[]

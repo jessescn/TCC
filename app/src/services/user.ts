@@ -15,5 +15,11 @@ export const UserService = {
       url: '/users',
       body: data
     })
+  },
+  publicos: () => {
+    return httpClient.request({
+      method: 'get',
+      url: '/users/publicos'
+    })
   }
 }

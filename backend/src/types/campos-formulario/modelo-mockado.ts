@@ -442,6 +442,7 @@ const tipoProcesso: RemoteTipoProcesso = {
     'Antes de preencher este formulário, é importante que o orientador verifique se a banca a ser definida atende a Norma PPGCC-01/19: Requisitos para Homologação de Bancas Examinadoras de Mestrado e Doutorado.',
   colegiado: true,
   escopo: 'privado',
+  publicos: ['publico_teste', 'publico_teste2'],
   dataFim: '2050-10-07T19:28:15.203Z',
   dataInicio: '2000-10-07T19:28:15.203Z',
   formularios: [1]

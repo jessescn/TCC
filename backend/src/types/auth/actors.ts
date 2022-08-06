@@ -5,6 +5,7 @@ export const Admin = {
   user_read: 'all',
   user_update: 'all',
   user_delete: 'all',
+  user_publicos: 'all',
 
   form_create: 'all',
   form_read: 'all',
@@ -19,6 +20,7 @@ export const Admin = {
   processo_status: 'all',
   processo_homologacao: 'all',
   processo_comentarios: 'all',
+  processo_delete_vote: 'all',
 
   tipo_processo_create: 'all',
   tipo_processo_read: 'all',
@@ -38,6 +40,7 @@ export type PermissionKeys = Record<
 
 export const Default: PermissionKeys = {
   user_create: 'all',
+  user_publicos: 'all',
   user_read: 'owned',
   user_update: 'owned',
   user_delete: 'not_allowed',
@@ -52,6 +55,7 @@ export const Default: PermissionKeys = {
   processo_update: 'owned',
   processo_delete: 'owned',
   processo_vote: 'not_allowed',
+  processo_delete_vote: 'not_allowed',
   processo_status: 'not_allowed',
   processo_homologacao: 'not_allowed',
   processo_comentarios: 'not_allowed',

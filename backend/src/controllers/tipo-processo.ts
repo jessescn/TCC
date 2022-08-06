@@ -15,6 +15,7 @@ export type RemoteTipoProcesso = {
   dataInicio?: string
   dataFim?: string
   escopo: string
+  publicos: string[]
   colegiado: boolean
   formularios: number[]
 }
@@ -24,7 +25,13 @@ export const TipoProcessoController: CrudController = {
     try {
       const data: RemoteTipoProcesso = req.body
 
-      const mandatoryFields = ['nome', 'escopo', 'colegiado']
+      const mandatoryFields = [
+        'nome',
+        'escopo',
+        'colegiado',
+        'formularios',
+        'publicos'
+      ]
 
       validateMandatoryFields(mandatoryFields, data)
 

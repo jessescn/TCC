@@ -9,7 +9,8 @@ export const routesPermissionsMap = {
     post: ['user_create'],
     get: ['user_read'],
     put: ['user_update'],
-    delete: ['user_delete']
+    delete: ['user_delete'],
+    publicos: ['user_create'] // TESTE
   },
   formularios: {
     post: ['form_create'],
@@ -28,7 +29,8 @@ export const routesPermissionsMap = {
     get: ['processo_read'],
     put: ['processo_update'],
     delete: ['processo_delete'],
-    vote: ['processo_vote']
+    vote: ['processo_vote'],
+    deleteVote: ['processo_delete_vote']
   },
   comentarios: {
     post: ['comentario_create'],

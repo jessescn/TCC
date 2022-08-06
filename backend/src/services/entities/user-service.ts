@@ -33,6 +33,16 @@ export const UserService = {
 
     return users.filter(user => user.roles.includes(role))
   },
+  getAllPublicos: async function () {
+    const users = await User.findAll()
+    const publicos = users.reduce((publicos, user) => {
+      const nonDuplicate = [...new Set([...publicos, ...user.publico])]
+
+      return nonDuplicate
+    }, [] as string[])
+
+    return publicos
+  },
   getByEmail: async function (email: string) {
     const resource = await User.findOne({ where: { email } })
     return resource

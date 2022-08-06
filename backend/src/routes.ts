@@ -19,6 +19,7 @@ routes.use(permissions)
 
 routes.get('/me', AuthController.me)
 
+routes.get('/users/publicos', UserController.publicos)
 routes.get('/users', UserController.read)
 routes.get('/users/:id', UserController.readById)
 routes.put('/users/:id', UserController.update)

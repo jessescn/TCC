@@ -11,6 +11,7 @@ import { TipoProcessoModel } from 'domain/models/tipo-processo'
 import { useFormContext } from 'react-hook-form'
 import { formatISODate } from 'utils/format'
 import FormularioSelect from './formularios-select'
+import PublicosSelect from './publicos-select'
 
 type Props = {
   tipoProcesso?: TipoProcessoModel
@@ -100,6 +101,7 @@ const Content = ({ tipoProcesso }: Props) => {
         </Flex>
       </Flex>
       <FormularioSelect tipoProcesso={tipoProcesso} />
+      <PublicosSelect tipoProcesso={tipoProcesso} />
     </Stack>
   )
 }
