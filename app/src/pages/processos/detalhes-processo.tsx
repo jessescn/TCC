@@ -4,6 +4,7 @@ import Content from 'components/pages/detalhes-processo/content'
 import Header from 'components/organisms/processo/header'
 import { useParams } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
+import { getCurrentStatus } from 'utils/procedimento'
 
 const DetalhesProcesso = () => {
   const { id } = useParams()
@@ -38,7 +39,7 @@ const DetalhesProcesso = () => {
             <Box height="50px">
               <Header
                 processoId={processo.id}
-                status={processo.status[processo.status.length - 1]?.status}
+                status={getCurrentStatus(processo)}
               />
             </Box>
             <Divider borderWidth="1px" borderColor="#EEE" my="16px" />

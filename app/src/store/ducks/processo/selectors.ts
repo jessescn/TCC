@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { Processo } from 'domain/entity/processo'
+import { getCurrentStatus } from 'utils/procedimento'
 import { State } from '..'
 import { getCurrentUser } from '../session/selectors'
 
@@ -33,7 +34,7 @@ export const getProcessosEmHomologacao = createSelector(
   [getProcessos],
   processos => {
     return processos.filter(processo => {
-      const lastStatus = processo.status[processo.status.length - 1]?.status
+      const lastStatus = getCurrentStatus(processo)
 
       return lastStatus === 'em_homologacao'
     })

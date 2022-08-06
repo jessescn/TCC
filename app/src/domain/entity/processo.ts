@@ -1,4 +1,5 @@
 import { ProcessoModel, Resposta, RespostaCampo } from 'domain/models/processo'
+import { getCurrentStatus } from 'utils/procedimento'
 
 export class Processo {
   static filterByCreatedBy(processos: ProcessoModel[], createdBy: number) {
@@ -21,7 +22,7 @@ export class Processo {
       )
         return true
 
-      const lastStatus = processo.status[processo.status.length - 1]?.status
+      const lastStatus = getCurrentStatus(processo)
 
       if (term.includes(lastStatus)) return true
 

@@ -10,7 +10,6 @@ import {
 import Screen from 'components/atoms/screen'
 import Comments from 'components/pages/homologar-processo/comments'
 import Content from 'components/pages/homologar-processo/content'
-import Footer from 'components/pages/homologar-processo/footer'
 import Header from 'components/organisms/processo/header'
 import { CampoFormulario } from 'domain/models/formulario'
 import { useState } from 'react'
@@ -19,6 +18,7 @@ import { useParams } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
 
 import { motion } from 'framer-motion'
+import { getCurrentStatus } from 'utils/procedimento'
 
 const HomologarProcesso = () => {
   const { id } = useParams()
@@ -61,14 +61,11 @@ const HomologarProcesso = () => {
             <Box height="50px">
               <Header
                 processoId={processo.id}
-                status={processo.status[processo.status.length - 1]?.status}
+                status={getCurrentStatus(processo)}
               />
             </Box>
             <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-            <Box height="50px" mb="8px">
-              <Footer processo={processo} invalidFields={invalidos} />
-            </Box>
-            <Box height="calc(100% - 160px)">
+            <Box height="calc(100% - 120px)">
               <Content
                 processo={processo}
                 invalidos={invalidos}

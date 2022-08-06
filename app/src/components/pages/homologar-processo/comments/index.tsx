@@ -69,6 +69,9 @@ const Comments = ({ processo }: Props) => {
         Comentários
       </Text>
       <Stack spacing="16px" overflowY="auto" height="90%" w="100%" pr="8px">
+        {comentarios.length === 0 && (
+          <Text fontSize="12px">Nenhum comentário</Text>
+        )}
         {comentarios.map(comentario => (
           <Comment comentario={comentario} />
         ))}

@@ -3,6 +3,7 @@ import SimpleTable, { Cell } from 'components/organisms/simple-table'
 import { ProcessoModel, statusList } from 'domain/models/processo'
 import { useNavigate } from 'react-router-dom'
 import { formatDate } from 'utils/format'
+import { getCurrentStatus } from 'utils/procedimento'
 
 type Props = {
   processos: ProcessoModel[]
@@ -47,7 +48,7 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
           { content: 'Criado em', props: { width: '15%' } }
         ]}
         rows={sorted.map(processo => {
-          const status = processo.status[processo.status.length - 1]?.status
+          const status = getCurrentStatus(processo)
 
           return [
             { content: processo.id },
