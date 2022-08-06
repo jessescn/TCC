@@ -28,7 +28,11 @@ export const UserService = {
 
     return user
   },
+  getByRole: async function (role: Roles) {
+    const users = await User.findAll()
 
+    return users.filter(user => user.roles.includes(role))
+  },
   getByEmail: async function (email: string) {
     const resource = await User.findOne({ where: { email } })
     return resource

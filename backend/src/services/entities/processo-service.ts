@@ -11,7 +11,7 @@ import User from 'models/user'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import {
   isProcessoAprovado,
-  ProcessoStatusService
+  changeProcedimentoStatus
 } from 'services/processo/status'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 
@@ -58,7 +58,7 @@ export const ProcessoService = {
       status: [createStatus]
     })
 
-    const processo = await ProcessoStatusService.handleChangeStatus(
+    const processo = await changeProcedimentoStatus(
       newResource.id,
       'em_analise'
     )
@@ -124,16 +124,16 @@ export const ProcessoService = {
 
     if (isMaioriaVotos) {
       const novoStatus: TStatus = isProcessoAprovado(votes)
-        ? 'homologado'
-        : 'declinado'
+        ? 'deferido'
+        : 'indeferido'
 
-      await ProcessoStatusService.handleChangeStatus(resource.id, novoStatus)
+      await changeProcedimentoStatus(resource.id, novoStatus)
     }
 
     return resource
   },
   updateStatus: async function (id: number, status: TStatus) {
-    const resource = await ProcessoStatusService.handleChangeStatus(id, status)
+    const resource = await changeProcedimentoStatus(id, status)
 
     return resource
   }

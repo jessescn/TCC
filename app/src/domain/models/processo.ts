@@ -4,22 +4,20 @@ import { UserModel } from './user'
 
 export const statusList = {
   criado: { label: 'Criado', color: 'info.warning' },
-  pendente: { label: 'Pendente', color: 'info.warning' },
+  correcoes_pendentes: { label: 'Correções Pendentes', color: 'info.warning' },
   em_analise: { label: 'Em análise', color: 'info.warning' },
   em_homologacao: { label: 'Em homologação', color: 'info.warning' },
-  homologado: { label: 'Homologado', color: 'info.warning' },
-  declinado: { label: 'Declinado', color: 'info.warning' },
-  encaminhado: { label: 'Encaminhado', color: 'info.warning' }
+  deferido: { label: 'Deferido', color: 'info.warning' },
+  indeferido: { label: 'Infererido', color: 'info.warning' }
 }
 
 export type ProcessoStatus =
   | 'criado'
-  | 'pendente'
+  | 'correcoes_pendentes'
   | 'em_analise'
   | 'em_homologacao'
-  | 'homologado'
-  | 'declinado'
-  | 'encaminhado'
+  | 'deferido'
+  | 'indeferido'
 
 export type CampoInvalido = {
   formulario: number

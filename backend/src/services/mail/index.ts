@@ -25,17 +25,9 @@ export class NodeMailer {
     this.transporter = createTransport({ service: 'gmail', auth: this.auth })
   }
 
-  send(data: EmailTemplate) {
-    return new Promise((resolve, reject) => {
-      const mailOptions: SendMailOptions = { ...data, from: this.auth.user }
-
-      this.transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          reject(error)
-        }
-
-        resolve(info?.response)
-      })
-    })
+  async send(data: EmailTemplate) {
+    const mailOptions: SendMailOptions = { ...data, from: this.auth.user }
+    const info = await this.transporter.sendMail(mailOptions)
+    return info
   }
 }

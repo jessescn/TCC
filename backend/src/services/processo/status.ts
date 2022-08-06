@@ -1,9 +1,11 @@
 import Processo, {
   ProcessoModel,
   Status,
+  statusList,
   TStatus,
   VotoProcesso
 } from 'models/processo'
+import { UserModel } from 'models/user'
 import { UserService } from 'services/entities/user-service'
 import { NodeMailer } from 'services/mail'
 import templates from 'services/mail/templates'
@@ -15,10 +17,12 @@ export const isProcessoAprovado = (votes: VotoProcesso[]) => {
   return positive > negative
 }
 
-type Handler = (processo: ProcessoModel) => Promise<Status>
+type Handler = (processo: ProcessoModel, autor: UserModel) => Promise<Status>
 
-export const ProcessoStatusService = {
-  criado: async function (processo: ProcessoModel): Promise<Status> {
+const mailService = new NodeMailer()
+
+export const ProcessoStatusHandler: Record<TStatus, Handler> = {
+  criado: async function (): Promise<Status> {
     const statusCriado: Status = {
       status: 'criado',
       data: new Date().toISOString()
@@ -27,7 +31,22 @@ export const ProcessoStatusService = {
     return statusCriado
   },
   em_analise: async function (processo: ProcessoModel): Promise<Status> {
-    // Envia email a coordenacão avisando de um novo processo está pronto para ser analisado
+    const sendEmailCoordenacao = async () => {
+      // Envia email a coordenacão avisando de um novo processo está pronto para ser analisado
+      const coordenacaoUsers = await UserService.getByRole('coordenacao')
+
+      if (coordenacaoUsers.length === 0) return
+
+      const mailList = coordenacaoUsers.map(user => user.email).toString()
+
+      const email = templates['analise-procedimento-coordenacao'](mailList, {
+        processo
+      })
+
+      await mailService.send(email)
+    }
+
+    await sendEmailCoordenacao()
 
     const statusAnalise: Status = {
       status: 'em_analise',
@@ -36,8 +55,23 @@ export const ProcessoStatusService = {
 
     return statusAnalise
   },
-  em_homologacao: async function (processo: ProcessoModel): Promise<Status> {
-    // Envia email aos membros do colegiado avisando que um novo processo está para ser votado
+  em_homologacao: async function (processo) {
+    const sendEmailColegiado = async () => {
+      // Envia email aos membros do colegiado avisando que um novo processo está para ser votado
+      const colegiado = await UserService.getByRole('colegiado')
+
+      if (colegiado.length === 0) return
+
+      const mailList = colegiado.map(user => user.email).toString()
+
+      const email = templates['homologacao-colegiado'](mailList, {
+        processo
+      })
+
+      await mailService.send(email)
+    }
+
+    await sendEmailColegiado()
 
     const statusHomologacao: Status = {
       status: 'em_homologacao',
@@ -46,58 +80,60 @@ export const ProcessoStatusService = {
 
     return statusHomologacao
   },
-  homologado: async function (processo: ProcessoModel): Promise<Status> {
-    const autor = await UserService.getById(processo.createdBy)
+  deferido: async function (processo, autor) {
+    const sendEmailSecretaria = async () => {
+      // definir melhor quais emails devem ser enviados nessa etapa
+      // envia um email a secretaria contendo as informacões necessárias para dar continuidade ao processo
 
-    // definir melhor quais emails devem ser enviados nessa etapa
+      const email = templates['approve-processo'](autor.email, {
+        processo
+      })
 
-    const email = templates['approve-processo'](autor.email, {
-      processo
-    })
-
-    const mailService = new NodeMailer()
-    await mailService.send(email)
-
-    return { status: 'homologado', data: new Date().toISOString() }
-  },
-  declinado: async function (processo: ProcessoModel): Promise<Status> {
-    return { status: 'declinado', data: new Date().toISOString() }
-  },
-  pendente: async function (processo: ProcessoModel): Promise<Status> {
-    // envia um email ao autor avisando que precisa que certos campos sejam alterados
-    return { status: 'pendente', data: new Date().toISOString() }
-  },
-  encaminhado: async function (processo: ProcessoModel): Promise<Status> {
-    // envia um email a secretaria contendo as informacões necessárias para dar continuidade ao processo
-    return { status: 'encaminhado', data: new Date().toISOString() }
-  },
-  handleChangeStatus: async function (
-    processoId: number,
-    novoStatus: TStatus
-  ): Promise<ProcessoModel> {
-    const self = ProcessoStatusService
-    const processo = await Processo.findOne({
-      where: { id: processoId, deleted: false }
-    })
-
-    const options: Record<TStatus, Handler> = {
-      criado: self.criado,
-      em_analise: self.em_analise,
-      declinado: self.declinado,
-      em_homologacao: self.em_homologacao,
-      encaminhado: self.encaminhado,
-      homologado: self.homologado,
-      pendente: self.pendente
+      await mailService.send(email)
     }
 
-    const status = await options[novoStatus](processo)
+    await sendEmailSecretaria()
 
-    processo.set({ status: [...processo.status, status] })
-
-    await processo.save()
-
-    // [EMAIL] toda alteracão de status envia email avisando ao autor
-
-    return processo
+    return { status: 'deferido', data: new Date().toISOString() }
+  },
+  indeferido: async function () {
+    return { status: 'indeferido', data: new Date().toISOString() }
+  },
+  correcoes_pendentes: async function () {
+    return { status: 'correcoes_pendentes', data: new Date().toISOString() }
   }
+}
+
+const sendUpdateStatusEmail = async (
+  autor: UserModel,
+  processo: ProcessoModel,
+  status: Status
+) => {
+  const email = templates['update-procedimento-status'](autor.email, {
+    processo,
+    novoStatus: statusList[status.status].label
+  })
+
+  await mailService.send(email)
+}
+
+export const changeProcedimentoStatus = async (
+  processoId: number,
+  novoStatus: TStatus
+): Promise<ProcessoModel> => {
+  const processo = await Processo.findOne({
+    where: { id: processoId, deleted: false }
+  })
+
+  const autor = await UserService.getById(processo.createdBy)
+
+  const status = await ProcessoStatusHandler[novoStatus](processo, autor)
+
+  processo.set({ status: [...processo.status, status] })
+
+  await processo.save()
+
+  await sendUpdateStatusEmail(autor, processo, status)
+
+  return processo
 }

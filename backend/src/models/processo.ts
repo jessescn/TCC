@@ -11,23 +11,22 @@ import {
 } from 'sequelize'
 import TipoProcesso from './tipo-processo'
 
-export const statusList = [
-  'criado',
-  'pendente',
-  'em_analise',
-  'em_homologacao',
-  'homologado',
-  'declinado',
-  'encaminhado'
-]
+export const statusList = {
+  criado: { label: 'Criado', color: 'info.warning' },
+  correcoes_pendentes: { label: 'Correções Pendentes', color: 'info.warning' },
+  em_analise: { label: 'Em análise', color: 'info.warning' },
+  em_homologacao: { label: 'Em homologação', color: 'info.warning' },
+  deferido: { label: 'Deferido', color: 'info.warning' },
+  indeferido: { label: 'Infererido', color: 'info.warning' }
+}
+
 export type TStatus =
   | 'criado'
-  | 'pendente'
+  | 'correcoes_pendentes'
   | 'em_analise'
   | 'em_homologacao'
-  | 'homologado'
-  | 'declinado'
-  | 'encaminhado'
+  | 'deferido'
+  | 'indeferido'
 
 export type CampoInvalido = {
   formulario: number

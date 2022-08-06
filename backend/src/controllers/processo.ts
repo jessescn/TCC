@@ -145,7 +145,11 @@ export const ProcessoController = {
 
       checkPermissionResource(permission, req)
 
-      if (!isNumber(id) || !status || !statusList.includes(status)) {
+      if (
+        !isNumber(id) ||
+        !status ||
+        !Object.keys(statusList).includes(status)
+      ) {
         throw new BadRequestError()
       }
 
@@ -170,7 +174,7 @@ export const ProcessoController = {
 
       const resource = await ProcessoService.updateStatus(
         Number(id),
-        'homologado'
+        'deferido'
       )
 
       res.json(resource)

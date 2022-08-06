@@ -17,7 +17,7 @@ export const populateInitialData = async () => {
     email: process.env.DEFAULT_USER_EMAIL,
     permissoes: { ...Default } as any,
     roles: ['usuario'],
-    senha: process.env.DEFAULT_USER_PASSWORDD
+    senha: process.env.DEFAULT_USER_PASSWORD
   })
 
   await createInitialFormulario(mock.formulario)
