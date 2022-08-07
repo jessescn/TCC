@@ -11,11 +11,18 @@ type Props = {
 }
 
 const Content = ({ processo, formularios }: Props) => {
+  const status = getCurrentStatus(processo)
+  const isEditable = status === 'correcoes_pendentes'
+
   return (
     <Box h="100%">
       <Header processoId={processo.id} status={getCurrentStatus(processo)} />
       <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-      <Processo formularios={formularios} processo={processo} />
+      <Processo
+        formularios={formularios}
+        processo={processo}
+        editable={isEditable}
+      />
     </Box>
   )
 }

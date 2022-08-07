@@ -5,7 +5,9 @@ import Processo, {
   TStatus,
   VotoProcesso
 } from 'models/processo'
-import { UserModel } from 'models/user'
+import Comentario from 'models/comentario'
+import TipoProcesso from 'models/tipo-processo'
+import User, { UserModel } from 'models/user'
 import { UserService } from 'services/entities/user-service'
 import { NodeMailer } from 'services/mail'
 import templates from 'services/mail/templates'
@@ -122,7 +124,8 @@ export const changeProcedimentoStatus = async (
   novoStatus: TStatus
 ): Promise<ProcessoModel> => {
   const processo = await Processo.findOne({
-    where: { id: processoId, deleted: false }
+    where: { id: processoId, deleted: false },
+    include: [TipoProcesso, Comentario, User]
   })
 
   const autor = await UserService.getById(processo.createdBy)

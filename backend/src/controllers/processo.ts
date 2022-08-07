@@ -1,3 +1,4 @@
+import { getCurrentStatus } from './../utils/procedimento'
 import { ComentarioService } from 'services/entities/comentario-service'
 import {
   checkPermissionResource,
@@ -93,6 +94,20 @@ export const ProcessoController = {
       }
 
       const updatedResource = await ProcessoService.update(Number(id), data)
+
+      if (
+        data.respostas &&
+        getCurrentStatus(updatedResource) === 'correcoes_pendentes'
+      ) {
+        const resource = await ProcessoService.updateStatus(
+          Number(id),
+          'em_analise'
+        )
+
+        console.log({ resource })
+
+        return res.json(resource)
+      }
 
       res.json(updatedResource)
     } catch (error) {

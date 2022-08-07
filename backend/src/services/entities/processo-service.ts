@@ -79,8 +79,14 @@ export const ProcessoService = {
   update: async function (id: number, { status, ...data }: any) {
     const resource = await Processo.findOne({ where: { id, deleted: false } })
 
+    const currentStatus = getCurrentStatus(resource)
+
     if (!resource) {
       throw new NotFoundError()
+    }
+
+    if (currentStatus !== 'correcoes_pendentes') {
+      throw new BadRequestError()
     }
 
     resource.set({ ...data })
@@ -172,7 +178,10 @@ export const ProcessoService = {
     return resource
   },
   newRevisao: async function (id: number, revisao: Revisao) {
-    const resource = await Processo.findOne({ where: { id, deleted: false } })
+    const resource = await Processo.findOne({
+      where: { id, deleted: false },
+      include: [TipoProcesso, Comentario, User]
+    })
 
     if (!resource) {
       throw new NotFoundError()

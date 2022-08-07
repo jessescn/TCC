@@ -14,8 +14,7 @@ type Props = {
 export default function Footer({
   onChangeForm,
   currentIdx,
-  isLastForm,
-  onClear
+  isLastForm
 }: Props) {
   const navigate = useNavigate()
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -52,24 +51,13 @@ export default function Footer({
 
   useEffect(() => {
     if (submitStatus === 'success') {
-      navigate('/')
+      navigate('/meus-processos')
       store.dispatch(actions.processo.resetStatus())
     }
   }, [submitStatus])
 
   return (
     <Flex justifyContent="flex-end" mt="16px">
-      {/* <Button
-        bgColor="initial.white"
-        borderColor="primary.dark"
-        borderWidth={1}
-        color="primary.dark"
-        size="sm"
-        mr="8px"
-        onClick={onClear}
-      >
-        Limpar formulário
-      </Button> */}
       <Flex justifyContent="flex-end">
         {currentIdx > 0 && (
           <Button

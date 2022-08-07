@@ -1,8 +1,12 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import { CustomCampoInvalido } from 'components/pages/analisar-processo/content'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import { CampoInvalido, ProcessoModel } from 'domain/models/processo'
+import { CampoInvalido, ProcessoModel, Resposta } from 'domain/models/processo'
+import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { actions, store, useSelector } from 'store'
+import SaveChangesModal from './modals/save-changes'
 import RenderContent from './render-campos'
 
 type Props = {
@@ -13,6 +17,10 @@ type Props = {
   handleInvalidate?: (question: CustomCampoInvalido) => void
 }
 
+type CustomFormModel = {
+  respostas: Resposta[]
+}
+
 export default function Formulario({
   formulario,
   processo,
@@ -20,15 +28,34 @@ export default function Formulario({
   camposInvalidos = [],
   handleInvalidate
 }: Props) {
-  const methods = useForm({ defaultValues: { respostas: processo.respostas } })
+  const navigate = useNavigate()
+  const statusUpdate = useSelector(state => state.processo.status)
+  const saveChangesModalControls = useDisclosure()
 
-  const updateResposta = (exemplo: any) => {
-    console.log(exemplo)
+  const methods = useForm<CustomFormModel>({
+    defaultValues: { respostas: processo.respostas }
+  })
+
+  const updateResposta = (data: CustomFormModel) => {
+    saveChangesModalControls.onClose()
+    store.dispatch(
+      actions.processo.update({
+        id: processo.id,
+        data: { respostas: data.respostas }
+      })
+    )
   }
+
+  useEffect(() => {
+    if (statusUpdate === 'success') {
+      store.dispatch(actions.processo.resetStatus())
+      navigate(-1)
+    }
+  }, [statusUpdate])
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(updateResposta)}>
+      <form id="processo-form" onSubmit={methods.handleSubmit(updateResposta)}>
         <RenderContent
           formulario={formulario}
           editable={editable}
@@ -42,12 +69,13 @@ export default function Formulario({
               color="initial.white"
               display="block"
               size="sm"
-              type="submit"
+              onClick={saveChangesModalControls.onOpen}
             >
               Salvar alterações
             </Button>
           </Flex>
         )}
+        <SaveChangesModal {...saveChangesModalControls} />
       </form>
     </FormProvider>
   )

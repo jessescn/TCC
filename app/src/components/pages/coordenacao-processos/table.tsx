@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
 import { ProcessoModel, statusList } from 'domain/models/processo'
 import { useNavigate } from 'react-router-dom'
+import { actions, store } from 'store'
 import { formatDate } from 'utils/format'
 import { getCurrentStatus } from 'utils/procedimento'
 
@@ -22,6 +23,7 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
 
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
+    store.dispatch(actions.processo.resetStatus())
 
     navigate(`/coordenacao/processos/${id}`)
   }

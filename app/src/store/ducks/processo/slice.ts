@@ -84,6 +84,8 @@ const reducers = {
     state.status = 'pristine'
     state.statusSubmit = 'pristine'
     state.statusVote = 'pristine'
+    state.statusRevisao = 'pristine'
+    state.statusUpdateStatus = 'pristine'
   },
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'

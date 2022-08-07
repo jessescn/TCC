@@ -32,6 +32,8 @@ export default function Content({ formularios, processo }: Props) {
     state => state.processo.statusUpdateStatus
   )
 
+  const statusRevisao = useSelector(state => state.processo.statusRevisao)
+
   const [feedback, setFeedback] = useState('')
   const [camposInvalidos, setCamposInvalidos] = useState<CustomCampoInvalido[]>(
     []
@@ -81,11 +83,11 @@ export default function Content({ formularios, processo }: Props) {
   }
 
   useEffect(() => {
-    if (statusUpdateStatus === 'success') {
+    if (statusUpdateStatus === 'success' || statusRevisao === 'success') {
       store.dispatch(actions.processo.resetStatus())
       navigate('/coordenacao/processos')
     }
-  }, [statusUpdateStatus])
+  }, [statusUpdateStatus, statusRevisao])
 
   return (
     <Box h="100%">
