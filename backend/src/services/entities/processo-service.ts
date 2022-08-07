@@ -1,7 +1,9 @@
 import Comentario from 'models/comentario'
 import Processo, {
+  CampoInvalido,
   ProcessoModel,
   Resposta,
+  Revisao,
   Status,
   TStatus,
   VotoProcesso
@@ -23,6 +25,11 @@ export type RemoteProcesso = {
   createdBy: number
 }
 
+export type RemoteRevisao = {
+  comentario: string
+  campos: CampoInvalido[]
+}
+
 export type ProcessoQuery = WhereOptions<InferAttributes<ProcessoModel>>
 
 const isMaioria = (votes: VotoProcesso[]) => {
@@ -34,7 +41,10 @@ const isMaioria = (votes: VotoProcesso[]) => {
 
 export const ProcessoService = {
   getById: async function (id: number) {
-    const resource = await Processo.findOne({ where: { id, deleted: false } })
+    const resource = await Processo.findOne({
+      where: { id, deleted: false },
+      include: [TipoProcesso, Comentario, User]
+    })
 
     if (!resource) {
       throw new NotFoundError()
@@ -158,6 +168,19 @@ export const ProcessoService = {
   },
   updateStatus: async function (id: number, status: TStatus) {
     const resource = await changeProcedimentoStatus(id, status)
+
+    return resource
+  },
+  newRevisao: async function (id: number, revisao: Revisao) {
+    const resource = await Processo.findOne({ where: { id, deleted: false } })
+
+    if (!resource) {
+      throw new NotFoundError()
+    }
+
+    resource.set({ revisoes: [...resource.revisoes, revisao] })
+
+    await resource.save()
 
     return resource
   }

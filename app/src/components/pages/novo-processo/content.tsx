@@ -66,7 +66,7 @@ export default function Content({ formularios, tipoProcesso }: Props) {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form id="novo-procedimento" onSubmit={methods.handleSubmit(onSubmit)}>
         {formularios[currentIdx] && (
           <RenderFormulario formulario={formularios[currentIdx]} />
         )}

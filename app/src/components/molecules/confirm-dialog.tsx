@@ -28,6 +28,8 @@ export default function ConfirmDialog({
 }: Props) {
   return (
     <AlertDialog
+      closeOnOverlayClick={false}
+      closeOnEsc={false}
       isCentered
       isOpen={isOpen}
       onClose={onClose}
@@ -36,7 +38,7 @@ export default function ConfirmDialog({
       <AlertOverlay>
         <AlertContent>
           {title && <AlertHeader>{title}</AlertHeader>}
-          <AlertBody>{content}</AlertBody>
+          <AlertBody fontSize="14px">{content}</AlertBody>
           {footer && <AlertFooter>{footer}</AlertFooter>}
         </AlertContent>
       </AlertOverlay>

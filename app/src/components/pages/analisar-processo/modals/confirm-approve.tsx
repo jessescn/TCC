@@ -1,21 +1,20 @@
-import { Button } from '@chakra-ui/react'
+import ConfirmDialog from 'components/molecules/confirm-dialog'
 import { FocusableElement } from '@chakra-ui/utils'
 import { useRef } from 'react'
-
-import ConfirmDialog from '../confirm-dialog'
+import { Button } from '@chakra-ui/react'
 
 type Props = {
   onConfirm: () => void
-  currentVote: string
   isOpen: boolean
   onClose: () => void
+  isColegiado: boolean
 }
 
-export default function ConfirmVote({
-  currentVote,
-  onConfirm,
+export default function ConfirmApproveModal({
+  isOpen,
   onClose,
-  isOpen
+  onConfirm,
+  isColegiado
 }: Props) {
   const cancelRef = useRef<HTMLButtonElement | FocusableElement>(null)
 
@@ -42,6 +41,10 @@ export default function ConfirmVote({
     </>
   )
 
+  const content = isColegiado
+    ? `Deseja mesmo aprovar o procedimento? Caso aprovado, será encaminhando para aprovação pelo colegiado.`
+    : 'Deseja mesmo aprovar o procedimento?'
+
   return (
     <ConfirmDialog
       title="Confirmar voto"
@@ -49,7 +52,7 @@ export default function ConfirmVote({
       isOpen={isOpen}
       onClose={onClose}
       footer={footer}
-      content={`Deseja mesmo confirmar seu voto como ${currentVote}?`}
+      content={content}
     />
   )
 }

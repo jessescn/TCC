@@ -1,21 +1,30 @@
-import { Box, Button, Flex, Stack } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { campoComponente } from 'components/molecules/forms/fields'
+import { CustomCampoInvalido } from 'components/pages/analisar-processo/content'
+import { CampoFormulario } from 'components/pages/detalhes-formulario/campo'
 import { Processo } from 'domain/entity/processo'
 import { FormularioModel } from 'domain/models/formulario'
-import { Resposta, RespostaCampo } from 'domain/models/processo'
+import { CampoInvalido, Resposta, RespostaCampo } from 'domain/models/processo'
 import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 type Props = {
   formulario: FormularioModel
   editable?: boolean
+  camposInvalidos: CustomCampoInvalido[]
+  handleInvalidate?: (question: CustomCampoInvalido) => void
 }
 
-export default function RenderFormulario({
+export default function RenderContent({
   formulario,
-  editable = false
+  camposInvalidos,
+  editable = false,
+  handleInvalidate
 }: Props) {
   const { getValues, setValue } = useFormContext()
+  const camposInvalidosMap = new Map(
+    camposInvalidos.map(campo => [campo.ordem, campo])
+  )
 
   const handleUpdateResposta = useCallback(
     (novoCampo: RespostaCampo) => {
@@ -41,31 +50,38 @@ export default function RenderFormulario({
     >
       {formulario.campos.map(campo => {
         const Componente = campoComponente[campo.tipo]
+        const isInvalido = !!camposInvalidosMap.get(campo.ordem)
+
+        const handleInvalideField = () => {
+          if (!handleInvalidate) return
+
+          handleInvalidate({
+            ordem: campo.ordem,
+            formulario: formulario.id,
+            campo
+          })
+        }
 
         return (
-          <Box key={campo.ordem} bgColor="initial.white" p="16px">
+          <Box
+            key={campo.ordem}
+            borderColor={isInvalido ? 'info.error' : 'initial.white'}
+            bgColor="initial.white"
+            borderWidth="1px"
+            borderRadius="4px"
+            p="16px"
+          >
             <Componente
               {...campo}
               editable={editable}
               onUpdateResposta={handleUpdateResposta}
               formulario={formulario}
+              onInvalide={handleInvalidate ? handleInvalideField : undefined}
+              isInvalido={isInvalido}
             />
           </Box>
         )
       })}
-      {editable && (
-        <Flex justifyContent="flex-end">
-          <Button
-            bgColor="primary.dark"
-            color="initial.white"
-            display="block"
-            size="sm"
-            type="submit"
-          >
-            Salvar alterações
-          </Button>
-        </Flex>
-      )}
     </Stack>
   )
 }

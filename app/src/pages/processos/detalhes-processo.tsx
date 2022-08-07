@@ -36,16 +36,7 @@ const DetalhesProcesso = () => {
             py="32px"
             position="relative"
           >
-            <Box height="50px">
-              <Header
-                processoId={processo.id}
-                status={getCurrentStatus(processo)}
-              />
-            </Box>
-            <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-            <Box height="calc(100% - 160px)">
-              <Content processo={processo} formularios={formularios} />
-            </Box>
+            <Content processo={processo} formularios={formularios} />
           </Box>
         </>
       )}

@@ -44,6 +44,7 @@ export default function RenderFormulario({ formulario }: Props) {
               {...campo}
               onUpdateResposta={handleUpdateResposta}
               formulario={formulario}
+              editable
             />
           </Box>
         )

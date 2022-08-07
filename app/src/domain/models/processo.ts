@@ -22,8 +22,6 @@ export type ProcessoStatus =
 export type CampoInvalido = {
   formulario: number
   ordem: number
-  comentario: string
-  autor: number
 }
 
 export type RespostaCampo = {
@@ -47,10 +45,17 @@ export type Status = {
   status: ProcessoStatus
 }
 
+export type Revisao = {
+  comentario: string
+  data: string
+  autor: number
+  campos: CampoInvalido
+}
+
 export interface ProcessoModel {
   id: number
   status: Status[]
-  camposInvalidos: CampoInvalido[]
+  revisoes: Revisao[]
   respostas: Resposta[]
   votos?: VotoProcesso[]
   tipo_processo?: TipoProcessoModel

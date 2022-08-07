@@ -1,4 +1,8 @@
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex, useDisclosure } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { actions, store, useSelector } from 'store'
+import ConfirmSubmittionModal from './modals/confirm-submittion'
 
 type Props = {
   currentIdx: number
@@ -13,13 +17,17 @@ export default function Footer({
   isLastForm,
   onClear
 }: Props) {
+  const navigate = useNavigate()
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const submitStatus = useSelector(state => state.processo.statusSubmit)
+
   const SubmitButton = (
     <Button
       bgColor="primary.dark"
       color="initial.white"
       display="block"
       size="sm"
-      type="submit"
+      onClick={onOpen}
     >
       Submeter Processo
     </Button>
@@ -37,6 +45,17 @@ export default function Footer({
       Próximo Formulário
     </Button>
   )
+
+  const handleConfirm = () => {
+    onClose()
+  }
+
+  useEffect(() => {
+    if (submitStatus === 'success') {
+      navigate('/')
+      store.dispatch(actions.processo.resetStatus())
+    }
+  }, [submitStatus])
 
   return (
     <Flex justifyContent="flex-end" mt="16px">
@@ -60,6 +79,7 @@ export default function Footer({
             color="primary.dark"
             size="sm"
             mr="8px"
+            isLoading={submitStatus === 'loading'}
             onClick={() => onChangeForm(currentIdx - 1)}
           >
             Voltar
@@ -67,6 +87,11 @@ export default function Footer({
         )}
         {isLastForm ? SubmitButton : NextButton}
       </Flex>
+      <ConfirmSubmittionModal
+        onConfirm={handleConfirm}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </Flex>
   )
 }

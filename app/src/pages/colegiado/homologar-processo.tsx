@@ -11,7 +11,6 @@ import Screen from 'components/atoms/screen'
 import Comments from 'components/pages/homologar-processo/comments'
 import Content from 'components/pages/homologar-processo/content'
 import Header from 'components/organisms/processo/header'
-import { CampoFormulario } from 'domain/models/formulario'
 import { useState } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'
 import { useParams } from 'react-router-dom'
@@ -33,7 +32,6 @@ const HomologarProcesso = () => {
 
   const [showComments, setShowComments] = useState(false)
   const [hidden, setHidden] = useState(!showComments)
-  const [invalidos, setInvalidos] = useState<CampoFormulario[]>([])
 
   const handleToggleComments = () => {
     setShowComments(prev => !prev)
@@ -66,12 +64,7 @@ const HomologarProcesso = () => {
             </Box>
             <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
             <Box height="calc(100% - 120px)">
-              <Content
-                processo={processo}
-                invalidos={invalidos}
-                setInvalidos={setInvalidos}
-                formularios={formularios}
-              />
+              <Content processo={processo} formularios={formularios} />
             </Box>
             <Flex mt="8px">
               <Tooltip label="Comentários">

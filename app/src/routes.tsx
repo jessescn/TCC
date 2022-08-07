@@ -17,6 +17,7 @@ import HomologarProcesso from 'pages/colegiado/homologar-processo'
 import ListaHomologacao from 'pages/colegiado/lista-homologacao'
 import ProcessosCoordenacao from 'pages/coordenador/processos'
 import EstatisticasProcesso from 'pages/coordenador/estatisticas'
+import AnaliseProcesso from 'pages/coordenador/analise-processo'
 
 export default function Routes() {
   return (
@@ -114,6 +115,14 @@ export default function Routes() {
         element={
           <PrivateRoute>
             <ProcessosCoordenacao />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/coordenacao/processos/:id"
+        element={
+          <PrivateRoute>
+            <AnaliseProcesso />
           </PrivateRoute>
         }
       />

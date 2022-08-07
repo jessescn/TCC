@@ -1,6 +1,11 @@
 import { AxiosResponse } from 'axios'
 import { ComentarioModel } from 'domain/models/comentario'
-import { ProcessoModel, Resposta, VotoProcesso } from 'domain/models/processo'
+import {
+  CampoInvalido,
+  ProcessoModel,
+  Resposta,
+  VotoProcesso
+} from 'domain/models/processo'
 import { httpClient } from './config'
 
 export type NovoProcesso = {
@@ -12,6 +17,15 @@ export type NovoProcesso = {
 export type Vote = {
   autor: number
   aprovado: boolean
+}
+
+export type StatusPayload = {
+  status: string
+}
+
+export type RevisaoPayload = {
+  comentario: string
+  campos: CampoInvalido[]
 }
 
 export const ProcessoService = {
@@ -52,6 +66,20 @@ export const ProcessoService = {
     return httpClient.request<AxiosResponse<ComentarioModel[]>>({
       method: 'get',
       url: `/processos/${processoId}/comentarios`
+    })
+  },
+  updateStatus: (processoId: number, payload: StatusPayload) => {
+    return httpClient.request<AxiosResponse<ProcessoModel>>({
+      method: 'post',
+      url: `/processos/${processoId}/status`,
+      body: payload
+    })
+  },
+  revisao: (processoId: number, payload: RevisaoPayload) => {
+    return httpClient.request<AxiosResponse<ProcessoModel>>({
+      method: 'post',
+      url: `/processos/${processoId}/revisao`,
+      body: payload
     })
   }
 }

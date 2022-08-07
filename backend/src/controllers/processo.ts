@@ -4,10 +4,11 @@ import {
   errorResponseHandler,
   validateMandatoryFields
 } from 'controllers'
-import { Resposta, statusList, VotoProcesso } from 'models/processo'
+import { Resposta, Revisao, statusList, VotoProcesso } from 'models/processo'
 import {
   ProcessoQuery,
-  ProcessoService
+  ProcessoService,
+  RemoteRevisao
 } from 'services/entities/processo-service'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
@@ -32,13 +33,15 @@ export const ProcessoController = {
 
       validateMandatoryFields(mandatoryFields, data)
 
-      const newResource = await ProcessoService.create({
+      const { id } = await ProcessoService.create({
         createdBy: req.user.id,
         tipo: req.body.tipo,
         respostas: req.body.respostas
       })
 
-      res.status(HttpStatusCode.created).json(newResource)
+      const resource = await ProcessoService.getById(id)
+
+      res.status(HttpStatusCode.created).json(resource)
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -197,6 +200,38 @@ export const ProcessoController = {
       const resource = await ProcessoService.updateStatus(
         Number(id),
         'deferido'
+      )
+
+      res.json(resource)
+    } catch (error) {
+      errorResponseHandler(res, error)
+    }
+  },
+  revisao: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params
+
+      const permission = req.user.permissoes.processo_update
+
+      checkPermissionResource(permission, req)
+
+      const data: RemoteRevisao = req.body
+
+      if (!isNumber(id) || data.campos.length === 0) {
+        throw new BadRequestError()
+      }
+
+      const revisao: Revisao = {
+        ...data,
+        data: new Date().toISOString(),
+        autor: req.user.id
+      }
+
+      await ProcessoService.newRevisao(Number(id), revisao)
+
+      const resource = await ProcessoService.updateStatus(
+        Number(id),
+        'correcoes_pendentes'
       )
 
       res.json(resource)

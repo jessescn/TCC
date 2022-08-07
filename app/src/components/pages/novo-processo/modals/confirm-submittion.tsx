@@ -1,21 +1,18 @@
-import { Button } from '@chakra-ui/react'
+import ConfirmDialog from 'components/molecules/confirm-dialog'
 import { FocusableElement } from '@chakra-ui/utils'
 import { useRef } from 'react'
-
-import ConfirmDialog from '../confirm-dialog'
+import { Button } from '@chakra-ui/react'
 
 type Props = {
-  onConfirm: () => void
-  currentVote: string
   isOpen: boolean
   onClose: () => void
+  onConfirm: () => void
 }
 
-export default function ConfirmVote({
-  currentVote,
-  onConfirm,
+export default function ConfirmSubmittionModal({
+  isOpen,
   onClose,
-  isOpen
+  onConfirm
 }: Props) {
   const cancelRef = useRef<HTMLButtonElement | FocusableElement>(null)
 
@@ -35,21 +32,23 @@ export default function ConfirmVote({
         bgColor="primary.dark"
         _hover={{ bgColor: 'primary.default' }}
         ml={3}
+        type="submit"
+        form="novo-procedimento"
         onClick={onConfirm}
       >
-        Confirmar
+        Submeter
       </Button>
     </>
   )
 
   return (
     <ConfirmDialog
-      title="Confirmar voto"
+      title="Submeter Resposta"
+      content="Tem certeza que deseja submeter sua resposta? não será possível editar enquanto não for revisado pela coordenação."
+      footer={footer}
       cancelRef={cancelRef}
       isOpen={isOpen}
       onClose={onClose}
-      footer={footer}
-      content={`Deseja mesmo confirmar seu voto como ${currentVote}?`}
     />
   )
 }

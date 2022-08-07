@@ -10,13 +10,15 @@ import { CampoHora } from './hora'
 import { CampoParagrafo } from './paragrafo'
 import { CampoResposta } from './resposta'
 
-type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>
-
 export type BaseCampoProps = {
   formulario: FormularioModel
   editable: boolean
+  isInvalido?: boolean
+  onInvalide?: (ordem: number) => void
   onUpdateResposta: (novoCampo: RespostaCampo) => void
 }
+
+type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>
 
 export const campoComponente: CampoComponente = {
   paragrafo: CampoParagrafo,

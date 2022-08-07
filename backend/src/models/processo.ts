@@ -31,8 +31,6 @@ export type TStatus =
 export type CampoInvalido = {
   formulario: number
   ordem: number
-  comentario: string
-  autor: number
 }
 
 export type RespostaCampo = {
@@ -56,6 +54,13 @@ export type Status = {
   status: TStatus
 }
 
+export type Revisao = {
+  comentario: string
+  data: string
+  autor: number
+  campos: CampoInvalido[]
+}
+
 export interface ProcessoModel
   extends Model<
     InferAttributes<ProcessoModel>,
@@ -63,7 +68,7 @@ export interface ProcessoModel
   > {
   id: CreationOptional<number>
   status: Status[]
-  camposInvalidos: CampoInvalido[]
+  revisoes: Revisao[]
   respostas: Resposta[]
   votos: VotoProcesso[]
   deleted: boolean
@@ -88,7 +93,7 @@ const Processo = sequelize.define<ProcessoModel>('processo', {
     allowNull: false,
     defaultValue: []
   },
-  camposInvalidos: {
+  revisoes: {
     type: DataTypes.ARRAY(DataTypes.JSON),
     allowNull: false,
     defaultValue: []
