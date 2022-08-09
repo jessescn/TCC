@@ -18,19 +18,22 @@ export const routesPermissionsMap = {
     put: ['form_update'],
     delete: ['form_delete']
   },
-  'tipo-processos': {
-    post: ['tipo_processo_create'],
-    get: ['tipo_processo_read'],
-    put: ['tipo_processo_update'],
-    delete: ['tipo_processo_delete']
+  'tipo-procedimentos': {
+    post: ['tipo_procedimento_create'],
+    get: ['tipo_procedimento_read'],
+    put: ['tipo_procedimento_update'],
+    delete: ['tipo_procedimento_delete']
   },
-  processos: {
-    post: ['processo_create'],
-    get: ['processo_read'],
-    put: ['processo_update'],
-    delete: ['processo_delete'],
-    vote: ['processo_vote'],
-    deleteVote: ['processo_delete_vote']
+  procedimentos: {
+    post: ['procedimento_create'],
+    get: ['procedimento_read'],
+    put: ['procedimento_update'],
+    delete: ['procedimento_delete']
+  },
+  colegiado: {
+    vote: ['colegiado_vote'],
+    deleteVote: ['colegiado_delete_vote'],
+    comments: ['colegiado_comments']
   },
   comentarios: {
     post: ['comentario_create'],

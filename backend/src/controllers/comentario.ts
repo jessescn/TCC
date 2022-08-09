@@ -3,6 +3,7 @@ import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { isNumber } from 'utils/value'
 import {
+  checkPermissionResource,
   CrudController,
   errorResponseHandler,
   validateMandatoryFields
@@ -10,8 +11,7 @@ import {
 
 type RemoteComentario = {
   conteudo: string
-  processo: number
-  comentarioMae?: number
+  procedimento: number
 }
 
 export const ComentarioController: CrudController = {
@@ -19,28 +19,33 @@ export const ComentarioController: CrudController = {
     try {
       const data: RemoteComentario = req.body
 
-      const mandatoryFields = ['conteudo', 'processo']
+      const permission = req.user.permissoes.comentario_create
+
+      checkPermissionResource(permission, req)
+
+      const mandatoryFields = ['conteudo', 'procedimento']
 
       validateMandatoryFields(mandatoryFields, data)
 
-      const resource = await ComentarioService.create({
+      const newComentario = await ComentarioService.create({
         ...data,
-        processoId: data.processo,
+        procedimentoId: data.procedimento,
         createdBy: req.user.id
       })
 
-      console.log(req.user)
-
-      const comentario = resource.toJSON()
-
-      res.status(HttpStatusCode.created).send({ ...comentario, user: req.user })
+      res.status(HttpStatusCode.created).send(newComentario)
     } catch (error) {
       errorResponseHandler(res, error)
     }
   },
   read: async (req: Request, res: Response) => {
     try {
+      const permission = req.user.permissoes.comentario_read
+
+      checkPermissionResource(permission, req)
+
       const comentarios = await ComentarioService.getAll()
+
       res.send(comentarios)
     } catch (error) {
       errorResponseHandler(res, error)
@@ -49,6 +54,10 @@ export const ComentarioController: CrudController = {
   readById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params
+
+      const permission = req.user.permissoes.comentario_read
+
+      checkPermissionResource(permission, req)
 
       if (!isNumber(id)) {
         throw new BadRequestError()
@@ -63,6 +72,10 @@ export const ComentarioController: CrudController = {
   },
   update: async (req: Request, res: Response) => {
     try {
+      const permission = req.user.permissoes.comentario_update
+
+      checkPermissionResource(permission, req)
+
       const { id } = req.params
       const data = req.body
 
@@ -79,6 +92,10 @@ export const ComentarioController: CrudController = {
   },
   delete: async (req: Request, res: Response) => {
     try {
+      const permission = req.user.permissoes.comentario_delete
+
+      checkPermissionResource(permission, req)
+
       const { id } = req.params
 
       if (!isNumber(id)) {

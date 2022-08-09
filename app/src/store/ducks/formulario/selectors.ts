@@ -1,15 +1,14 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { ProcessoModel } from 'domain/models/processo'
-import { TipoProcessoModel } from 'domain/models/tipo-processo'
+import { ProcedimentoModel } from 'domain/models/procedimento'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { State } from '..'
-import { getTipoProcessoByProcesso } from '../tipo-processo/selectors'
 
 export const getRoot = (state: State) => {
-  return state.form
+  return state.formulario
 }
 
 export const getFormularios = createSelector([getRoot], state => {
-  return state.forms
+  return state.formularios
 })
 
 export const getFormularioById = createSelector(
@@ -40,30 +39,30 @@ export const getFormulariosBySearch = createSelector(
   }
 )
 
-export const getFormulariosByTipoProcesso = createSelector(
+export const getFormulariosByTipoProcedimento = createSelector(
   [getFormularios],
   formularios => {
-    return (tipoProcesso?: TipoProcessoModel) => {
-      if (!tipoProcesso) {
+    return (tipoProcedimento?: TipoProcedimentoModel) => {
+      if (!tipoProcedimento) {
         return []
       }
 
       return formularios.filter(formulario =>
-        tipoProcesso.formularios.includes(formulario.id)
+        tipoProcedimento.formularios.includes(formulario.id)
       )
     }
   }
 )
 
-export const getFormulariosByProcesso = createSelector(
-  [getFormulariosByTipoProcesso],
-  formulariosByTipoProcesso => {
-    return (processo?: ProcessoModel) => {
-      if (!processo) {
+export const getFormulariosByProcedimento = createSelector(
+  [getFormulariosByTipoProcedimento],
+  formulariosByTipoProcedimento => {
+    return (procedimento?: ProcedimentoModel) => {
+      if (!procedimento) {
         return []
       }
 
-      return formulariosByTipoProcesso(processo.tipo_processo)
+      return formulariosByTipoProcedimento(procedimento.tipo_procedimento)
     }
   }
 )

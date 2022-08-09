@@ -29,7 +29,7 @@ export default function FormulariosTable({
   const totalPages = Math.ceil(formularios.length / 5)
 
   const handleDelete = (id: number) => {
-    store.dispatch(actions.form.delete(id))
+    store.dispatch(actions.formulario.delete(id))
   }
 
   const getEditMenu = (form: FormularioModel) => {

@@ -2,7 +2,7 @@ import { Box, Divider, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import Content from 'components/pages/estatisticas/content'
 
-export default function EstatisticasProcesso() {
+export default function EstatisticasProcedimento() {
   return (
     <Screen py="24px">
       <Box

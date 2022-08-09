@@ -9,5 +9,5 @@ export interface ComentarioModel {
 
 export interface NewComentario {
   conteudo: string
-  processo: number
+  procedimento: number
 }

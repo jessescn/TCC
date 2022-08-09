@@ -37,8 +37,8 @@ export const invisibleStyle = {
 const Sidebar = () => {
   const currentUser = useSelector(selectors.session.getCurrentUser)
 
-  const processosAbertos = useSelector(
-    selectors.tipoProcesso.getTipoProcessosAbertos
+  const procedimentosAbertos = useSelector(
+    selectors.tipoProcedimento.getTipoProcedimentosAbertos
   )
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
@@ -116,16 +116,16 @@ const Sidebar = () => {
           <NavItem icon={FiHome} title="Página inicial" url="/" />
           <NavItem
             icon={BsCardChecklist}
-            title="Meus processos"
-            url="/meus-processos"
+            title="Meus procedimentos"
+            url="/meus-procedimentos"
           />
-          {processosAbertos.length > 0 && (
+          {procedimentosAbertos.length > 0 && (
             <NavSubItems
               icon={BsListCheck}
-              title="Abrir Processo"
-              items={processosAbertos.map(tipoProcesso => ({
-                title: tipoProcesso.nome,
-                url: `/novo-processo/${tipoProcesso.id}`,
+              title="Abrir Procedimento"
+              items={procedimentosAbertos.map(tipoProcedimento => ({
+                title: tipoProcedimento.nome,
+                url: `/novo-procedimento/${tipoProcedimento.id}`,
                 icon: FiCornerDownRight
               }))}
             />
@@ -133,13 +133,13 @@ const Sidebar = () => {
           <NavItem
             icon={FaVoteYea}
             title="Homologação"
-            url="/colegiado/processos"
+            url="/colegiado/procedimentos"
             roles={['admin', 'colegiado']}
           />
           <NavItem
             icon={AiOutlineFileAdd}
-            title="Processos Cadastrados"
-            url="/tipo-processos"
+            title="procedimentos Cadastrados"
+            url="/tipo-procedimentos"
             roles={['admin']}
           />
           <NavItem
@@ -154,8 +154,8 @@ const Sidebar = () => {
             roles={['admin', 'coordenador']}
             items={[
               {
-                title: 'Todos os Processos',
-                url: `/coordenacao/processos`,
+                title: 'Todos os procedimentos',
+                url: `/coordenacao/procedimentos`,
                 icon: BsCardChecklist
               },
               {

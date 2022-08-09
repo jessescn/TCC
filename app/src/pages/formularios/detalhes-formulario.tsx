@@ -21,7 +21,7 @@ export default function Form() {
   const id = Number(searchParams.get('id'))
 
   const formulario = useSelector(state =>
-    selectors.form.getFormularioById(state)(Number(id))
+    selectors.formulario.getFormularioById(state)(Number(id))
   )
 
   const alreadyInitializeForm = useRef(false)
@@ -30,14 +30,14 @@ export default function Form() {
 
   const onSubmit = (data: FormularioForm) => {
     if (!formulario) {
-      store.dispatch(actions.form.create(data))
+      store.dispatch(actions.formulario.create(data))
       return
     }
 
     const updatedForm: FormularioModel = { ...formulario, ...data }
 
     store.dispatch(
-      actions.form.update({ data: updatedForm, id: formulario.id })
+      actions.formulario.update({ data: updatedForm, id: formulario.id })
     )
   }
 

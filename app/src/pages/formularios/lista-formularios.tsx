@@ -23,7 +23,7 @@ export default function Formularios() {
   const [term, setTerm] = useState('')
 
   const formularios = useSelector(state =>
-    selectors.form.getFormulariosBySearch(state)(term)
+    selectors.formulario.getFormulariosBySearch(state)(term)
   )
 
   const handleSearch = (termo: string) => {
@@ -47,7 +47,7 @@ export default function Formularios() {
             Formulários
           </Text>
           <Text my="16px" fontSize="14px">
-            Crie um modelo de formulário para utilizar em processos
+            Crie um modelo de formulário para utilizar em procedimentos
           </Text>
         </Box>
         <Divider my="24px" borderColor="secondary.dark" />

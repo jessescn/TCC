@@ -11,8 +11,8 @@ export default function ListaHomologacao() {
   const [currentPage, setCurrentPage] = useState(1)
   const [term, setTerm] = useState('')
 
-  const processos = useSelector(state =>
-    selectors.processo.getProcessosEmHomologacaoBySearch(state)(term)
+  const procedimentos = useSelector(state =>
+    selectors.procedimento.getProcedimentosEmHomologacaoBySearch(state)(term)
   )
 
   const handleSearch = (termo: string) => {
@@ -33,7 +33,7 @@ export default function ListaHomologacao() {
       >
         <Box>
           <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-            Processos em homologacão
+            Procedimentos em homologacão
           </Text>
         </Box>
         <Divider my="24px" borderColor="secondary.dark" />
@@ -46,7 +46,7 @@ export default function ListaHomologacao() {
             placeholder="Ex.Busca por ID, nome e status"
             onChange={e => handleSearch(e.target.value)}
             label={{
-              text: 'Buscar processos em homologacão',
+              text: 'Buscar procedimentos em homologacão',
               props: {
                 htmlFor: 'search',
                 fontSize: '14px',
@@ -55,9 +55,9 @@ export default function ListaHomologacao() {
             }}
           />
         </Flex>
-        {processos.length > 0 ? (
+        {procedimentos.length > 0 ? (
           <Table
-            processos={processos}
+            procedimentos={procedimentos}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
@@ -65,7 +65,7 @@ export default function ListaHomologacao() {
           <Center flexDir="column" h="40vh">
             <Icon fontSize="45px" as={MdSearchOff} />
             <Text textAlign="center" maxW="300px" fontSize="14px">
-              Nenhum processo encontrado.
+              Nenhum procedimento encontrado.
             </Text>
           </Center>
         )}

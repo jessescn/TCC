@@ -2,22 +2,22 @@ import { Route, Routes as RoutesWrapper } from 'react-router-dom'
 import AuthRedirect from './components/template/auth-redirect'
 import PrivateRoute from './components/template/private-route'
 
-import DetalhesProcesso from 'pages/processos/detalhes-processo'
-import MeusProcessos from 'pages/processos/meus-processos'
-import ListaTipoProcessos from 'pages/tipo-processos/lista-tipo-processos'
+import DetalhesProcedimento from 'pages/procedimentos/detalhes-procedimento'
+import MeusProcedimentos from 'pages/procedimentos/meus-procedimentos'
+import ListaTipoProcedimentos from 'pages/tipo-procedimentos/tipo-procedimentos'
 import Home from './pages/home'
 import Login from './pages/login'
 import Register from './pages/register'
 import ListaFormularios from './pages/formularios/lista-formularios'
 import DetalhesFormulario from './pages/formularios/detalhes-formulario'
 
-import DetalhesTipoProcesso from 'pages/tipo-processos/detalhes-tipo-processo'
-import NovoProcesso from 'pages/processos/novo-processo'
-import HomologarProcesso from 'pages/colegiado/homologar-processo'
+import DetalhesTipoProcedimentos from 'pages/tipo-procedimentos/detalhes-tipo-procedimento'
+import NovoProcedimento from 'pages/procedimentos/novo-procedimento'
+import HomologarProcedimento from 'pages/colegiado/homologar-procedimento'
 import ListaHomologacao from 'pages/colegiado/lista-homologacao'
-import ProcessosCoordenacao from 'pages/coordenador/processos'
-import EstatisticasProcesso from 'pages/coordenador/estatisticas'
-import AnaliseProcesso from 'pages/coordenador/analise-processo'
+import ProcedimentosCoordenacao from 'pages/coordenador/procedimentos'
+import EstatisticasProcedimento from 'pages/coordenador/estatisticas'
+import AnaliseProcedimento from 'pages/coordenador/analise-procedimento'
 
 export default function Routes() {
   return (
@@ -63,47 +63,47 @@ export default function Routes() {
         }
       />
       <Route
-        path="/tipo-processos"
+        path="/tipo-procedimentos"
         element={
           <PrivateRoute requiredRoles={['admin']}>
-            <ListaTipoProcessos />
+            <ListaTipoProcedimentos />
           </PrivateRoute>
         }
       />
       <Route
-        path="/tipo-processos/edit"
+        path="/tipo-procedimentos/edit"
         element={
           <PrivateRoute requiredRoles={['admin']}>
-            <DetalhesTipoProcesso />
+            <DetalhesTipoProcedimentos />
           </PrivateRoute>
         }
       />
       <Route
-        path="/meus-processos"
+        path="/meus-procedimentos"
         element={
           <PrivateRoute>
-            <MeusProcessos />
+            <MeusProcedimentos />
           </PrivateRoute>
         }
       />
       <Route
-        path="/meus-processos/:id"
+        path="/meus-procedimentos/:id"
         element={
           <PrivateRoute>
-            <DetalhesProcesso />
+            <DetalhesProcedimento />
           </PrivateRoute>
         }
       />
       <Route
-        path="/colegiado/processos/:id"
+        path="/colegiado/procedimentos/:id"
         element={
           <PrivateRoute>
-            <HomologarProcesso />
+            <HomologarProcedimento />
           </PrivateRoute>
         }
       />
       <Route
-        path="/colegiado/processos"
+        path="/colegiado/procedimentos"
         element={
           <PrivateRoute>
             <ListaHomologacao />
@@ -111,18 +111,18 @@ export default function Routes() {
         }
       />
       <Route
-        path="/coordenacao/processos"
+        path="/coordenacao/procedimentos"
         element={
           <PrivateRoute>
-            <ProcessosCoordenacao />
+            <ProcedimentosCoordenacao />
           </PrivateRoute>
         }
       />
       <Route
-        path="/coordenacao/processos/:id"
+        path="/coordenacao/procedimentos/:id"
         element={
           <PrivateRoute>
-            <AnaliseProcesso />
+            <AnaliseProcedimento />
           </PrivateRoute>
         }
       />
@@ -130,15 +130,15 @@ export default function Routes() {
         path="/coordenacao/estatisticas"
         element={
           <PrivateRoute>
-            <EstatisticasProcesso />
+            <EstatisticasProcedimento />
           </PrivateRoute>
         }
       />
       <Route
-        path="/novo-processo/:id"
+        path="/novo-procedimento/:id"
         element={
           <PrivateRoute>
-            <NovoProcesso />
+            <NovoProcedimento />
           </PrivateRoute>
         }
       />

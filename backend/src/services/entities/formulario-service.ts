@@ -13,49 +13,58 @@ export type FormularioQuery = WhereOptions<InferAttributes<FormularioModel>>
 
 export const FormularioService = {
   getById: async function (id: number) {
-    const resource = await Formulario.findOne({ where: { id, deleted: false } })
+    const formulario = await Formulario.findOne({
+      where: { id, deleted: false },
+      include: User
+    })
 
-    if (!resource) {
+    if (!formulario) {
       throw new NotFoundError()
     }
 
-    return resource
+    return formulario
   },
   getAll: async function (query: FormularioQuery = {}) {
-    const resources = await Formulario.findAll({
+    const formularios = await Formulario.findAll({
       include: User,
       where: { deleted: false, ...query }
     })
-    return resources
+    return formularios
   },
   create: async function (data: CreateFormulario) {
-    const newResource = await Formulario.create(data)
-    return newResource
+    const newFormulario = await Formulario.create(data, { include: User })
+    return newFormulario
   },
   update: async function (id: number, data: any) {
-    const resource = await Formulario.findOne({ where: { id, deleted: false } })
+    const formulario = await Formulario.findOne({
+      where: { id, deleted: false },
+      include: User
+    })
 
-    if (!resource) {
+    if (!formulario) {
       throw new NotFoundError()
     }
 
-    resource.set({ ...data })
+    formulario.set({ ...data })
 
-    await resource.save()
+    await formulario.save()
 
-    return resource
+    return formulario
   },
   destroy: async function (id: number) {
-    const resource = await Formulario.findOne({ where: { id, deleted: false } })
+    const formulario = await Formulario.findOne({
+      where: { id, deleted: false },
+      include: User
+    })
 
-    if (!resource) {
+    if (!formulario) {
       throw new NotFoundError()
     }
 
-    resource.set({ deleted: true })
+    formulario.set({ deleted: true })
 
-    await resource.save()
+    await formulario.save()
 
-    return resource
+    return formulario
   }
 }

@@ -8,7 +8,7 @@ import {
   Model
 } from 'sequelize'
 import { PermissionKeys, Roles } from 'types/auth/actors'
-import { ProcessoModel } from './processo'
+import { ProcedimentoModel } from './procedimento'
 
 export interface UserModel
   extends Model<
@@ -23,7 +23,7 @@ export interface UserModel
   permissoes: PermissionKeys
   roles: Roles[]
   publico: string[]
-  processos?: ProcessoModel[]
+  procedimentos?: ProcedimentoModel[]
   createdAt?: Date
   updatedAt?: Date
 }

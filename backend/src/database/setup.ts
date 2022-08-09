@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 import { createInitialFormulario } from 'models/formulario'
-import { createInitialTipoProcesso } from 'models/tipo-processo'
+import { createInitialTipoProcedimento } from 'models/tipo-procedimento'
 import { createInitialUser } from 'models/user'
 import { Admin, Default } from 'types/auth/actors'
 import mock from 'types/campos-formulario/modelo-mockado'
@@ -21,5 +21,5 @@ export const populateInitialData = async () => {
   })
 
   await createInitialFormulario(mock.formulario)
-  await createInitialTipoProcesso(mock.tipoProcesso)
+  await createInitialTipoProcedimento(mock.tipoProcedimento)
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import Processo from 'models/processo'
+import Procedimento from 'models/procedimento'
 import User from 'models/user'
 import {
   CreationOptional,
@@ -17,7 +17,7 @@ export interface ComentarioModel
     InferCreationAttributes<ComentarioModel>
   > {
   id: CreationOptional<number>
-  processoId: CreationOptional<number>
+  procedimentoId: CreationOptional<number>
   conteudo: string
   deleted: CreationOptional<boolean>
   createdAt?: Date
@@ -30,7 +30,7 @@ const Comentario = sequelize.define<ComentarioModel>('comentario', {
     autoIncrement: true,
     primaryKey: true
   },
-  processoId: {
+  procedimentoId: {
     type: DataTypes.INTEGER
   },
   conteudo: {
@@ -44,8 +44,8 @@ const Comentario = sequelize.define<ComentarioModel>('comentario', {
   }
 })
 
-Comentario.belongsTo(Processo)
+Comentario.belongsTo(Procedimento)
 Comentario.belongsTo(User, { foreignKey: 'createdBy' })
-Processo.hasMany(Comentario)
+Procedimento.hasMany(Comentario)
 
 export default Comentario

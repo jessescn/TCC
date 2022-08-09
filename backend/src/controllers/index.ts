@@ -1,3 +1,4 @@
+import { PermissionScope } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import {
   BadRequestError,
@@ -22,8 +23,11 @@ export const errorResponseHandler = (res: Response, error: any) => {
   res.status(HttpStatusCode.serverError).send()
 }
 
-export const checkPermissionResource = (permission: string, req: Request) => {
-  if (permission === 'owned' && req.user.id !== Number(req.params.id)) {
+export const checkPermissionResource = (
+  permission: PermissionScope,
+  req: Request
+) => {
+  if (permission === 'not_allowed') {
     throw new UnauthorizedError()
   }
 }

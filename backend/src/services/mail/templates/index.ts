@@ -1,4 +1,4 @@
-import { ProcessoModel } from 'models/processo'
+import { ProcedimentoModel } from 'models/procedimento'
 import { EmailTemplate } from '..'
 
 type Template<T> = (to: string, data?: T) => EmailTemplate
@@ -10,17 +10,17 @@ const passwordRecovery: Template<any> = (to, data) => ({
 })
 
 type ApproveProcedimentoData = {
-  processo: ProcessoModel
+  procedimento: ProcedimentoModel
 }
 
-const approveProcesso: Template<ApproveProcedimentoData> = (to, data) => ({
+const approveProcedimento: Template<ApproveProcedimentoData> = (to, data) => ({
   to,
-  subject: `[PPGCC/UFCG] Processo #${data.processo.id} aprovado!`,
-  text: `O processo #${data.processo.id} foi aprovado pelo colegiado e foi encaminhado a secretaria para as próximas etapas`
+  subject: `[PPGCC/UFCG] Procedimento #${data.procedimento.id} aprovado!`,
+  text: `O procedimento #${data.procedimento.id} foi aprovado pelo colegiado e foi encaminhado a secretaria para as próximas etapas`
 })
 
 type UpdateProcedimentoData = {
-  processo: ProcessoModel
+  procedimento: ProcedimentoModel
   novoStatus: string
 }
 
@@ -29,12 +29,12 @@ const updateProcedimentoStatus: Template<UpdateProcedimentoData> = (
   data
 ) => ({
   to,
-  subject: `[PPGCC/UFCG] Atualizacão Procedimento #${data.processo.id}`,
-  text: `O procedimento de número ${data.processo.id} teve status para ${data.novoStatus}. Para mais detalhes, acesse o sistema pelo link:`
+  subject: `[PPGCC/UFCG] Atualizacão Procedimento #${data.procedimento.id}`,
+  text: `O procedimento de número ${data.procedimento.id} teve status para ${data.novoStatus}. Para mais detalhes, acesse o sistema pelo link:`
 })
 
 type AnaliseProcedimentoCoordenacaoData = {
-  processo: ProcessoModel
+  procedimento: ProcedimentoModel
 }
 
 const analiseProcedimentoCoordenacao: Template<
@@ -42,11 +42,11 @@ const analiseProcedimentoCoordenacao: Template<
 > = (to, data) => ({
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento em análise`,
-  text: `O procedimento de número ${data.processo.id} teve seus status atualizado para EM ANÁLISE. Acesse o sistema para oter mais detalhes.`
+  text: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM ANÁLISE. Acesse o sistema para oter mais detalhes.`
 })
 
 type HomologacaoColegiadoData = {
-  processo: ProcessoModel
+  procedimento: ProcedimentoModel
 }
 
 const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
@@ -54,13 +54,13 @@ const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
   data
 ) => ({
   to,
-  subject: `[PPGCC/UFCG] Novo Processo a ser homologado`,
-  text: `O procedimento de número ${data.processo.id} teve seus status atualizado para EM HOMOLOGAÇÃO. Para acompanhar a votação e definir seu deferimento, acesse o sistema.`
+  subject: `[PPGCC/UFCG] Novo Procedimento a ser homologado`,
+  text: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM HOMOLOGAÇÃO. Para acompanhar a votação e definir seu deferimento, acesse o sistema.`
 })
 
 export default {
   'password-recovery': passwordRecovery,
-  'approve-processo': approveProcesso,
+  'approve-procedimento': approveProcedimento,
   'update-procedimento-status': updateProcedimentoStatus,
   'analise-procedimento-coordenacao': analiseProcedimentoCoordenacao,
   'homologacao-colegiado': homologacaoColegiado

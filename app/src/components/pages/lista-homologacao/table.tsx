@@ -1,19 +1,19 @@
 import { Box } from '@chakra-ui/react'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
-import { ProcessoModel } from 'domain/models/processo'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 import { useNavigate } from 'react-router-dom'
 import { formatDate } from 'utils/format'
 
 type Props = {
-  processos: ProcessoModel[]
+  procedimentos: ProcedimentoModel[]
   currentPage: number
   setCurrentPage: (page: number) => void
 }
 
-const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
+const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
   const navigate = useNavigate()
 
-  const sorted = [...processos]
+  const sorted = [...procedimentos]
 
   sorted.sort(function (a, b) {
     return a.id - b.id
@@ -22,7 +22,7 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
 
-    navigate(`/colegiado/processos/${id}`)
+    navigate(`/colegiado/procedimentos/${id}`)
   }
 
   return (
@@ -44,12 +44,14 @@ const Table = ({ processos, currentPage, setCurrentPage }: Props) => {
           { content: 'Autor', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '20%' } }
         ]}
-        rows={sorted.map(processo => [
-          { content: processo.id },
-          { content: processo.tipo_processo?.nome },
-          { content: processo.user?.nome || '-' },
+        rows={sorted.map(procedimento => [
+          { content: procedimento.id },
+          { content: procedimento.tipo_procedimento?.nome },
+          { content: procedimento.user?.nome || '-' },
           {
-            content: !processo.createdAt ? '-' : formatDate(processo.createdAt)
+            content: !procedimento.createdAt
+              ? '-'
+              : formatDate(procedimento.createdAt)
           }
         ])}
       />

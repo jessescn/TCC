@@ -1,6 +1,6 @@
 import { errorResponseHandler } from 'controllers'
 import jwt from 'jsonwebtoken'
-import { UserService } from 'services/entities/user-service'
+import { UsuarioService } from 'services/entities/usuario-service'
 import { Request, Response } from 'types/express'
 import {
   BadRequestError,
@@ -22,13 +22,13 @@ export const AuthController = {
         throw new BadRequestError()
       }
 
-      const user = await UserService.getByEmail(data.email)
+      const user = await UsuarioService.getByEmail(data.email)
 
       if (!user) {
         throw new NotFoundError()
       }
 
-      const isPasswordValid = await UserService.validPassword(
+      const isPasswordValid = await UsuarioService.validPassword(
         data.password,
         user.senha
       )

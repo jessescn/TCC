@@ -5,7 +5,7 @@ import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
-  forms: FormularioModel[]
+  formularios: FormularioModel[]
   status: Status
 }
 
@@ -21,7 +21,7 @@ export type CreatePayload = {
 }
 
 export const initialState: State = {
-  forms: [],
+  formularios: [],
   status: 'pristine'
 }
 
@@ -31,7 +31,7 @@ const reducers = {
   },
   listSuccess: (state: State, action: PayloadAction<FormularioModel[]>) => {
     state.status = 'success'
-    state.forms = action.payload
+    state.formularios = action.payload
   },
   listFailure: (state: State) => {
     state.status = 'failure'
@@ -41,7 +41,7 @@ const reducers = {
   },
   createSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
     state.status = 'success'
-    state.forms = [...state.forms, action.payload]
+    state.formularios = [...state.formularios, action.payload]
   },
   createFailure: (state: State) => {
     state.status = 'failure'
@@ -52,8 +52,10 @@ const reducers = {
   updateSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
     state.status = 'success'
 
-    const indexof = state.forms.map(elm => elm.id).indexOf(action.payload.id)
-    state.forms.splice(indexof, 1, action.payload)
+    const indexof = state.formularios
+      .map(elm => elm.id)
+      .indexOf(action.payload.id)
+    state.formularios.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
     state.status = 'failure'
@@ -63,7 +65,9 @@ const reducers = {
   },
   deleteSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
     state.status = 'success'
-    state.forms = state.forms.filter(form => form.id !== action.payload.id)
+    state.formularios = state.formularios.filter(
+      form => form.id !== action.payload.id
+    )
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'

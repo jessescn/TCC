@@ -1,10 +1,11 @@
-import { TipoProcessoController } from './controllers/tipo-processo'
+import { TipoProcedimentoController } from './controllers/tipo-procedimento'
 import { ComentarioController } from './controllers/comentario'
 import { FormularioController } from 'controllers/formulario'
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
-import { UserController } from './controllers/user'
-import { ProcessoController } from './controllers/processo'
+import { UsuarioController } from './controllers/usuario'
+import { ProcedimentoController } from './controllers/procedimento'
+import { ColegiadoController } from './controllers/colegiado'
 
 import auth from './middlewares/authorization'
 import permissions from './middlewares/permissions'
@@ -12,18 +13,18 @@ import permissions from './middlewares/permissions'
 const routes = Router()
 
 routes.post('/token', AuthController.token)
-routes.post('/users', UserController.create)
+routes.post('/users', UsuarioController.create)
 
 routes.use(auth)
 routes.use(permissions)
 
 routes.get('/me', AuthController.me)
 
-routes.get('/users/publicos', UserController.publicos)
-routes.get('/users', UserController.read)
-routes.get('/users/:id', UserController.readById)
-routes.put('/users/:id', UserController.update)
-routes.delete('/users/:id', UserController.delete)
+routes.get('/users/publicos', UsuarioController.publicos)
+routes.get('/users', UsuarioController.read)
+routes.get('/users/:id', UsuarioController.readById)
+routes.put('/users/:id', UsuarioController.update)
+routes.delete('/users/:id', UsuarioController.delete)
 
 routes.get('/formularios', FormularioController.read)
 routes.get('/formularios/:id', FormularioController.readById)
@@ -31,23 +32,24 @@ routes.post('/formularios', FormularioController.create)
 routes.put('/formularios/:id', FormularioController.update)
 routes.delete('/formularios/:id', FormularioController.delete)
 
-routes.get('/processos', ProcessoController.read)
-routes.get('/processos/:id', ProcessoController.readById)
-routes.post('/processos', ProcessoController.create)
-routes.put('/processos/:id', ProcessoController.update)
-routes.delete('/processos/:id', ProcessoController.delete)
-routes.post('/processos/:id/vote', ProcessoController.vote)
-routes.delete('/processos/:id/vote', ProcessoController.deleteVote)
-routes.get('/processos/:id/comentarios', ProcessoController.comentarios)
-routes.post('/processos/:id/status', ProcessoController.updateStatus)
-routes.post('/processos/:id/homologacao', ProcessoController.homologate)
-routes.post('/processos/:id/revisao', ProcessoController.revisao)
+routes.get('/procedimentos', ProcedimentoController.read)
+routes.get('/procedimentos/:id', ProcedimentoController.readById)
+routes.post('/procedimentos', ProcedimentoController.create)
+routes.put('/procedimentos/:id', ProcedimentoController.update)
+routes.delete('/procedimentos/:id', ProcedimentoController.delete)
+routes.post('/procedimentos/:id/status', ProcedimentoController.updateStatus)
+routes.post('/procedimentos/:id/homologacao', ProcedimentoController.homologate)
+routes.post('/procedimentos/:id/revisao', ProcedimentoController.revisao)
 
-routes.get('/tipo-processos', TipoProcessoController.read)
-routes.get('/tipo-processos/:id', TipoProcessoController.readById)
-routes.post('/tipo-processos', TipoProcessoController.create)
-routes.put('/tipo-processos/:id', TipoProcessoController.update)
-routes.delete('/tipo-processos/:id', TipoProcessoController.delete)
+routes.post('/colegiado/:id/vote', ColegiadoController.vote)
+routes.delete('/colegiado/:id/vote', ColegiadoController.deleteVote)
+routes.get('/colegiado/:id/comentarios', ColegiadoController.comments)
+
+routes.get('/tipo-procedimentos', TipoProcedimentoController.read)
+routes.get('/tipo-procedimentos/:id', TipoProcedimentoController.readById)
+routes.post('/tipo-procedimentos', TipoProcedimentoController.create)
+routes.put('/tipo-procedimentos/:id', TipoProcedimentoController.update)
+routes.delete('/tipo-procedimentos/:id', TipoProcedimentoController.delete)
 
 routes.get('/comentarios', ComentarioController.read)
 routes.get('/comentarios/:id', ComentarioController.readById)

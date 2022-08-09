@@ -1,5 +1,5 @@
 import { FormularioModel, TipoCampoFormulario } from 'domain/models/formulario'
-import { RespostaCampo } from 'domain/models/processo'
+import { RespostaCampo } from 'domain/models/procedimento'
 import { CampoCaixaVerificacao } from './caixa-verificacao'
 import { CampoData } from './data'
 import { CampoEscolhaMultipla } from './escolha-multipla'
