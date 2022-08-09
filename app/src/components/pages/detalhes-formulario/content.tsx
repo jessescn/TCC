@@ -58,7 +58,7 @@ export default function Content({ formulario }: Props) {
             <Input
               size="sm"
               defaultValue={formulario?.nome}
-              {...register('nome')}
+              {...register('nome', { required: true })}
             />
           </Box>
           <Box>
@@ -89,7 +89,7 @@ export default function Content({ formulario }: Props) {
       <Collapse in={showForm} animateOpacity>
         <EditForm />
       </Collapse>
-      <Flex justifyContent="flex-end">
+      <Flex justifyContent="flex-end" mt="8px">
         <Button
           bgColor="initial.white"
           borderColor="primary.dark"

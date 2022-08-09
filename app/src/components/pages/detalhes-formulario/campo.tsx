@@ -28,9 +28,15 @@ type Props = {
   campo: CampoFormulario
   onDelete: (ordem: number) => void
   onUpdate: (campo: CampoFormulario) => void
+  onDuplicate: (ordem: number) => void
 }
 
-export default function Campo({ campo, onDelete, onUpdate }: Props) {
+export default function Campo({
+  campo,
+  onDelete,
+  onUpdate,
+  onDuplicate
+}: Props) {
   const handleUpdateTitle = debounce(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
       onUpdate({
@@ -99,20 +105,28 @@ export default function Campo({ campo, onDelete, onUpdate }: Props) {
         justifyContent="flex-end"
         alignItems="center"
       >
-        <Flex>
+        <Flex p={2}>
           <Tooltip label="Remover campo">
             <IconButton
+              mr="8px"
+              size="sm"
               aria-label=""
-              variant="unstyled"
+              bgColor="primary.dark"
+              _hover={{ bgColor: 'primary.default' }}
               onClick={() => onDelete(campo.ordem)}
-              icon={<Icon as={RiDeleteBinLine} />}
+              icon={<Icon as={RiDeleteBinLine} color="initial.white" />}
             />
           </Tooltip>
           <Tooltip label="Duplicar campo">
             <IconButton
+              size="sm"
               aria-label=""
-              variant="unstyled"
-              icon={<Icon as={HiOutlineDocumentDuplicate} />}
+              bgColor="primary.dark"
+              _hover={{ bgColor: 'primary.default' }}
+              onClick={() => onDuplicate(campo.ordem)}
+              icon={
+                <Icon as={HiOutlineDocumentDuplicate} color="initial.white" />
+              }
             />
           </Tooltip>
         </Flex>

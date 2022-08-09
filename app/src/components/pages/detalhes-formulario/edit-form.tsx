@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { AiOutlinePlus } from 'react-icons/ai'
 import Campo, { CampoFormulario } from './campo'
+import lodash from 'lodash'
 
 export default function EditForm() {
   const { setValue, watch } = useFormContext()
@@ -20,6 +21,27 @@ export default function EditForm() {
 
     setValue('campos', [...campos, novoCampo])
   }, [campos, setValue])
+
+  const handleDuplicate = useCallback(
+    (campoOrdem: number) => {
+      const index = campos.findIndex(campo => campo.ordem === campoOrdem)
+
+      if (index === -1) return
+
+      const ordem = new Date().valueOf()
+      const campoCopy: CampoFormulario = lodash.cloneDeep({
+        ...campos[index],
+        ordem
+      })
+
+      const updatedCampos: CampoFormulario[] = lodash.cloneDeep([...campos])
+
+      updatedCampos.splice(index, 0, campoCopy)
+
+      setValue('campos', updatedCampos)
+    },
+    [campos, setValue]
+  )
 
   const handleDelete = useCallback(
     (ordem: number) => {
@@ -49,7 +71,8 @@ export default function EditForm() {
     <Box>
       <Flex justifyContent="flex-end" my="8px">
         <Button
-          bgColor="secondary.dark"
+          bgColor="primary.dark"
+          _hover={{ bgColor: 'primary.default' }}
           color="initial.white"
           aria-label=""
           size="xs"
@@ -62,8 +85,10 @@ export default function EditForm() {
       <Stack spacing="24px">
         {campos.map(campo => (
           <Campo
+            key={campo.ordem}
             campo={campo}
             onDelete={handleDelete}
+            onDuplicate={handleDuplicate}
             onUpdate={handleUpdate}
           />
         ))}

@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import Procedimento from 'models/procedimento'
+import Procedimento, { ProcedimentoModel } from 'models/procedimento'
 import User from 'models/user'
 import {
   CreationOptional,
@@ -20,6 +20,7 @@ export interface ComentarioModel
   procedimentoId: CreationOptional<number>
   conteudo: string
   deleted: CreationOptional<boolean>
+  procedimento?: ProcedimentoModel
   createdAt?: Date
   updatedAt?: Date
 }

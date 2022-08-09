@@ -32,19 +32,22 @@ export default function FormulariosTable({
     store.dispatch(actions.formulario.delete(id))
   }
 
+  const handleRedirect = (formularioId: number) => {
+    store.dispatch(actions.formulario.resetStatus())
+    navigate(`/formularios/edit?id=${formularioId}`)
+  }
+
   const getEditMenu = (form: FormularioModel) => {
     return (
       <Menu>
         <MenuButton
           as={IconButton}
           variant="unstyled"
-          size="lg"
+          size="sm"
           icon={<Icon as={AiFillEdit} />}
         />
         <MenuList>
-          <MenuItem onClick={() => navigate(`/formularios/edit?id=${form.id}`)}>
-            Editar
-          </MenuItem>
+          <MenuItem onClick={() => handleRedirect(form.id)}>Editar</MenuItem>
           <MenuItem onClick={() => handleDelete(form.id)}>Excluir</MenuItem>
         </MenuList>
       </Menu>
@@ -58,9 +61,9 @@ export default function FormulariosTable({
       onChangePage={setCurrentPage}
       columns={[
         { content: 'ID', props: { width: '10%' } },
-        { content: 'Nome', props: { width: '45%' } },
+        { content: 'Nome', props: { width: '60%' } },
         { content: 'Criado por', props: { width: '15%' } },
-        { content: 'Última atualizacão', props: { width: '15%' } },
+        { content: 'Última atualizacão', props: { width: '10%' } },
         { content: '', props: { width: '5%' } }
       ]}
       rows={formularios.map(form => [

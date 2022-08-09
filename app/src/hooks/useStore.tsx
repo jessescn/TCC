@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 
-type Entity = 'tipoProcedimento' | 'form' | 'procedimento'
+type Entity = 'tipoProcedimento' | 'formulario' | 'procedimento'
 
 export const useStore = (entities: Entity[]) => {
   useEffect(() => {

@@ -125,7 +125,7 @@ export default function TipoProcedimentos() {
             onClick={() => navigate('/tipo-procedimentos/edit')}
             _hover={{ bgColor: 'primary.default' }}
           >
-            Criar Novo Procedimento
+            Novo Procedimento
           </Button>
         </Flex>
         {tipoProcedimentos.length > 0 ? (

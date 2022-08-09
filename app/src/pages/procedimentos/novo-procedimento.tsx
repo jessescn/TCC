@@ -12,7 +12,9 @@ export default function NovoProcedimento() {
     selectors.tipoProcedimento.getTipoProcedimento(state)(Number(id))
   )
   const formularios = useSelector(state =>
-    selectors.formulario.getFormulariosByProcedimento(state)(tipoProcedimento)
+    selectors.formulario.getFormulariosByTipoProcedimento(state)(
+      tipoProcedimento
+    )
   )
 
   return (

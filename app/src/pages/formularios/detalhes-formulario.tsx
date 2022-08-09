@@ -2,7 +2,7 @@ import { Box, Divider } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
 import Content from 'components/pages/detalhes-formulario/content'
@@ -16,7 +16,11 @@ type FormularioForm = {
 }
 
 export default function Form() {
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+
+  const statusCreate = useSelector(state => state.formulario.statusCreate)
+  const statusUpdate = useSelector(state => state.formulario.statusUpdate)
 
   const id = Number(searchParams.get('id'))
 
@@ -54,6 +58,13 @@ export default function Form() {
 
     alreadyInitializeForm.current = true
   }, [formulario])
+
+  useEffect(() => {
+    if (statusCreate === 'success' || statusUpdate === 'success') {
+      store.dispatch(actions.formulario.resetStatus())
+      navigate('/formularios')
+    }
+  }, [statusCreate, statusUpdate])
 
   return (
     <Screen py="24px">

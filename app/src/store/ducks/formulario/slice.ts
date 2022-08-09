@@ -7,6 +7,8 @@ type Status = 'pristine' | 'loading' | 'success' | 'failure'
 export type State = {
   formularios: FormularioModel[]
   status: Status
+  statusCreate: Status
+  statusUpdate: Status
 }
 
 export type UpdatePayload = {
@@ -22,7 +24,9 @@ export type CreatePayload = {
 
 export const initialState: State = {
   formularios: [],
-  status: 'pristine'
+  status: 'pristine',
+  statusCreate: 'pristine',
+  statusUpdate: 'pristine'
 }
 
 const reducers = {
@@ -37,20 +41,20 @@ const reducers = {
     state.status = 'failure'
   },
   create: (state: State, action: PayloadAction<CreatePayload>) => {
-    state.status = 'loading'
+    state.statusCreate = 'loading'
   },
   createSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
-    state.status = 'success'
+    state.statusCreate = 'success'
     state.formularios = [...state.formularios, action.payload]
   },
   createFailure: (state: State) => {
-    state.status = 'failure'
+    state.statusCreate = 'failure'
   },
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
-    state.status = 'loading'
+    state.statusUpdate = 'loading'
   },
   updateSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
-    state.status = 'success'
+    state.statusUpdate = 'success'
 
     const indexof = state.formularios
       .map(elm => elm.id)
@@ -58,7 +62,7 @@ const reducers = {
     state.formularios.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
-    state.status = 'failure'
+    state.statusUpdate = 'failure'
   },
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'
@@ -71,6 +75,11 @@ const reducers = {
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'
+  },
+  resetStatus: (state: State) => {
+    state.status = 'pristine'
+    state.statusCreate = 'pristine'
+    state.statusUpdate = 'pristine'
   }
 }
 

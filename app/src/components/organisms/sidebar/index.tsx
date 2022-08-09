@@ -130,6 +130,23 @@ const Sidebar = () => {
               }))}
             />
           )}
+          <NavSubItems
+            icon={BsListCheck}
+            title="Coordenação"
+            roles={['admin', 'coordenador']}
+            items={[
+              {
+                title: 'Todos os procedimentos',
+                url: `/coordenacao/procedimentos`,
+                icon: BsCardChecklist
+              },
+              {
+                title: 'Estatísticas Gerais',
+                url: `/coordenacao/estatisticas`,
+                icon: BsClipboardData
+              }
+            ]}
+          />
           <NavItem
             icon={FaVoteYea}
             title="Homologação"
@@ -147,23 +164,6 @@ const Sidebar = () => {
             title="Formulários"
             url="/formularios"
             roles={['admin']}
-          />
-          <NavSubItems
-            icon={BsListCheck}
-            title="Coordenação"
-            roles={['admin', 'coordenador']}
-            items={[
-              {
-                title: 'Todos os procedimentos',
-                url: `/coordenacao/procedimentos`,
-                icon: BsCardChecklist
-              },
-              {
-                title: 'Estatísticas Gerais',
-                url: `/coordenacao/estatisticas`,
-                icon: BsClipboardData
-              }
-            ]}
           />
         </Flex>
         <Flex p="5%" flexDir="column" w="100%" alignItems={'flex-start'} mb={4}>

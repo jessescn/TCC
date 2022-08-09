@@ -16,7 +16,7 @@ type Props = {
 function PrivateRoute({ children, requiredRoles = [] }: Props) {
   const location = useLocation()
 
-  useStore(['tipoProcedimento', 'form', 'procedimento'])
+  useStore(['tipoProcedimento', 'formulario', 'procedimento'])
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
 
