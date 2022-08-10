@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 import { sequelize } from 'database'
 import Procedimento, { ProcedimentoModel } from 'models/procedimento'
-import User from 'models/user'
+import User, { UserModel } from 'models/user'
 import {
   CreationOptional,
   DataTypes,
@@ -21,6 +21,7 @@ export interface ComentarioModel
   conteudo: string
   deleted: CreationOptional<boolean>
   procedimento?: ProcedimentoModel
+  user?: UserModel
   createdAt?: Date
   updatedAt?: Date
 }

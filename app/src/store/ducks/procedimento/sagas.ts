@@ -42,8 +42,6 @@ function* createSaga(action: PayloadAction<CreatePayload>) {
       ProcedimentoService.create(action.payload)
     )
 
-    console.log(response.data)
-
     yield put(actions.createSuccess(response.data))
   } catch (error) {
     yield put(actions.createFailure())

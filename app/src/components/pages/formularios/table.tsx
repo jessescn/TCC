@@ -69,7 +69,7 @@ export default function FormulariosTable({
       rows={formularios.map(form => [
         { content: form.id },
         { content: form.nome },
-        { content: form.createdBy?.nome || '-' },
+        { content: form.user?.nome || '-' },
         {
           content: !form.updatedAt ? '-' : formatDate(form.updatedAt)
         },

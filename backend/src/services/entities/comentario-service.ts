@@ -1,7 +1,7 @@
 import Comentario, { ComentarioModel } from 'models/comentario'
 import Procedimento from 'models/procedimento'
 import User from 'models/user'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
 export type CreateComentario = {
@@ -10,13 +10,20 @@ export type CreateComentario = {
   createdBy: number
 }
 
+const includeableUser: Includeable = {
+  model: User,
+  as: 'user',
+  required: false,
+  attributes: ['nome', 'email']
+}
+
 export type ComentarioQuery = WhereOptions<InferAttributes<ComentarioModel>>
 
 export const ComentarioService = {
   getById: async function (id: number) {
     const comentario = await Comentario.findOne({
       where: { id, deleted: false },
-      include: [User, Procedimento]
+      include: [includeableUser, Procedimento]
     })
 
     if (!comentario) {
@@ -27,21 +34,25 @@ export const ComentarioService = {
   },
   getAll: async function (query: ComentarioQuery = {}) {
     const comentarios = await Comentario.findAll({
-      include: [User, Procedimento],
+      include: [includeableUser, Procedimento],
       where: { deleted: false, ...query }
     })
     return comentarios
   },
   create: async function (data: CreateComentario) {
-    const newComentario = await Comentario.create(data, {
-      include: [User, Procedimento]
+    const { id } = await Comentario.create(data)
+
+    const resource = await Comentario.findOne({
+      where: { id },
+      include: [includeableUser, Procedimento]
     })
-    return newComentario
+
+    return resource
   },
   update: async function (id: number, data: any) {
     const comentario = await Comentario.findOne({
       where: { id, deleted: false },
-      include: [User, Procedimento]
+      include: [includeableUser, Procedimento]
     })
 
     if (!comentario) {
@@ -57,7 +68,7 @@ export const ComentarioService = {
   destroy: async function (id: number) {
     const comentario = await Comentario.findOne({
       where: { id, deleted: false },
-      include: [User, Procedimento]
+      include: [includeableUser, Procedimento]
     })
 
     if (!comentario) {

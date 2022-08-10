@@ -25,5 +25,6 @@ export interface FormularioModel {
   campos: CampoFormulario[]
   createdAt?: string
   updatedAt?: string
-  createdBy?: UserModel
+  createdBy?: number
+  user?: UserModel
 }

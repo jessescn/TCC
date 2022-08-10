@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Divider,
   Drawer,
   DrawerContent,
@@ -62,7 +63,7 @@ const Sidebar = () => {
       finalFocusRef={btnRef}
     >
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent p={0}>
         <Flex
           bgColor="initial.white"
           pos="sticky"
@@ -77,8 +78,6 @@ const Sidebar = () => {
             w="100%"
             alignItems={'flex-start'}
             as="nav"
-            overflowY="auto"
-            css={invisibleStyle}
           >
             <Flex alignItems="center" mb="24px">
               <IconButton
@@ -106,58 +105,65 @@ const Sidebar = () => {
                 Computação UFCG
               </Text>
             </Flex>
-            <NavItem icon={FiHome} title="Página inicial" url="/" />
-            <NavItem
-              icon={BsCardChecklist}
-              title="Meus procedimentos"
-              url="/meus-procedimentos"
-            />
-            {procedimentosAbertos.length > 0 && (
+            <Box
+              overflowY="scroll"
+              h="calc(100vh - 220px)"
+              w="100%"
+              css={invisibleStyle}
+            >
+              <NavItem icon={FiHome} title="Página inicial" url="/" />
+              <NavItem
+                icon={BsCardChecklist}
+                title="Meus procedimentos"
+                url="/meus-procedimentos"
+              />
+              {procedimentosAbertos.length > 0 && (
+                <NavSubItems
+                  icon={BsListCheck}
+                  title="Abrir Procedimento"
+                  items={procedimentosAbertos.map(tipoProcedimento => ({
+                    title: tipoProcedimento.nome,
+                    url: `/novo-procedimento/${tipoProcedimento.id}`,
+                    icon: FiCornerDownRight
+                  }))}
+                />
+              )}
               <NavSubItems
                 icon={BsListCheck}
-                title="Abrir Procedimento"
-                items={procedimentosAbertos.map(tipoProcedimento => ({
-                  title: tipoProcedimento.nome,
-                  url: `/novo-procedimento/${tipoProcedimento.id}`,
-                  icon: FiCornerDownRight
-                }))}
+                title="Coordenação"
+                roles={['admin', 'coordenador']}
+                items={[
+                  {
+                    title: 'Todos os procedimentos',
+                    url: `/coordenacao/procedimentos`,
+                    icon: BsCardChecklist
+                  },
+                  {
+                    title: 'Estatísticas Gerais',
+                    url: `/coordenacao/estatisticas`,
+                    icon: BsClipboardData
+                  }
+                ]}
               />
-            )}
-            <NavSubItems
-              icon={BsListCheck}
-              title="Coordenação"
-              roles={['admin', 'coordenador']}
-              items={[
-                {
-                  title: 'Todos os procedimentos',
-                  url: `/coordenacao/procedimentos`,
-                  icon: BsCardChecklist
-                },
-                {
-                  title: 'Estatísticas Gerais',
-                  url: `/coordenacao/estatisticas`,
-                  icon: BsClipboardData
-                }
-              ]}
-            />
-            <NavItem
-              icon={FaVoteYea}
-              title="Homologação"
-              url="/colegiado/procedimentos"
-              roles={['admin', 'colegiado']}
-            />
-            <NavItem
-              icon={AiOutlineFileAdd}
-              title="procedimentos Cadastrados"
-              url="/tipo-procedimentos"
-              roles={['admin']}
-            />
-            <NavItem
-              icon={AiOutlineForm}
-              title="Formulários"
-              url="/formularios"
-              roles={['admin']}
-            />
+              <NavItem
+                icon={FaVoteYea}
+                title="Homologação"
+                url="/colegiado/procedimentos"
+                roles={['admin', 'colegiado']}
+              />
+              <NavItem
+                icon={AiOutlineFileAdd}
+                title="procedimentos Cadastrados"
+                url="/tipo-procedimentos"
+                roles={['admin']}
+              />
+              <NavItem
+                icon={AiOutlineForm}
+                title="Formulários"
+                url="/formularios"
+                roles={['admin']}
+              />
+            </Box>
           </Flex>
           <Flex
             p="5%"

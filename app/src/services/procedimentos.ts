@@ -19,6 +19,10 @@ export type Vote = {
   aprovado: boolean
 }
 
+export type DeleteVote = {
+  autor: number
+}
+
 export type StatusPayload = {
   status: string
 }
@@ -58,14 +62,21 @@ export const ProcedimentoService = {
   vote: (procedimentoId: number, payload: Vote) => {
     return httpClient.request<AxiosResponse<ProcedimentoModel>>({
       method: 'post',
-      url: `/procedimentos/${procedimentoId}/vote`,
+      url: `/colegiado/${procedimentoId}/vote`,
+      body: payload
+    })
+  },
+  deleteVote: (procedimentoId: number, payload: DeleteVote) => {
+    return httpClient.request<AxiosResponse<ProcedimentoModel>>({
+      method: 'delete',
+      url: `/colegiado/${procedimentoId}/vote`,
       body: payload
     })
   },
   comments: (procedimentoId: number) => {
     return httpClient.request<AxiosResponse<ComentarioModel[]>>({
       method: 'get',
-      url: `/procedimentos/${procedimentoId}/comentarios`
+      url: `/colegiado/${procedimentoId}/comentarios`
     })
   },
   updateStatus: (procedimentoId: number, payload: StatusPayload) => {

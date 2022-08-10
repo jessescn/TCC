@@ -41,10 +41,21 @@ function PrivateRoute({ children, requiredRoles = [] }: Props) {
   }
 
   return (
-    <Box>
-      <Header />
-      <Sidebar />
-      <Flex onClick={closeSidebar}>{children}</Flex>
+    <Box position="relative">
+      <Box position="absolute" top="0" left="0" right="0">
+        <Header />
+      </Box>
+      <Box
+        position="absolute"
+        top="72px"
+        left="0"
+        right="0"
+        overflowY="scroll"
+        height="calc(100vh - 72px)"
+      >
+        <Sidebar />
+        <Flex onClick={closeSidebar}>{children}</Flex>
+      </Box>
     </Box>
   )
 }

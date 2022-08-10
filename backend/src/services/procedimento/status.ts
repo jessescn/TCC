@@ -11,6 +11,14 @@ import User, { UserModel } from 'models/user'
 import { UsuarioService } from 'services/entities/usuario-service'
 import { NodeMailer } from 'services/mail'
 import templates from 'services/mail/templates'
+import { Includeable } from 'sequelize/types'
+
+const includeableUser: Includeable = {
+  model: User,
+  as: 'user',
+  required: false,
+  attributes: ['nome', 'email', 'id']
+}
 
 export const isProcedimentoAprovado = (votes: VotoProcedimento[]) => {
   const positive = votes.filter(vote => vote.aprovado).length
@@ -130,7 +138,7 @@ export const changeProcedimentoStatus = async (
 ): Promise<ProcedimentoModel> => {
   const procedimento = await Procedimento.findOne({
     where: { id: procedimentoId, deleted: false },
-    include: [TipoProcedimento, Comentario, User]
+    include: [TipoProcedimento, Comentario, includeableUser]
   })
 
   const autor = await UsuarioService.getById(procedimento.createdBy)

@@ -1,5 +1,4 @@
 import TipoProcedimento from 'models/tipo-procedimento'
-import User from 'models/user'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 import { TipoProcedimentoModel } from '../../models/tipo-procedimento'
@@ -23,8 +22,7 @@ export const TipoProcedimentoService = {
   },
   getById: async function (id: number) {
     const tipoProcedimento = await TipoProcedimento.findOne({
-      where: { id, deleted: false },
-      include: User
+      where: { id, deleted: false }
     })
 
     if (!tipoProcedimento) {
@@ -37,15 +35,13 @@ export const TipoProcedimentoService = {
     query: WhereOptions<InferAttributes<TipoProcedimentoModel>> = {}
   ) {
     const tipoProcedimentos = await TipoProcedimento.findAll({
-      include: User,
       where: { deleted: false, ...query }
     })
     return tipoProcedimentos
   },
   update: async function (id: number, data: any) {
     const updatedTipoProcedimento = await TipoProcedimento.findOne({
-      where: { id, deleted: false },
-      include: User
+      where: { id, deleted: false }
     })
 
     if (!updatedTipoProcedimento) {
@@ -60,8 +56,7 @@ export const TipoProcedimentoService = {
   },
   destroy: async function (id: number) {
     const tipoProcedimento = await TipoProcedimento.findOne({
-      where: { id, deleted: false },
-      include: User
+      where: { id, deleted: false }
     })
 
     if (!tipoProcedimento) {

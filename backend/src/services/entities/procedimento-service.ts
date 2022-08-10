@@ -10,7 +10,7 @@ import Procedimento, {
 } from 'models/procedimento'
 import TipoProcedimento from 'models/tipo-procedimento'
 import User, { UserModel } from 'models/user'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
 import {
   isProcedimentoAprovado,
   changeProcedimentoStatus
@@ -51,11 +51,18 @@ const isMaioria = (votes: VotoProcedimento[]) => {
   return numberOfVotes >= Math.floor(numberOfColegiados / 2) // TODO; O que acontece quando a quantidade for par?
 }
 
+const includeableUser: Includeable = {
+  model: User,
+  as: 'user',
+  required: false,
+  attributes: ['nome', 'email', 'id']
+}
+
 export const ProcedimentoService = {
   getById: async function (id: number) {
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
-      include: [TipoProcedimento, Comentario, User]
+      include: [TipoProcedimento, Comentario, includeableUser]
     })
 
     if (!procedimento) {
@@ -66,7 +73,7 @@ export const ProcedimentoService = {
   },
   getAll: async function (query: ProcedimentoQuery = {}) {
     const procedimentos = await Procedimento.findAll({
-      include: [TipoProcedimento, Comentario, User],
+      include: [TipoProcedimento, Comentario, includeableUser],
       where: { deleted: false, ...query }
     })
 
@@ -108,7 +115,8 @@ export const ProcedimentoService = {
     const { permission, user } = credentials
 
     const procedimento = await Procedimento.findOne({
-      where: { id, deleted: false }
+      where: { id, deleted: false },
+      include: [TipoProcedimento, Comentario, includeableUser]
     })
 
     if (!procedimento) {
@@ -135,7 +143,8 @@ export const ProcedimentoService = {
     const { permission, user } = credentials
 
     const procedimento = await Procedimento.findOne({
-      where: { id, deleted: false }
+      where: { id, deleted: false },
+      include: [TipoProcedimento, Comentario, includeableUser]
     })
 
     if (!procedimento) {
@@ -155,7 +164,7 @@ export const ProcedimentoService = {
   vote: async function (id: number, newVote: VotoProcedimento) {
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
-      include: [TipoProcedimento, Comentario, User]
+      include: [TipoProcedimento, Comentario, includeableUser]
     })
 
     if (!procedimento) {
@@ -203,7 +212,8 @@ export const ProcedimentoService = {
   },
   removeVote: async function (id: number, autor: number) {
     const procedimento = await Procedimento.findOne({
-      where: { id, deleted: false }
+      where: { id, deleted: false },
+      include: [TipoProcedimento, Comentario, includeableUser]
     })
 
     if (!procedimento) {
@@ -234,7 +244,7 @@ export const ProcedimentoService = {
   newRevisao: async function (id: number, revisao: Revisao) {
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
-      include: [TipoProcedimento, Comentario, User]
+      include: [TipoProcedimento, Comentario, includeableUser]
     })
 
     if (!procedimento) {

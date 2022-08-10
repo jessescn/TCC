@@ -1,6 +1,6 @@
 import Formulario, { FormularioModel, CampoFormulario } from 'models/formulario'
 import User from 'models/user'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
 
 export type CreateFormulario = {
@@ -9,13 +9,20 @@ export type CreateFormulario = {
   createdBy: number
 }
 
+const includeableUser: Includeable = {
+  model: User,
+  as: 'user',
+  required: false,
+  attributes: ['nome', 'email']
+}
+
 export type FormularioQuery = WhereOptions<InferAttributes<FormularioModel>>
 
 export const FormularioService = {
   getById: async function (id: number) {
     const formulario = await Formulario.findOne({
       where: { id, deleted: false },
-      include: User
+      include: includeableUser
     })
 
     if (!formulario) {
@@ -26,7 +33,7 @@ export const FormularioService = {
   },
   getAll: async function (query: FormularioQuery = {}) {
     const formularios = await Formulario.findAll({
-      include: User,
+      include: includeableUser,
       where: { deleted: false, ...query }
     })
     return formularios
@@ -38,7 +45,7 @@ export const FormularioService = {
   update: async function (id: number, data: any) {
     const formulario = await Formulario.findOne({
       where: { id, deleted: false },
-      include: User
+      include: includeableUser
     })
 
     if (!formulario) {
@@ -54,7 +61,7 @@ export const FormularioService = {
   destroy: async function (id: number) {
     const formulario = await Formulario.findOne({
       where: { id, deleted: false },
-      include: User
+      include: includeableUser
     })
 
     if (!formulario) {

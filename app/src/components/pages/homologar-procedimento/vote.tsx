@@ -21,7 +21,7 @@ type Props = {
 }
 
 const Votes = ({ procedimento }: Props) => {
-  const isColegiado = false
+  const isColegiado = useSelector(selectors.session.is)('colegiado')
 
   const currentStatus = getCurrentStatus(procedimento)
 

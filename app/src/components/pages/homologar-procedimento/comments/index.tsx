@@ -34,8 +34,6 @@ const Comments = ({ procedimento }: Props) => {
 
     const novoComentario = response.data as any
 
-    console.log(novoComentario)
-
     setComentarios(prev => [...prev, novoComentario])
     setIsLoading(false)
     setValue('')
@@ -68,7 +66,7 @@ const Comments = ({ procedimento }: Props) => {
       <Text fontWeight="bold" mb="20px">
         Comentários
       </Text>
-      <Stack spacing="16px" overflowY="auto" height="90%" w="100%" pr="8px">
+      <Stack spacing="16px" overflowY="auto" height="85%" w="100%" pr="8px">
         {comentarios.length === 0 && (
           <Text fontSize="12px">Nenhum comentário</Text>
         )}
