@@ -49,7 +49,7 @@ export type Revisao = {
   comentario: string
   data: string
   autor: number
-  campos: CampoInvalido
+  campos: CampoInvalido[]
 }
 
 export interface ProcedimentoModel {

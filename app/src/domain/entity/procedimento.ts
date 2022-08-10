@@ -1,3 +1,5 @@
+import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
+import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import {
   ProcedimentoModel,
   Resposta,
@@ -6,6 +8,39 @@ import {
 import { getCurrentStatus } from 'utils/procedimento'
 
 export class Procedimento {
+  static getRevisao = (procedimento: ProcedimentoModel) => {
+    if (procedimento.revisoes.length === 0) return
+
+    return procedimento.revisoes[procedimento.revisoes.length - 1]
+  }
+
+  static getCamposInvalidos = (
+    procedimento: ProcedimentoModel,
+    formularios: FormularioModel[]
+  ): CustomCampoInvalido[] => {
+    const campos: Map<number, CampoFormulario> = new Map()
+
+    formularios.forEach(formulario => {
+      formulario.campos.forEach(campo => campos.set(campo.ordem, campo))
+    })
+
+    const revisao = this.getRevisao(procedimento)
+
+    if (!revisao) {
+      return []
+    }
+
+    return revisao.campos.reduce((camposRevisao, campoRevisao) => {
+      const campoFormulario = campos.get(campoRevisao.ordem)
+
+      if (!campoFormulario) {
+        return camposRevisao
+      }
+
+      return [...camposRevisao, { ...campoRevisao, campo: campoFormulario }]
+    }, [] as CustomCampoInvalido[])
+  }
+
   static filterByCreatedBy(
     procedimentos: ProcedimentoModel[],
     createdBy: number
@@ -34,7 +69,7 @@ export class Procedimento {
 
       const lastStatus = getCurrentStatus(procedimento)
 
-      if (term.includes(lastStatus)) return true
+      if (lastStatus && term.includes(lastStatus)) return true
 
       const terms = term.split(' ')
       let includes = false

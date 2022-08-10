@@ -55,7 +55,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
           return [
             { content: procedimento.id },
             { content: procedimento.tipo_procedimento?.nome },
-            { content: statusList[status].label },
+            { content: status ? statusList[status].label : '-' },
             {
               content: procedimento.tipo_procedimento?.formularios.length || 0
             },

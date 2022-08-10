@@ -22,17 +22,16 @@ const Content = ({ tipoProcedimento }: Props) => {
 
   return (
     <Stack spacing="24px">
-      <Flex alignItems="center">
-        <Text fontSize="14px" fontWeight="bold">
+      <Box alignItems="center">
+        <Text fontSize="14px" mb="8px" fontWeight="bold">
           Nome:
         </Text>
         <Input
           defaultValue={tipoProcedimento?.nome}
           size="sm"
-          ml="8px"
           {...register('nome')}
         />
-      </Flex>
+      </Box>
       <Box>
         <Text fontSize="14px" mb="8px" fontWeight="bold">
           Descricão:

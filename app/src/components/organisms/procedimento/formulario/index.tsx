@@ -1,13 +1,10 @@
-import { Button, Flex, useDisclosure } from '@chakra-ui/react'
+import { Button, Collapse, Flex, Icon, useDisclosure } from '@chakra-ui/react'
 import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
-import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import {
-  CampoInvalido,
-  ProcedimentoModel,
-  Resposta
-} from 'domain/models/procedimento'
+import { FormularioModel } from 'domain/models/formulario'
+import { ProcedimentoModel, Resposta } from 'domain/models/procedimento'
 import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { BsChevronBarExpand, BsChevronExpand } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 import SaveChangesModal from './modals/save-changes'
@@ -32,6 +29,8 @@ export default function Formulario({
   camposInvalidos = [],
   handleInvalidate
 }: Props) {
+  const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true })
+
   const navigate = useNavigate()
   const statusUpdate = useSelector(state => state.procedimento.status)
   const saveChangesModalControls = useDisclosure()
@@ -58,32 +57,48 @@ export default function Formulario({
   }, [statusUpdate])
 
   return (
-    <FormProvider {...methods}>
-      <form
-        id="procedimento-form"
-        onSubmit={methods.handleSubmit(updateResposta)}
-      >
-        <RenderContent
-          formulario={formulario}
-          editable={editable}
-          camposInvalidos={camposInvalidos}
-          handleInvalidate={handleInvalidate}
-        />
-        {editable && !handleInvalidate && (
-          <Flex justifyContent="flex-end" mt="16px">
-            <Button
-              bgColor="primary.dark"
-              color="initial.white"
-              display="block"
-              size="sm"
-              onClick={saveChangesModalControls.onOpen}
-            >
-              Salvar alterações
-            </Button>
-          </Flex>
-        )}
-        <SaveChangesModal {...saveChangesModalControls} />
-      </form>
-    </FormProvider>
+    <>
+      <Flex justifyContent="flex-end" mb="8px">
+        <Button
+          size="xs"
+          onClick={onToggle}
+          _focus={{ boxShadow: 'none' }}
+          rightIcon={
+            <Icon as={isOpen ? BsChevronBarExpand : BsChevronExpand} />
+          }
+        >
+          {isOpen ? 'Ocultar formulário' : 'Expandir formulário'}
+        </Button>
+      </Flex>
+      <Collapse in={isOpen} animateOpacity>
+        <FormProvider {...methods}>
+          <form
+            id="procedimento-form"
+            onSubmit={methods.handleSubmit(updateResposta)}
+          >
+            <RenderContent
+              formulario={formulario}
+              editable={editable}
+              camposInvalidos={camposInvalidos}
+              handleInvalidate={handleInvalidate}
+            />
+          </form>
+        </FormProvider>
+      </Collapse>
+      {editable && !handleInvalidate && (
+        <Flex justifyContent="flex-end" mt="16px">
+          <Button
+            bgColor="primary.dark"
+            color="initial.white"
+            display="block"
+            size="sm"
+            onClick={saveChangesModalControls.onOpen}
+          >
+            Salvar alterações
+          </Button>
+        </Flex>
+      )}
+      <SaveChangesModal {...saveChangesModalControls} />
+    </>
   )
 }

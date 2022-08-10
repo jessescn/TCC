@@ -16,7 +16,7 @@ const DetalhesProcedimento = () => {
   )
 
   return (
-    <Screen py="24px" h="calc(100vh - 72px)">
+    <Screen py="24px">
       {!procedimento ? (
         <Flex justifyContent="center">
           <Spinner />

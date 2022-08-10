@@ -8,7 +8,7 @@ import {
   ProcedimentoModel,
   ProcedimentoStatus
 } from 'domain/models/procedimento'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
@@ -38,6 +38,10 @@ export default function Content({ formularios, procedimento }: Props) {
   const [camposInvalidos, setCamposInvalidos] = useState<CustomCampoInvalido[]>(
     []
   )
+
+  const handleClearInvalidations = useCallback(() => {
+    setCamposInvalidos([])
+  }, [])
 
   const handleInvalidateField = (campo: CustomCampoInvalido) => {
     const idx = camposInvalidos.findIndex(
@@ -86,14 +90,14 @@ export default function Content({ formularios, procedimento }: Props) {
   useEffect(() => {
     if (statusUpdateStatus === 'success' || statusRevisao === 'success') {
       store.dispatch(actions.procedimento.resetStatus())
-      navigate('/coordenacao/orocedimentos')
+      navigate('/coordenacao/procedimentos')
     }
   }, [statusUpdateStatus, statusRevisao])
 
   return (
     <Box h="100%">
       <Header
-        procedimentoId={procedimento.id}
+        procedimento={procedimento}
         status={getCurrentStatus(procedimento)}
       />
       <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
@@ -101,9 +105,18 @@ export default function Content({ formularios, procedimento }: Props) {
         formularios={formularios}
         procedimento={procedimento}
         camposInvalidos={camposInvalidos}
-        handleInvalidateField={handleInvalidateField}
+        onInvalidateField={handleInvalidateField}
       />
-      <Flex justifyContent="flex-end" mt="16px">
+      <Flex justifyContent="flex-end" mt="16px" alignItems="center">
+        <Button
+          size="xs"
+          _focus={{ boxShadow: 'none' }}
+          variant="unstyled"
+          mr="8px"
+          onClick={handleClearInvalidations}
+        >
+          Limpar correção
+        </Button>
         <Button
           borderColor="info.error"
           borderWidth="1px"
@@ -111,7 +124,7 @@ export default function Content({ formularios, procedimento }: Props) {
           bgColor="initial.white"
           color="info.error"
           _hover={{ color: 'initial.white', bgColor: 'info.error' }}
-          mr="8px"
+          mx="8px"
           disabled={camposInvalidos.length === 0}
           onClick={invalidModalControls.onOpen}
           isLoading={statusUpdateStatus === 'loading'}

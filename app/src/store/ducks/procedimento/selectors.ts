@@ -14,8 +14,8 @@ export const getProcedimentos = createSelector([getRoot], state => {
 
 export const getProcedimentoById = createSelector(
   [getProcedimentos],
-  Procedimentos => (id: number) => {
-    return Procedimentos.find(Procedimento => Procedimento.id === id)
+  procedimentos => (id: number) => {
+    return procedimentos.find(procedimento => procedimento.id === id)
   }
 )
 
@@ -57,7 +57,7 @@ export const getMeusProcedimentosBySearch = createSelector(
 
 export const getProcedimentosBySearch = createSelector(
   [getProcedimentos],
-  Procedimentos => {
-    return (search: string) => Procedimento.search(Procedimentos, search)
+  procedimentos => {
+    return (search: string) => Procedimento.search(procedimentos, search)
   }
 )

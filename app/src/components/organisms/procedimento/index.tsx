@@ -1,14 +1,14 @@
 import { Box, Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
 import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
 import { FormularioModel } from 'domain/models/formulario'
-import { CampoInvalido, ProcedimentoModel } from 'domain/models/procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 import { useState } from 'react'
 import Formulario from './formulario'
 
 type Props = {
   procedimento: ProcedimentoModel
   formularios: FormularioModel[]
-  handleInvalidateField?: (campo: CustomCampoInvalido) => void
+  onInvalidateField?: (campo: CustomCampoInvalido) => void
   camposInvalidos?: CustomCampoInvalido[]
   editable?: boolean
 }
@@ -18,7 +18,7 @@ export default function Procedimento({
   procedimento,
   camposInvalidos = [],
   editable = false,
-  handleInvalidateField
+  onInvalidateField
 }: Props) {
   const [formularioSelecionado, setFormularioSelecionado] = useState(
     formularios[0]
@@ -69,7 +69,7 @@ export default function Procedimento({
             editable={editable}
             formulario={formularioSelecionado}
             procedimento={procedimento}
-            handleInvalidate={handleInvalidateField}
+            handleInvalidate={onInvalidateField}
             camposInvalidos={camposInvalidos}
           />
         )}

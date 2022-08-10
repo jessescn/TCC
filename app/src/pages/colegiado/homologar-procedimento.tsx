@@ -58,7 +58,7 @@ const HomologarProcedimento = () => {
           >
             <Box height="50px">
               <Header
-                procedimentoId={procedimento.id}
+                procedimento={procedimento}
                 status={getCurrentStatus(procedimento)}
               />
             </Box>

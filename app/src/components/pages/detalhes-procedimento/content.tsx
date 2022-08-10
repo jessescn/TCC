@@ -1,6 +1,7 @@
 import { Box, Divider } from '@chakra-ui/react'
-import Procedimento from 'components/organisms/procedimento'
+import RenderProcedimento from 'components/organisms/procedimento'
 import Header from 'components/organisms/procedimento/header'
+import { Procedimento } from 'domain/entity/procedimento'
 import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { getCurrentStatus } from 'utils/procedimento'
@@ -13,18 +14,23 @@ type Props = {
 const Content = ({ procedimento, formularios }: Props) => {
   const status = getCurrentStatus(procedimento)
   const isEditable = status === 'correcoes_pendentes'
+  const camposInvalidos = Procedimento.getCamposInvalidos(
+    procedimento,
+    formularios
+  )
 
   return (
-    <Box h="100%">
+    <Box>
       <Header
-        procedimentoId={procedimento.id}
+        procedimento={procedimento}
         status={getCurrentStatus(procedimento)}
       />
       <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-      <Procedimento
+      <RenderProcedimento
         formularios={formularios}
         procedimento={procedimento}
         editable={isEditable}
+        camposInvalidos={camposInvalidos}
       />
     </Box>
   )
