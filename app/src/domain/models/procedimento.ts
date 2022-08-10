@@ -48,7 +48,7 @@ export type Status = {
 export type Revisao = {
   comentario: string
   data: string
-  autor: number
+  autor: UserModel
   campos: CampoInvalido[]
 }
 

@@ -1,11 +1,11 @@
 import {
+  Box,
   Flex,
   Icon,
   IconButton,
   Popover,
   PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger as OrigPopoverTrigger,
@@ -48,9 +48,18 @@ const Header = ({ procedimento, status }: Props) => {
           <PopoverContent fontSize="14px" _focus={{ boxShadow: 'none' }}>
             <PopoverArrow />
             <PopoverHeader fontWeight="bold">
-              Revisor: {revisao.autor}
+              Revisor: {revisao.autor.nome || revisao.autor.email}
             </PopoverHeader>
-            <PopoverBody>{revisao.comentario}</PopoverBody>
+            <PopoverBody>
+              <Box>
+                <Text fontSize="12px" fontWeight="bold">
+                  Comentário:
+                </Text>
+                <Text fontSize="12px" mt="8px">
+                  {revisao.comentario}
+                </Text>
+              </Box>
+            </PopoverBody>
           </PopoverContent>
         </Portal>
       </Popover>

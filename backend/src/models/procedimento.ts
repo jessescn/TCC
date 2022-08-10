@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import User from 'models/user'
+import User, { UserModel } from 'models/user'
 import {
   CreationOptional,
   DataTypes,
@@ -57,7 +57,7 @@ export type Status = {
 export type Revisao = {
   comentario: string
   data: string
-  autor: number
+  autor: UserModel
   campos: CampoInvalido[]
 }
 

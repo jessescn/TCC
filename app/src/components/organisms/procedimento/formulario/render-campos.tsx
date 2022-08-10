@@ -51,6 +51,8 @@ export default function RenderContent({
         const Componente = campoComponente[campo.tipo]
         const isInvalido = !!camposInvalidosMap.get(campo.ordem)
 
+        const isParagrafo = campo.tipo === 'paragrafo'
+
         const handleInvalideField = () => {
           if (!handleInvalidate) return
 
@@ -64,20 +66,28 @@ export default function RenderContent({
         return (
           <Box
             key={campo.ordem}
-            borderColor={isInvalido ? 'info.error' : 'initial.white'}
+            borderColor={
+              editable && isInvalido && !isParagrafo
+                ? 'info.error'
+                : 'initial.white'
+            }
             bgColor="initial.white"
             borderWidth="1px"
             borderRadius="4px"
             p="16px"
           >
-            <Componente
-              {...campo}
-              editable={editable}
-              onUpdateResposta={handleUpdateResposta}
-              formulario={formulario}
-              onInvalide={handleInvalidate ? handleInvalideField : undefined}
-              isInvalido={isInvalido}
-            />
+            {isParagrafo ? (
+              <Componente {...campo} formulario={formulario} />
+            ) : (
+              <Componente
+                {...campo}
+                editable={editable}
+                onUpdateResposta={handleUpdateResposta}
+                formulario={formulario}
+                onInvalide={handleInvalidate ? handleInvalideField : undefined}
+                isInvalido={(editable || handleInvalidate) && isInvalido}
+              />
+            )}
           </Box>
         )
       })}

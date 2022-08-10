@@ -220,7 +220,7 @@ export const ProcedimentoController = {
       const revisao: Revisao = {
         ...data,
         data: new Date().toISOString(),
-        autor: req.user.id
+        autor: req.user
       }
 
       await ProcedimentoService.newRevisao(Number(id), revisao)
