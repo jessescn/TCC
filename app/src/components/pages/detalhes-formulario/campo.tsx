@@ -70,9 +70,11 @@ export default function Campo({
       <Stack direction="row" spacing="16px" my="8px" px="16px">
         {campo.tipo !== 'paragrafo' && (
           <Input
-            placeholder="Pergunta"
+            placeholder="Digite a pergunta do campo"
             size="sm"
-            defaultValue={campo.configuracao_campo.titulo}
+            defaultValue={
+              campo.configuracao_campo.titulo || 'Texto nova pergunta'
+            }
             onChange={handleUpdateTitle}
           />
         )}

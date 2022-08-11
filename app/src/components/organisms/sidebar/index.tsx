@@ -153,7 +153,7 @@ const Sidebar = () => {
               />
               <NavItem
                 icon={AiOutlineFileAdd}
-                title="procedimentos Cadastrados"
+                title="Tipo de Procedimentos"
                 url="/tipo-procedimentos"
                 roles={['admin']}
               />

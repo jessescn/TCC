@@ -110,8 +110,8 @@ export const ProcedimentoController = {
 
       const updatedProcedimento = await ProcedimentoService.update(
         Number(id),
-        data,
-        credentials
+        credentials,
+        data
       )
 
       if (
