@@ -4,11 +4,13 @@ import { Sequelize } from 'sequelize'
 const username = process.env.POSTGRES_USER
 const password = process.env.POSTGRES_PASSWORD
 const database = process.env.POSTGRES_DB
+const host = process.env.POSTGRES_HOST
 
-const sequelize = new Sequelize(
-  `postgresql://${username}:${password}@localhost:5432/${database}`,
-  { dialect: 'postgres' }
-)
+const uri = `postgresql://${username}:${password}@${host}:5432/${database}`
+
+const sequelize = new Sequelize(uri, {
+  dialect: 'postgres'
+})
 
 const connect = async () => {
   try {
