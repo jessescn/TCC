@@ -1,15 +1,17 @@
 /* istanbul ignore file */
-import { Sequelize } from 'sequelize'
+import { Dialect, Sequelize } from 'sequelize'
 
-const username = process.env.POSTGRES_USER
-const password = process.env.POSTGRES_PASSWORD
-const database = process.env.POSTGRES_DB
-const host = process.env.POSTGRES_HOST
+const username = process.env.DB_USER
+const password = process.env.DB_PASSWORD
+const database = process.env.DB_NAME
+const host = process.env.DB_HOST
+const port = process.env.DB_PORT
+const dialect = process.env.DB_DIALECT as Dialect
 
-const uri = `postgresql://${username}:${password}@${host}:5432/${database}`
+const uri = `postgresql://${username}:${password}@${host}:${port}/${database}`
 
 const sequelize = new Sequelize(uri, {
-  dialect: 'postgres'
+  dialect
 })
 
 const connect = async () => {

@@ -6,6 +6,10 @@ import {
   UnauthorizedError
 } from 'types/express/errors'
 
+export interface Controller {
+  exec: (req: Request, res: Response) => Promise<void>
+}
+
 export interface CrudController {
   create: (req: Request, res: Response) => Promise<void>
   read: (req: Request, res: Response) => Promise<void>
@@ -32,10 +36,29 @@ export const checkPermissionResource = (
   }
 }
 
-export const validateMandatoryFields = (fields: string[], data: any) => {
+export const validateMandatoryFields = (
+  fields: string[],
+  data: any,
+  message?: string
+) => {
   fields.forEach(field => {
     if (!data[field]) {
-      throw new BadRequestError()
+      throw new BadRequestError(message)
     }
   })
+}
+
+export const checkIncludesInvalidFields = (
+  fields: string[],
+  data: any,
+  message?: string
+) => {
+  let hasInvalidFields = false
+  Object.keys(data).forEach(key => {
+    if (!fields.includes(key)) {
+      hasInvalidFields = true
+    }
+  })
+
+  return hasInvalidFields
 }

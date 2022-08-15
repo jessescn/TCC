@@ -1,11 +1,16 @@
-import { TipoProcedimentoController } from './controllers/tipo-procedimento'
-import { ComentarioController } from './controllers/comentario'
 import { FormularioController } from 'controllers/formulario'
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
-import { UsuarioController } from './controllers/usuario'
-import { ProcedimentoController } from './controllers/procedimento'
 import { ColegiadoController } from './controllers/colegiado'
+import { ProcedimentoController } from './controllers/procedimento'
+import { TipoProcedimentoController } from './controllers/tipo-procedimento'
+import { UsuarioController } from './controllers/usuario'
+
+import { CreateComentarioController } from 'controllers/comentario/create'
+import { DeleteComentarioController } from 'controllers/comentario/delete'
+import { ReadComentarioController } from 'controllers/comentario/read'
+import { ReadOneComentarioController } from 'controllers/comentario/read-one'
+import { UpdateComentarioController } from 'controllers/comentario/update'
 
 import auth from './middlewares/authorization'
 import permissions from './middlewares/permissions'
@@ -51,10 +56,10 @@ routes.post('/tipo-procedimentos', TipoProcedimentoController.create)
 routes.put('/tipo-procedimentos/:id', TipoProcedimentoController.update)
 routes.delete('/tipo-procedimentos/:id', TipoProcedimentoController.delete)
 
-routes.get('/comentarios', ComentarioController.read)
-routes.get('/comentarios/:id', ComentarioController.readById)
-routes.post('/comentarios', ComentarioController.create)
-routes.put('/comentarios/:id', ComentarioController.update)
-routes.delete('/comentarios/:id', ComentarioController.delete)
+routes.get('/comentarios', ReadComentarioController().exec)
+routes.get('/comentarios/:id', ReadOneComentarioController().exec)
+routes.post('/comentarios', CreateComentarioController().exec)
+routes.patch('/comentarios/:id', UpdateComentarioController().exec)
+routes.delete('/comentarios/:id', DeleteComentarioController().exec)
 
 export { routes }
