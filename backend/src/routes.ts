@@ -56,10 +56,10 @@ routes.post('/tipo-procedimentos', TipoProcedimentoController.create)
 routes.put('/tipo-procedimentos/:id', TipoProcedimentoController.update)
 routes.delete('/tipo-procedimentos/:id', TipoProcedimentoController.delete)
 
-routes.get('/comentarios', ReadComentarioController().exec)
-routes.get('/comentarios/:id', ReadOneComentarioController().exec)
-routes.post('/comentarios', CreateComentarioController().exec)
-routes.patch('/comentarios/:id', UpdateComentarioController().exec)
-routes.delete('/comentarios/:id', DeleteComentarioController().exec)
+routes.get('/comentarios', new ReadComentarioController().exec)
+routes.get('/comentarios/:id', new ReadOneComentarioController().exec)
+routes.post('/comentarios', new CreateComentarioController().exec)
+routes.patch('/comentarios/:id', new UpdateComentarioController().exec)
+routes.delete('/comentarios/:id', new DeleteComentarioController().exec)
 
 export { routes }

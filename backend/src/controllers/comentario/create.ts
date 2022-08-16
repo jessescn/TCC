@@ -12,42 +12,39 @@ export type NewComentario = {
   procedimento: number
 }
 
-export const validators = {
-  hasPermissions: (req: Request) => {
-    const permission = req.user.permissoes.comentario_create
-    checkPermissionResource(permission, req)
-  },
-  includesMandatoryFields: (req: Request) => {
-    const mandatoryFields = ['conteudo', 'procedimento']
-    validateMandatoryFields(mandatoryFields, req.body)
-  }
+const hasPermissions = (req: Request) => {
+  const permission = req.user.permissoes.comentario_create
+  checkPermissionResource(permission, req)
 }
 
-export function CreateComentarioController(): Controller {
-  const validateRequest = (req: Request) => {
-    validators.hasPermissions(req)
-    validators.includesMandatoryFields(req)
+const includesMandatoryFields = (req: Request) => {
+  const mandatoryFields = ['conteudo', 'procedimento']
+  validateMandatoryFields(mandatoryFields, req.body)
+}
+
+export class CreateComentarioController extends Controller {
+  constructor() {
+    const validations = [hasPermissions, includesMandatoryFields]
+    super(validations)
   }
 
-  return {
-    exec: async (request: Request, response: Response) => {
-      try {
-        validateRequest(request)
+  exec = async (request: Request, response: Response) => {
+    try {
+      this.validateRequest(request)
 
-        const { conteudo, procedimento } = request.body as NewComentario
+      const { conteudo, procedimento } = request.body as NewComentario
 
-        const newComentario = await ComentarioService.create({
-          conteudo,
-          procedimentoId: procedimento,
-          createdBy: request.user.id
-        })
+      const newComentario = await ComentarioService.create({
+        conteudo,
+        procedimentoId: procedimento,
+        createdBy: request.user.id
+      })
 
-        response.status(HttpStatusCode.created).send(newComentario)
-      } catch (error) {
-        console.log({ error })
+      response.status(HttpStatusCode.created).send(newComentario)
+    } catch (error) {
+      console.log({ error })
 
-        errorResponseHandler(response, error)
-      }
+      errorResponseHandler(response, error)
     }
   }
 }

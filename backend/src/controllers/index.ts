@@ -6,7 +6,7 @@ import {
   UnauthorizedError
 } from 'types/express/errors'
 
-export interface Controller {
+export interface IController {
   exec: (req: Request, res: Response) => Promise<void>
 }
 
@@ -61,4 +61,22 @@ export const checkIncludesInvalidFields = (
   })
 
   return hasInvalidFields
+}
+
+export type Validation = (request: Request) => void
+
+export abstract class Controller implements IController {
+  private validations: Validation[] = []
+
+  constructor(validations: Validation[]) {
+    this.validations = validations
+  }
+
+  validateRequest = (req: Request) => {
+    this.validations.forEach(validation => validation(req))
+  }
+
+  exec = (req: Request, res: Response) => {
+    return null
+  }
 }
