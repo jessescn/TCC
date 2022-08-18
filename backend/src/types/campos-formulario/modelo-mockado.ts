@@ -1,5 +1,5 @@
 import { RemoteFormulario } from 'controllers/formulario'
-import { RemoteTipoProcedimento } from 'controllers/tipo-procedimento'
+import { NewTipoProcedimento } from 'controllers/tipo-procedimento/create'
 
 const formulario: RemoteFormulario = {
   nome: 'Solicitação de Homologação de Comissão Examinadora de Defesa de Dissertação de Mestrado',
@@ -436,7 +436,7 @@ const formulario: RemoteFormulario = {
   ]
 }
 
-const tipoProcedimento: RemoteTipoProcedimento = {
+const tipoProcedimento: NewTipoProcedimento = {
   nome: 'Solicitação de Homologação de Comissão Examinadora de Defesa de Dissertação de Mestrado',
   descricao:
     'Antes de preencher este formulário, é importante que o orientador verifique se a banca a ser definida atende a Norma PPGCC-01/19: Requisitos para Homologação de Bancas Examinadoras de Mestrado e Doutorado.',

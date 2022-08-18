@@ -10,7 +10,7 @@ import {
 } from 'sequelize'
 import User from './user'
 
-import { RemoteTipoProcedimento } from 'controllers/tipo-procedimento'
+import { NewTipoProcedimento } from 'controllers/tipo-procedimento/create'
 
 export type TipoProcedimentoStatus = 'ativo' | 'inativo' | 'rascunho'
 
@@ -89,7 +89,7 @@ const TipoProcedimento = sequelize.define<TipoProcedimentoModel>(
 TipoProcedimento.belongsTo(User, { foreignKey: 'createdBy' })
 
 export const createInitialTipoProcedimento = async (
-  tipoProcedimento: RemoteTipoProcedimento
+  tipoProcedimento: NewTipoProcedimento
 ) => {
   await TipoProcedimento.findOrCreate({
     where: {

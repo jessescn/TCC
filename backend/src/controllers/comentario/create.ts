@@ -42,8 +42,6 @@ export class CreateComentarioController extends Controller {
 
       response.status(HttpStatusCode.created).send(newComentario)
     } catch (error) {
-      console.log({ error })
-
       errorResponseHandler(response, error)
     }
   }

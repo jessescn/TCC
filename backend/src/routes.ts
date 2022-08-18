@@ -3,15 +3,22 @@ import { Router } from 'express'
 import { AuthController } from './controllers/auth'
 import { ColegiadoController } from './controllers/colegiado'
 import { ProcedimentoController } from './controllers/procedimento'
-import { TipoProcedimentoController } from './controllers/tipo-procedimento'
 import { UsuarioController } from './controllers/usuario'
 
-import { CreateComentarioController } from 'controllers/comentario/create'
-import { DeleteComentarioController } from 'controllers/comentario/delete'
-import { ReadComentarioController } from 'controllers/comentario/read'
-import { ReadOneComentarioController } from 'controllers/comentario/read-one'
-import { UpdateComentarioController } from 'controllers/comentario/update'
-
+import {
+  createComentarioController,
+  deleteComentarioController,
+  readComentarioController,
+  readOneComentarioController,
+  updateComentarioController
+} from 'controllers/comentario'
+import {
+  createTipoProcedimentoController,
+  deleteTipoProcedimentoController,
+  readOneTipoProcedimentoController,
+  readTipoProcedimentoController,
+  updateTipoProcedimentoController
+} from 'controllers/tipo-procedimento'
 import auth from './middlewares/authorization'
 import permissions from './middlewares/permissions'
 
@@ -50,16 +57,16 @@ routes.post('/colegiado/:id/vote', ColegiadoController.vote)
 routes.delete('/colegiado/:id/vote', ColegiadoController.deleteVote)
 routes.get('/colegiado/:id/comentarios', ColegiadoController.comments)
 
-routes.get('/tipo-procedimentos', TipoProcedimentoController.read)
-routes.get('/tipo-procedimentos/:id', TipoProcedimentoController.readById)
-routes.post('/tipo-procedimentos', TipoProcedimentoController.create)
-routes.put('/tipo-procedimentos/:id', TipoProcedimentoController.update)
-routes.delete('/tipo-procedimentos/:id', TipoProcedimentoController.delete)
+routes.get('/tipo-procedimentos', readTipoProcedimentoController.exec)
+routes.get('/tipo-procedimentos/:id', readOneTipoProcedimentoController.exec)
+routes.post('/tipo-procedimentos', createTipoProcedimentoController.exec)
+routes.put('/tipo-procedimentos/:id', updateTipoProcedimentoController.exec)
+routes.delete('/tipo-procedimentos/:id', deleteTipoProcedimentoController.exec)
 
-routes.get('/comentarios', new ReadComentarioController().exec)
-routes.get('/comentarios/:id', new ReadOneComentarioController().exec)
-routes.post('/comentarios', new CreateComentarioController().exec)
-routes.patch('/comentarios/:id', new UpdateComentarioController().exec)
-routes.delete('/comentarios/:id', new DeleteComentarioController().exec)
+routes.get('/comentarios', readComentarioController.exec)
+routes.get('/comentarios/:id', readOneComentarioController.exec)
+routes.post('/comentarios', createComentarioController.exec)
+routes.patch('/comentarios/:id', updateComentarioController.exec)
+routes.delete('/comentarios/:id', deleteComentarioController.exec)
 
 export { routes }

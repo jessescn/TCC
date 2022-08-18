@@ -31,6 +31,19 @@ export const FormularioService = {
 
     return formulario
   },
+  getByIds: async function (ids: number[]) {
+    const formularios = await Formulario.findAll({
+      where: {
+        id: {
+          in: ids
+        },
+        deleted: false
+      },
+      include: includeableUser
+    })
+
+    return formularios
+  },
   getAll: async function (query: FormularioQuery = {}) {
     const formularios = await Formulario.findAll({
       include: includeableUser,
