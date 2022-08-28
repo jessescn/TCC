@@ -1,7 +1,6 @@
 import { FormularioController } from 'controllers/formulario'
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
-import { ColegiadoController } from './controllers/colegiado'
 import { ProcedimentoController } from './controllers/procedimento'
 import { UsuarioController } from './controllers/usuario'
 
@@ -9,6 +8,7 @@ import {
   createComentarioController,
   deleteComentarioController,
   readComentarioController,
+  readCommentsByProcedimentoController,
   readOneComentarioController,
   updateComentarioController
 } from 'controllers/comentario'
@@ -21,6 +21,7 @@ import {
 } from 'controllers/tipo-procedimento'
 import auth from './middlewares/authorization'
 import permissions from './middlewares/permissions'
+import { deleteVoteController, voteController } from 'controllers/colegiado'
 
 const routes = Router()
 
@@ -53,9 +54,12 @@ routes.post('/procedimentos/:id/status', ProcedimentoController.updateStatus)
 routes.post('/procedimentos/:id/homologacao', ProcedimentoController.homologate)
 routes.post('/procedimentos/:id/revisao', ProcedimentoController.revisao)
 
-routes.post('/colegiado/:id/vote', ColegiadoController.vote)
-routes.delete('/colegiado/:id/vote', ColegiadoController.deleteVote)
-routes.get('/colegiado/:id/comentarios', ColegiadoController.comments)
+routes.post('/colegiado/:id/vote', voteController.exec)
+routes.delete('/colegiado/:id/vote', deleteVoteController.exec)
+routes.get(
+  '/colegiado/:id/comentarios',
+  readCommentsByProcedimentoController.exec
+)
 
 routes.get('/tipo-procedimentos', readTipoProcedimentoController.exec)
 routes.get('/tipo-procedimentos/:id', readOneTipoProcedimentoController.exec)

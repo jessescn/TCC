@@ -76,7 +76,7 @@ export abstract class Controller implements IController {
     this.validations.forEach(validation => validation(req))
   }
 
-  exec = (req: Request, res: Response) => {
+  exec = (request: Request, response: Response) => {
     return null
   }
 }
