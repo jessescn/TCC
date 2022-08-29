@@ -1,15 +1,15 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/entities/comentario-service'
+import { FormularioService } from 'services/entities/formulario-service'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'validations/request'
 
-export class ReadCommentsByProcedimentoController extends Controller {
+export class ReadOneFormularioController extends Controller {
   constructor() {
     const validations = [hasNumericId]
-    const permission: keyof PermissionKeys = 'colegiado_comments'
+    const permission: keyof PermissionKeys = 'form_read'
 
-    super({ permission, validations })
+    super({ validations, permission })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,11 +18,11 @@ export class ReadCommentsByProcedimentoController extends Controller {
 
       const { id } = request.params
 
-      const comentarios = await ComentarioService.getAll({ procedimentoId: id })
+      const formulario = await FormularioService.getById(Number(id))
 
-      response.json(comentarios)
+      response.json(formulario)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

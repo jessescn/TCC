@@ -1,21 +1,21 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/entities/comentario-service'
+import { FormularioModel } from 'models/formulario'
+import { FormularioService } from 'services/entities/formulario-service'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'validations/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
-  const validFields = ['conteudo', 'procedimentoId']
+  const validFields: (keyof FormularioModel)[] = ['nome', 'descricao', 'campos']
   notIncludesInvalidFields(req, validFields)
 }
 
-export class UpdateComentarioController extends Controller {
+export class UpdateFormularioController extends Controller {
   constructor() {
-    const permission: keyof PermissionKeys = 'comentario_update'
-
+    const permission: keyof PermissionKeys = 'form_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
-    super({ validations, permission })
+    super({ permission, validations })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -23,11 +23,11 @@ export class UpdateComentarioController extends Controller {
       this.validateRequest(request)
 
       const { id } = request.params
-      const data = request.body
+      const data = request.body as Partial<FormularioModel>
 
-      const updatedComentario = await ComentarioService.update(Number(id), data)
+      const updatedFormulario = await FormularioService.update(Number(id), data)
 
-      response.json(updatedComentario)
+      response.json(updatedFormulario)
     } catch (error) {
       errorResponseHandler(response, error)
     }

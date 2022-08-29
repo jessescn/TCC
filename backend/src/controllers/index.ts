@@ -1,4 +1,4 @@
-import { PermissionScope } from 'types/auth/actors'
+import { PermissionKeys, PermissionScope } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import {
   BadRequestError,
@@ -64,12 +64,42 @@ export const checkIncludesInvalidFields = (
 }
 
 export type Validation = (request: Request) => void
+export type ControllerProperties = {
+  validations?: Validation[]
+  permission?: keyof PermissionKeys
+  mandatoryFields?: string[]
+}
 
 export abstract class Controller implements IController {
   private validations: Validation[] = []
+  private mandatoryFields: string[] = []
+  private permission: keyof PermissionKeys
 
-  constructor(validations: Validation[]) {
-    this.validations = validations
+  constructor({
+    permission,
+    validations,
+    mandatoryFields
+  }: ControllerProperties) {
+    this.validations = [
+      this.hasPermissions,
+      this.includesMandatoryFields,
+      ...validations
+    ]
+    this.mandatoryFields = mandatoryFields
+    this.permission = permission
+  }
+
+  hasPermissions = (req: Request) => {
+    if (!this.permission) return
+
+    const permissionValue = req.user.permissoes[this.permission]
+    checkPermissionResource(permissionValue, req)
+  }
+
+  includesMandatoryFields = (req: Request) => {
+    if (this.mandatoryFields.length === 0) return
+
+    validateMandatoryFields(this.mandatoryFields, req.body)
   }
 
   validateRequest = (req: Request) => {

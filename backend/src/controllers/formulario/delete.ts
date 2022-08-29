@@ -1,13 +1,13 @@
+import { hasNumericId } from './../../validations/request'
 import { Controller, errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/entities/comentario-service'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { FormularioService } from 'services/entities/formulario-service'
 
-export class ReadCommentsByProcedimentoController extends Controller {
+export class DeleteFormularioController extends Controller {
   constructor() {
+    const permission: keyof PermissionKeys = 'form_delete'
     const validations = [hasNumericId]
-    const permission: keyof PermissionKeys = 'colegiado_comments'
 
     super({ permission, validations })
   }
@@ -18,11 +18,11 @@ export class ReadCommentsByProcedimentoController extends Controller {
 
       const { id } = request.params
 
-      const comentarios = await ComentarioService.getAll({ procedimentoId: id })
+      const deletedFormulario = await FormularioService.destroy(Number(id))
 
-      response.json(comentarios)
+      response.json(deletedFormulario)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

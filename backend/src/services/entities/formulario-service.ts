@@ -6,6 +6,7 @@ import { NotFoundError } from 'types/express/errors'
 export type CreateFormulario = {
   nome: string
   campos: CampoFormulario[]
+  descricao?: string
   createdBy: number
 }
 
@@ -55,7 +56,7 @@ export const FormularioService = {
     const newFormulario = await Formulario.create(data, { include: User })
     return newFormulario
   },
-  update: async function (id: number, data: any) {
+  update: async function (id: number, data: Partial<FormularioModel>) {
     const formulario = await Formulario.findOne({
       where: { id, deleted: false },
       include: includeableUser

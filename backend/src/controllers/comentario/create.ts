@@ -1,10 +1,6 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler,
-  validateMandatoryFields
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { ComentarioService } from 'services/entities/comentario-service'
+import { PermissionKeys } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 
 export type NewComentario = {
@@ -12,20 +8,15 @@ export type NewComentario = {
   procedimento: number
 }
 
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.comentario_create
-  checkPermissionResource(permission, req)
-}
-
-const includesMandatoryFields = (req: Request) => {
-  const mandatoryFields = ['conteudo', 'procedimento']
-  validateMandatoryFields(mandatoryFields, req.body)
-}
-
 export class CreateComentarioController extends Controller {
   constructor() {
-    const validations = [hasPermissions, includesMandatoryFields]
-    super(validations)
+    const permission: keyof PermissionKeys = 'comentario_create'
+    const mandatoryFields: (keyof NewComentario)[] = [
+      'conteudo',
+      'procedimento'
+    ]
+
+    super({ mandatoryFields, permission })
   }
 
   exec = async (request: Request, response: Response) => {

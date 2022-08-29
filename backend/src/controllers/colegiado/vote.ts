@@ -1,28 +1,17 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler,
-  validateMandatoryFields
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { VotoProcedimento } from 'models/procedimento'
 import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { PermissionKeys } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { hasNumericId } from 'validations/request'
 
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.colegiado_vote
-  checkPermissionResource(permission, req)
-}
-
-const includesMandatoryFields = (req: Request) => {
-  const mandatoryFields: (keyof VotoProcedimento)[] = ['autor', 'aprovado']
-  validateMandatoryFields(mandatoryFields, req.body)
-}
-
 export class VoteController extends Controller {
   constructor() {
-    const validations = [hasPermissions, hasNumericId, includesMandatoryFields]
-    super(validations)
+    const mandatoryFields: (keyof VotoProcedimento)[] = ['autor', 'aprovado']
+    const permission: keyof PermissionKeys = 'colegiado_vote'
+
+    const validations = [hasNumericId]
+    super({ validations, permission, mandatoryFields })
   }
 
   exec = async (request: Request, response: Response) => {

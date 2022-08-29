@@ -1,10 +1,6 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler,
-  validateMandatoryFields
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'validations/request'
 
@@ -12,20 +8,13 @@ type RemoteDeleteVote = {
   autor: number
 }
 
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.colegiado_delete_vote
-  checkPermissionResource(permission, req)
-}
-
-const includesMandatoryFields = (req: Request) => {
-  const mandatoryFields: (keyof RemoteDeleteVote)[] = ['autor']
-  validateMandatoryFields(mandatoryFields, req.body)
-}
-
 export class DeleteVoteController extends Controller {
   constructor() {
-    const validations = [hasPermissions, hasNumericId, includesMandatoryFields]
-    super(validations)
+    const validations = [hasNumericId]
+    const permission: keyof PermissionKeys = 'colegiado_delete_vote'
+    const mandatoryFields = ['autor']
+
+    super({ validations, mandatoryFields, permission })
   }
 
   exec = async (request: Request, response: Response) => {

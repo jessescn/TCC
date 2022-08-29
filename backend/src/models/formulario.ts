@@ -10,7 +10,11 @@ import {
   Model
 } from 'sequelize'
 
-import { RemoteFormulario } from 'controllers/formulario'
+export type RemoteFormulario = {
+  nome: string
+  descricao?: string
+  campos: CampoFormulario[]
+}
 
 type TipoCampoFormulario =
   | 'paragrafo'

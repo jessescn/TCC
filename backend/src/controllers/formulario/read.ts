@@ -1,11 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/entities/comentario-service'
+import { FormularioService } from 'services/entities/formulario-service'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 
-export class ReadComentarioController extends Controller {
+export class ReadFormularioController extends Controller {
   constructor() {
-    const permission: keyof PermissionKeys = 'comentario_delete'
+    const permission: keyof PermissionKeys = 'form_read'
+
     super({ permission })
   }
 
@@ -13,9 +14,9 @@ export class ReadComentarioController extends Controller {
     try {
       this.validateRequest(request)
 
-      const comentarios = await ComentarioService.getAll()
+      const formularios = await FormularioService.getAll()
 
-      response.send(comentarios)
+      response.json(formularios)
     } catch (error) {
       errorResponseHandler(response, error)
     }

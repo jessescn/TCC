@@ -1,21 +1,15 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { ComentarioService } from 'services/entities/comentario-service'
+import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'validations/request'
 
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.comentario_read
-  checkPermissionResource(permission, req)
-}
-
 export class ReadOneComentarioController extends Controller {
   constructor() {
-    const validators = [hasPermissions, hasNumericId]
-    super(validators)
+    const validations = [hasNumericId]
+    const permission: keyof PermissionKeys = 'comentario_read'
+
+    super({ validations, permission })
   }
 
   exec = async (request: Request, response: Response) => {

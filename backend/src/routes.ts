@@ -1,4 +1,3 @@
-import { FormularioController } from 'controllers/formulario'
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
 import { ProcedimentoController } from './controllers/procedimento'
@@ -22,6 +21,13 @@ import {
 import auth from './middlewares/authorization'
 import permissions from './middlewares/permissions'
 import { deleteVoteController, voteController } from 'controllers/colegiado'
+import {
+  createFormularioController,
+  deleteFormularioController,
+  readFormularioController,
+  readOneFormularioController,
+  updateFormularioController
+} from 'controllers/formulario'
 
 const routes = Router()
 
@@ -39,11 +45,11 @@ routes.get('/users/:id', UsuarioController.readById)
 routes.put('/users/:id', UsuarioController.update)
 routes.delete('/users/:id', UsuarioController.delete)
 
-routes.get('/formularios', FormularioController.read)
-routes.get('/formularios/:id', FormularioController.readById)
-routes.post('/formularios', FormularioController.create)
-routes.put('/formularios/:id', FormularioController.update)
-routes.delete('/formularios/:id', FormularioController.delete)
+routes.get('/formularios', readFormularioController.exec)
+routes.get('/formularios/:id', readOneFormularioController.exec)
+routes.post('/formularios', createFormularioController.exec)
+routes.put('/formularios/:id', updateFormularioController.exec)
+routes.delete('/formularios/:id', deleteFormularioController.exec)
 
 routes.get('/procedimentos', ProcedimentoController.read)
 routes.get('/procedimentos/:id', ProcedimentoController.readById)
