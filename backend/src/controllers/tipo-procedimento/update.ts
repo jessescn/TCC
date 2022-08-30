@@ -1,16 +1,8 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'validations/request'
-
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.tipo_procedimento_update
-  checkPermissionResource(permission, req)
-}
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
   const validFields = [
@@ -29,12 +21,10 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 
 export class UpdateTipoProcedimentoController extends Controller {
   constructor() {
-    const validations = [
-      hasPermissions,
-      hasNumericId,
-      notIncludesInvalidUpdateFields
-    ]
-    super(validations)
+    const permission: PermissionKey = 'tipo_procedimento_update'
+    const validations = [hasNumericId, notIncludesInvalidUpdateFields]
+
+    super({ validations, permission })
   }
 
   exec = async (request: Request, response: Response) => {

@@ -1,15 +1,15 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { UsuarioService } from 'services/entities/usuario-service'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'validations/request'
 
-export class DeleteTipoProcedimentoController extends Controller {
+export class DeleteUsuarioController extends Controller {
   constructor() {
-    const permission: PermissionKey = 'tipo_procedimento_update'
+    const permission: PermissionKey = 'user_delete'
     const validations = [hasNumericId]
 
-    super({ validations, permission })
+    super({ permission, validations })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,13 +18,11 @@ export class DeleteTipoProcedimentoController extends Controller {
 
       const { id } = request.params
 
-      const deletedTipoProcedimento = await TipoProcedimentoService.destroy(
-        Number(id)
-      )
+      const deletedUsuario = await UsuarioService.destroy(Number(id))
 
-      response.json(deletedTipoProcedimento)
+      response.json(deletedUsuario)
     } catch (error) {
-      errorResponseHandler(response, error)
+      errorResponseHandler(error, response)
     }
   }
 }

@@ -9,8 +9,8 @@ export class VoteController extends Controller {
   constructor() {
     const mandatoryFields: (keyof VotoProcedimento)[] = ['autor', 'aprovado']
     const permission: keyof PermissionKeys = 'colegiado_vote'
-
     const validations = [hasNumericId]
+
     super({ validations, permission, mandatoryFields })
   }
 

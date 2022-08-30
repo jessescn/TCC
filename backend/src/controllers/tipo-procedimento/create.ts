@@ -1,11 +1,7 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler,
-  validateMandatoryFields
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { FormularioService } from 'services/entities/formulario-service'
 import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { NotFoundError } from 'types/express/errors'
 
@@ -19,28 +15,18 @@ export type NewTipoProcedimento = {
   colegiado: boolean
   formularios: number[]
 }
-
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.tipo_procedimento_create
-  checkPermissionResource(permission, req)
-}
-
-const includesMandatoryFields = (req: Request) => {
-  const mandatoryFields = [
-    'nome',
-    'escopo',
-    'colegiado',
-    'formularios',
-    'publicos'
-  ]
-
-  validateMandatoryFields(mandatoryFields, req.body)
-}
-
 export class CreateTipoProcedimentoController extends Controller {
   constructor() {
-    const validations = [hasPermissions, includesMandatoryFields]
-    super(validations)
+    const permission: PermissionKey = 'tipo_procedimento_create'
+    const mandatoryFields = [
+      'nome',
+      'escopo',
+      'colegiado',
+      'formularios',
+      'publicos'
+    ]
+
+    super({ permission, mandatoryFields })
   }
 
   checkIfFormulariosExists = async (formulariosIds: number[]) => {

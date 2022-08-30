@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { Roles } from 'types/auth/actors'
 
-export type RemoteUser = {
+export type RemoteNewUsuario = {
   nome: string
   email: string
   senha: string
@@ -48,7 +48,7 @@ export const UsuarioService = {
     const usuario = await User.findOne({ where: { email } })
     return usuario
   },
-  create: async function (data: RemoteUser) {
+  create: async function (data: RemoteNewUsuario) {
     const usuario = await this.getByEmail(data.email)
 
     if (usuario) {
@@ -58,7 +58,7 @@ export const UsuarioService = {
     const newUsuario = await User.create(data)
     return newUsuario
   },
-  update: async function (id: number, data: any) {
+  update: async function (id: number, data: Partial<UserModel>) {
     const usuario = await User.findOne({ where: { id, deleted: false } })
 
     if (!usuario) {

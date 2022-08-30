@@ -1,21 +1,12 @@
-import {
-  checkPermissionResource,
-  Controller,
-  errorResponseHandler
-} from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-
-const hasPermissions = (req: Request) => {
-  const permission = req.user.permissoes.tipo_procedimento_read
-  checkPermissionResource(permission, req)
-}
 
 export class ReadTipoProcedimentoController extends Controller {
   constructor() {
-    const validations = [hasPermissions]
-
-    super(validations)
+    const permission: PermissionKey = 'tipo_procedimento_read'
+    super({ permission })
   }
 
   exec = async (request: Request, response: Response) => {

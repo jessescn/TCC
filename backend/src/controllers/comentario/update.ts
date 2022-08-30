@@ -12,7 +12,6 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 export class UpdateComentarioController extends Controller {
   constructor() {
     const permission: keyof PermissionKeys = 'comentario_update'
-
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
     super({ validations, permission })

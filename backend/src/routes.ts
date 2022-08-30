@@ -1,7 +1,14 @@
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
 import { ProcedimentoController } from './controllers/procedimento'
-import { UsuarioController } from './controllers/usuario'
+import {
+  createUsuarioController,
+  deleteUsuarioController,
+  publicosUsuarioController,
+  readOneUsuarioController,
+  readUsuarioController,
+  updateUsuarioController
+} from './controllers/usuario'
 
 import {
   createComentarioController,
@@ -32,18 +39,18 @@ import {
 const routes = Router()
 
 routes.post('/token', AuthController.token)
-routes.post('/users', UsuarioController.create)
+routes.post('/users', createUsuarioController.exec)
 
 routes.use(auth)
 routes.use(permissions)
 
 routes.get('/me', AuthController.me)
 
-routes.get('/users/publicos', UsuarioController.publicos)
-routes.get('/users', UsuarioController.read)
-routes.get('/users/:id', UsuarioController.readById)
-routes.put('/users/:id', UsuarioController.update)
-routes.delete('/users/:id', UsuarioController.delete)
+routes.get('/users/publicos', publicosUsuarioController.exec)
+routes.get('/users', readUsuarioController.exec)
+routes.get('/users/:id', readOneUsuarioController.exec)
+routes.put('/users/:id', updateUsuarioController.exec)
+routes.delete('/users/:id', deleteUsuarioController.exec)
 
 routes.get('/formularios', readFormularioController.exec)
 routes.get('/formularios/:id', readOneFormularioController.exec)

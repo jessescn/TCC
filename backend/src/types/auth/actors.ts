@@ -1,7 +1,14 @@
-export type Roles = 'usuario' | 'admin' | 'coordenacao' | 'colegiado'
+export const rolesMap = [
+  'usuario',
+  'admin',
+  'coordenacao',
+  'colegiado'
+] as const
 
-export const Admin = {
-  user_create: 'all', ///
+export type Roles = typeof rolesMap[number]
+
+const admin = {
+  user_create: 'all',
   user_read: 'all',
   user_update: 'all',
   user_delete: 'all',
@@ -34,11 +41,13 @@ export const Admin = {
   comentario_delete: 'all'
 }
 
-export type PermissionScope = 'owned' | 'all' | 'not_allowed'
+export const permissionScopesMap = ['owned', 'all', 'not_allowed'] as const
+export type PermissionScope = typeof permissionScopesMap[number]
 
-export type PermissionKeys = Record<keyof typeof Admin, PermissionScope>
+export type PermissionKeys = Record<keyof typeof admin, PermissionScope>
+export type PermissionKey = keyof PermissionKeys
 
-export const Default: PermissionKeys = {
+const defaultPermissions: PermissionKeys = {
   user_create: 'all', // se cadastrar
   user_publicos: 'not_allowed', // visualizar todos os publicos
   user_read: 'owned', // somente pode ler sobre seu próprio usuario
@@ -70,4 +79,9 @@ export const Default: PermissionKeys = {
   comentario_read: 'not_allowed', // não pode criar um comentario
   comentario_update: 'not_allowed', // não pode criar um comentario
   comentario_delete: 'not_allowed' // não pode criar um comentario
+}
+
+export const actorsPermissions = {
+  admin,
+  default: defaultPermissions
 }
