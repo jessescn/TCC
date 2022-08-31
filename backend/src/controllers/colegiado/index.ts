@@ -1,5 +1,5 @@
 import { DeleteVoteController } from './delete-vote'
-import { VoteController } from './vote'
+import { UpdateVoteController } from './update-vote'
 
-export const voteController = new VoteController()
+export const voteController = new UpdateVoteController()
 export const deleteVoteController = new DeleteVoteController()

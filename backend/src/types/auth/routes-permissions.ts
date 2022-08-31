@@ -28,7 +28,9 @@ export const routesPermissionsMap = {
     post: ['procedimento_create'],
     get: ['procedimento_read'],
     put: ['procedimento_update'],
-    delete: ['procedimento_delete']
+    delete: ['procedimento_delete'],
+    homologate: ['procedimento_homologacao'],
+    review: ['procedimento_revisao']
   },
   colegiado: {
     vote: ['colegiado_vote'],

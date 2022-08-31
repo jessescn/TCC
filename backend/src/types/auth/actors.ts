@@ -25,6 +25,7 @@ const admin = {
   procedimento_delete: 'all',
   procedimento_status: 'all',
   procedimento_homologacao: 'all',
+  procedimento_review: 'all',
 
   colegiado_vote: 'all',
   colegiado_delete_vote: 'all',
@@ -65,6 +66,7 @@ const defaultPermissions: PermissionKeys = {
   procedimento_delete: 'not_allowed', // não pode remover um procedimento
   procedimento_status: 'not_allowed', // não pode alterar o status diretamente de um procedimento
   procedimento_homologacao: 'not_allowed', // não pode deferir um procedimento
+  procedimento_review: 'not_allowed', // não pode revisar um procedimento
 
   colegiado_vote: 'not_allowed', // não pode votar
   colegiado_delete_vote: 'not_allowed', // não pode remover um voto

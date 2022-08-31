@@ -1,6 +1,15 @@
 import { Router } from 'express'
 import { AuthController } from './controllers/auth'
-import { ProcedimentoController } from './controllers/procedimento'
+import {
+  createProcedimentoController,
+  deleteProcedimentoController,
+  homologateProcedimentoController,
+  readOneProcedimentoController,
+  readProcedimentoController,
+  reviewProcedimentoController,
+  updateProcedimentoController,
+  updateStatusProcedimentoController
+} from './controllers/procedimento'
 import {
   createUsuarioController,
   deleteUsuarioController,
@@ -58,14 +67,20 @@ routes.post('/formularios', createFormularioController.exec)
 routes.put('/formularios/:id', updateFormularioController.exec)
 routes.delete('/formularios/:id', deleteFormularioController.exec)
 
-routes.get('/procedimentos', ProcedimentoController.read)
-routes.get('/procedimentos/:id', ProcedimentoController.readById)
-routes.post('/procedimentos', ProcedimentoController.create)
-routes.put('/procedimentos/:id', ProcedimentoController.update)
-routes.delete('/procedimentos/:id', ProcedimentoController.delete)
-routes.post('/procedimentos/:id/status', ProcedimentoController.updateStatus)
-routes.post('/procedimentos/:id/homologacao', ProcedimentoController.homologate)
-routes.post('/procedimentos/:id/revisao', ProcedimentoController.revisao)
+routes.get('/procedimentos', readProcedimentoController.exec)
+routes.get('/procedimentos/:id', readOneProcedimentoController.exec)
+routes.post('/procedimentos', createProcedimentoController.exec)
+routes.put('/procedimentos/:id', updateProcedimentoController.exec)
+routes.delete('/procedimentos/:id', deleteProcedimentoController.exec)
+routes.post(
+  '/procedimentos/:id/status',
+  updateStatusProcedimentoController.exec
+)
+routes.post(
+  '/procedimentos/:id/homologacao',
+  homologateProcedimentoController.exec
+)
+routes.post('/procedimentos/:id/revisao', reviewProcedimentoController.exec)
 
 routes.post('/colegiado/:id/vote', voteController.exec)
 routes.delete('/colegiado/:id/vote', deleteVoteController.exec)

@@ -4,31 +4,31 @@ import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'validations/request'
 
-type RemoteDeleteVote = {
-  autor: number
-}
-
-export class DeleteVoteController extends Controller {
+export class HomologateProcedimentoController extends Controller {
   constructor() {
+    const permission: PermissionKey = 'procedimento_homologacao'
     const validations = [hasNumericId]
-    const permission: PermissionKey = 'colegiado_delete_vote'
-    const mandatoryFields = ['autor']
 
-    super({ validations, mandatoryFields, permission })
+    super({ permission, validations })
   }
 
-  private callServiceToDeleteVote = async (request: Request) => {
+  private getProcedimentoWithUpdatedStatus = (request: Request) => {
     const { id } = request.params
-    const { autor } = request.body as RemoteDeleteVote
+    return ProcedimentoService.getById(Number(id))
+  }
 
-    return ProcedimentoService.removeVote(Number(id), autor)
+  private callServiceToUpdateStatus = async (request: Request) => {
+    const { id } = request.params
+
+    await ProcedimentoService.updateStatus(Number(id), 'deferido')
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const procedimento = await this.callServiceToDeleteVote(request)
+      await this.callServiceToUpdateStatus(request)
+      const procedimento = await this.getProcedimentoWithUpdatedStatus(request)
 
       response.json(procedimento)
     } catch (error) {

@@ -9,13 +9,12 @@ import Procedimento, {
   VotoProcedimento
 } from 'models/procedimento'
 import TipoProcedimento from 'models/tipo-procedimento'
-import User, { UserModel } from 'models/user'
+import User from 'models/user'
 import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
 import {
-  isProcedimentoAprovado,
-  changeProcedimentoStatus
+  changeProcedimentoStatus,
+  isProcedimentoAprovado
 } from 'services/procedimento/status'
-import { PermissionScope } from 'types/auth/actors'
 import {
   BadRequestError,
   NotFoundError,
@@ -25,19 +24,15 @@ import { belongsToPublico, getCurrentStatus } from 'utils/procedimento'
 import { TipoProcedimentoService } from './tipo-procedimento-service'
 import { UsuarioService } from './usuario-service'
 
-type Credentials = {
-  user: UserModel
-  permission: PermissionScope
-}
-
-export type RemoteProcedimento = {
+export type NewProcedimento = {
   tipo: number
   respostas: Resposta[]
   votos?: VotoProcedimento[]
   createdBy: number
 }
 
-export type RemoteRevisao = {
+export type NewRevisao = {
+  aprovado: boolean
   comentario: string
   campos: CampoInvalido[]
 }
@@ -79,7 +74,7 @@ export const ProcedimentoService = {
 
     return procedimentos
   },
-  create: async function (data: RemoteProcedimento) {
+  create: async function (data: NewProcedimento) {
     const user = await UsuarioService.getById(data.createdBy)
     const tipoProcedimento = await TipoProcedimentoService.getById(data.tipo)
 
@@ -109,11 +104,8 @@ export const ProcedimentoService = {
   },
   update: async function (
     id: number,
-    credentials: Credentials,
-    { status, ...data }: any
+    { status, ...data }: Partial<ProcedimentoModel>
   ) {
-    const { permission, user } = credentials
-
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
       include: [TipoProcedimento, Comentario, includeableUser]
@@ -121,10 +113,6 @@ export const ProcedimentoService = {
 
     if (!procedimento) {
       throw new NotFoundError()
-    }
-
-    if (permission === 'owned' && procedimento.createdBy !== user.id) {
-      throw new UnauthorizedError()
     }
 
     const currentStatus = getCurrentStatus(procedimento)
@@ -139,9 +127,7 @@ export const ProcedimentoService = {
 
     return procedimento
   },
-  destroy: async function (id: number, credentials: Credentials) {
-    const { permission, user } = credentials
-
+  destroy: async function (id: number) {
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
       include: [TipoProcedimento, Comentario, includeableUser]
@@ -151,17 +137,13 @@ export const ProcedimentoService = {
       throw new NotFoundError()
     }
 
-    if (permission === 'owned' && procedimento.createdBy !== user.id) {
-      throw new UnauthorizedError()
-    }
-
     procedimento.set({ deleted: true })
 
     await procedimento.save()
 
     return procedimento
   },
-  vote: async function (id: number, newVote: VotoProcedimento) {
+  updateVote: async function (id: number, newVote: VotoProcedimento) {
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
       include: [TipoProcedimento, Comentario, includeableUser]

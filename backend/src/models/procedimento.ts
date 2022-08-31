@@ -72,6 +72,7 @@ export interface ProcedimentoModel
   respostas: Resposta[]
   votos: VotoProcedimento[]
   deleted: boolean
+  tipo?: number
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number

@@ -89,6 +89,8 @@ export abstract class Controller implements IController {
     this.permission = permission
   }
 
+  exec: (req: Request, res: Response) => Promise<void>
+
   hasPermissions = (req: Request) => {
     if (!this.permission) return
 
@@ -104,9 +106,5 @@ export abstract class Controller implements IController {
 
   validateRequest = (req: Request) => {
     this.validations.forEach(validation => validation(req))
-  }
-
-  exec = (request: Request, response: Response) => {
-    return null
   }
 }
