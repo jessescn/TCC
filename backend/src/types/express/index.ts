@@ -3,7 +3,6 @@ import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import { UserModel } from 'models/user'
 
 export interface Request extends ExpressRequest {
-  permissoes?: Record<any, any>
   user?: UserModel
 }
 

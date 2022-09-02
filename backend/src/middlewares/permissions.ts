@@ -1,34 +1,54 @@
 import { NextFunction } from 'express'
+import { Middleware } from 'middlewares'
+import { PermissionKeys } from 'types/auth/actors'
 import { routesPermissionsMap } from 'types/auth/routes-permissions'
 import { Request, Response } from 'types/express'
+import { UnauthorizedError } from 'types/express/errors'
+import { errorResponseHandler } from 'utils/response'
 
-const PermissionsMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { permissoes: userPrivileges } = req
+export class PermissionsMiddleware extends Middleware {
+  private extractRequiredKeys = (req: Request) => {
+    const resource = req.originalUrl.split('/')[1]
+    const method = req.method.toLowerCase()
 
-  const resource = req.originalUrl.split('/')[1]
-  const method = req.method.toLowerCase()
+    const requiredPermissions: string[] =
+      routesPermissionsMap[resource][method] || []
 
-  const resourcePermissions: string[] =
-    routesPermissionsMap[resource][method] || []
-
-  const havePermission = resourcePermissions.reduce((acc, permission) => {
-    if (!userPrivileges[permission]) {
-      return false
-    }
-
-    return acc && true
-  }, true)
-
-  if (!havePermission) {
-    res.status(401).send()
-    return
+    return requiredPermissions
   }
 
-  next()
-}
+  private compareRequiredKeysWithPermissions = (
+    permissions: PermissionKeys,
+    requiredKeys: string[]
+  ) => {
+    return requiredKeys.reduce((acc, permission) => {
+      if (!permissions[permission]) {
+        return false
+      }
 
-export default PermissionsMiddleware
+      return acc && true
+    }, true)
+  }
+
+  private verifyHasAllRequiredPermissions = (req: Request) => {
+    const { permissoes } = req.user
+
+    const requiredKeys = this.extractRequiredKeys(req)
+
+    return this.compareRequiredKeysWithPermissions(permissoes, requiredKeys)
+  }
+
+  exec = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const hasPermission = this.verifyHasAllRequiredPermissions(req)
+
+      if (!hasPermission) {
+        throw new UnauthorizedError()
+      }
+
+      next()
+    } catch (error) {
+      errorResponseHandler(error, res)
+    }
+  }
+}

@@ -34,8 +34,8 @@ import {
   readTipoProcedimentoController,
   updateTipoProcedimentoController
 } from 'controllers/tipo-procedimento'
-import auth from './middlewares/authorization'
-import permissions from './middlewares/permissions'
+import { AuthTokenMiddleware } from './middlewares/authorization'
+import { PermissionsMiddleware } from './middlewares/permissions'
 import { deleteVoteController, voteController } from 'controllers/colegiado'
 import {
   createFormularioController,
@@ -45,13 +45,16 @@ import {
   updateFormularioController
 } from 'controllers/formulario'
 
+const authTokenMiddleware = new AuthTokenMiddleware()
+const permissionsMiddleware = new PermissionsMiddleware()
+
 const routes = Router()
 
 routes.post('/token', AuthController.token)
 routes.post('/users', createUsuarioController.exec)
 
-routes.use(auth)
-routes.use(permissions)
+routes.use(authTokenMiddleware.exec)
+routes.use(permissionsMiddleware.exec)
 
 routes.get('/me', AuthController.me)
 

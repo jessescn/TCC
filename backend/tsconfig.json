@@ -1,11 +1,10 @@
 {
   "include": [
-    "./src/**/*.ts",
-    "**/*.spec.ts",
-    "**/*.test.ts"
+    "./src/**/*",
   ],
   "exclude": [
-    ".sequelizerc"
+    ".sequelizerc",
+    "node_modules"
   ],
   "compilerOptions": {
     "baseUrl": "src",
@@ -20,5 +19,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
+    "plugins": [
+      {
+        "transform": "ts-auto-mock/transformer",
+        "cacheBetweenTests": false
+      }
+    ]
   }
 }

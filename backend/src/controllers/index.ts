@@ -89,7 +89,7 @@ export abstract class Controller implements IController {
     this.permission = permission
   }
 
-  exec: (req: Request, res: Response) => Promise<void>
+  abstract exec: (req: Request, res: Response) => Promise<void>
 
   hasPermissions = (req: Request) => {
     if (!this.permission) return
