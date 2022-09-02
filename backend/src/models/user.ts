@@ -10,10 +10,24 @@ import {
 import { PermissionKeys, Roles } from 'types/auth/actors'
 import { ProcedimentoModel } from './procedimento'
 
-export interface UserModel
+export interface UserModel {
+  id: number
+  nome: string
+  email: string
+  senha: string
+  deleted: boolean
+  permissoes: PermissionKeys
+  roles: Roles[]
+  publico: string[]
+  procedimentos?: ProcedimentoModel[]
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export interface UserAttributes
   extends Model<
-    InferAttributes<UserModel>,
-    InferCreationAttributes<UserModel>
+    InferAttributes<UserAttributes>,
+    InferCreationAttributes<UserAttributes>
   > {
   id: CreationOptional<number>
   nome: string
@@ -28,7 +42,7 @@ export interface UserModel
   updatedAt?: Date
 }
 
-const User = sequelize.define<UserModel>('user', {
+const User = sequelize.define<UserAttributes>('user', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

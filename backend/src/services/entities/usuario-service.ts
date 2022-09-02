@@ -1,4 +1,4 @@
-import User, { UserModel } from 'models/user'
+import User, { UserAttributes, UserModel } from 'models/user'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 import bcrypt from 'bcrypt'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
@@ -12,7 +12,7 @@ export type RemoteNewUsuario = {
   roles?: Roles[]
 }
 
-export type UserQuery = WhereOptions<InferAttributes<UserModel>>
+export type UserQuery = WhereOptions<InferAttributes<UserAttributes>>
 
 export const UsuarioService = {
   getAll: async function (query: UserQuery = {}) {

@@ -1,4 +1,4 @@
-import Comentario, { ComentarioModel } from 'models/comentario'
+import Comentario, { ComentarioAttributes } from 'models/comentario'
 import Procedimento from 'models/procedimento'
 import User from 'models/user'
 import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
@@ -17,7 +17,9 @@ const includeableUser: Includeable = {
   attributes: ['nome', 'email']
 }
 
-export type ComentarioQuery = WhereOptions<InferAttributes<ComentarioModel>>
+export type ComentarioQuery = WhereOptions<
+  InferAttributes<ComentarioAttributes>
+>
 
 export const ComentarioService = {
   getById: async function (id: number) {

@@ -14,10 +14,26 @@ import { NewTipoProcedimento } from 'controllers/tipo-procedimento/create'
 
 export type TipoProcedimentoStatus = 'ativo' | 'inativo' | 'rascunho'
 
-export interface TipoProcedimentoModel
+export interface TipoProcedimentoModel {
+  id: number
+  nome: string
+  descricao: string
+  status: TipoProcedimentoStatus
+  dataInicio: string
+  dataFim: string
+  escopo: string
+  formularios: number[]
+  publicos: string[]
+  colegiado: boolean
+  deleted: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export interface TipoProcedimentoAttributes
   extends Model<
-    InferAttributes<TipoProcedimentoModel>,
-    InferCreationAttributes<TipoProcedimentoModel>
+    InferAttributes<TipoProcedimentoAttributes>,
+    InferCreationAttributes<TipoProcedimentoAttributes>
   > {
   id: CreationOptional<number>
   nome: string
@@ -34,7 +50,7 @@ export interface TipoProcedimentoModel
   updatedAt?: Date
 }
 
-const TipoProcedimento = sequelize.define<TipoProcedimentoModel>(
+const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
   'tipo_procedimento',
   {
     id: {

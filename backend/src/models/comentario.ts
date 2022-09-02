@@ -11,10 +11,21 @@ import {
   Model
 } from 'sequelize'
 
-export interface ComentarioModel
+export interface ComentarioModel {
+  id: number
+  procedimentoId: number
+  conteudo: string
+  deleted: boolean
+  procedimento?: ProcedimentoModel
+  user?: UserModel
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export interface ComentarioAttributes
   extends Model<
-    InferAttributes<ComentarioModel>,
-    InferCreationAttributes<ComentarioModel>
+    InferAttributes<ComentarioAttributes>,
+    InferCreationAttributes<ComentarioAttributes>
   > {
   id: CreationOptional<number>
   procedimentoId: CreationOptional<number>
@@ -26,7 +37,7 @@ export interface ComentarioModel
   updatedAt?: Date
 }
 
-const Comentario = sequelize.define<ComentarioModel>('comentario', {
+const Comentario = sequelize.define<ComentarioAttributes>('comentario', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

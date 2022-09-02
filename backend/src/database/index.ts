@@ -1,18 +1,21 @@
 /* istanbul ignore file */
 import { Dialect, Sequelize } from 'sequelize'
+import config from 'database/config'
 
-const username = process.env.DB_USER
-const password = process.env.DB_PASSWORD
-const database = process.env.DB_NAME
-const host = process.env.DB_HOST
-const port = process.env.DB_PORT
-const dialect = process.env.DB_DIALECT as Dialect
+const environment = process.env.NODE_ENV as keyof typeof config
 
-const uri = `postgresql://${username}:${password}@${host}:${port}/${database}`
+const createSequelizeInstance = () => {
+  const { username, database, host, password, dialect, port } =
+    config[environment]
 
-const sequelize = new Sequelize(uri, {
-  dialect
-})
+  const uri = `postgresql://${username}:${password}@${host}:${port}/${database}`
+
+  return new Sequelize(uri, {
+    dialect: dialect as Dialect
+  })
+}
+
+const sequelize = createSequelizeInstance()
 
 const connect = async () => {
   try {

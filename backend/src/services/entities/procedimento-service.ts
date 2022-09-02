@@ -1,6 +1,7 @@
 import Comentario from 'models/comentario'
 import Procedimento, {
   CampoInvalido,
+  ProcedimentoAttributes,
   ProcedimentoModel,
   Resposta,
   Revisao,
@@ -37,7 +38,9 @@ export type NewRevisao = {
   campos: CampoInvalido[]
 }
 
-export type ProcedimentoQuery = WhereOptions<InferAttributes<ProcedimentoModel>>
+export type ProcedimentoQuery = WhereOptions<
+  InferAttributes<ProcedimentoAttributes>
+>
 
 const isMaioria = (votes: VotoProcedimento[]) => {
   const numberOfColegiados = Number(process.env.COLEGIADO_QUANTITY) || 0
@@ -175,7 +178,7 @@ export const ProcedimentoService = {
 
     await procedimento.save()
 
-    let updatedResource = procedimento
+    let updatedResource: ProcedimentoModel = procedimento
 
     const isMaioriaVotos = isMaioria(votes)
 

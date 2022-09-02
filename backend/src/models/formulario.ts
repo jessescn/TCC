@@ -34,10 +34,21 @@ export type CampoFormulario = {
   configuracao_campo?: any
 }
 
-export interface FormularioModel
+export interface FormularioModel {
+  id: number
+  nome: string
+  descricao: string
+  campos: CampoFormulario[]
+  deleted: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  createdBy?: number
+}
+
+export interface FormularioAttributes
   extends Model<
-    InferAttributes<FormularioModel>,
-    InferCreationAttributes<FormularioModel>
+    InferAttributes<FormularioAttributes>,
+    InferCreationAttributes<FormularioAttributes>
   > {
   id: CreationOptional<number>
   nome: string
@@ -49,7 +60,7 @@ export interface FormularioModel
   createdBy?: number
 }
 
-const Formulario = sequelize.define<FormularioModel>('formulario', {
+const Formulario = sequelize.define<FormularioAttributes>('formulario', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

@@ -1,4 +1,8 @@
-import Formulario, { FormularioModel, CampoFormulario } from 'models/formulario'
+import Formulario, {
+  FormularioModel,
+  CampoFormulario,
+  FormularioAttributes
+} from 'models/formulario'
 import User from 'models/user'
 import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
@@ -17,7 +21,9 @@ const includeableUser: Includeable = {
   attributes: ['nome', 'email']
 }
 
-export type FormularioQuery = WhereOptions<InferAttributes<FormularioModel>>
+export type FormularioQuery = WhereOptions<
+  InferAttributes<FormularioAttributes>
+>
 
 export const FormularioService = {
   getById: async function (id: number) {

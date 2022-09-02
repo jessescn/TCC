@@ -1,7 +1,8 @@
-import TipoProcedimento from 'models/tipo-procedimento'
+import TipoProcedimento, {
+  TipoProcedimentoAttributes
+} from 'models/tipo-procedimento'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { NotFoundError } from 'types/express/errors'
-import { TipoProcedimentoModel } from '../../models/tipo-procedimento'
 
 export type CreateTipoProcedimento = {
   nome: string
@@ -32,7 +33,7 @@ export const TipoProcedimentoService = {
     return tipoProcedimento
   },
   getAll: async function (
-    query: WhereOptions<InferAttributes<TipoProcedimentoModel>> = {}
+    query: WhereOptions<InferAttributes<TipoProcedimentoAttributes>> = {}
   ) {
     const tipoProcedimentos = await TipoProcedimento.findAll({
       where: { deleted: false, ...query }

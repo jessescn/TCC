@@ -61,10 +61,23 @@ export type Revisao = {
   campos: CampoInvalido[]
 }
 
-export interface ProcedimentoModel
+export interface ProcedimentoModel {
+  id: number
+  status: Status[]
+  revisoes: Revisao[]
+  respostas: Resposta[]
+  votos: VotoProcedimento[]
+  deleted: boolean
+  tipo?: number
+  createdAt?: Date
+  updatedAt?: Date
+  createdBy?: number
+}
+
+export interface ProcedimentoAttributes
   extends Model<
-    InferAttributes<ProcedimentoModel>,
-    InferCreationAttributes<ProcedimentoModel>
+    InferAttributes<ProcedimentoAttributes>,
+    InferCreationAttributes<ProcedimentoAttributes>
   > {
   id: CreationOptional<number>
   status: Status[]
@@ -78,7 +91,7 @@ export interface ProcedimentoModel
   createdBy?: number
 }
 
-const Procedimento = sequelize.define<ProcedimentoModel>('procedimento', {
+const Procedimento = sequelize.define<ProcedimentoAttributes>('procedimento', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

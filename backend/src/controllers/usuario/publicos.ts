@@ -15,7 +15,7 @@ export class PublicosUsuarioController extends Controller {
 
       const publicos = await UsuarioService.getAllPublicos()
 
-      return response.json(publicos)
+      response.json(publicos)
     } catch (error) {
       errorResponseHandler(error, response)
     }
