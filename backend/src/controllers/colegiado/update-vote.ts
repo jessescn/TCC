@@ -1,24 +1,28 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { VotoProcedimento } from 'models/procedimento'
-import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { IProcedimentoRepo } from 'repository'
+import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class UpdateVoteController extends Controller {
-  constructor() {
+  private repository: ProcedimentoRepository
+
+  constructor(repository: IProcedimentoRepo) {
     const mandatoryFields: (keyof VotoProcedimento)[] = ['autor', 'aprovado']
     const permission: PermissionKey = 'colegiado_vote'
     const validations = [hasNumericId]
 
-    super({ validations, permission, mandatoryFields })
+    super({ validations, permission, mandatoryFields, repository })
+    this.repository = repository
   }
 
   private callServiceToUpdateVote = (request: Request) => {
     const { id } = request.params
     const data = request.body as VotoProcedimento
 
-    return ProcedimentoService.updateVote(Number(id), {
+    return this.repository.updateVote(Number(id), {
       aprovado: data.aprovado,
       autor: data.autor,
       data: data.data

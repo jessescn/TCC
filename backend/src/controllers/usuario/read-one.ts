@@ -1,9 +1,10 @@
 import { Controller, errorResponseHandler, Validation } from 'controllers'
-import { UsuarioService } from 'services/entities/usuario-service'
+import { IRepository } from 'repository'
+import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { UnauthorizedError } from 'types/express/errors'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 const hasAccessToSpecificResource: Validation = request => {
   const { id } = request.params
@@ -15,11 +16,15 @@ const hasAccessToSpecificResource: Validation = request => {
 }
 
 export class ReadOneUsuarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'user_read'
     const validations = [hasNumericId, hasAccessToSpecificResource]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+  }
+
+  get repository(): UsuarioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -28,7 +33,7 @@ export class ReadOneUsuarioController extends Controller {
 
       const { id } = request.params
 
-      const usuario = await UsuarioService.getById(Number(id))
+      const usuario = await this.repository.findOne(Number(id))
 
       response.json(usuario)
     } catch (error) {

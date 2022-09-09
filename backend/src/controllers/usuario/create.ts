@@ -1,7 +1,3 @@
-import {
-  RemoteNewUsuario,
-  UsuarioService
-} from 'services/entities/usuario-service'
 import { Controller, errorResponseHandler, Validation } from 'controllers'
 import {
   actorsPermissions,
@@ -12,6 +8,11 @@ import {
 } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
+import { IRepository } from 'repository'
+import {
+  RemoteNewUsuario,
+  UsuarioRepository
+} from 'repository/sequelize/usuario'
 
 const hasOnlyAvailableRoles: Validation = request => {
   const availableRoles = rolesMap
@@ -48,16 +49,16 @@ const hasOnlyValidPermissions: Validation = request => {
 }
 
 export class CreateUsuarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const validations = [hasOnlyAvailableRoles, hasOnlyValidPermissions]
     const permission: PermissionKey = 'user_create'
-    const mandatoryFields: (keyof RemoteNewUsuario)[] = [
-      'email',
-      'nome',
-      'senha'
-    ]
+    const mandatoryFields = ['email', 'nome', 'senha']
 
-    super({ mandatoryFields, permission, validations })
+    super({ mandatoryFields, permission, validations, repository })
+  }
+
+  get repository(): UsuarioRepository {
+    return this.props.repository
   }
 
   private mergePermissions = (request: Request) => {
@@ -77,7 +78,7 @@ export class CreateUsuarioController extends Controller {
 
       const data = request.body as RemoteNewUsuario
 
-      const newUsuario = await UsuarioService.create({
+      const newUsuario = await this.repository.create({
         email: data.email,
         nome: data.nome,
         senha: data.senha,

@@ -1,26 +1,30 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { IProcedimentoRepo } from 'repository'
+import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class HomologateProcedimentoController extends Controller {
-  constructor() {
+  private repository: ProcedimentoRepository
+
+  constructor(repository: IProcedimentoRepo) {
     const permission: PermissionKey = 'procedimento_homologacao'
     const validations = [hasNumericId]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+    this.repository = repository
   }
 
   private getProcedimentoWithUpdatedStatus = (request: Request) => {
     const { id } = request.params
-    return ProcedimentoService.getById(Number(id))
+    return this.repository.findOne(Number(id))
   }
 
   private callServiceToUpdateStatus = async (request: Request) => {
     const { id } = request.params
 
-    await ProcedimentoService.updateStatus(Number(id), 'deferido')
+    await this.repository.updateStatus(Number(id), 'deferido')
   }
 
   exec = async (request: Request, response: Response) => {

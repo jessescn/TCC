@@ -1,15 +1,20 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/entities/comentario-service'
+import { IRepository } from 'repository'
+import { ComentarioRepository } from 'repository/sequelize/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class DeleteComentarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const validations = [hasNumericId]
     const permission: keyof PermissionKeys = 'comentario_delete'
 
-    super({ validations, permission })
+    super({ validations, permission, repository })
+  }
+
+  get repository(): ComentarioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,7 +23,7 @@ export class DeleteComentarioController extends Controller {
 
       const { id } = request.params
 
-      const deletedComentario = await ComentarioService.destroy(Number(id))
+      const deletedComentario = await this.repository.destroy(Number(id))
 
       response.json(deletedComentario)
     } catch (error) {

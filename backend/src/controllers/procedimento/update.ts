@@ -1,11 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { ProcedimentoModel } from 'models/procedimento'
-import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { IProcedimentoRepo } from 'repository'
+import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { UnauthorizedError } from 'types/express/errors'
+import { BadRequestError, UnauthorizedError } from 'types/express/errors'
 import { getCurrentStatus } from 'utils/procedimento'
-import { hasNumericId, notIncludesInvalidFields } from 'validations/request'
+import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
   const validFields: (keyof ProcedimentoModel)[] = [
@@ -17,16 +18,19 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 }
 
 export class UpdateProcedimentoController extends Controller {
-  constructor() {
+  private repository: ProcedimentoRepository
+
+  constructor(repository: IProcedimentoRepo) {
     const permission: PermissionKey = 'procedimento_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+    this.repository = repository
   }
 
   private getProcedimentoById = (request: Request) => {
     const { id } = request.params
-    return ProcedimentoService.getById(Number(id))
+    return this.repository.findOne(Number(id))
   }
 
   private checkIfHasPrivilegesToGetProcedimento = async (request: Request) => {
@@ -49,11 +53,11 @@ export class UpdateProcedimentoController extends Controller {
     const { id } = request.params
     const data = request.body as Partial<ProcedimentoModel>
 
-    return ProcedimentoService.update(Number(id), data)
+    return this.repository.update(Number(id), data)
   }
 
   private updateProcedimentoStatusToEmAnalise = (procedimentoId: number) => {
-    return ProcedimentoService.updateStatus(procedimentoId, 'em_analise')
+    return this.repository.updateStatus(procedimentoId, 'em_analise')
   }
 
   private getProcedimentoWithUpdatedStatus = async (request: Request) => {
@@ -62,11 +66,11 @@ export class UpdateProcedimentoController extends Controller {
     const isOnPendingChangesStatus =
       getCurrentStatus(procedimento) === 'correcoes_pendentes'
 
-    if (isOnPendingChangesStatus) {
-      return this.updateProcedimentoStatusToEmAnalise(procedimento.id)
+    if (!isOnPendingChangesStatus) {
+      throw new BadRequestError('Cannot update in this current status')
     }
 
-    return procedimento
+    return this.updateProcedimentoStatusToEmAnalise(procedimento.id)
   }
 
   exec = async (request: Request, response: Response) => {

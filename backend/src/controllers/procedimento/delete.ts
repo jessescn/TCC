@@ -1,21 +1,25 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { IProcedimentoRepo } from 'repository'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { UnauthorizedError } from 'types/express/errors'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class DeleteProcedimentoController extends Controller {
-  constructor() {
+  constructor(repository: IProcedimentoRepo) {
     const permission: PermissionKey = 'procedimento_delete'
     const validations = [hasNumericId]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+  }
+
+  get repository() {
+    return this.props.repository
   }
 
   private checkIfHasPermissionToDelete = async (request: Request) => {
     const { id } = request.params
-    const procedimento = await ProcedimentoService.getById(Number(id))
+    const procedimento = await this.repository.findOne(Number(id))
 
     const scope = request.user.permissoes[this.permission]
     const isOwnedScope = scope === 'owned'
@@ -30,7 +34,7 @@ export class DeleteProcedimentoController extends Controller {
 
   private callServiceToDeleteProcedimento = (request: Request) => {
     const { id } = request.params
-    return ProcedimentoService.destroy(Number(id))
+    return this.repository.destroy(Number(id))
   }
 
   exec = async (request: Request, response: Response) => {

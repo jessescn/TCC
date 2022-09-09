@@ -1,19 +1,25 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/entities/comentario-service'
+import { IRepository } from 'repository'
+import { ComentarioRepository } from 'repository/sequelize/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 
 export class ReadComentarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: keyof PermissionKeys = 'comentario_delete'
-    super({ permission })
+
+    super({ permission, repository })
+  }
+
+  get repository(): ComentarioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const comentarios = await ComentarioService.getAll()
+      const comentarios = await this.repository.findAll({})
 
       response.send(comentarios)
     } catch (error) {

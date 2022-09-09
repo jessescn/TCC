@@ -1,15 +1,20 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { FormularioService } from 'services/entities/formulario-service'
+import { IRepository } from 'repository'
+import { FormularioRepository } from 'repository/sequelize/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class ReadOneFormularioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const validations = [hasNumericId]
     const permission: keyof PermissionKeys = 'form_read'
 
-    super({ validations, permission })
+    super({ validations, permission, repository })
+  }
+
+  get repository(): FormularioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,7 +23,7 @@ export class ReadOneFormularioController extends Controller {
 
       const { id } = request.params
 
-      const formulario = await FormularioService.getById(Number(id))
+      const formulario = await this.repository.findOne(Number(id))
 
       response.json(formulario)
     } catch (error) {

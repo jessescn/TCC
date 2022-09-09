@@ -1,11 +1,16 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { TipoProcedimentoModel } from 'models/tipo-procedimento'
+import { IRepository } from 'repository'
+import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId, notIncludesInvalidFields } from 'validations/request'
+import {
+  hasNumericId,
+  notIncludesInvalidFields
+} from 'utils/validations/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
-  const validFields = [
+  const validFields: (keyof TipoProcedimentoModel)[] = [
     'nome',
     'descricao',
     'status',
@@ -20,11 +25,15 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 }
 
 export class UpdateTipoProcedimentoController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'tipo_procedimento_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
-    super({ validations, permission })
+    super({ validations, permission, repository })
+  }
+
+  get repository(): TipoProcedimentoRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -32,9 +41,9 @@ export class UpdateTipoProcedimentoController extends Controller {
       this.validateRequest(request)
 
       const { id } = request.params
-      const data = request.body
+      const data = request.body as Partial<TipoProcedimentoModel>
 
-      const updatedTipoProcedimento = await TipoProcedimentoService.update(
+      const updatedTipoProcedimento = await this.repository.update(
         Number(id),
         data
       )

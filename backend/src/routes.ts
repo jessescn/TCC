@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AuthController } from './controllers/auth'
+import { authController } from 'factories/controllers/auth'
 import {
   createProcedimentoController,
   deleteProcedimentoController,
@@ -9,7 +9,7 @@ import {
   reviewProcedimentoController,
   updateProcedimentoController,
   updateStatusProcedimentoController
-} from './controllers/procedimento'
+} from 'factories/controllers/procedimento'
 import {
   createUsuarioController,
   deleteUsuarioController,
@@ -17,7 +17,7 @@ import {
   readOneUsuarioController,
   readUsuarioController,
   updateUsuarioController
-} from './controllers/usuario'
+} from 'factories/controllers/usuario'
 
 import {
   createComentarioController,
@@ -26,37 +26,39 @@ import {
   readCommentsByProcedimentoController,
   readOneComentarioController,
   updateComentarioController
-} from 'controllers/comentario'
+} from 'factories/controllers/comentario'
 import {
   createTipoProcedimentoController,
   deleteTipoProcedimentoController,
   readOneTipoProcedimentoController,
   readTipoProcedimentoController,
   updateTipoProcedimentoController
-} from 'controllers/tipo-procedimento'
-import { AuthTokenMiddleware } from './middlewares/authorization'
-import { PermissionsMiddleware } from './middlewares/permissions'
-import { deleteVoteController, voteController } from 'controllers/colegiado'
+} from 'factories/controllers/tipo-procedimento'
+import {
+  deleteVoteController,
+  voteController
+} from 'factories/controllers/colegiado'
 import {
   createFormularioController,
   deleteFormularioController,
   readFormularioController,
   readOneFormularioController,
   updateFormularioController
-} from 'controllers/formulario'
-
-const authTokenMiddleware = new AuthTokenMiddleware()
-const permissionsMiddleware = new PermissionsMiddleware()
+} from 'factories/controllers/formulario'
+import {
+  authTokenMiddleware,
+  permissionsMiddleware
+} from 'factories/middlewares'
 
 const routes = Router()
 
-routes.post('/token', AuthController.token)
+routes.post('/token', authController.token)
 routes.post('/users', createUsuarioController.exec)
 
 routes.use(authTokenMiddleware.exec)
 routes.use(permissionsMiddleware.exec)
 
-routes.get('/me', AuthController.me)
+routes.get('/me', authController.me)
 
 routes.get('/users/publicos', publicosUsuarioController.exec)
 routes.get('/users', readUsuarioController.exec)

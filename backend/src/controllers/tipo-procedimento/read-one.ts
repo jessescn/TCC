@@ -1,15 +1,20 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { IRepository } from 'repository'
+import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class ReadOneTipoProcedimentoController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'tipo_procedimento_read'
     const validations = [hasNumericId]
 
-    super({ validations, permission })
+    super({ validations, permission, repository })
+  }
+
+  get repository(): TipoProcedimentoRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,7 +23,7 @@ export class ReadOneTipoProcedimentoController extends Controller {
 
       const { id } = request.params
 
-      const tipoProcedimento = await TipoProcedimentoService.getById(Number(id))
+      const tipoProcedimento = await this.repository.findOne(Number(id))
 
       response.json(tipoProcedimento)
     } catch (error) {

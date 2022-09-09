@@ -1,6 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { FormularioService } from 'services/entities/formulario-service'
-import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { IRepository } from 'repository'
+import { FormularioRepository } from 'repository/sequelize/formulario'
+import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { NotFoundError } from 'types/express/errors'
@@ -16,7 +17,9 @@ export type NewTipoProcedimento = {
   formularios: number[]
 }
 export class CreateTipoProcedimentoController extends Controller {
-  constructor() {
+  private formularioRepo: FormularioRepository
+
+  constructor(tipoProcedimentoRepo: IRepository, formularioRepo: IRepository) {
     const permission: PermissionKey = 'tipo_procedimento_create'
     const mandatoryFields = [
       'nome',
@@ -26,13 +29,23 @@ export class CreateTipoProcedimentoController extends Controller {
       'publicos'
     ]
 
-    super({ permission, mandatoryFields })
+    super({ permission, mandatoryFields, repository: tipoProcedimentoRepo })
+
+    this.formularioRepo = formularioRepo
+  }
+
+  get repository(): TipoProcedimentoRepository {
+    return this.props.repository
   }
 
   checkIfFormulariosExists = async (formulariosIds: number[]) => {
     if (formulariosIds.length === 0) return
 
-    const formularios = await FormularioService.getByIds(formulariosIds)
+    const formularios = await this.formularioRepo.findAll({
+      id: {
+        in: formulariosIds
+      }
+    })
 
     if (formularios.length !== formulariosIds.length) {
       throw new NotFoundError('formulario not found')
@@ -47,7 +60,7 @@ export class CreateTipoProcedimentoController extends Controller {
 
       await this.checkIfFormulariosExists(data.formularios || [])
 
-      const newTipoProcedimento = await TipoProcedimentoService.create({
+      const newTipoProcedimento = await this.repository.create({
         colegiado: data.colegiado,
         escopo: data.escopo,
         formularios: data.formularios,

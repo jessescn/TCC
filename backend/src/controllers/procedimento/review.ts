@@ -1,45 +1,55 @@
-import {
-  NewRevisao,
-  ProcedimentoService
-} from 'services/entities/procedimento-service'
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 import { Revisao } from 'models/procedimento'
-import { TipoProcedimentoService } from 'services/entities/tipo-procedimento-service'
+import { IProcedimentoRepo, IRepository } from 'repository'
+import {
+  NewRevisao,
+  ProcedimentoRepository
+} from 'repository/sequelize/procedimento'
+import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
 
 export class ReviewProcedimentoController extends Controller {
-  constructor() {
+  private repository: ProcedimentoRepository
+  private tipoProcedimentoRepo: TipoProcedimentoRepository
+
+  constructor(
+    procedimentoRepo: IProcedimentoRepo,
+    tipoProcedimentoRepo: IRepository
+  ) {
     const permission: PermissionKey = 'procedimento_review'
     const validations = [hasNumericId]
-    const mandatoryFields: (keyof NewRevisao)[] = [
-      'aprovado',
-      'comentario',
-      'campos'
-    ]
+    const mandatoryFields = ['aprovado', 'comentario', 'campos']
 
-    super({ permission, validations, mandatoryFields })
+    super({
+      permission,
+      validations,
+      mandatoryFields,
+      repository: procedimentoRepo
+    })
+    this.repository = procedimentoRepo
+    this.tipoProcedimentoRepo = tipoProcedimentoRepo
   }
 
   private getUpdatedProcedimento = async (request: Request) => {
     const { id } = request.params
-    return ProcedimentoService.getById(Number(id))
+    return this.repository.findOne(Number(id))
   }
 
   private updateStatusToPendingChanges = async (request: Request) => {
     const { id } = request.params
-    await ProcedimentoService.updateStatus(Number(id), 'correcoes_pendentes')
+    await this.repository.updateStatus(Number(id), 'correcoes_pendentes')
   }
 
   private updateStatusToHomologation = async (request: Request) => {
     const { id } = request.params
-    await ProcedimentoService.updateStatus(Number(id), 'em_homologacao')
+    await this.repository.updateStatus(Number(id), 'em_homologacao')
   }
 
   private updateStatusToDeferred = async (request: Request) => {
     const { id } = request.params
-    await ProcedimentoService.updateStatus(Number(id), 'deferido')
+    await this.repository.updateStatus(Number(id), 'deferido')
   }
 
   private updateProcedimentoToNextStatus = async (request: Request) => {
@@ -52,7 +62,7 @@ export class ReviewProcedimentoController extends Controller {
     }
 
     const procedimento = await this.getUpdatedProcedimento(request)
-    const tipo = await TipoProcedimentoService.getById(procedimento.tipo)
+    const tipo = await this.tipoProcedimentoRepo.findOne(procedimento.tipo)
 
     const shouldForwardToColegiado = tipo.colegiado
 
@@ -73,7 +83,7 @@ export class ReviewProcedimentoController extends Controller {
       autor: request.user
     }
 
-    await ProcedimentoService.newRevisao(Number(id), revisao)
+    await this.repository.newRevisao(Number(id), revisao)
   }
 
   exec = async (request: Request, response: Response) => {

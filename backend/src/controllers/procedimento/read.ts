@@ -1,26 +1,28 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { ProcedimentoModel } from 'models/procedimento'
-import {
-  ProcedimentoQuery,
-  ProcedimentoService
-} from 'services/entities/procedimento-service'
+import { IProcedimentoRepo } from 'repository'
+import { ProcedimentoQuery } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 
 export class ReadProcedimentoController extends Controller {
-  constructor() {
+  constructor(repository: IProcedimentoRepo) {
     const permission: PermissionKey = 'procedimento_read'
 
-    super({ permission })
+    super({ permission, repository })
+  }
+
+  get repository() {
+    return this.props.repository
   }
 
   private getOwnedProcedimentos = (request: Request) => {
     const ownedQuery: ProcedimentoQuery = { createdBy: request.user.id }
-    return ProcedimentoService.getAll(ownedQuery)
+    return this.repository.findAll(ownedQuery)
   }
 
   private getAllProcedimentosFromSystem = () => {
-    return ProcedimentoService.getAll()
+    return this.repository.findAll({})
   }
 
   private getProcedimentosByPermissionScope = async (request: Request) => {

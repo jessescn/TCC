@@ -1,10 +1,14 @@
 import { Controller, errorResponseHandler, Validation } from 'controllers'
 import { UserModel } from 'models/user'
-import { UsuarioService } from 'services/entities/usuario-service'
+import { IRepository } from 'repository'
+import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
-import { hasNumericId, notIncludesInvalidFields } from 'validations/request'
+import {
+  hasNumericId,
+  notIncludesInvalidFields
+} from 'utils/validations/request'
 
 const notIncludesInvalidUpdateFields: Validation = request => {
   const validFields: (keyof Partial<UserModel>)[] = [
@@ -27,7 +31,7 @@ const hasSomeUpdatePayload: Validation = request => {
 }
 
 export class UpdateUsuarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'user_update'
     const validations = [
       hasNumericId,
@@ -35,7 +39,11 @@ export class UpdateUsuarioController extends Controller {
       notIncludesInvalidUpdateFields
     ]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+  }
+
+  get repository(): UsuarioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -45,7 +53,7 @@ export class UpdateUsuarioController extends Controller {
       const { id } = request.params
       const data = request.body as Partial<UserModel>
 
-      const updatedUsuario = await UsuarioService.update(Number(id), data)
+      const updatedUsuario = await this.repository.update(Number(id), data)
 
       response.json(updatedUsuario)
     } catch (error) {

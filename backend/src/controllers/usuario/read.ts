@@ -1,22 +1,28 @@
 import { PermissionKey } from 'types/auth/actors'
 import { Controller, errorResponseHandler } from 'controllers'
 import { Request, Response } from 'types/express'
-import { UserQuery, UsuarioService } from 'services/entities/usuario-service'
+import { IRepository } from 'repository'
+import { UsuarioQuery, UsuarioRepository } from 'repository/sequelize/usuario'
 
 export class ReadUsuarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'user_read'
-    super({ permission })
+
+    super({ permission, repository })
+  }
+
+  get repository(): UsuarioRepository {
+    return this.props.repository
   }
 
   private getAllUsuarios = (request: Request) => {
-    return UsuarioService.getAll()
+    return this.repository.findAll()
   }
 
   private getOnlyOwnedUsuarios = (request: Request) => {
-    const query: UserQuery = { id: request.user.id }
+    const query: UsuarioQuery = { id: request.user.id }
 
-    return UsuarioService.getAll(query)
+    return this.repository.findAll(query)
   }
 
   private getUsuariosByScope = (request: Request) => {

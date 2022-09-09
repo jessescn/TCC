@@ -1,19 +1,28 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UsuarioService } from 'services/entities/usuario-service'
+import { IRepository } from 'repository'
+import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
+import { Usuario } from 'usecases/usuario'
 
 export class PublicosUsuarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'user_publicos'
-    super({ permission })
+
+    super({ permission, repository })
+  }
+
+  get repository(): UsuarioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const publicos = await UsuarioService.getAllPublicos()
+      const usuarios = await this.repository.findAll()
+
+      const publicos = Usuario.getPublicos(usuarios)
 
       response.json(publicos)
     } catch (error) {

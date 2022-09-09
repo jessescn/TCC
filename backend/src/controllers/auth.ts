@@ -1,20 +1,28 @@
 import { errorResponseHandler } from 'controllers'
 import jwt from 'jsonwebtoken'
-import { UsuarioService } from 'services/entities/usuario-service'
+import { IRepository } from 'repository'
+import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { Request, Response } from 'types/express'
 import {
   BadRequestError,
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
+import { isValidPassword } from 'utils/password'
 
 type Credentials = {
   email: string
   password: string
 }
 
-export const AuthController = {
-  token: async (req: Request, res: Response) => {
+export class AuthController {
+  private repository: UsuarioRepository
+
+  constructor(repository: IRepository) {
+    this.repository = repository
+  }
+
+  token = async (req: Request, res: Response) => {
     try {
       const data: Credentials = req.body
 
@@ -22,16 +30,13 @@ export const AuthController = {
         throw new BadRequestError()
       }
 
-      const user = await UsuarioService.getByEmail(data.email)
+      const [user] = await this.repository.findAll({ email: data.email })
 
       if (!user) {
         throw new NotFoundError()
       }
 
-      const isPasswordValid = await UsuarioService.validPassword(
-        data.password,
-        user.senha
-      )
+      const isPasswordValid = await isValidPassword(data.password, user.senha)
 
       if (!isPasswordValid) {
         throw new UnauthorizedError()
@@ -43,8 +48,9 @@ export const AuthController = {
     } catch (error) {
       errorResponseHandler(res, error)
     }
-  },
-  me: async (req: Request, res: Response) => {
+  }
+
+  me = async (req: Request, res: Response) => {
     try {
       res.json(req.user)
     } catch (error) {

@@ -1,21 +1,12 @@
-import { PermissionKey, PermissionScope } from 'types/auth/actors'
+import { IRepository } from 'repository'
+import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
-import {
-  BadRequestError,
-  RequestError,
-  UnauthorizedError
-} from 'types/express/errors'
+import { RequestError } from 'types/express/errors'
+import { validateMandatoryFields } from 'utils/fields'
+import { checkPermissionResource } from 'utils/permission'
 
 export interface IController {
   exec: (req: Request, res: Response) => Promise<void>
-}
-
-export interface CrudController {
-  create: (req: Request, res: Response) => Promise<void>
-  read: (req: Request, res: Response) => Promise<void>
-  readById: (req: Request, res: Response) => Promise<void>
-  update: (req: Request, res: Response) => Promise<void>
-  delete: (req: Request, res: Response) => Promise<void>
 }
 
 export const errorResponseHandler = (res: Response, error: any) => {
@@ -27,66 +18,32 @@ export const errorResponseHandler = (res: Response, error: any) => {
   res.status(HttpStatusCode.serverError).send()
 }
 
-export const checkPermissionResource = (
-  permission: PermissionScope,
-  req: Request
-) => {
-  if (permission === 'not_allowed') {
-    throw new UnauthorizedError()
-  }
-}
-
-export const validateMandatoryFields = (
-  fields: string[],
-  data: any,
-  message?: string
-) => {
-  fields.forEach(field => {
-    if (!(field in data)) {
-      throw new BadRequestError(message)
-    }
-  })
-}
-
-export const checkIncludesInvalidFields = (
-  fields: string[],
-  data: any,
-  message?: string
-) => {
-  let hasInvalidFields = false
-  Object.keys(data).forEach(key => {
-    if (!fields.includes(key)) {
-      hasInvalidFields = true
-    }
-  })
-
-  return hasInvalidFields
-}
-
 export type Validation = (request: Request) => void
-export type ControllerProperties = {
+
+export type ControllerProps = {
   validations?: Validation[]
   permission?: PermissionKey
   mandatoryFields?: string[]
+  repository?: IRepository
 }
 
 export abstract class Controller implements IController {
-  protected validations: Validation[] = []
-  protected mandatoryFields: string[] = []
-  protected permission: PermissionKey
+  protected props: ControllerProps
 
-  constructor({
-    permission,
-    validations,
-    mandatoryFields
-  }: ControllerProperties) {
-    this.validations = [
-      this.hasPermissions,
-      this.includesMandatoryFields,
-      ...validations
-    ]
-    this.mandatoryFields = mandatoryFields
-    this.permission = permission
+  constructor(props: ControllerProps) {
+    this.props = props
+  }
+
+  get permission() {
+    return this.props.permission
+  }
+
+  get mandatoryFields() {
+    return this.props.mandatoryFields
+  }
+
+  get validations() {
+    return this.props.validations
   }
 
   abstract exec: (req: Request, res: Response) => Promise<void>
@@ -95,7 +52,7 @@ export abstract class Controller implements IController {
     if (!this.permission) return
 
     const permissionValue = req.user.permissoes[this.permission]
-    checkPermissionResource(permissionValue, req)
+    checkPermissionResource(permissionValue)
   }
 
   includesMandatoryFields = (req: Request) => {

@@ -1,15 +1,20 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UsuarioService } from 'services/entities/usuario-service'
+import { IRepository } from 'repository'
+import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 
 export class DeleteUsuarioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: PermissionKey = 'user_delete'
     const validations = [hasNumericId]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+  }
+
+  get repository(): UsuarioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,7 +23,7 @@ export class DeleteUsuarioController extends Controller {
 
       const { id } = request.params
 
-      const deletedUsuario = await UsuarioService.destroy(Number(id))
+      const deletedUsuario = await this.repository.destroy(Number(id))
 
       response.json(deletedUsuario)
     } catch (error) {

@@ -2,9 +2,10 @@ import { Controller, errorResponseHandler, Validation } from 'controllers'
 import { TStatus, statusList as availableStatus } from 'models/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'validations/request'
+import { hasNumericId } from 'utils/validations/request'
 import { BadRequestError } from 'types/express/errors'
-import { ProcedimentoService } from 'services/entities/procedimento-service'
+import { IProcedimentoRepo } from 'repository'
+import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 
 type UpdateStatusProcedimento = {
   status: TStatus
@@ -21,18 +22,21 @@ const checkIfHasInvalidStatus: Validation = request => {
 }
 
 export class UpdateStatusProcedimentoController extends Controller {
-  constructor() {
+  private repository: ProcedimentoRepository
+
+  constructor(repository: IProcedimentoRepo) {
     const permission: PermissionKey = 'procedimento_status'
     const validations = [hasNumericId, checkIfHasInvalidStatus]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+    this.repository = repository
   }
 
   private callServiceToUpdateStatus = (request: Request) => {
     const { id } = request.params
     const { status } = request.body as UpdateStatusProcedimento
 
-    return ProcedimentoService.updateStatus(Number(id), status)
+    return this.repository.updateStatus(Number(id), status)
   }
 
   exec = async (request: Request, response: Response) => {

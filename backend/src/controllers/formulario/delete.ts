@@ -1,15 +1,20 @@
-import { hasNumericId } from './../../validations/request'
+import { hasNumericId } from '../../utils/validations/request'
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { FormularioService } from 'services/entities/formulario-service'
+import { IRepository } from 'repository'
+import { FormularioRepository } from 'repository/sequelize/formulario'
 
 export class DeleteFormularioController extends Controller {
-  constructor() {
+  constructor(repository: IRepository) {
     const permission: keyof PermissionKeys = 'form_delete'
     const validations = [hasNumericId]
 
-    super({ permission, validations })
+    super({ permission, validations, repository })
+  }
+
+  get repository(): FormularioRepository {
+    return this.props.repository
   }
 
   exec = async (request: Request, response: Response) => {
@@ -18,7 +23,7 @@ export class DeleteFormularioController extends Controller {
 
       const { id } = request.params
 
-      const deletedFormulario = await FormularioService.destroy(Number(id))
+      const deletedFormulario = await this.repository.destroy(Number(id))
 
       response.json(deletedFormulario)
     } catch (error) {
