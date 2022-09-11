@@ -4,7 +4,7 @@ import { ComentarioRepository } from 'repository/sequelize/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { NotFoundError } from 'types/express/errors'
-import { hasNumericId } from 'utils/validations/request'
+import { hasNumericId } from 'utils/request'
 
 export class ReadOneComentarioController extends Controller {
   constructor(repository: IRepository) {

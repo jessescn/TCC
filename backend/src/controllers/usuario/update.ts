@@ -4,17 +4,12 @@ import { IRepository } from 'repository'
 import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { BadRequestError } from 'types/express/errors'
-import {
-  hasNumericId,
-  notIncludesInvalidFields
-} from 'utils/validations/request'
+import { BadRequestError, NotFoundError } from 'types/express/errors'
+import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields: Validation = request => {
   const validFields: (keyof Partial<UserModel>)[] = [
-    'senha',
     'nome',
-    'email',
     'permissoes',
     'roles',
     'publico'
@@ -46,12 +41,22 @@ export class UpdateUsuarioController extends Controller {
     return this.props.repository
   }
 
+  checkIfUsuarioExists = async (id: number) => {
+    const usuario = await this.repository.findOne(id)
+
+    if (!usuario) {
+      throw new NotFoundError()
+    }
+  }
+
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
       const { id } = request.params
       const data = request.body as Partial<UserModel>
+
+      await this.checkIfUsuarioExists(Number(id))
 
       const updatedUsuario = await this.repository.update(Number(id), data)
 

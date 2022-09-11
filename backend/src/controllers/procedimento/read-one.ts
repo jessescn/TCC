@@ -3,8 +3,8 @@ import { ProcedimentoModel } from 'models/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { UnauthorizedError } from 'types/express/errors'
-import { hasNumericId } from 'utils/validations/request'
+import { NotFoundError, UnauthorizedError } from 'types/express/errors'
+import { hasNumericId } from 'utils/request'
 
 export class ReadOneProcedimentoController extends Controller {
   constructor(repository: IProcedimentoRepo) {
@@ -35,7 +35,7 @@ export class ReadOneProcedimentoController extends Controller {
     }
   }
 
-  private callServiceToGetProcedimentoById = async (request: Request) => {
+  private callRepoToGetProcedimento = async (request: Request) => {
     const { id } = request.params
 
     const procedimento = await this.repository.findOne(Number(id))
@@ -49,7 +49,11 @@ export class ReadOneProcedimentoController extends Controller {
     try {
       this.validateRequest(request)
 
-      const procedimento = await this.callServiceToGetProcedimentoById(request)
+      const procedimento = await this.callRepoToGetProcedimento(request)
+
+      if (!procedimento) {
+        throw new NotFoundError()
+      }
 
       response.json(procedimento)
     } catch (error) {

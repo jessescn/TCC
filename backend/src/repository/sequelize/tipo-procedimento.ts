@@ -4,7 +4,6 @@ import TipoProcedimento, {
 } from 'models/tipo-procedimento'
 import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
-import { NotFoundError } from 'types/express/errors'
 
 export type TipoRepositorioQuery = WhereOptions<
   InferAttributes<TipoProcedimentoAttributes>
@@ -27,6 +26,7 @@ export class TipoProcedimentoRepository implements IRepository {
     const tipoProcedimentos = await TipoProcedimento.findAll({
       where: { deleted: false, ...query }
     })
+
     return tipoProcedimentos
   }
 
@@ -34,10 +34,6 @@ export class TipoProcedimentoRepository implements IRepository {
     const tipoProcedimento = await TipoProcedimento.findOne({
       where: { id, deleted: false }
     })
-
-    if (!tipoProcedimento) {
-      throw new NotFoundError()
-    }
 
     return tipoProcedimento
   }
@@ -48,13 +44,7 @@ export class TipoProcedimentoRepository implements IRepository {
   }
 
   update = async (id: number, data: Partial<TipoProcedimentoModel>) => {
-    const updatedTipoProcedimento = await TipoProcedimento.findOne({
-      where: { id, deleted: false }
-    })
-
-    if (!updatedTipoProcedimento) {
-      throw new NotFoundError()
-    }
+    const updatedTipoProcedimento = await this.findOne(id)
 
     updatedTipoProcedimento.set({ ...data })
 
@@ -64,13 +54,7 @@ export class TipoProcedimentoRepository implements IRepository {
   }
 
   destroy = async (id: number) => {
-    const tipoProcedimento = await TipoProcedimento.findOne({
-      where: { id, deleted: false }
-    })
-
-    if (!tipoProcedimento) {
-      throw new NotFoundError()
-    }
+    const tipoProcedimento = await this.findOne(id)
 
     tipoProcedimento.set({ deleted: true })
 

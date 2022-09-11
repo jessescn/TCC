@@ -1,9 +1,6 @@
 import { createMock } from 'ts-auto-mock'
 import { ProcedimentoModel, Status } from 'models/procedimento'
-import {
-  belongsToPublico,
-  getCurrentStatus
-} from 'utils/validations/procedimento'
+import { belongsToPublico, getCurrentStatus } from 'utils/procedimento'
 import { UserModel } from 'models/user'
 import { TipoProcedimentoModel } from 'models/tipo-procedimento'
 

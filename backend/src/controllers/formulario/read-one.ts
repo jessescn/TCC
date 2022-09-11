@@ -3,7 +3,8 @@ import { IRepository } from 'repository'
 import { FormularioRepository } from 'repository/sequelize/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
+import { NotFoundError } from 'types/express/errors'
+import { hasNumericId } from 'utils/request'
 
 export class ReadOneFormularioController extends Controller {
   constructor(repository: IRepository) {
@@ -24,6 +25,10 @@ export class ReadOneFormularioController extends Controller {
       const { id } = request.params
 
       const formulario = await this.repository.findOne(Number(id))
+
+      if (!formulario) {
+        throw new NotFoundError()
+      }
 
       response.json(formulario)
     } catch (error) {

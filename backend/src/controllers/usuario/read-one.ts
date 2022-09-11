@@ -3,8 +3,8 @@ import { IRepository } from 'repository'
 import { UsuarioRepository } from 'repository/sequelize/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { UnauthorizedError } from 'types/express/errors'
-import { hasNumericId } from 'utils/validations/request'
+import { NotFoundError, UnauthorizedError } from 'types/express/errors'
+import { hasNumericId } from 'utils/request'
 
 const hasAccessToSpecificResource: Validation = request => {
   const { id } = request.params
@@ -34,6 +34,10 @@ export class ReadOneUsuarioController extends Controller {
       const { id } = request.params
 
       const usuario = await this.repository.findOne(Number(id))
+
+      if (!usuario) {
+        throw new NotFoundError()
+      }
 
       response.json(usuario)
     } catch (error) {

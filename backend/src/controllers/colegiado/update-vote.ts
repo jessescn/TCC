@@ -1,14 +1,18 @@
-import { Controller, errorResponseHandler } from 'controllers'
-import { VotoProcedimento } from 'models/procedimento'
+import { errorResponseHandler } from 'controllers'
+import {
+  ProcedimentoAttributes,
+  TStatus,
+  VotoProcedimento
+} from 'models/procedimento'
 import { IProcedimentoRepo } from 'repository'
-import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
+import { ProcedimentoStatusService } from 'services/procedimento-status'
 import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
+import { ProcedimentoUseCase } from 'usecases/procedimento'
+import { hasNumericId } from 'utils/request'
+import { VoteController } from '.'
 
-export class UpdateVoteController extends Controller {
-  private repository: ProcedimentoRepository
-
+export class UpdateVoteController extends VoteController {
   constructor(repository: IProcedimentoRepo) {
     const mandatoryFields: (keyof VotoProcedimento)[] = ['autor', 'aprovado']
     const permission: PermissionKey = 'colegiado_vote'
@@ -16,6 +20,20 @@ export class UpdateVoteController extends Controller {
 
     super({ validations, permission, mandatoryFields, repository })
     this.repository = repository
+  }
+
+  private handleMajorityVotes = async (
+    procedimento: ProcedimentoAttributes
+  ) => {
+    const novoStatus: TStatus =
+      ProcedimentoStatusService.isProcedimentoAprovado(procedimento.votos)
+        ? 'deferido'
+        : 'indeferido'
+
+    return ProcedimentoStatusService.changeProcedimentoStatus(
+      procedimento,
+      novoStatus
+    )
   }
 
   private callServiceToUpdateVote = (request: Request) => {
@@ -33,7 +51,18 @@ export class UpdateVoteController extends Controller {
     try {
       this.validateRequest(request)
 
+      await this.checkIfProcedimentoCanUpdate(request)
+
       const procedimento = await this.callServiceToUpdateVote(request)
+
+      const isMaioriaVotos = ProcedimentoUseCase.isMaioria(procedimento.votos)
+
+      if (isMaioriaVotos) {
+        const updatedProcedimento = await this.handleMajorityVotes(procedimento)
+
+        response.status(HttpStatusCode.created).send(updatedProcedimento)
+        return
+      }
 
       response.status(HttpStatusCode.created).send(procedimento)
     } catch (error) {

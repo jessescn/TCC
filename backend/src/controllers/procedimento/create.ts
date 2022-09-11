@@ -1,10 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
+import { ProcedimentoAttributes } from 'models/procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
-import { NewProcedimento } from 'repository/sequelize/procedimento'
+import { CreateProcedimento } from 'repository/sequelize/procedimento'
+import { ProcedimentoStatusService } from 'services/procedimento-status'
 import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { BadRequestError, UnauthorizedError } from 'types/express/errors'
-import { belongsToPublico } from 'utils/validations/procedimento'
+import { belongsToPublico } from 'utils/procedimento'
 
 export class CreateProcedimentoController extends Controller {
   private tipoProcedimentoRepo: IRepository
@@ -15,7 +17,7 @@ export class CreateProcedimentoController extends Controller {
     tipoProcedimentoRepo: IRepository,
     usuarioRepo: IRepository
   ) {
-    const mandatoryFields: (keyof NewProcedimento)[] = ['tipo', 'respostas']
+    const mandatoryFields: (keyof CreateProcedimento)[] = ['tipo', 'respostas']
     const permission: PermissionKey = 'procedimento_create'
 
     super({ permission, mandatoryFields, repository })
@@ -28,7 +30,7 @@ export class CreateProcedimentoController extends Controller {
   }
 
   private checkIfTipoProcedimentoExists = async (request: Request) => {
-    const { tipo } = request.body as NewProcedimento
+    const { tipo } = request.body as CreateProcedimento
 
     const tipoProcedimento = await this.tipoProcedimentoRepo.findOne(tipo)
 
@@ -38,7 +40,7 @@ export class CreateProcedimentoController extends Controller {
   }
 
   private checkIfUserBelongsToPublico = async (request: Request) => {
-    const { createdBy, tipo } = request.body as NewProcedimento
+    const { createdBy, tipo } = request.body as CreateProcedimento
 
     const usuario = await this.usuarioRepo.findOne(createdBy)
     const tipoProcedimento = await this.tipoProcedimentoRepo.findOne(tipo)
@@ -54,8 +56,25 @@ export class CreateProcedimentoController extends Controller {
     }
   }
 
-  private callServiceToCreateProcedimento = (request: Request) => {
-    const data = request.body as NewProcedimento
+  private validateIfProcedimentoCanBeCreated = async (request: Request) => {
+    await this.checkIfTipoProcedimentoExists(request)
+    await this.checkIfUserBelongsToPublico(request)
+  }
+
+  private updateCreatedProcedimentoStatus = async (
+    createdProcedimento: ProcedimentoAttributes
+  ) => {
+    const procedimento =
+      await ProcedimentoStatusService.changeProcedimentoStatus(
+        createdProcedimento,
+        'em_analise'
+      )
+
+    return procedimento
+  }
+
+  private callRepoToCreateProcedimento = (request: Request) => {
+    const data = request.body as CreateProcedimento
 
     return this.repository.create({
       respostas: data.respostas,
@@ -69,10 +88,11 @@ export class CreateProcedimentoController extends Controller {
     try {
       this.validateRequest(request)
 
-      await this.checkIfTipoProcedimentoExists(request)
-      await this.checkIfUserBelongsToPublico(request)
+      await this.validateIfProcedimentoCanBeCreated(request)
 
-      const procedimento = await this.callServiceToCreateProcedimento(request)
+      const created = await this.callRepoToCreateProcedimento(request)
+
+      const procedimento = await this.updateCreatedProcedimentoStatus(created)
 
       response.status(HttpStatusCode.created).send(procedimento)
     } catch (error) {

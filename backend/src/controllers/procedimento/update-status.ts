@@ -2,8 +2,8 @@ import { Controller, errorResponseHandler, Validation } from 'controllers'
 import { TStatus, statusList as availableStatus } from 'models/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
-import { BadRequestError } from 'types/express/errors'
+import { hasNumericId } from 'utils/request'
+import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoRepo } from 'repository'
 import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 
@@ -32,7 +32,17 @@ export class UpdateStatusProcedimentoController extends Controller {
     this.repository = repository
   }
 
-  private callServiceToUpdateStatus = (request: Request) => {
+  private checkIfProcedimentoExists = async (request: Request) => {
+    const { id } = request.params
+
+    const procedimento = this.repository.findOne(Number(id))
+
+    if (!procedimento) {
+      throw new NotFoundError()
+    }
+  }
+
+  private callRepoToUpdateStatus = (request: Request) => {
     const { id } = request.params
     const { status } = request.body as UpdateStatusProcedimento
 
@@ -42,7 +52,9 @@ export class UpdateStatusProcedimentoController extends Controller {
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
-      const procedimento = await this.callServiceToUpdateStatus(request)
+
+      await this.checkIfProcedimentoExists(request)
+      const procedimento = await this.callRepoToUpdateStatus(request)
 
       response.json(procedimento)
     } catch (error) {

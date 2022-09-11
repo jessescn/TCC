@@ -4,10 +4,8 @@ import { IRepository } from 'repository'
 import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import {
-  hasNumericId,
-  notIncludesInvalidFields
-} from 'utils/validations/request'
+import { NotFoundError } from 'types/express/errors'
+import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
   const validFields: (keyof TipoProcedimentoModel)[] = [
@@ -36,12 +34,22 @@ export class UpdateTipoProcedimentoController extends Controller {
     return this.props.repository
   }
 
+  checkIfTipoProcedimentoExists = async (id: number) => {
+    const tipoProcedimento = await this.repository.findOne(id)
+
+    if (!tipoProcedimento) {
+      throw new NotFoundError()
+    }
+  }
+
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
       const { id } = request.params
       const data = request.body as Partial<TipoProcedimentoModel>
+
+      await this.checkIfTipoProcedimentoExists(Number(id))
 
       const updatedTipoProcedimento = await this.repository.update(
         Number(id),

@@ -2,11 +2,10 @@ import User, { UserAttributes, UserModel } from 'models/user'
 import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { Roles } from 'types/auth/actors'
-import { ConflictError, NotFoundError } from 'types/express/errors'
 
 export type UsuarioQuery = WhereOptions<InferAttributes<UserAttributes>>
 
-export type RemoteNewUsuario = {
+export type CreateUsuario = {
   nome: string
   email: string
   senha: string
@@ -20,35 +19,15 @@ export class UsuarioRepository implements IRepository {
   }
 
   findOne = async (id: number) => {
-    const usuario = await User.findOne({ where: { id, deleted: false } })
-
-    if (!usuario) {
-      throw new NotFoundError()
-    }
-
-    return usuario
+    return User.findOne({ where: { id, deleted: false } })
   }
 
-  create = async (data: RemoteNewUsuario) => {
-    const usuario = await User.findOne({ where: { email: data.email } })
-
-    if (usuario) {
-      throw new ConflictError()
-    }
-
-    const newUsuario = await User.create(data)
-
-    return newUsuario
+  create = async (data: CreateUsuario) => {
+    return User.create(data)
   }
 
   update = async (id: number, data: Partial<UserModel>) => {
-    const usuario = await User.findOne({ where: { id, deleted: false } })
-
-    if (!usuario) {
-      throw new NotFoundError()
-    }
-
-    delete data.senha
+    const usuario = await this.findOne(id)
 
     usuario.set({ ...data })
 
@@ -58,11 +37,7 @@ export class UsuarioRepository implements IRepository {
   }
 
   destroy = async (id: number) => {
-    const usuario = await User.findOne({ where: { id, deleted: false } })
-
-    if (!usuario) {
-      throw new NotFoundError()
-    }
+    const usuario = await this.findOne(id)
 
     usuario.set({ deleted: true })
 

@@ -1,10 +1,14 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ProcedimentoModel } from 'models/procedimento'
+import { ProcedimentoAttributes, ProcedimentoModel } from 'models/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { BadRequestError, UnauthorizedError } from 'types/express/errors'
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError
+} from 'types/express/errors'
 import { getCurrentStatus } from 'utils/procedimento'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
@@ -28,14 +32,21 @@ export class UpdateProcedimentoController extends Controller {
     this.repository = repository
   }
 
-  private getProcedimentoById = (request: Request) => {
-    const { id } = request.params
-    return this.repository.findOne(Number(id))
+  private checkIfProcedimentoCanUpdateResposta = async (
+    procedimento: ProcedimentoAttributes
+  ) => {
+    const isOnPendingChangesStatus =
+      getCurrentStatus(procedimento) === 'correcoes_pendentes'
+
+    if (!isOnPendingChangesStatus) {
+      throw new BadRequestError('Cannot update in this current status')
+    }
   }
 
-  private checkIfHasPrivilegesToGetProcedimento = async (request: Request) => {
-    const procedimento = await this.getProcedimentoById(request)
-
+  private checkIfHasPrivilegesToGetProcedimento = (
+    procedimento: ProcedimentoAttributes,
+    request: Request
+  ) => {
     const scope = request.user.permissoes[this.permission]
     const hasScopeOwned = scope === 'owned'
     const hasScopeAll = scope === 'all'
@@ -49,37 +60,47 @@ export class UpdateProcedimentoController extends Controller {
     }
   }
 
-  private callServiceToUpdateProcedimento = async (request: Request) => {
+  private checkIfProcedimentoExists = (
+    procedimento: ProcedimentoAttributes
+  ) => {
+    if (!procedimento) {
+      throw new NotFoundError()
+    }
+  }
+
+  private validateIfProcedimentoCanUpdate = async (request: Request) => {
     const { id } = request.params
     const data = request.body as Partial<ProcedimentoModel>
 
-    return this.repository.update(Number(id), data)
+    const procedimento = await this.repository.findOne(Number(id))
+
+    this.checkIfProcedimentoExists(procedimento)
+    this.checkIfHasPrivilegesToGetProcedimento(procedimento, request)
+
+    if (data.respostas) {
+      this.checkIfProcedimentoCanUpdateResposta(procedimento)
+    }
   }
 
   private updateProcedimentoStatusToEmAnalise = (procedimentoId: number) => {
     return this.repository.updateStatus(procedimentoId, 'em_analise')
   }
 
-  private getProcedimentoWithUpdatedStatus = async (request: Request) => {
-    const procedimento = await this.getProcedimentoById(request)
+  private callRepoToUpdateProcedimento = async (request: Request) => {
+    const { id } = request.params
+    const data = request.body as Partial<ProcedimentoModel>
 
-    const isOnPendingChangesStatus =
-      getCurrentStatus(procedimento) === 'correcoes_pendentes'
+    await this.repository.update(Number(id), data)
 
-    if (!isOnPendingChangesStatus) {
-      throw new BadRequestError('Cannot update in this current status')
-    }
-
-    return this.updateProcedimentoStatusToEmAnalise(procedimento.id)
+    return this.updateProcedimentoStatusToEmAnalise(Number(id))
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      await this.checkIfHasPrivilegesToGetProcedimento(request)
-      await this.callServiceToUpdateProcedimento(request)
-      const procedimento = await this.getProcedimentoWithUpdatedStatus(request)
+      await this.validateIfProcedimentoCanUpdate(request)
+      const procedimento = await this.callRepoToUpdateProcedimento(request)
 
       response.json(procedimento)
     } catch (error) {

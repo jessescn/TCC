@@ -1,7 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
+import { hasNumericId } from 'utils/request'
 import { Revisao } from 'models/procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
 import {
@@ -9,6 +9,7 @@ import {
   ProcedimentoRepository
 } from 'repository/sequelize/procedimento'
 import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
+import { NotFoundError } from 'types/express/errors'
 
 export class ReviewProcedimentoController extends Controller {
   private repository: ProcedimentoRepository
@@ -30,6 +31,15 @@ export class ReviewProcedimentoController extends Controller {
     })
     this.repository = procedimentoRepo
     this.tipoProcedimentoRepo = tipoProcedimentoRepo
+  }
+
+  private checkIfProcedimentoExists = async (request: Request) => {
+    const { id } = request.params
+    const procedimento = await this.repository.findOne(Number(id))
+
+    if (!procedimento) {
+      throw new NotFoundError()
+    }
   }
 
   private getUpdatedProcedimento = async (request: Request) => {
@@ -73,7 +83,7 @@ export class ReviewProcedimentoController extends Controller {
     }
   }
 
-  private callServiceToAddNewRevisao = async (request: Request) => {
+  private callRepoToAddNewRevisao = async (request: Request) => {
     const { id } = request.params
     const data = request.body as NewRevisao
 
@@ -89,8 +99,11 @@ export class ReviewProcedimentoController extends Controller {
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
-      await this.callServiceToAddNewRevisao(request)
+
+      await this.checkIfProcedimentoExists(request)
+      await this.callRepoToAddNewRevisao(request)
       await this.updateProcedimentoToNextStatus(request)
+
       const procedimento = await this.getUpdatedProcedimento(request)
 
       response.json(procedimento)

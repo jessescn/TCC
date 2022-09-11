@@ -3,7 +3,8 @@ import { IRepository } from 'repository'
 import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
+import { NotFoundError } from 'types/express/errors'
+import { hasNumericId } from 'utils/request'
 
 export class ReadOneTipoProcedimentoController extends Controller {
   constructor(repository: IRepository) {
@@ -24,6 +25,10 @@ export class ReadOneTipoProcedimentoController extends Controller {
       const { id } = request.params
 
       const tipoProcedimento = await this.repository.findOne(Number(id))
+
+      if (!tipoProcedimento) {
+        throw new NotFoundError()
+      }
 
       response.json(tipoProcedimento)
     } catch (error) {

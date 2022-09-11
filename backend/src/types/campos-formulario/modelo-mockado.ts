@@ -1,5 +1,5 @@
-import { RemoteFormulario } from 'controllers/formulario'
 import { NewTipoProcedimento } from 'controllers/tipo-procedimento/create'
+import { RemoteFormulario } from 'models/formulario'
 
 const formulario: RemoteFormulario = {
   nome: 'Solicitação de Homologação de Comissão Examinadora de Defesa de Dissertação de Mestrado',

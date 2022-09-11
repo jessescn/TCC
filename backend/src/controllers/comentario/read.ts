@@ -19,7 +19,7 @@ export class ReadComentarioController extends Controller {
     try {
       this.validateRequest(request)
 
-      const comentarios = await this.repository.findAll({})
+      const comentarios = await this.repository.findAll()
 
       response.send(comentarios)
     } catch (error) {

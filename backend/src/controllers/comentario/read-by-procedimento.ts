@@ -3,7 +3,7 @@ import { IRepository } from 'repository'
 import { ComentarioRepository } from 'repository/sequelize/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
+import { hasNumericId } from 'utils/request'
 
 export class ReadCommentsByProcedimentoController extends Controller {
   constructor(repository: IRepository) {

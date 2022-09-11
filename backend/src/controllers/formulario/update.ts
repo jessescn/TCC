@@ -4,10 +4,8 @@ import { IRepository } from 'repository'
 import { FormularioRepository } from 'repository/sequelize/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import {
-  hasNumericId,
-  notIncludesInvalidFields
-} from 'utils/validations/request'
+import { NotFoundError } from 'types/express/errors'
+import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
   const validFields: (keyof FormularioModel)[] = ['nome', 'descricao', 'campos']
@@ -26,12 +24,22 @@ export class UpdateFormularioController extends Controller {
     return this.props.repository
   }
 
+  checkIfFormularioExists = async (id: number) => {
+    const formulario = await this.repository.findOne(id)
+
+    if (!formulario) {
+      throw new NotFoundError()
+    }
+  }
+
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
       const { id } = request.params
       const data = request.body as Partial<FormularioModel>
+
+      await this.checkIfFormularioExists(Number(id))
 
       const updatedFormulario = await this.repository.update(Number(id), data)
 

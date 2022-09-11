@@ -1,17 +1,15 @@
-import { Controller, errorResponseHandler } from 'controllers'
+import { errorResponseHandler } from 'controllers'
 import { IProcedimentoRepo } from 'repository'
-import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/validations/request'
+import { hasNumericId } from 'utils/request'
+import { VoteController } from '.'
 
 type RemoteDeleteVote = {
   autor: number
 }
 
-export class DeleteVoteController extends Controller {
-  private repository: ProcedimentoRepository
-
+export class DeleteVoteController extends VoteController {
   constructor(repository: IProcedimentoRepo) {
     const validations = [hasNumericId]
     const permission: PermissionKey = 'colegiado_delete_vote'
@@ -21,7 +19,7 @@ export class DeleteVoteController extends Controller {
     this.repository = repository
   }
 
-  private callServiceToDeleteVote = async (request: Request) => {
+  private callRepoToDeleteVote = async (request: Request) => {
     const { id } = request.params
     const { autor } = request.body as RemoteDeleteVote
 
@@ -32,7 +30,9 @@ export class DeleteVoteController extends Controller {
     try {
       this.validateRequest(request)
 
-      const procedimento = await this.callServiceToDeleteVote(request)
+      await this.checkIfProcedimentoCanUpdate(request)
+
+      const procedimento = await this.callRepoToDeleteVote(request)
 
       response.json(procedimento)
     } catch (error) {

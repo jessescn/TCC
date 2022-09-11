@@ -17,7 +17,7 @@ export type CreateComentario = {
 }
 
 export class ComentarioRepository implements IRepository {
-  findAll = async (query: ComentarioQuery) => {
+  findAll = async (query: ComentarioQuery = {}) => {
     const comentarios = await Comentario.findAll({
       include: [includeableUser, Procedimento],
       where: { deleted: false, ...query }

@@ -7,17 +7,14 @@ import {
   rolesMap
 } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { BadRequestError } from 'types/express/errors'
+import { BadRequestError, ConflictError } from 'types/express/errors'
 import { IRepository } from 'repository'
-import {
-  RemoteNewUsuario,
-  UsuarioRepository
-} from 'repository/sequelize/usuario'
+import { CreateUsuario, UsuarioRepository } from 'repository/sequelize/usuario'
 
 const hasOnlyAvailableRoles: Validation = request => {
   const availableRoles = rolesMap
 
-  const { roles } = request.body as RemoteNewUsuario
+  const { roles } = request.body as CreateUsuario
 
   if (!roles || roles.length === 0) return
 
@@ -32,7 +29,7 @@ const hasOnlyValidPermissions: Validation = request => {
   const validPermission = Object.keys(actorsPermissions.admin)
   const validScopes = permissionScopesMap
 
-  const { permissoes } = request.body as RemoteNewUsuario
+  const { permissoes } = request.body as CreateUsuario
 
   if (!permissoes || Object.keys(permissoes).length === 0) return
 
@@ -62,7 +59,7 @@ export class CreateUsuarioController extends Controller {
   }
 
   private mergePermissions = (request: Request) => {
-    const { permissoes } = request.body as RemoteNewUsuario
+    const { permissoes } = request.body as CreateUsuario
 
     const merged: PermissionKeys = {
       ...actorsPermissions.default,
@@ -72,11 +69,21 @@ export class CreateUsuarioController extends Controller {
     return merged
   }
 
+  checkIfUserAlreadyExists = async (email: string) => {
+    const [usuario] = await this.repository.findAll({ email })
+
+    if (usuario) {
+      throw new ConflictError('user already exists')
+    }
+  }
+
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const data = request.body as RemoteNewUsuario
+      const data = request.body as CreateUsuario
+
+      await this.checkIfUserAlreadyExists(data.email)
 
       const newUsuario = await this.repository.create({
         email: data.email,
