@@ -1,6 +1,6 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { IRepository } from 'repository'
-import { ComentarioRepository } from 'repository/sequelize/comentario'
+import { ComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
@@ -13,17 +13,15 @@ export class ReadCommentsByProcedimentoController extends Controller {
     super({ permission, validations, repository })
   }
 
-  get repository(): ComentarioRepository {
-    return this.props.repository
-  }
-
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
       const { id } = request.params
 
-      const comentarios = await this.repository.findAll({ procedimentoId: id })
+      const comentarios = await ComentarioService.findAll({
+        procedimentoId: id
+      })
 
       response.json(comentarios)
     } catch (error) {
