@@ -1,4 +1,3 @@
-import { IRepository } from 'repository'
 import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { RequestError } from 'types/express/errors'
@@ -24,14 +23,20 @@ export type ControllerProps = {
   validations?: Validation[]
   permission?: PermissionKey
   mandatoryFields?: string[]
-  repository?: IRepository
 }
 
 export abstract class Controller implements IController {
   protected props: ControllerProps
 
   constructor(props: ControllerProps) {
-    this.props = props
+    this.props = {
+      ...props,
+      validations: [
+        this.hasPermissions,
+        this.includesMandatoryFields,
+        ...(props.validations || [])
+      ]
+    }
   }
 
   get permission() {

@@ -1,16 +1,18 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { IRepository } from 'repository'
 import { ComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
 export class DeleteComentarioController extends Controller {
-  constructor(repository: IRepository) {
+  private service: ComentarioService
+
+  constructor(service: ComentarioService) {
     const validations = [hasNumericId]
     const permission: keyof PermissionKeys = 'comentario_delete'
 
-    super({ validations, permission, repository })
+    super({ validations, permission })
+    this.service = service
   }
 
   exec = async (request: Request, response: Response) => {
@@ -19,7 +21,7 @@ export class DeleteComentarioController extends Controller {
 
       const { id } = request.params
 
-      const deletedComentario = await ComentarioService.delete(Number(id))
+      const deletedComentario = await this.service.delete(Number(id))
 
       response.json(deletedComentario)
     } catch (error) {

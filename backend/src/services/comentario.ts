@@ -1,15 +1,25 @@
-import { ComentarioQuery } from './../repository/sequelize/comentario'
-import { NewComentario } from 'controllers/comentario/create'
-import { makeComentarioRepository } from 'factories/repositories/comentario-factory'
+import {
+  ComentarioQuery,
+  ComentarioRepository
+} from './../repository/sequelize/comentario'
 import { UserModel } from 'models/user'
 import { NotFoundError } from 'types/express/errors'
 import { ComentarioModel } from 'models/comentario'
+import { IRepository } from 'repository'
 
+export type NewComentario = {
+  conteudo: string
+  procedimento: number
+}
 export class ComentarioService {
-  static comentarioRepo = makeComentarioRepository()
+  private repository: ComentarioRepository
 
-  static async create(usuario: UserModel, data: NewComentario) {
-    const newComentario = await this.comentarioRepo.create({
+  constructor(repository: IRepository) {
+    this.repository = repository
+  }
+
+  async create(usuario: UserModel, data: NewComentario) {
+    const newComentario = await this.repository.create({
       conteudo: data.conteudo,
       procedimentoId: data.procedimento,
       createdBy: usuario.id
@@ -18,8 +28,8 @@ export class ComentarioService {
     return newComentario
   }
 
-  static async checkIfComentarioExists(id: number) {
-    const comentario = await this.comentarioRepo.findOne(id)
+  async checkIfComentarioExists(id: number) {
+    const comentario = await this.repository.findOne(id)
 
     if (!comentario) {
       throw new NotFoundError('comentario does not exists')
@@ -28,25 +38,25 @@ export class ComentarioService {
     return comentario
   }
 
-  static async findOne(id: number) {
+  async findOne(id: number) {
     const comentario = await this.checkIfComentarioExists(id)
 
     return comentario
   }
 
-  static async findAll(query: ComentarioQuery = {}) {
-    return this.comentarioRepo.findAll(query)
+  async findAll(query: ComentarioQuery = {}) {
+    return this.repository.findAll(query)
   }
 
-  static async delete(id: number) {
+  async delete(id: number) {
     await this.checkIfComentarioExists(id)
 
-    return this.comentarioRepo.destroy(id)
+    return this.repository.destroy(id)
   }
 
-  static async update(id: number, data: Partial<ComentarioModel>) {
+  async update(id: number, data: Partial<ComentarioModel>) {
     await this.checkIfComentarioExists(id)
 
-    return this.comentarioRepo.update(id, data)
+    return this.repository.update(id, data)
   }
 }
