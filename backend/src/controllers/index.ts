@@ -19,23 +19,25 @@ export const errorResponseHandler = (res: Response, error: any) => {
 
 export type Validation = (request: Request) => void
 
-export type ControllerProps = {
+export type ControllerProps<T> = {
   validations?: Validation[]
   permission?: PermissionKey
   mandatoryFields?: string[]
+  service: T
 }
 
-export abstract class Controller implements IController {
-  protected props: ControllerProps
+export abstract class Controller<T> implements IController {
+  protected props: ControllerProps<T>
 
-  constructor(props: ControllerProps) {
+  constructor(props: ControllerProps<T>) {
+    const defaultValidations = [
+      this.hasPermissions,
+      this.includesMandatoryFields
+    ]
+
     this.props = {
       ...props,
-      validations: [
-        this.hasPermissions,
-        this.includesMandatoryFields,
-        ...(props.validations || [])
-      ]
+      validations: [...defaultValidations, ...(props.validations || [])]
     }
   }
 
@@ -44,11 +46,15 @@ export abstract class Controller implements IController {
   }
 
   get mandatoryFields() {
-    return this.props.mandatoryFields
+    return this.props.mandatoryFields || []
   }
 
   get validations() {
-    return this.props.validations
+    return this.props.validations || []
+  }
+
+  get service() {
+    return this.props.service
   }
 
   abstract exec: (req: Request, res: Response) => Promise<void>

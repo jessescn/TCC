@@ -1,11 +1,10 @@
-import { Controller, errorResponseHandler } from 'controllers'
+import { errorResponseHandler } from 'controllers'
 import { ComentarioService, NewComentario } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
+import { ComentarioController } from '.'
 
-export class CreateComentarioController extends Controller {
-  private service: ComentarioService
-
+export class CreateComentarioController extends ComentarioController {
   constructor(service: ComentarioService) {
     const permission: keyof PermissionKeys = 'comentario_create'
     const mandatoryFields: (keyof NewComentario)[] = [
@@ -13,8 +12,7 @@ export class CreateComentarioController extends Controller {
       'procedimento'
     ]
 
-    super({ mandatoryFields, permission })
-    this.service = service
+    super({ mandatoryFields, permission, service })
   }
 
   exec = async (request: Request, response: Response) => {

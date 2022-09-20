@@ -5,7 +5,7 @@ import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateComentarioController } from '../create'
 
-describe('Comentario Controller', () => {
+describe('CreateComentario Controller', () => {
   const comentario = createMock<ComentarioModel>()
   const newComentario = createMock<NewComentario>({
     conteudo: 'test',
