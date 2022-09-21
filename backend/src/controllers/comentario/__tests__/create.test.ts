@@ -1,18 +1,16 @@
-import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
 import { ComentarioService, NewComentario } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
+import { bootstrap } from '../__mocks__'
 import { CreateComentarioController } from '../create'
 
 describe('CreateComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>()
+  const { user, comentario, response, spies } = bootstrap('comentario_create')
+
   const newComentario = createMock<NewComentario>({
     conteudo: 'test',
     procedimento: 1
-  })
-  const user = createMock<UserModel>({
-    permissoes: { comentario_create: 'all' }
   })
 
   const makeSut = () => {
@@ -23,14 +21,9 @@ describe('CreateComentario Controller', () => {
     return { sut: new CreateComentarioController(service), service }
   }
 
-  const sendSpy = jest.fn()
-  const response = {
-    status: jest.fn().mockReturnValue({ send: sendSpy })
-  }
-
   afterEach(() => {
     response.status.mockClear()
-    sendSpy.mockClear()
+    spies.sendSpy.mockClear()
   })
 
   it('should receive a request and response with the created comentario', async () => {
@@ -42,7 +35,7 @@ describe('CreateComentario Controller', () => {
 
     expect(service.create).toBeCalledWith(request.user, newComentario)
     expect(response.status).toBeCalledWith(HttpStatusCode.created)
-    expect(sendSpy).toBeCalledWith(comentario)
+    expect(spies.sendSpy).toBeCalledWith(comentario)
   })
 
   it('should response with unauthorized error code if user does not have access', async () => {
@@ -60,7 +53,7 @@ describe('CreateComentario Controller', () => {
     await sut.exec(request, response as any)
 
     expect(response.status).toBeCalledWith(HttpStatusCode.unauthorized)
-    expect(sendSpy).toBeCalledWith('no permission to access the resource')
+    expect(spies.sendSpy).toBeCalledWith('no permission to access the resource')
   })
 
   it('should response with bad request error code if request does not have mandatory fields', async () => {
@@ -74,6 +67,6 @@ describe('CreateComentario Controller', () => {
     await sut.exec(request, response as any)
 
     expect(response.status).toBeCalledWith(HttpStatusCode.badRequest)
-    expect(sendSpy).toBeCalledWith('invalid request')
+    expect(spies.sendSpy).toBeCalledWith('invalid request')
   })
 })

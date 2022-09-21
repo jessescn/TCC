@@ -8,7 +8,7 @@
     "prod": "NODE_PATH=src NODE_ENV=prod nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
     "build": "tsc",
     "test": "NODE_PATH=src jest",
-    "test:watch": "NODE_PATH=src jest --watch --coverage",
+    "tw": "NODE_PATH=src jest --watch --coverage",
     "lint": "eslint --ext .js,.ts .",
     "coverage": "NODE_PATH=src jest --coverage"
   },

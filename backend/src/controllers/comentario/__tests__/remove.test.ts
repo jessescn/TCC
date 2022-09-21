@@ -1,17 +1,13 @@
-import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
 import { ComentarioService } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { NotFoundError } from 'types/express/errors'
+import { bootstrap } from '../__mocks__'
 import { DeleteComentarioController } from '../delete'
 
 describe('RemoveComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-
-  const user = createMock<UserModel>({
-    permissoes: { comentario_delete: 'all' }
-  })
+  const { user, comentario, response, spies } = bootstrap('comentario_delete')
 
   const makeSut = () => {
     const service = createMock<ComentarioService>({
@@ -22,18 +18,10 @@ describe('RemoveComentario Controller', () => {
     return { sut: new DeleteComentarioController(service), service }
   }
 
-  const sendSpy = jest.fn()
-  const jsonSpy = jest.fn()
-
-  const response = {
-    status: jest.fn().mockReturnValue({ send: sendSpy }),
-    json: jsonSpy
-  }
-
   afterEach(() => {
     response.status.mockClear()
-    sendSpy.mockClear()
-    jsonSpy.mockClear()
+    spies.sendSpy.mockClear()
+    spies.jsonSpy.mockClear()
   })
 
   it('should receive a request with id and remove the respective comentario', async () => {

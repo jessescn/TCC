@@ -26,7 +26,7 @@ export class ReadComentarioController extends ComentarioController {
       const query = this.getQueryByScope(request.user)
       const comentarios = await this.service.findAll(query)
 
-      response.send(comentarios)
+      response.json(comentarios)
     } catch (error) {
       errorResponseHandler(response, error)
     }

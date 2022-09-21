@@ -1,4 +1,6 @@
 import { errorResponseHandler } from 'controllers'
+import { UserModel } from 'models/user'
+import { ComentarioQuery } from 'repository/sequelize/comentario'
 import { ComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
@@ -13,21 +15,27 @@ export class ReadCommentsByProcedimentoController extends ComentarioController {
     super({ permission, validations, service })
   }
 
+  getQueryByScope(usuario: UserModel, procedimentoId: number): ComentarioQuery {
+    const scope = usuario.permissoes[this.permission]
+
+    return scope === 'owned'
+      ? { user: { id: usuario.id }, procedimentoId }
+      : { procedimentoId }
+  }
+
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
       const { id } = request.params
 
-      await this.checkUserPermissionScope(request.user, Number(id))
+      const query = this.getQueryByScope(request.user, Number(id))
 
-      const comentarios = await this.service.findAll({
-        procedimentoId: id
-      })
+      const comentarios = await this.service.findAll(query)
 
       response.json(comentarios)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }
