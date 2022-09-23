@@ -1,6 +1,6 @@
 import { ReadOneFormularioController } from 'controllers/formulario/read-one'
-import { makeFormularioRepository } from 'factories/repositories/formulario-factory'
+import { makeFormularioService } from 'factories/services/formulario-factory'
 
 export const makeReadOneFormularioController = () => {
-  return new ReadOneFormularioController(makeFormularioRepository())
+  return new ReadOneFormularioController(makeFormularioService())
 }

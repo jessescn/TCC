@@ -1,36 +1,26 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { RemoteFormulario } from 'models/formulario'
-import { IRepository } from 'repository'
-import { FormularioRepository } from 'repository/sequelize/formulario'
+import { NewFormulario } from 'models/formulario'
+import { FormularioService } from 'services/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 
-export class CreateFormularioController extends Controller {
-  constructor(repository: IRepository) {
-    const mandatoryFields = ['nome', 'campos']
+export class CreateFormularioController extends Controller<FormularioService> {
+  constructor(service: FormularioService) {
     const permission: keyof PermissionKeys = 'form_create'
+    const mandatoryFields = ['nome', 'campos']
 
-    super({ mandatoryFields, permission, repository })
-  }
-
-  get repository(): FormularioRepository {
-    return this.props.repository
+    super({ mandatoryFields, permission, service })
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const data = request.body as RemoteFormulario
+      const data = request.body as NewFormulario
 
-      const newFormulario = await this.repository.create({
-        campos: data.campos,
-        nome: data.nome,
-        descricao: data.descricao,
-        createdBy: request.user.id
-      })
+      const newFormulario = await this.service.create(request.user, data)
 
-      response.status(HttpStatusCode.created).json(newFormulario)
+      response.status(HttpStatusCode.created).send(newFormulario)
     } catch (error) {
       errorResponseHandler(response, error)
     }

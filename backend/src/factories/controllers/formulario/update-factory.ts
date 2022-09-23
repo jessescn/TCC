@@ -1,6 +1,6 @@
 import { UpdateFormularioController } from 'controllers/formulario/update'
-import { makeFormularioRepository } from 'factories/repositories/formulario-factory'
+import { makeFormularioService } from 'factories/services/formulario-factory'
 
 export const makeUpdateFormularioController = () => {
-  return new UpdateFormularioController(makeFormularioRepository())
+  return new UpdateFormularioController(makeFormularioService())
 }

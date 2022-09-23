@@ -2,28 +2,14 @@ import { hasNumericId } from 'utils/request'
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { IRepository } from 'repository'
-import { FormularioRepository } from 'repository/sequelize/formulario'
-import { NotFoundError } from 'types/express/errors'
+import { FormularioService } from 'services/formulario'
 
-export class DeleteFormularioController extends Controller {
-  constructor(repository: IRepository) {
+export class DeleteFormularioController extends Controller<FormularioService> {
+  constructor(service: FormularioService) {
     const permission: keyof PermissionKeys = 'form_delete'
     const validations = [hasNumericId]
 
-    super({ permission, validations, repository })
-  }
-
-  get repository(): FormularioRepository {
-    return this.props.repository
-  }
-
-  checkIfFormularioExists = async (id: number) => {
-    const formulario = await this.repository.findOne(id)
-
-    if (!formulario) {
-      throw new NotFoundError()
-    }
+    super({ permission, validations, service })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -32,9 +18,7 @@ export class DeleteFormularioController extends Controller {
 
       const { id } = request.params
 
-      await this.checkIfFormularioExists(Number(id))
-
-      const deletedFormulario = await this.repository.destroy(Number(id))
+      const deletedFormulario = await this.service.delete(Number(id))
 
       response.json(deletedFormulario)
     } catch (error) {

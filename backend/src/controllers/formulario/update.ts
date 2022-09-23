@@ -1,10 +1,8 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { FormularioModel } from 'models/formulario'
-import { IRepository } from 'repository'
-import { FormularioRepository } from 'repository/sequelize/formulario'
+import { FormularioService } from 'services/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { NotFoundError } from 'types/express/errors'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
@@ -12,24 +10,12 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
   notIncludesInvalidFields(req, validFields)
 }
 
-export class UpdateFormularioController extends Controller {
-  constructor(repository: IRepository) {
+export class UpdateFormularioController extends Controller<FormularioService> {
+  constructor(service: FormularioService) {
     const permission: keyof PermissionKeys = 'form_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
-    super({ permission, validations, repository })
-  }
-
-  get repository(): FormularioRepository {
-    return this.props.repository
-  }
-
-  checkIfFormularioExists = async (id: number) => {
-    const formulario = await this.repository.findOne(id)
-
-    if (!formulario) {
-      throw new NotFoundError()
-    }
+    super({ permission, validations, service })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -39,9 +25,7 @@ export class UpdateFormularioController extends Controller {
       const { id } = request.params
       const data = request.body as Partial<FormularioModel>
 
-      await this.checkIfFormularioExists(Number(id))
-
-      const updatedFormulario = await this.repository.update(Number(id), data)
+      const updatedFormulario = await this.service.update(Number(id), data)
 
       response.json(updatedFormulario)
     } catch (error) {

@@ -1,6 +1,6 @@
 import { ReadComentarioController } from 'controllers/comentario/read'
-import { makeComentarioRepository } from 'factories/repositories/comentario-factory'
+import { makeComentarioService } from 'factories/services/comentario-factory'
 
 export const makeReadComentarioController = () => {
-  return new ReadComentarioController(makeComentarioRepository())
+  return new ReadComentarioController(makeComentarioService())
 }

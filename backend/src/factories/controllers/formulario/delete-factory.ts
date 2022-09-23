@@ -1,6 +1,6 @@
 import { DeleteFormularioController } from 'controllers/formulario/delete'
-import { makeFormularioRepository } from 'factories/repositories/formulario-factory'
+import { makeFormularioService } from 'factories/services/formulario-factory'
 
 export const makeDeleteFormularioController = () => {
-  return new DeleteFormularioController(makeFormularioRepository())
+  return new DeleteFormularioController(makeFormularioService())
 }

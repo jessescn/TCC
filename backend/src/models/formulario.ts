@@ -10,7 +10,7 @@ import {
   Model
 } from 'sequelize'
 
-export type RemoteFormulario = {
+export type NewFormulario = {
   nome: string
   descricao?: string
   campos: CampoFormulario[]
@@ -89,7 +89,7 @@ const Formulario = sequelize.define<FormularioAttributes>('formulario', {
 Formulario.belongsTo(User, { foreignKey: 'createdBy' })
 User.hasMany(Formulario)
 
-export const createInitialFormulario = async (formulario: RemoteFormulario) => {
+export const createInitialFormulario = async (formulario: NewFormulario) => {
   Formulario.findOrCreate({
     where: {
       nome: formulario.nome
