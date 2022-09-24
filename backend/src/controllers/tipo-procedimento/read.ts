@@ -1,25 +1,29 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { IRepository } from 'repository'
-import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
+import { UserModel } from 'models/user'
+import { TipoProcedimentoQuery } from 'repository/sequelize/tipo-procedimento'
+import { ITipoProcedimentoService } from 'services/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 
-export class ReadTipoProcedimentoController extends Controller {
-  constructor(repository: IRepository) {
+export class ReadTipoProcedimentoController extends Controller<ITipoProcedimentoService> {
+  constructor(service: ITipoProcedimentoService) {
     const permission: PermissionKey = 'tipo_procedimento_read'
 
-    super({ permission, repository })
+    super({ permission, service })
   }
 
-  get repository(): TipoProcedimentoRepository {
-    return this.props.repository
+  getQueryByScope = (usuario: UserModel): TipoProcedimentoQuery => {
+    const scope = usuario.permissoes[this.permission]
+
+    return scope === 'owned' ? { createdBy: usuario.id } : {}
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const tipoProcedimentos = await this.repository.findAll()
+      const query = this.getQueryByScope(request.user)
+      const tipoProcedimentos = await this.service.findAll(query)
 
       response.send(tipoProcedimentos)
     } catch (error) {

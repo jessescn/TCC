@@ -1,17 +1,18 @@
+import { baseSetup } from 'controllers/__mocks__'
+import { FormularioModel } from 'models/formulario'
 import { UserModel } from 'models/user'
-import { FormularioService } from 'services/formulario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadFormularioController } from '../read'
-import { bootstrap } from '../__mocks__'
 
 describe('ReadFormulario Controller', () => {
-  const { user, formulario, response, spies } = bootstrap('form_read')
+  const formulario = createMock<FormularioModel>()
+  const { user, response, spies } = baseSetup('form_read')
 
   const makeSut = () => {
-    const service = createMock<FormularioService>({
+    const service = {
       findAll: jest.fn().mockResolvedValue([formulario])
-    })
+    } as any
 
     return { sut: new ReadFormularioController(service), service }
   }

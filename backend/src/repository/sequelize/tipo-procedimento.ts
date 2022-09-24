@@ -5,9 +5,20 @@ import TipoProcedimento, {
 import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
-export type TipoRepositorioQuery = WhereOptions<
+export type TipoProcedimentoQuery = WhereOptions<
   InferAttributes<TipoProcedimentoAttributes>
 >
+
+export type NewTipoProcedimento = {
+  nome: string
+  descricao?: string
+  dataInicio?: string
+  dataFim?: string
+  escopo: string
+  publicos: string[]
+  colegiado: boolean
+  formularios: number[]
+}
 
 export type CreateTipoProcedimento = {
   nome: string
@@ -22,7 +33,7 @@ export type CreateTipoProcedimento = {
 }
 
 export class TipoProcedimentoRepository implements IRepository {
-  findAll = async (query: TipoRepositorioQuery = {}) => {
+  findAll = async (query: TipoProcedimentoQuery = {}) => {
     const tipoProcedimentos = await TipoProcedimento.findAll({
       where: { deleted: false, ...query }
     })

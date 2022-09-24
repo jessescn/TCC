@@ -1,14 +1,14 @@
 import { errorResponseHandler } from 'controllers'
 import { UserModel } from 'models/user'
 import { ComentarioQuery } from 'repository/sequelize/comentario'
-import { ComentarioService } from 'services/comentario'
+import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 import { ComentarioController } from '.'
 
 export class ReadCommentsByProcedimentoController extends ComentarioController {
-  constructor(service: ComentarioService) {
+  constructor(service: IComentarioService) {
     const validations = [hasNumericId]
     const permission: keyof PermissionKeys = 'colegiado_comments'
 

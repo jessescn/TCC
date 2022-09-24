@@ -6,7 +6,7 @@ export const validateMandatoryFields = (
   message?: string
 ) => {
   fields.forEach(field => {
-    if (!data[field]) {
+    if (!(field in data)) {
       throw new BadRequestError(message)
     }
   })

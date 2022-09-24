@@ -1,9 +1,19 @@
 /* istanbul ignore file */
-import { createInitialFormulario } from 'models/formulario'
+import Formulario from 'models/formulario'
 import { createInitialTipoProcedimento } from 'models/tipo-procedimento'
 import { createInitialUser } from 'models/user'
+import { NewFormulario } from 'repository/sequelize/formulario'
 import { actorsPermissions } from 'types/auth/actors'
 import mock from 'types/campos-formulario/modelo-mockado'
+
+export const createInitialFormulario = async (formulario: NewFormulario) => {
+  Formulario.findOrCreate({
+    where: {
+      nome: formulario.nome
+    },
+    defaults: formulario
+  })
+}
 
 export const populateInitialData = async () => {
   await createInitialUser({

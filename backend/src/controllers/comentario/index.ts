@@ -1,9 +1,9 @@
 import { Controller } from 'controllers'
 import { UserModel } from 'models/user'
-import { ComentarioService } from 'services/comentario'
+import { IComentarioService } from 'services/comentario'
 import { UnauthorizedError } from 'types/express/errors'
 
-export abstract class ComentarioController extends Controller<ComentarioService> {
+export abstract class ComentarioController extends Controller<IComentarioService> {
   async checkUserPermissionScope(usuario: UserModel, id: number) {
     const scope = usuario.permissoes[this.permission]
 

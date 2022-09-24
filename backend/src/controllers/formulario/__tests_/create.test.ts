@@ -1,17 +1,18 @@
-import { NewFormulario } from 'models/formulario'
-import { FormularioService } from 'services/formulario'
+import { baseSetup } from 'controllers/__mocks__'
+import { FormularioModel } from 'models/formulario'
+import { NewFormulario } from 'repository/sequelize/formulario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateFormularioController } from '../create'
-import { bootstrap } from '../__mocks__'
 
 describe('CreateFormulario Controller', () => {
-  const { formulario, user, spies, response } = bootstrap('form_create')
+  const formulario = createMock<FormularioModel>()
+  const { user, spies, response } = baseSetup('form_create')
 
   const makeSut = () => {
-    const service = createMock<FormularioService>({
+    const service = {
       create: jest.fn().mockResolvedValue(formulario)
-    })
+    } as any
 
     return { sut: new CreateFormularioController(service), service }
   }
@@ -39,9 +40,9 @@ describe('CreateFormulario Controller', () => {
   })
 
   it('should respond with badRequest error if request body does not have required fields', async () => {
-    const newFormularioWithoutFields = createMock<NewFormulario>({
+    const newFormularioWithoutFields = {
       campos: []
-    })
+    } as any
     const request = createMock<Request>({
       user,
       body: newFormularioWithoutFields

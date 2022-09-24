@@ -1,12 +1,14 @@
 import { UserModel } from 'models/user'
-import { ComentarioService, NewComentario } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
-import { bootstrap } from '../__mocks__'
 import { CreateComentarioController } from '../create'
+import { NewComentario } from 'repository/sequelize/comentario'
+import { baseSetup } from 'controllers/__mocks__'
+import { ComentarioModel } from 'models/comentario'
 
 describe('CreateComentario Controller', () => {
-  const { user, comentario, response, spies } = bootstrap('comentario_create')
+  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
+  const { user, response, spies } = baseSetup('comentario_create')
 
   const newComentario = createMock<NewComentario>({
     conteudo: 'test',
@@ -14,9 +16,9 @@ describe('CreateComentario Controller', () => {
   })
 
   const makeSut = () => {
-    const service = createMock<ComentarioService>({
+    const service = {
       create: jest.fn().mockResolvedValue(comentario)
-    })
+    } as any
 
     return { sut: new CreateComentarioController(service), service }
   }

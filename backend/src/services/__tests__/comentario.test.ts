@@ -1,7 +1,8 @@
 import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
 import { IRepository } from 'repository'
-import { ComentarioService, NewComentario } from 'services/comentario'
+import { NewComentario } from 'repository/sequelize/comentario'
+import { ComentarioService } from 'services/comentario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { NotFoundError } from 'types/express/errors'
 

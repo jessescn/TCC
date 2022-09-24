@@ -1,10 +1,7 @@
-import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
 import { createMock } from 'ts-auto-mock'
 
-export const bootstrap = (permissao: string) => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-
+export const baseSetup = (permissao: string) => {
   const user = createMock<UserModel>({
     permissoes: { [permissao]: 'all' }
   })
@@ -23,7 +20,6 @@ export const bootstrap = (permissao: string) => {
       sendSpy,
       jsonSpy
     },
-    user,
-    comentario
+    user
   }
 }

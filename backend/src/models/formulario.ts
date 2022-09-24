@@ -10,12 +10,6 @@ import {
   Model
 } from 'sequelize'
 
-export type NewFormulario = {
-  nome: string
-  descricao?: string
-  campos: CampoFormulario[]
-}
-
 type TipoCampoFormulario =
   | 'paragrafo'
   | 'resposta'
@@ -88,14 +82,5 @@ const Formulario = sequelize.define<FormularioAttributes>('formulario', {
 
 Formulario.belongsTo(User, { foreignKey: 'createdBy' })
 User.hasMany(Formulario)
-
-export const createInitialFormulario = async (formulario: NewFormulario) => {
-  Formulario.findOrCreate({
-    where: {
-      nome: formulario.nome
-    },
-    defaults: formulario
-  })
-}
 
 export default Formulario

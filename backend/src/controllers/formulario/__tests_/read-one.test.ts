@@ -1,16 +1,17 @@
-import { FormularioService } from 'services/formulario'
+import { baseSetup } from 'controllers/__mocks__'
+import { FormularioModel } from 'models/formulario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadOneFormularioController } from '../read-one'
-import { bootstrap } from '../__mocks__'
 
 describe('ReadOneFormulario Controller', () => {
-  const { user, formulario, response, spies } = bootstrap('form_delete')
+  const formulario = createMock<FormularioModel>()
+  const { user, response, spies } = baseSetup('form_delete')
 
   const makeSut = () => {
-    const service = createMock<FormularioService>({
+    const service = {
       findOne: jest.fn().mockResolvedValue(formulario)
-    })
+    } as any
 
     return { sut: new ReadOneFormularioController(service), service }
   }

@@ -10,6 +10,11 @@ export type ComentarioQuery = WhereOptions<
   InferAttributes<ComentarioAttributes>
 >
 
+export type NewComentario = {
+  conteudo: string
+  procedimento: number
+}
+
 export type CreateComentario = {
   conteudo: string
   procedimentoId: number

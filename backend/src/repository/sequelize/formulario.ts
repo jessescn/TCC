@@ -18,6 +18,12 @@ export type CreateFormulario = {
   createdBy: number
 }
 
+export type NewFormulario = {
+  nome: string
+  descricao?: string
+  campos: CampoFormulario[]
+}
+
 export class FormularioRepository implements IRepository {
   findAll = async (query: FormularioQuery = {}) => {
     const formularios = await Formulario.findAll({

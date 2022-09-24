@@ -1,17 +1,18 @@
-import { bootstrap } from '../__mocks__'
+import { baseSetup } from 'controllers/__mocks__'
+import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
-import { ComentarioService } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadCommentsByProcedimentoController } from '../read-by-procedimento'
 
 describe('ReadByProcedimento Controller', () => {
-  const { user, comentario, response, spies } = bootstrap('colegiado_comments')
+  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
+  const { user, response, spies } = baseSetup('colegiado_comments')
 
   const makeSut = () => {
-    const service = createMock<ComentarioService>({
+    const service = {
       findAll: jest.fn().mockResolvedValue([comentario])
-    })
+    } as any
 
     return { sut: new ReadCommentsByProcedimentoController(service), service }
   }

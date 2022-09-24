@@ -1,13 +1,27 @@
-import { FormularioModel, NewFormulario } from 'models/formulario'
+import { FormularioAttributes, FormularioModel } from 'models/formulario'
 import { UserModel } from 'models/user'
 import { IRepository } from 'repository'
 import {
   FormularioQuery,
-  FormularioRepository
+  FormularioRepository,
+  NewFormulario
 } from 'repository/sequelize/formulario'
+import { IService } from 'services'
 import { NotFoundError } from 'types/express/errors'
 
-export class FormularioService {
+export interface IFormularioService
+  extends IService<FormularioAttributes, FormularioQuery> {
+  update: (
+    id: number,
+    data: Partial<FormularioModel>
+  ) => Promise<FormularioAttributes>
+  create: (
+    usuario: UserModel,
+    data: NewFormulario
+  ) => Promise<FormularioAttributes>
+}
+
+export class FormularioService implements IFormularioService {
   private repository: FormularioRepository
 
   constructor(repository: IRepository) {

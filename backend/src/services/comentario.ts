@@ -1,17 +1,27 @@
 import {
   ComentarioQuery,
-  ComentarioRepository
+  ComentarioRepository,
+  NewComentario
 } from './../repository/sequelize/comentario'
 import { UserModel } from 'models/user'
 import { NotFoundError } from 'types/express/errors'
-import { ComentarioModel } from 'models/comentario'
+import { ComentarioAttributes, ComentarioModel } from 'models/comentario'
 import { IRepository } from 'repository'
+import { IService } from 'services'
 
-export type NewComentario = {
-  conteudo: string
-  procedimento: number
+export interface IComentarioService
+  extends IService<ComentarioAttributes, ComentarioQuery> {
+  update: (
+    id: number,
+    data: Partial<ComentarioModel>
+  ) => Promise<ComentarioAttributes>
+  create: (
+    usuario: UserModel,
+    data: NewComentario
+  ) => Promise<ComentarioAttributes>
 }
-export class ComentarioService {
+
+export class ComentarioService implements IComentarioService {
   private repository: ComentarioRepository
 
   constructor(repository: IRepository) {
@@ -28,7 +38,7 @@ export class ComentarioService {
     return newComentario
   }
 
-  async checkIfComentarioExists(id: number) {
+  private async checkIfComentarioExists(id: number) {
     const comentario = await this.repository.findOne(id)
 
     if (!comentario) {

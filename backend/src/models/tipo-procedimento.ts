@@ -28,6 +28,7 @@ export interface TipoProcedimentoModel {
   deleted: boolean
   createdAt?: Date
   updatedAt?: Date
+  createdBy?: number
 }
 
 export interface TipoProcedimentoAttributes
@@ -48,6 +49,7 @@ export interface TipoProcedimentoAttributes
   deleted: boolean
   createdAt?: Date
   updatedAt?: Date
+  createdBy?: number
 }
 
 const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(

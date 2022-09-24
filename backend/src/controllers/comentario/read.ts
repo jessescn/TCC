@@ -1,13 +1,13 @@
 import { errorResponseHandler } from 'controllers'
 import { UserModel } from 'models/user'
 import { ComentarioQuery } from 'repository/sequelize/comentario'
-import { ComentarioService } from 'services/comentario'
+import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { ComentarioController } from '.'
 
 export class ReadComentarioController extends ComentarioController {
-  constructor(service: ComentarioService) {
+  constructor(service: IComentarioService) {
     const permission: keyof PermissionKeys = 'comentario_delete'
 
     super({ permission, service })

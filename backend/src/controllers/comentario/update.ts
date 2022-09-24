@@ -1,6 +1,6 @@
 import { errorResponseHandler } from 'controllers'
 import { ComentarioModel } from 'models/comentario'
-import { ComentarioService } from 'services/comentario'
+import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
@@ -12,7 +12,7 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 }
 
 export class UpdateComentarioController extends ComentarioController {
-  constructor(service: ComentarioService) {
+  constructor(service: IComentarioService) {
     const permission: keyof PermissionKeys = 'comentario_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 

@@ -1,19 +1,20 @@
+import { baseSetup } from 'controllers/__mocks__'
+import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
-import { ComentarioService } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { NotFoundError } from 'types/express/errors'
-import { bootstrap } from '../__mocks__'
 import { DeleteComentarioController } from '../delete'
 
 describe('RemoveComentario Controller', () => {
-  const { user, comentario, response, spies } = bootstrap('comentario_delete')
+  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
+  const { user, response, spies } = baseSetup('comentario_delete')
 
   const makeSut = () => {
-    const service = createMock<ComentarioService>({
+    const service = {
       delete: jest.fn().mockResolvedValue(comentario),
       findOne: jest.fn().mockResolvedValue(comentario)
-    })
+    } as any
 
     return { sut: new DeleteComentarioController(service), service }
   }
@@ -72,9 +73,9 @@ describe('RemoveComentario Controller', () => {
   })
 
   it('should response with notFound error if comentario does not exists', async () => {
-    const service = createMock<ComentarioService>({
+    const service = {
       delete: jest.fn().mockRejectedValue(new NotFoundError())
-    })
+    } as any
 
     const sut = new DeleteComentarioController(service)
 

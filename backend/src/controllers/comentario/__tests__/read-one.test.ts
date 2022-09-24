@@ -1,17 +1,18 @@
+import { baseSetup } from 'controllers/__mocks__'
+import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
-import { ComentarioService } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
-import { bootstrap } from '../__mocks__'
 import { ReadOneComentarioController } from '../read-one'
 
 describe('ReadOneComentario Controller', () => {
-  const { user, comentario, response, spies } = bootstrap('comentario_read')
+  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
+  const { user, response, spies } = baseSetup('comentario_read')
 
   const makeSut = () => {
-    const service = createMock<ComentarioService>({
+    const service = {
       findOne: jest.fn().mockResolvedValue(comentario)
-    })
+    } as any
 
     return { sut: new ReadOneComentarioController(service), service }
   }

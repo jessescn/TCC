@@ -1,11 +1,11 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { NewFormulario } from 'models/formulario'
-import { FormularioService } from 'services/formulario'
+import { NewFormulario } from 'repository/sequelize/formulario'
+import { IFormularioService } from 'services/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 
-export class CreateFormularioController extends Controller<FormularioService> {
-  constructor(service: FormularioService) {
+export class CreateFormularioController extends Controller<IFormularioService> {
+  constructor(service: IFormularioService) {
     const permission: keyof PermissionKeys = 'form_create'
     const mandatoryFields = ['nome', 'campos']
 

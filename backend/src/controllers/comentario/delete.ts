@@ -1,12 +1,12 @@
 import { errorResponseHandler } from 'controllers'
-import { ComentarioService } from 'services/comentario'
+import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 import { ComentarioController } from '.'
 
 export class DeleteComentarioController extends ComentarioController {
-  constructor(service: ComentarioService) {
+  constructor(service: IComentarioService) {
     const validations = [hasNumericId]
     const permission: keyof PermissionKeys = 'comentario_delete'
 

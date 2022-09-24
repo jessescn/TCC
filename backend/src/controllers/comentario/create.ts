@@ -1,11 +1,12 @@
 import { errorResponseHandler } from 'controllers'
-import { ComentarioService, NewComentario } from 'services/comentario'
+import { NewComentario } from 'repository/sequelize/comentario'
+import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { ComentarioController } from '.'
 
 export class CreateComentarioController extends ComentarioController {
-  constructor(service: ComentarioService) {
+  constructor(service: IComentarioService) {
     const permission: keyof PermissionKeys = 'comentario_create'
     const mandatoryFields: (keyof NewComentario)[] = [
       'conteudo',

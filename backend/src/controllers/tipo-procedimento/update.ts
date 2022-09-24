@@ -1,10 +1,8 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { TipoProcedimentoModel } from 'models/tipo-procedimento'
-import { IRepository } from 'repository'
-import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
+import { ITipoProcedimentoService } from 'services/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { NotFoundError } from 'types/express/errors'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
@@ -22,24 +20,12 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
   notIncludesInvalidFields(req, validFields)
 }
 
-export class UpdateTipoProcedimentoController extends Controller {
-  constructor(repository: IRepository) {
+export class UpdateTipoProcedimentoController extends Controller<ITipoProcedimentoService> {
+  constructor(service: ITipoProcedimentoService) {
     const permission: PermissionKey = 'tipo_procedimento_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
-    super({ validations, permission, repository })
-  }
-
-  get repository(): TipoProcedimentoRepository {
-    return this.props.repository
-  }
-
-  checkIfTipoProcedimentoExists = async (id: number) => {
-    const tipoProcedimento = await this.repository.findOne(id)
-
-    if (!tipoProcedimento) {
-      throw new NotFoundError()
-    }
+    super({ validations, permission, service })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -49,9 +35,7 @@ export class UpdateTipoProcedimentoController extends Controller {
       const { id } = request.params
       const data = request.body as Partial<TipoProcedimentoModel>
 
-      await this.checkIfTipoProcedimentoExists(Number(id))
-
-      const updatedTipoProcedimento = await this.repository.update(
+      const updatedTipoProcedimento = await this.service.update(
         Number(id),
         data
       )

@@ -1,17 +1,18 @@
-import { FormularioService } from 'services/formulario'
+import { baseSetup } from 'controllers/__mocks__'
+import { FormularioModel } from 'models/formulario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { DeleteFormularioController } from '../delete'
-import { bootstrap } from '../__mocks__'
 
 describe('DeleteFormulario Controller', () => {
-  const { formulario, response, user, spies } = bootstrap('form_delete')
+  const formulario = createMock<FormularioModel>()
+  const { response, user, spies } = baseSetup('form_delete')
 
   const makeSut = () => {
-    const service = createMock<FormularioService>({
+    const service = {
       create: jest.fn().mockResolvedValue(formulario),
       delete: jest.fn().mockResolvedValue(formulario)
-    })
+    } as any
 
     return { sut: new DeleteFormularioController(service), service }
   }

@@ -1,19 +1,19 @@
+import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'models/comentario'
 import { UserModel } from 'models/user'
-import { ComentarioService } from 'services/comentario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { UpdateComentarioController } from '../update'
-import { bootstrap } from '../__mocks__'
 
 describe('UpdateComentario Controller', () => {
-  const { comentario, response, spies, user } = bootstrap('comentario_update')
+  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
+  const { response, spies, user } = baseSetup('comentario_update')
 
   const makeSut = () => {
-    const service = createMock<ComentarioService>({
+    const service = {
       update: jest.fn().mockResolvedValue(comentario),
       findOne: jest.fn().mockResolvedValue(comentario)
-    })
+    } as any
 
     return { sut: new UpdateComentarioController(service), service }
   }
