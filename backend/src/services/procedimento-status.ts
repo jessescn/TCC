@@ -39,7 +39,7 @@ export class ProcedimentoStatusService {
   static changeProcedimentoStatus = async (
     procedimento: ProcedimentoAttributes,
     novoStatus: TStatus
-  ): Promise<ProcedimentoModel> => {
+  ): Promise<ProcedimentoAttributes> => {
     const autor = await this.usuarioRepo.findOne(procedimento.createdBy)
 
     const status = await StatusHandlerMap[novoStatus].execute({

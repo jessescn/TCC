@@ -1,6 +1,6 @@
 import { HomologateProcedimentoController } from 'controllers/procedimento/homologate'
-import { makeProcedimentoRepository } from 'factories/repositories/procedimento-factory'
+import { makeProcedimentoService } from 'factories/services/procedimento-factory'
 
 export const makeHomologateProcedimentoController = () => {
-  return new HomologateProcedimentoController(makeProcedimentoRepository())
+  return new HomologateProcedimentoController(makeProcedimentoService())
 }

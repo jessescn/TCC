@@ -23,6 +23,12 @@ export type CreateProcedimento = {
   createdBy: number
 }
 
+export type NewProcedimento = {
+  tipo: number
+  respostas: Resposta[]
+  votos?: VotoProcedimento[]
+}
+
 export type NewRevisao = {
   aprovado: boolean
   comentario: string

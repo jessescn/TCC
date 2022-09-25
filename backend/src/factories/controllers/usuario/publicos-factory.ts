@@ -1,6 +1,6 @@
 import { PublicosUsuarioController } from 'controllers/usuario/publicos'
-import { makeUsuarioRepository } from 'factories/repositories/usuario-factory'
+import { makeUsuarioService } from 'factories/services/usuario-factory'
 
 export const makePublicosUsuarioController = () => {
-  return new PublicosUsuarioController(makeUsuarioRepository())
+  return new PublicosUsuarioController(makeUsuarioService())
 }

@@ -1,6 +1,6 @@
 import { ReadOneTipoProcedimentoController } from 'controllers/tipo-procedimento/read-one'
-import { makeTipoProcedimentoRepository } from 'factories/repositories/tipo-procedimento-factory'
+import { makeTipoProcedimentoService } from 'factories/services/tipo-procedimento-factory'
 
 export const makeReadOneTipoProcedimentoController = () => {
-  return new ReadOneTipoProcedimentoController(makeTipoProcedimentoRepository())
+  return new ReadOneTipoProcedimentoController(makeTipoProcedimentoService())
 }

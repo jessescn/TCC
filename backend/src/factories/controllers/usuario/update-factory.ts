@@ -1,6 +1,6 @@
 import { UpdateUsuarioController } from 'controllers/usuario/update'
-import { makeUsuarioRepository } from 'factories/repositories/usuario-factory'
+import { makeUsuarioService } from 'factories/services/usuario-factory'
 
 export const makeUpdateUsuarioController = () => {
-  return new UpdateUsuarioController(makeUsuarioRepository())
+  return new UpdateUsuarioController(makeUsuarioService())
 }

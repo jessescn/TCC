@@ -1,6 +1,6 @@
 import { DeleteProcedimentoController } from 'controllers/procedimento/delete'
-import { makeProcedimentoRepository } from 'factories/repositories/procedimento-factory'
+import { makeProcedimentoService } from 'factories/services/procedimento-factory'
 
 export const makeDeleteProcedimentoController = () => {
-  return new DeleteProcedimentoController(makeProcedimentoRepository())
+  return new DeleteProcedimentoController(makeProcedimentoService())
 }

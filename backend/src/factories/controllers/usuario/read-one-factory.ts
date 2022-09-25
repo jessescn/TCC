@@ -1,6 +1,6 @@
 import { ReadOneUsuarioController } from 'controllers/usuario/read-one'
-import { makeUsuarioRepository } from 'factories/repositories/usuario-factory'
+import { makeUsuarioService } from 'factories/services/usuario-factory'
 
 export const makeReadOneUsuarioController = () => {
-  return new ReadOneUsuarioController(makeUsuarioRepository())
+  return new ReadOneUsuarioController(makeUsuarioService())
 }
