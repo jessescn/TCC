@@ -1,5 +1,5 @@
-import { ComentarioModel } from 'models/comentario'
-import { UserModel } from 'models/user'
+import { ComentarioModel } from 'domain/models/comentario'
+import { UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import { NewComentario } from 'repository/sequelize/comentario'
 import { ComentarioService } from 'services/comentario'

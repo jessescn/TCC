@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { IUsuarioService } from 'services/usuario'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'

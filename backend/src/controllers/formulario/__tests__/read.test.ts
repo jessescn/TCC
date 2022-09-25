@@ -1,6 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { FormularioModel } from 'models/formulario'
-import { UserModel } from 'models/user'
+import { FormularioModel } from 'domain/models/formulario'
+import { UserModel } from 'domain/models/user'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadFormularioController } from '../read'

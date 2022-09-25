@@ -1,4 +1,4 @@
-import { UserAttributes } from 'models/user'
+import { UserAttributes } from 'domain/models/user'
 import { Roles } from 'types/auth/actors'
 
 export class Usuario {

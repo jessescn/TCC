@@ -1,4 +1,4 @@
-import { Status } from 'models/procedimento'
+import { Status } from 'domain/models/procedimento'
 import { StatusHandler } from '.'
 
 export class CorrecoesPendentesStatusHandler implements StatusHandler {

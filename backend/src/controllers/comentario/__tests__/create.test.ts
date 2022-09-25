@@ -1,10 +1,10 @@
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateComentarioController } from '../create'
 import { NewComentario } from 'repository/sequelize/comentario'
 import { baseSetup } from 'controllers/__mocks__'
-import { ComentarioModel } from 'models/comentario'
+import { ComentarioModel } from 'domain/models/comentario'
 
 describe('CreateComentario Controller', () => {
   const comentario = createMock<ComentarioModel>({ user: { id: 2 } })

@@ -1,5 +1,5 @@
 import { errorResponseHandler } from 'controllers'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { ComentarioQuery } from 'repository/sequelize/comentario'
 import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'

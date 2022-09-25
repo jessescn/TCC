@@ -2,7 +2,7 @@ import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
-import { Revisao } from 'models/procedimento'
+import { Revisao } from 'domain/models/procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
 import {
   NewRevisao,

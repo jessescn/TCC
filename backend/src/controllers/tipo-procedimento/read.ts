@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { TipoProcedimentoQuery } from 'repository/sequelize/tipo-procedimento'
 import { ITipoProcedimentoService } from 'services/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'

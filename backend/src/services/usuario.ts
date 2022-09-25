@@ -1,4 +1,4 @@
-import { UserAttributes, UserModel } from 'models/user'
+import { UserAttributes, UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import {
   NewUsuario,
@@ -7,7 +7,7 @@ import {
 } from 'repository/sequelize/usuario'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
-import { Usuario } from 'usecases/usuario'
+import { Usuario } from 'domain/usecases/usuario'
 
 export interface IUsuarioService
   extends IService<UserAttributes, UsuarioQuery> {

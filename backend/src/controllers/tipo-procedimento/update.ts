@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { TipoProcedimentoModel } from 'models/tipo-procedimento'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ITipoProcedimentoService } from 'services/tipo-procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'

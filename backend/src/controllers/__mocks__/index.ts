@@ -1,4 +1,4 @@
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { createMock } from 'ts-auto-mock'
 
 export const baseSetup = (permissao: string) => {

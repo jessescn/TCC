@@ -1,6 +1,6 @@
 import { ReadOneTipoProcedimentoController } from 'controllers/tipo-procedimento/read-one'
 import { baseSetup } from 'controllers/__mocks__'
-import { TipoProcedimentoModel } from 'models/tipo-procedimento'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 

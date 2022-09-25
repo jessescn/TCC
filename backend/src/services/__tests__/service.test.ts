@@ -1,4 +1,4 @@
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import { NewUsuario, UsuarioQuery } from 'repository/sequelize/usuario'
 import { UsuarioService } from 'services/usuario'

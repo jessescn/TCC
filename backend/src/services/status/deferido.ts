@@ -1,4 +1,4 @@
-import { Status } from 'models/procedimento'
+import { Status } from 'domain/models/procedimento'
 import { IMailRepository } from 'repository'
 import templates from 'templates'
 import { HandlerProps, StatusHandler } from '.'

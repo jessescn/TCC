@@ -2,10 +2,10 @@ import { ComentarioRepository, CreateComentario } from '../comentario'
 import Comentario, {
   ComentarioAttributes,
   ComentarioModel
-} from 'models/comentario'
+} from 'domain/models/comentario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { includeableUser } from 'repository'
-import Procedimento from 'models/procedimento'
+import Procedimento from 'domain/models/procedimento'
 
 describe('Comentario Repository', () => {
   const sut = new ComentarioRepository()

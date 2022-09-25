@@ -1,5 +1,5 @@
-import { FormularioAttributes, FormularioModel } from 'models/formulario'
-import { UserModel } from 'models/user'
+import { FormularioAttributes, FormularioModel } from 'domain/models/formulario'
+import { UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import {
   FormularioQuery,

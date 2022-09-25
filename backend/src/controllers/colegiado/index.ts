@@ -1,9 +1,9 @@
 import { Controller, ControllerProps } from 'controllers'
-import { ProcedimentoAttributes } from 'models/procedimento'
+import { ProcedimentoAttributes } from 'domain/models/procedimento'
 import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
 import { Request, Response } from 'types/express'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
-import { ProcedimentoUseCase } from 'usecases/procedimento'
+import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 
 export type VoteControllerProps = ControllerProps & {
   repository: ProcedimentoRepository

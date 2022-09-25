@@ -1,5 +1,5 @@
 import { errorResponseHandler } from 'controllers'
-import { ComentarioModel } from 'models/comentario'
+import { ComentarioModel } from 'domain/models/comentario'
 import { IComentarioService } from 'services/comentario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'

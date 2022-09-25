@@ -1,7 +1,7 @@
 import TipoProcedimento, {
   TipoProcedimentoAttributes,
   TipoProcedimentoModel
-} from 'models/tipo-procedimento'
+} from 'domain/models/tipo-procedimento'
 import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 

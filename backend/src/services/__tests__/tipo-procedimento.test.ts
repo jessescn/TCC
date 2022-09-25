@@ -1,6 +1,6 @@
-import { FormularioModel } from 'models/formulario'
-import { TipoProcedimentoModel } from 'models/tipo-procedimento'
-import { UserModel } from 'models/user'
+import { FormularioModel } from 'domain/models/formulario'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import {
   NewTipoProcedimento,

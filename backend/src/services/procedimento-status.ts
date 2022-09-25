@@ -6,10 +6,10 @@ import {
   statusList,
   TStatus,
   VotoProcedimento
-} from 'models/procedimento'
+} from 'domain/models/procedimento'
 import templates from 'templates'
 import { StatusHandlerMap } from './status'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { makeUsuarioRepository } from 'factories/repositories/usuario-factory'
 
 export class ProcedimentoStatusService {

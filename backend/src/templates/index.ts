@@ -1,4 +1,4 @@
-import { ProcedimentoModel } from 'models/procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 
 export type EmailTemplate = {
   to: string

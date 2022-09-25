@@ -1,8 +1,8 @@
 import Comentario, {
   ComentarioAttributes,
   ComentarioModel
-} from 'models/comentario'
-import Procedimento from 'models/procedimento'
+} from 'domain/models/comentario'
+import Procedimento from 'domain/models/procedimento'
 import { includeableUser, IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 

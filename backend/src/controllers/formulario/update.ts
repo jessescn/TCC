@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { FormularioModel } from 'models/formulario'
+import { FormularioModel } from 'domain/models/formulario'
 import { IFormularioService } from 'services/formulario'
 import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'

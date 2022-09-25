@@ -1,4 +1,4 @@
-import Comentario from 'models/comentario'
+import Comentario from 'domain/models/comentario'
 import Procedimento, {
   CampoInvalido,
   ProcedimentoAttributes,
@@ -8,13 +8,13 @@ import Procedimento, {
   Status,
   TStatus,
   VotoProcedimento
-} from 'models/procedimento'
-import TipoProcedimento from 'models/tipo-procedimento'
-import User from 'models/user'
+} from 'domain/models/procedimento'
+import TipoProcedimento from 'domain/models/tipo-procedimento'
+import User from 'domain/models/user'
 import { IProcedimentoRepo } from 'repository'
 import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
 import { ProcedimentoStatusService } from 'services/procedimento-status'
-import { ProcedimentoUseCase } from 'usecases/procedimento'
+import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 
 export type CreateProcedimento = {
   tipo: number

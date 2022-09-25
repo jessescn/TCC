@@ -1,8 +1,8 @@
 import {
   TipoProcedimentoAttributes,
   TipoProcedimentoModel
-} from 'models/tipo-procedimento'
-import { UserModel } from 'models/user'
+} from 'domain/models/tipo-procedimento'
+import { UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import { FormularioRepository } from 'repository/sequelize/formulario'
 import {

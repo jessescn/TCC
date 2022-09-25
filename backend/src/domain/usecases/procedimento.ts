@@ -1,4 +1,4 @@
-import { ProcedimentoModel, VotoProcedimento } from 'models/procedimento'
+import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
 
 export class ProcedimentoUseCase {
   static insertOrUpdateVote = (

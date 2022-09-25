@@ -1,5 +1,5 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { FormularioModel } from 'models/formulario'
+import { FormularioModel } from 'domain/models/formulario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { DeleteFormularioController } from '../delete'

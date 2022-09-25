@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ProcedimentoModel } from 'models/procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { ProcedimentoQuery } from 'repository/sequelize/procedimento'
 import { PermissionKey } from 'types/auth/actors'

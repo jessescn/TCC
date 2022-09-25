@@ -1,5 +1,5 @@
-import { FormularioModel } from 'models/formulario'
-import { UserModel } from 'models/user'
+import { FormularioModel } from 'domain/models/formulario'
+import { UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import { FormularioQuery, NewFormulario } from 'repository/sequelize/formulario'
 import { FormularioService } from 'services/formulario'

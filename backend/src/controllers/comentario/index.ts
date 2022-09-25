@@ -1,5 +1,5 @@
 import { Controller } from 'controllers'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { IComentarioService } from 'services/comentario'
 import { UnauthorizedError } from 'types/express/errors'
 

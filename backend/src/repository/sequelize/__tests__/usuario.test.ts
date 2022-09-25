@@ -1,4 +1,4 @@
-import User, { UserAttributes, UserModel } from 'models/user'
+import User, { UserAttributes, UserModel } from 'domain/models/user'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateUsuario, UsuarioRepository } from '../usuario'
 

@@ -1,7 +1,7 @@
 /* istanbul ignore file */
-import Formulario from 'models/formulario'
-import TipoProcedimento from 'models/tipo-procedimento'
-import { createInitialUser } from 'models/user'
+import Formulario from 'domain/models/formulario'
+import TipoProcedimento from 'domain/models/tipo-procedimento'
+import { createInitialUser } from 'domain/models/user'
 import { NewFormulario } from 'repository/sequelize/formulario'
 import { NewTipoProcedimento } from 'repository/sequelize/tipo-procedimento'
 import { actorsPermissions } from 'types/auth/actors'

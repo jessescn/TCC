@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import Procedimento, { ProcedimentoModel } from 'models/procedimento'
-import User, { UserModel } from 'models/user'
+import Procedimento, { ProcedimentoModel } from 'domain/models/procedimento'
+import User, { UserModel } from 'domain/models/user'
 import {
   CreationOptional,
   DataTypes,

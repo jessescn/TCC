@@ -1,13 +1,13 @@
 import { CreateProcedimento } from 'repository/sequelize/procedimento'
-import Comentario from 'models/comentario'
+import Comentario from 'domain/models/comentario'
 import Procedimento, {
   ProcedimentoAttributes,
   ProcedimentoModel,
   Revisao,
   Status,
   VotoProcedimento
-} from 'models/procedimento'
-import TipoProcedimento from 'models/tipo-procedimento'
+} from 'domain/models/procedimento'
+import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { includeableUser, ProcedimentoRepository } from '../procedimento'
 import { ProcedimentoStatusService } from 'services/procedimento-status'

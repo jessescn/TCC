@@ -1,4 +1,4 @@
-import User, { UserAttributes, UserModel } from 'models/user'
+import User, { UserAttributes, UserModel } from 'domain/models/user'
 import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 import { Roles } from 'types/auth/actors'

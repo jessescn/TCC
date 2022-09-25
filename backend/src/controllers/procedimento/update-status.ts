@@ -1,5 +1,8 @@
 import { Controller, errorResponseHandler, Validation } from 'controllers'
-import { TStatus, statusList as availableStatus } from 'models/procedimento'
+import {
+  TStatus,
+  statusList as availableStatus
+} from 'domain/models/procedimento'
 import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'

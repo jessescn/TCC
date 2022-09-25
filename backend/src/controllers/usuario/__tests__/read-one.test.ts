@@ -1,5 +1,5 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadOneUsuarioController } from '../read-one'

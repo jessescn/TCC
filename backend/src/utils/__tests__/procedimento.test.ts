@@ -1,8 +1,8 @@
 import { createMock } from 'ts-auto-mock'
-import { ProcedimentoModel, Status } from 'models/procedimento'
+import { ProcedimentoModel, Status } from 'domain/models/procedimento'
 import { belongsToPublico, getCurrentStatus } from 'utils/procedimento'
-import { UserModel } from 'models/user'
-import { TipoProcedimentoModel } from 'models/tipo-procedimento'
+import { UserModel } from 'domain/models/user'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
 describe('Procedimento utils Tests', () => {
   describe('getCurrentStatus', () => {

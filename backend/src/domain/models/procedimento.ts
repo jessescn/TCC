@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import User, { UserModel } from 'models/user'
+import User, { UserModel } from 'domain/models/user'
 import {
   CreationOptional,
   DataTypes,

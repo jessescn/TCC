@@ -1,5 +1,5 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { TipoProcedimentoModel } from 'models/tipo-procedimento'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { DeleteTipoProcedimentoController } from '../delete'

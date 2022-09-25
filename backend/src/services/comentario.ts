@@ -3,9 +3,9 @@ import {
   ComentarioRepository,
   NewComentario
 } from './../repository/sequelize/comentario'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { NotFoundError } from 'types/express/errors'
-import { ComentarioAttributes, ComentarioModel } from 'models/comentario'
+import { ComentarioAttributes, ComentarioModel } from 'domain/models/comentario'
 import { IRepository } from 'repository'
 import { IService } from 'services'
 

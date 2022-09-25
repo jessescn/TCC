@@ -3,12 +3,12 @@ import {
   ProcedimentoAttributes,
   TStatus,
   VotoProcedimento
-} from 'models/procedimento'
+} from 'domain/models/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { ProcedimentoStatusService } from 'services/procedimento-status'
 import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { ProcedimentoUseCase } from 'usecases/procedimento'
+import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 import { hasNumericId } from 'utils/request'
 import { VoteController } from '.'
 

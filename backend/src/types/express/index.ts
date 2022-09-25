@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 
 export interface Request extends ExpressRequest {
   user?: UserModel

@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UserModel } from 'models/user'
+import { UserModel } from 'domain/models/user'
 import { FormularioQuery } from 'repository/sequelize/formulario'
 import { IFormularioService } from 'services/formulario'
 import { PermissionKeys } from 'types/auth/actors'

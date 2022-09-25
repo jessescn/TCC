@@ -1,6 +1,6 @@
-import { TipoProcedimentoModel } from 'models/tipo-procedimento'
-import { ProcedimentoModel } from 'models/procedimento'
-import { UserModel } from 'models/user'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
+import { UserModel } from 'domain/models/user'
 
 export const getCurrentStatus = (procedimento: ProcedimentoModel) => {
   return procedimento.status[procedimento.status.length - 1]?.status

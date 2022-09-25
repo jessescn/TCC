@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { ProcedimentoAttributes } from 'models/procedimento'
+import { ProcedimentoAttributes } from 'domain/models/procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
 import { CreateProcedimento } from 'repository/sequelize/procedimento'
 import { ProcedimentoStatusService } from 'services/procedimento-status'

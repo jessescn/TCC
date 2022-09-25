@@ -1,6 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { ComentarioModel } from 'models/comentario'
-import { UserModel } from 'models/user'
+import { ComentarioModel } from 'domain/models/comentario'
+import { UserModel } from 'domain/models/user'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadOneComentarioController } from '../read-one'

@@ -1,7 +1,7 @@
-import { Status } from 'models/procedimento'
+import { Status } from 'domain/models/procedimento'
 import { IMailRepository, IRepository } from 'repository'
 import templates from 'templates'
-import { Usuario } from 'usecases/usuario'
+import { Usuario } from 'domain/usecases/usuario'
 import { HandlerProps, StatusHandler } from '.'
 
 export class EmHomologacaoStatusHandler implements StatusHandler {

@@ -1,7 +1,7 @@
-import { TipoProcedimentoAttributes } from './../../../models/tipo-procedimento'
+import { TipoProcedimentoAttributes } from '../../../domain/models/tipo-procedimento'
 import TipoProcedimento, {
   TipoProcedimentoModel
-} from 'models/tipo-procedimento'
+} from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import {
   CreateTipoProcedimento,
