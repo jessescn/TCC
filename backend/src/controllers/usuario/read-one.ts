@@ -21,7 +21,7 @@ export class ReadOneUsuarioController extends Controller<IUsuarioService> {
 
       response.json(usuario)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

@@ -18,7 +18,7 @@ export class PublicosUsuarioController extends Controller<IUsuarioService> {
 
       response.json(publicos)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

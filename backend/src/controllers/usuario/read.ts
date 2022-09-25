@@ -26,7 +26,7 @@ export class ReadUsuarioController extends Controller<IUsuarioService> {
 
       response.json(usuarios)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

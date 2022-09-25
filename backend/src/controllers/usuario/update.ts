@@ -34,7 +34,7 @@ export class UpdateUsuarioController extends Controller<IUsuarioService> {
 
       response.json(updatedUsuario)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

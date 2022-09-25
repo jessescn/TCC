@@ -22,7 +22,7 @@ export class DeleteUsuarioController extends Controller<IUsuarioService> {
 
       response.json(deletedUsuario)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

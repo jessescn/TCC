@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler, Validation } from 'controllers'
-import { CreateUsuario } from 'repository/sequelize/usuario'
+import { CreateUsuario, NewUsuario } from 'repository/sequelize/usuario'
 import { IUsuarioService } from 'services/usuario'
 import { PermissionKey, rolesMap } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
@@ -31,19 +31,13 @@ export class CreateUsuarioController extends Controller<IUsuarioService> {
     try {
       this.validateRequest(request)
 
-      const data = request.body as CreateUsuario
+      const data = request.body as NewUsuario
 
-      const newUsuario = await this.service.create({
-        email: data.email,
-        nome: data.nome,
-        senha: data.senha,
-        roles: data.roles,
-        permissoes: data.permissoes
-      })
+      const newUsuario = await this.service.create(data)
 
       response.status(HttpStatusCode.created).send(newUsuario)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }
