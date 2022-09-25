@@ -25,7 +25,7 @@ export class ReadTipoProcedimentoController extends Controller<ITipoProcedimento
       const query = this.getQueryByScope(request.user)
       const tipoProcedimentos = await this.service.findAll(query)
 
-      response.send(tipoProcedimentos)
+      response.json(tipoProcedimentos)
     } catch (error) {
       errorResponseHandler(response, error)
     }

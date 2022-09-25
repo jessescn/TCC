@@ -13,6 +13,8 @@ export type CreateUsuario = {
   roles?: Roles[]
 }
 
+export type NewUsuario = CreateUsuario
+
 export class UsuarioRepository implements IRepository {
   findAll = async (query: UsuarioQuery = {}) => {
     return User.findAll({ where: { deleted: false, ...query } })

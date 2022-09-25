@@ -10,8 +10,6 @@ import {
 } from 'sequelize'
 import User from './user'
 
-import { NewTipoProcedimento } from 'controllers/tipo-procedimento/create'
-
 export type TipoProcedimentoStatus = 'ativo' | 'inativo' | 'rascunho'
 
 export interface TipoProcedimentoModel {
@@ -105,16 +103,5 @@ const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
 )
 
 TipoProcedimento.belongsTo(User, { foreignKey: 'createdBy' })
-
-export const createInitialTipoProcedimento = async (
-  tipoProcedimento: NewTipoProcedimento
-) => {
-  await TipoProcedimento.findOrCreate({
-    where: {
-      nome: tipoProcedimento.nome
-    },
-    defaults: tipoProcedimento
-  })
-}
 
 export default TipoProcedimento

@@ -1,8 +1,9 @@
 /* istanbul ignore file */
 import Formulario from 'models/formulario'
-import { createInitialTipoProcedimento } from 'models/tipo-procedimento'
+import TipoProcedimento from 'models/tipo-procedimento'
 import { createInitialUser } from 'models/user'
 import { NewFormulario } from 'repository/sequelize/formulario'
+import { NewTipoProcedimento } from 'repository/sequelize/tipo-procedimento'
 import { actorsPermissions } from 'types/auth/actors'
 import mock from 'types/campos-formulario/modelo-mockado'
 
@@ -12,6 +13,17 @@ export const createInitialFormulario = async (formulario: NewFormulario) => {
       nome: formulario.nome
     },
     defaults: formulario
+  })
+}
+
+export const createInitialTipoProcedimento = async (
+  tipoProcedimento: NewTipoProcedimento
+) => {
+  await TipoProcedimento.findOrCreate({
+    where: {
+      nome: tipoProcedimento.nome
+    },
+    defaults: tipoProcedimento
   })
 }
 

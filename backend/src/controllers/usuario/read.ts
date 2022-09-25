@@ -1,44 +1,28 @@
-import { PermissionKey } from 'types/auth/actors'
 import { Controller, errorResponseHandler } from 'controllers'
+import { UserModel } from 'models/user'
+import { IUsuarioService } from 'services/usuario'
+import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
-import { IRepository } from 'repository'
-import { UsuarioQuery, UsuarioRepository } from 'repository/sequelize/usuario'
 
-export class ReadUsuarioController extends Controller {
-  constructor(repository: IRepository) {
+export class ReadUsuarioController extends Controller<IUsuarioService> {
+  constructor(service: IUsuarioService) {
     const permission: PermissionKey = 'user_read'
 
-    super({ permission, repository })
+    super({ permission, service })
   }
 
-  get repository(): UsuarioRepository {
-    return this.props.repository
-  }
+  private getQueryByScope = (usuario: UserModel) => {
+    const scope = usuario.permissoes[this.permission]
 
-  private getAllUsuarios = (request: Request) => {
-    return this.repository.findAll()
-  }
-
-  private getOnlyOwnedUsuarios = (request: Request) => {
-    const query: UsuarioQuery = { id: request.user.id }
-
-    return this.repository.findAll(query)
-  }
-
-  private getUsuariosByScope = (request: Request) => {
-    const scope = request.user.permissoes[this.permission]
-
-    const get =
-      scope === 'owned' ? this.getOnlyOwnedUsuarios : this.getAllUsuarios
-
-    return get(request)
+    return scope === 'owned' ? { id: usuario.id } : {}
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const usuarios = await this.getUsuariosByScope(request)
+      const query = this.getQueryByScope(request.user)
+      const usuarios = await this.service.findAll(query)
 
       response.json(usuarios)
     } catch (error) {
