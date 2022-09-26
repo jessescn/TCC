@@ -1,6 +1,6 @@
 import { DeleteVoteController } from 'controllers/colegiado/delete-vote'
-import { makeProcedimentoRepository } from 'factories/repositories/procedimento-factory'
+import { makeColegiadoService } from 'factories/services/colegiado-factory'
 
 export const makeDeleteVoteController = () => {
-  return new DeleteVoteController(makeProcedimentoRepository())
+  return new DeleteVoteController(makeColegiadoService())
 }

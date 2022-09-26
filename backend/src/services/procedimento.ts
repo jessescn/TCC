@@ -33,7 +33,6 @@ export interface IProcedimentoService
     id: number,
     data: Partial<ProcedimentoModel>
   ) => Promise<ProcedimentoAttributes>
-  homologate: (id: number) => Promise<ProcedimentoAttributes>
   newReview: (
     id: number,
     usuario: UserModel,
@@ -151,10 +150,6 @@ export class ProcedimentoService implements IProcedimentoService {
     await this.procedimentoRepo.update(id, data)
 
     return this.procedimentoRepo.updateStatus(id, 'em_analise')
-  }
-
-  async homologate(id: number) {
-    return this.updateStatus(id, 'deferido')
   }
 
   private async updateProcedimentoToNextStatus(
