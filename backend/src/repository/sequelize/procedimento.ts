@@ -6,15 +6,13 @@ import Procedimento, {
   Resposta,
   Revisao,
   Status,
-  TStatus,
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import User from 'domain/models/user'
+import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
-import { ProcedimentoStatusService } from 'services/procedimento-status'
-import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 
 export type CreateProcedimento = {
   tipo: number
@@ -127,16 +125,14 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     return procedimento
   }
 
-  updateStatus = async (id: number, status: TStatus) => {
+  updateStatus = async (id: number, status: Status) => {
     const procedimento = await this.findOne(id)
 
-    const updatedProcedimento =
-      await ProcedimentoStatusService.changeProcedimentoStatus(
-        procedimento,
-        status
-      )
+    procedimento.set({ status: [...procedimento.status, status] })
 
-    return updatedProcedimento
+    await procedimento.save()
+
+    return procedimento
   }
 
   newRevisao = async (id: number, revisao: Revisao) => {

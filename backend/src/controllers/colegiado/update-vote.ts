@@ -2,7 +2,7 @@ import { Controller, errorResponseHandler } from 'controllers'
 import { VotoProcedimento } from 'domain/models/procedimento'
 import { IColegiadoService } from 'services/colegiado'
 import { PermissionKey } from 'types/auth/actors'
-import { HttpStatusCode, Request, Response } from 'types/express'
+import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
 export class UpdateVoteController extends Controller<IColegiadoService> {
@@ -23,7 +23,7 @@ export class UpdateVoteController extends Controller<IColegiadoService> {
 
       const procedimento = await this.service.updateVote(Number(id), data)
 
-      response.status(HttpStatusCode.created).send(procedimento)
+      response.json(procedimento)
     } catch (error) {
       errorResponseHandler(response, error)
     }

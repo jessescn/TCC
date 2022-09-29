@@ -6,7 +6,7 @@ import {
 } from 'domain/models/procedimento'
 import { UserModel } from 'domain/models/user'
 import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
-import { TipoProcedimento } from 'domain/usecases/tipo-procedimento'
+import { TipoProcedimentoUseCase } from 'domain/usecases/tipo-procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
 import {
   NewProcedimento,
@@ -21,7 +21,7 @@ import {
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
-import { ProcedimentoStatusService } from './procedimento-status'
+import { IProcedimentoStatusService } from './procedimento-status'
 
 export interface IProcedimentoService
   extends IService<ProcedimentoAttributes, ProcedimentoQuery> {
@@ -44,13 +44,16 @@ export interface IProcedimentoService
 export class ProcedimentoService implements IProcedimentoService {
   private procedimentoRepo: ProcedimentoRepository
   private tipoProcedimentoRepo: TipoProcedimentoRepository
+  private statusService: IProcedimentoStatusService
 
   constructor(
     procedimentoRepo: IProcedimentoRepo,
-    tipoProcedimentoRepo: IRepository
+    tipoProcedimentoRepo: IRepository,
+    statusService: IProcedimentoStatusService
   ) {
     this.procedimentoRepo = procedimentoRepo
     this.tipoProcedimentoRepo = tipoProcedimentoRepo
+    this.statusService = statusService
   }
 
   private async checkIfTipoProcedimentoExists(tipo: number) {
@@ -66,7 +69,7 @@ export class ProcedimentoService implements IProcedimentoService {
   private async checkIfUserBelongsToPublico(usuario: UserModel, tipo: number) {
     const tipoProcedimento = await this.checkIfTipoProcedimentoExists(tipo)
 
-    if (!TipoProcedimento.belongsToPublico(usuario, tipoProcedimento)) {
+    if (!TipoProcedimentoUseCase.belongsToPublico(usuario, tipoProcedimento)) {
       throw new UnauthorizedError(
         'Does not have permission to this procedimento'
       )
@@ -96,13 +99,14 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   private async updateCreatedProcedimentoStatus(
-    createdProcedimento: ProcedimentoAttributes
+    created: ProcedimentoAttributes
   ) {
-    const procedimento =
-      await ProcedimentoStatusService.changeProcedimentoStatus(
-        createdProcedimento,
-        'em_analise'
-      )
+    const status = await this.statusService.execute(created, 'em_analise')
+
+    const procedimento = await this.procedimentoRepo.updateStatus(
+      created.id,
+      status
+    )
 
     return procedimento
   }
@@ -134,8 +138,10 @@ export class ProcedimentoService implements IProcedimentoService {
     return this.procedimentoRepo.findAll(query)
   }
 
-  async updateStatus(id: number, status: TStatus) {
-    await this.checkIfProcedimentoExists(id)
+  async updateStatus(id: number, novoStatus: TStatus) {
+    const procedimento = await this.checkIfProcedimentoExists(id)
+
+    const status = await this.statusService.execute(procedimento, novoStatus)
 
     return this.procedimentoRepo.updateStatus(id, status)
   }
@@ -149,7 +155,7 @@ export class ProcedimentoService implements IProcedimentoService {
 
     await this.procedimentoRepo.update(id, data)
 
-    return this.procedimentoRepo.updateStatus(id, 'em_analise')
+    return this.updateStatus(id, 'em_analise')
   }
 
   private async updateProcedimentoToNextStatus(
@@ -159,10 +165,7 @@ export class ProcedimentoService implements IProcedimentoService {
     const hasPendingChanges = !data.aprovado
 
     if (hasPendingChanges) {
-      return this.procedimentoRepo.updateStatus(
-        procedimento.id,
-        'correcoes_pendentes'
-      )
+      return this.updateStatus(procedimento.id, 'correcoes_pendentes')
     }
 
     const tipo = await this.tipoProcedimentoRepo.findOne(procedimento.tipo)
@@ -171,7 +174,7 @@ export class ProcedimentoService implements IProcedimentoService {
 
     const nextStatus = shouldForwardToColegiado ? 'em_homologacao' : 'deferido'
 
-    return this.procedimentoRepo.updateStatus(procedimento.id, nextStatus)
+    return this.updateStatus(procedimento.id, nextStatus)
   }
 
   async newReview(id: number, usuario: UserModel, data: NewRevisao) {

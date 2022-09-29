@@ -1,15 +1,15 @@
+import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
+import { UserAttributes } from 'domain/models/user'
 import { makeCorrecoesPendentesStatusHandler } from 'factories/services/status/correcoes-pendentes-factory'
 import { makeCriadoStatusHandler } from 'factories/services/status/criado-factory'
 import { makeDeferidoStatusHandler } from 'factories/services/status/deferido-factory'
 import { makeEmAnaliseStatusHandler } from 'factories/services/status/em-analise-factory'
 import { makeEmHomologacaoStatusHandler } from 'factories/services/status/em-homologacao-factory'
 import { makeIndeferidoStatusHandler } from 'factories/services/status/indeferido-factory'
-import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
-import { UserModel } from 'domain/models/user'
 
 export type HandlerProps = {
   procedimento: ProcedimentoModel
-  autor: UserModel
+  autor: UserAttributes
 }
 
 export interface StatusHandler {

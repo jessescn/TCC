@@ -1,23 +1,25 @@
 import { Status } from 'domain/models/procedimento'
-import { IMailRepository, IRepository } from 'repository'
+import { UsuarioUseCase } from 'domain/usecases/usuario'
+import { IRepository } from 'repository'
+import { MailSender } from 'repository/nodemailer/mail'
 import templates from 'templates'
-import { Usuario } from 'domain/usecases/usuario'
 import { HandlerProps, StatusHandler } from '.'
 
 export class EmAnaliseStatusHandler implements StatusHandler {
   private usuarioRepo: IRepository
-  private mailRepo: IMailRepository
 
-  constructor(usuarioRepo: IRepository, mailRepo: IMailRepository) {
+  constructor(usuarioRepo: IRepository) {
     this.usuarioRepo = usuarioRepo
-    this.mailRepo = mailRepo
   }
 
   execute = async ({ procedimento }: HandlerProps) => {
     const sendEmailCoordenacao = async () => {
       // Envia email a coordenacão avisando de um novo procedimento está pronto para ser analisado
       const usuarios = await this.usuarioRepo.findAll({})
-      const coordenacaoUsers = Usuario.findByRole(usuarios, 'coordenacao')
+      const coordenacaoUsers = UsuarioUseCase.filterByRole(
+        usuarios,
+        'coordenacao'
+      )
 
       if (coordenacaoUsers.length === 0) return
 
@@ -27,7 +29,7 @@ export class EmAnaliseStatusHandler implements StatusHandler {
         procedimento
       })
 
-      await this.mailRepo.send(email)
+      await MailSender.send(email)
     }
 
     await sendEmailCoordenacao()

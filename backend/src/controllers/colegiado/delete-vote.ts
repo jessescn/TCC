@@ -4,7 +4,7 @@ import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
-type RemoteDeleteVote = {
+export type RemoteDeleteVote = {
   autor: number
 }
 
@@ -28,7 +28,7 @@ export class DeleteVoteController extends Controller<IColegiadoService> {
 
       response.json(procedimento)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

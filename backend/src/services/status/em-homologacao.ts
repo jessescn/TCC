@@ -1,18 +1,18 @@
 import { Status } from 'domain/models/procedimento'
-import { IMailRepository, IRepository } from 'repository'
+import { IRepository } from 'repository'
 import templates from 'templates'
-import { Usuario } from 'domain/usecases/usuario'
+import { UsuarioUseCase } from 'domain/usecases/usuario'
 import { HandlerProps, StatusHandler } from '.'
+import { MailSender } from 'repository/nodemailer/mail'
 
 export class EmHomologacaoStatusHandler implements StatusHandler {
   private usuarioRepo: IRepository
-  private mailRepo: IMailRepository
 
   execute = async ({ procedimento }: HandlerProps) => {
     const sendEmailColegiado = async () => {
       // Envia email aos membros do colegiado avisando que um novo procedimento está para ser votado
       const usuarios = await this.usuarioRepo.findAll({})
-      const colegiado = Usuario.findByRole(usuarios, 'colegiado')
+      const colegiado = UsuarioUseCase.filterByRole(usuarios, 'colegiado')
 
       if (colegiado.length === 0) return
 
@@ -22,7 +22,7 @@ export class EmHomologacaoStatusHandler implements StatusHandler {
         procedimento
       })
 
-      await this.mailRepo.send(email)
+      await MailSender.send(email)
     }
 
     await sendEmailColegiado()

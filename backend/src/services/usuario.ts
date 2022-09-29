@@ -7,7 +7,7 @@ import {
 } from 'repository/sequelize/usuario'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
-import { Usuario } from 'domain/usecases/usuario'
+import { UsuarioUseCase } from 'domain/usecases/usuario'
 
 export interface IUsuarioService
   extends IService<UserAttributes, UsuarioQuery> {
@@ -80,6 +80,6 @@ export class UsuarioService implements IUsuarioService {
   async getPublicos() {
     const usuarios = await this.findAll()
 
-    return Usuario.getPublicos(usuarios)
+    return UsuarioUseCase.getPublicos(usuarios)
   }
 }

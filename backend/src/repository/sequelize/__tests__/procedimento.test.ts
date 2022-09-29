@@ -10,7 +10,6 @@ import Procedimento, {
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { includeableUser, ProcedimentoRepository } from '../procedimento'
-import { ProcedimentoStatusService } from 'services/procedimento-status'
 
 describe('Procedimento Repository', () => {
   const procedimento = createMock<ProcedimentoModel>()
@@ -221,24 +220,25 @@ describe('Procedimento Repository', () => {
       jest
         .spyOn(Procedimento, 'findOne')
         .mockResolvedValueOnce(procedimentoWithSpies as any)
-
-      jest
-        .spyOn(ProcedimentoStatusService, 'changeProcedimentoStatus')
-        .mockResolvedValueOnce(procedimento as ProcedimentoAttributes)
     })
 
     it('should update the procedimento status', async () => {
-      const result = await sut.updateStatus(10, 'em_homologacao')
+      const status: Status = {
+        data: new Date().toISOString(),
+        status: 'em_homologacao'
+      }
 
-      expect(result).toEqual(procedimento)
+      const result = await sut.updateStatus(10, status)
+
+      expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 10, deleted: false },
         include: [TipoProcedimento, Comentario, includeableUser]
       })
-      expect(ProcedimentoStatusService.changeProcedimentoStatus).toBeCalledWith(
-        procedimentoWithSpies,
-        'em_homologacao'
-      )
+      expect(procedimentoWithSpies.set).toBeCalledWith({
+        status: [...procedimentoWithSpies.status, status]
+      })
+      expect(procedimentoWithSpies.save).toBeCalled()
     })
   })
 

@@ -1,6 +1,4 @@
-import { createTransport, Transporter, SendMailOptions } from 'nodemailer'
-import SMTPTransport from 'nodemailer/lib/smtp-transport'
-import { IMailRepository } from 'repository'
+import { createTransport, SendMailOptions } from 'nodemailer'
 import { EmailTemplate } from 'templates'
 
 type Auth = {
@@ -8,21 +6,20 @@ type Auth = {
   pass: string
 }
 
-export class MailRepository implements IMailRepository {
-  private auth: Auth
-  private transporter: Transporter<SMTPTransport.SentMessageInfo>
-
-  constructor() {
-    this.auth = {
-      user: process.env.MAIL_TRANSPORTER_USER,
-      pass: process.env.MAIL_TRANSPORTER_PASSWORD
-    }
-
-    this.transporter = createTransport({ service: 'gmail', auth: this.auth })
+export class MailSender {
+  static auth: Auth = {
+    user: process.env.MAIL_TRANSPORTER_USER,
+    pass: process.env.MAIL_TRANSPORTER_PASSWORD
   }
 
-  async send(data: EmailTemplate) {
+  static transporter = createTransport({
+    service: 'gmail',
+    auth: this.auth
+  })
+
+  static async send(data: EmailTemplate) {
     const mailOptions: SendMailOptions = { ...data, from: this.auth.user }
+
     const info = await this.transporter.sendMail(mailOptions)
     return info
   }

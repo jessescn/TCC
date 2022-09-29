@@ -6,7 +6,7 @@ import {
 import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
-import { ProcedimentoStatusService } from './procedimento-status'
+import { IProcedimentoStatusService } from './procedimento-status'
 
 export interface IColegiadoService {
   updateVote: (
@@ -19,21 +19,26 @@ export interface IColegiadoService {
 
 export class ColegiadoService implements IColegiadoService {
   private repository: IProcedimentoRepo
+  private statusService: IProcedimentoStatusService
 
-  constructor(repository: IProcedimentoRepo) {
+  constructor(
+    repository: IProcedimentoRepo,
+    statusService: IProcedimentoStatusService
+  ) {
     this.repository = repository
+    this.statusService = statusService
   }
 
   private async handleMajorityVotes(procedimento: ProcedimentoAttributes) {
-    const novoStatus: TStatus =
-      ProcedimentoStatusService.isProcedimentoAprovado(procedimento.votos)
-        ? 'deferido'
-        : 'indeferido'
-
-    return ProcedimentoStatusService.changeProcedimentoStatus(
-      procedimento,
-      novoStatus
+    const novoStatus: TStatus = ProcedimentoUseCase.isProcedimentoAprovado(
+      procedimento
     )
+      ? 'deferido'
+      : 'indeferido'
+
+    const status = await this.statusService.execute(procedimento, novoStatus)
+
+    return this.repository.updateStatus(procedimento.id, status)
   }
 
   private async checkIfProcedimentoExists(id: number) {

@@ -1,7 +1,7 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { UserModel } from 'domain/models/user'
 
-export class TipoProcedimento {
+export class TipoProcedimentoUseCase {
   static belongsToPublico = (user: UserModel, tipo: TipoProcedimentoModel) => {
     if (tipo.publicos.length === 0) {
       return true

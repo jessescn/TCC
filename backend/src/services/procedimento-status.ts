@@ -1,23 +1,33 @@
-import { makeMailRepository } from 'factories/repositories/mail-factory'
 import {
   ProcedimentoAttributes,
   ProcedimentoModel,
   Status,
   statusList,
-  TStatus,
-  VotoProcedimento
+  TStatus
 } from 'domain/models/procedimento'
+import { UserAttributes } from 'domain/models/user'
+import { IRepository } from 'repository'
+import { MailSender } from 'repository/nodemailer/mail'
+import { UsuarioRepository } from 'repository/sequelize/usuario'
 import templates from 'templates'
 import { StatusHandlerMap } from './status'
-import { UserModel } from 'domain/models/user'
-import { makeUsuarioRepository } from 'factories/repositories/usuario-factory'
 
-export class ProcedimentoStatusService {
-  private static usuarioRepo = makeUsuarioRepository()
-  private static mailRepo = makeMailRepository()
+export interface IProcedimentoStatusService {
+  execute: (
+    procedimento: ProcedimentoAttributes,
+    novoStatus: TStatus
+  ) => Promise<Status>
+}
 
-  private static sendUpdateStatusEmail = async (
-    autor: UserModel,
+export class ProcedimentoStatusService implements IProcedimentoStatusService {
+  private usuarioRepo: UsuarioRepository
+
+  constructor(usuarioRepo: IRepository) {
+    this.usuarioRepo = usuarioRepo
+  }
+
+  private sendUpdateStatusEmail = async (
+    autor: UserAttributes,
     procedimento: ProcedimentoModel,
     status: Status
   ) => {
@@ -26,20 +36,10 @@ export class ProcedimentoStatusService {
       novoStatus: statusList[status.status].label
     })
 
-    await this.mailRepo.send(email)
+    await MailSender.send(email)
   }
 
-  static isProcedimentoAprovado = (votes: VotoProcedimento[]) => {
-    const positive = votes.filter(vote => vote.aprovado).length
-    const negative = votes.length - positive
-
-    return positive > negative
-  }
-
-  static changeProcedimentoStatus = async (
-    procedimento: ProcedimentoAttributes,
-    novoStatus: TStatus
-  ): Promise<ProcedimentoAttributes> => {
+  async execute(procedimento: ProcedimentoAttributes, novoStatus: TStatus) {
     const autor = await this.usuarioRepo.findOne(procedimento.createdBy)
 
     const status = await StatusHandlerMap[novoStatus].execute({
@@ -47,12 +47,8 @@ export class ProcedimentoStatusService {
       procedimento
     })
 
-    procedimento.set({ status: [...procedimento.status, status] })
-
-    await procedimento.save()
-
     await this.sendUpdateStatusEmail(autor, procedimento, status)
 
-    return procedimento
+    return status
   }
 }
