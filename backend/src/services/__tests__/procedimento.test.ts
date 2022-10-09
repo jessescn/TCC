@@ -1,6 +1,6 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ProcedimentoModel, Resposta, Status } from 'domain/models/procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IProcedimentoRepo, IRepository } from 'repository'
 import {
   NewProcedimento,
@@ -29,7 +29,7 @@ describe('Procedimento Service', () => {
 
   describe('create', () => {
     const tipoProcedimento = createMock<TipoProcedimentoModel>()
-    const usuario = createMock<UserModel>({ id: 1 })
+    const usuario = createMock<ActorModel>({ id: 1 })
     const data = createMock<NewProcedimento>({ tipo: 1 })
 
     const repo = createMock<IProcedimentoRepo>({
@@ -227,7 +227,7 @@ describe('Procedimento Service', () => {
     const tipoProcedimento = createMock<TipoProcedimentoModel>({
       colegiado: true
     })
-    const usuario = createMock<UserModel>()
+    const usuario = createMock<ActorModel>()
 
     const repo = createMock<IProcedimentoRepo>({
       findOne: jest.fn().mockResolvedValue(procedimento),

@@ -1,5 +1,5 @@
 import { Status } from 'domain/models/procedimento'
-import { UsuarioUseCase } from 'domain/usecases/usuario'
+import { UsuarioUseCase } from 'domain/usecases/actor'
 import { IRepository } from 'repository'
 import { MailSender } from 'repository/nodemailer/mail'
 import templates from 'templates'

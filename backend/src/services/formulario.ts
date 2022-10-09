@@ -1,5 +1,5 @@
 import { FormularioAttributes, FormularioModel } from 'domain/models/formulario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import {
   FormularioQuery,
@@ -16,7 +16,7 @@ export interface IFormularioService
     data: Partial<FormularioModel>
   ) => Promise<FormularioAttributes>
   create: (
-    usuario: UserModel,
+    actor: ActorModel,
     data: NewFormulario
   ) => Promise<FormularioAttributes>
 }
@@ -28,12 +28,12 @@ export class FormularioService implements IFormularioService {
     this.repository = repository
   }
 
-  async create(usuario: UserModel, data: NewFormulario) {
+  async create(actor: ActorModel, data: NewFormulario) {
     const newFormulario = await this.repository.create({
       campos: data.campos,
       nome: data.nome,
       descricao: data.descricao,
-      createdBy: usuario.id
+      createdBy: actor.id
     })
 
     return newFormulario

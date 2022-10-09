@@ -1,5 +1,5 @@
 import { ComentarioModel } from 'domain/models/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import { NewComentario } from 'repository/sequelize/comentario'
 import { ComentarioService } from 'services/comentario'
@@ -15,7 +15,7 @@ describe('Comentario Service', () => {
       create: jest.fn().mockResolvedValue(comentario)
     })
     const newComentario = createMock<NewComentario>()
-    const usuario = createMock<UserModel>()
+    const usuario = createMock<ActorModel>()
 
     it('should create a new comentario', async () => {
       const sut = new ComentarioService(repo)

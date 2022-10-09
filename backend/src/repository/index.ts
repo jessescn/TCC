@@ -1,4 +1,4 @@
-import User from 'domain/models/user'
+import User from 'domain/models/actor'
 import { Includeable } from 'sequelize/types'
 import { EmailTemplate } from 'templates'
 

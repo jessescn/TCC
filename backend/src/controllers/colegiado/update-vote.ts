@@ -1,14 +1,14 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { VotoProcedimento } from 'domain/models/procedimento'
 import { IColegiadoService } from 'services/colegiado'
-import { PermissionKey } from 'types/auth/actors'
+import { PermissionKey } from 'domain/profiles'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
 export class UpdateVoteController extends Controller<IColegiadoService> {
   constructor(service: IColegiadoService) {
     const mandatoryFields: (keyof VotoProcedimento)[] = ['autor', 'aprovado']
-    const permission: PermissionKey = 'colegiado_vote'
+    const permission: PermissionKey = 'colegiado_update_vote'
     const validations = [hasNumericId]
 
     super({ validations, permission, mandatoryFields, service })

@@ -1,6 +1,6 @@
 import { Controller, errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
 import { IColegiadoService } from 'services/colegiado'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 

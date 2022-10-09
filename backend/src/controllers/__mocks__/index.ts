@@ -1,9 +1,13 @@
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
+import { ProfileModel } from 'domain/models/profile'
+import { PermissionKey } from 'domain/profiles'
 import { createMock } from 'ts-auto-mock'
 
-export const baseSetup = (permissao: string) => {
-  const user = createMock<UserModel>({
-    permissoes: { [permissao]: 'all' }
+export const baseSetup = (permissao?: PermissionKey) => {
+  const permissoes = permissao ? { [permissao]: 'all' } : {}
+
+  const actor = createMock<ActorModel>({
+    profile: createMock<ProfileModel>({ permissoes })
   })
 
   const sendSpy = jest.fn()
@@ -20,6 +24,6 @@ export const baseSetup = (permissao: string) => {
       sendSpy,
       jsonSpy
     },
-    user
+    actor
   }
 }

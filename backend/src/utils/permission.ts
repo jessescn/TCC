@@ -1,8 +1,8 @@
-import { PermissionScope } from 'types/auth/actors'
+import { Scope } from 'domain/profiles'
 import { UnauthorizedError } from 'types/express/errors'
 
-export const checkPermissionResource = (permission: PermissionScope) => {
-  if (permission === 'not_allowed') {
+export const checkPermissionResource = (permission: Scope) => {
+  if (!permission) {
     throw new UnauthorizedError()
   }
 }

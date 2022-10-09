@@ -6,7 +6,7 @@ import { DeleteVoteController, RemoteDeleteVote } from '../delete-vote'
 
 describe('DeleteVote Controller', () => {
   const procedimento = createMock<ProcedimentoModel>()
-  const { user, response, spies } = baseSetup('colegiado_delete_vote')
+  const { actor, response, spies } = baseSetup('colegiado_delete_vote')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +24,7 @@ describe('DeleteVote Controller', () => {
   it('should delete a vote from an existing procedimento', async () => {
     const data = createMock<RemoteDeleteVote>({ autor: 1 })
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })
@@ -39,7 +39,7 @@ describe('DeleteVote Controller', () => {
 
   it('should respond with BadRequestError if some mandatory field is not provided', async () => {
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: {}
     })

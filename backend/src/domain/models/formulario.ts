@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import User from 'domain/models/user'
+import Actor, { ActorModel } from 'domain/models/actor'
 import {
   CreationOptional,
   DataTypes,
@@ -34,9 +34,9 @@ export interface FormularioModel {
   descricao: string
   campos: CampoFormulario[]
   deleted: boolean
+  actor?: ActorModel
   createdAt?: Date
   updatedAt?: Date
-  createdBy?: number
 }
 
 export interface FormularioAttributes
@@ -80,7 +80,7 @@ const Formulario = sequelize.define<FormularioAttributes>('formulario', {
   updatedAt: DataTypes.DATE
 })
 
-Formulario.belongsTo(User, { foreignKey: 'createdBy' })
-User.hasMany(Formulario)
+Formulario.belongsTo(Actor, { foreignKey: 'createdBy' })
+Actor.hasMany(Formulario)
 
 export default Formulario

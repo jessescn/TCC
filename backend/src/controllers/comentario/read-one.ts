@@ -1,6 +1,6 @@
 import { errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
 import { IComentarioService } from 'services/comentario'
-import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 import { ComentarioController } from '.'
@@ -8,7 +8,7 @@ import { ComentarioController } from '.'
 export class ReadOneComentarioController extends ComentarioController {
   constructor(service: IComentarioService) {
     const validations = [hasNumericId]
-    const permission: keyof PermissionKeys = 'comentario_read'
+    const permission: PermissionKey = 'comentario_read'
 
     super({ validations, permission, service })
   }
@@ -19,7 +19,7 @@ export class ReadOneComentarioController extends ComentarioController {
 
       const { id } = request.params
 
-      await this.checkUserPermissionScope(request.user, Number(id))
+      await this.checkUserPermissionScope(request.actor, Number(id))
 
       const comentario = await this.service.findOne(Number(id))
 

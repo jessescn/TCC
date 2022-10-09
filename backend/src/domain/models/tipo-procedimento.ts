@@ -8,7 +8,7 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import User from './user'
+import Actor, { ActorModel } from './actor'
 
 export type TipoProcedimentoStatus = 'ativo' | 'inativo' | 'rascunho'
 
@@ -24,9 +24,9 @@ export interface TipoProcedimentoModel {
   publicos: string[]
   colegiado: boolean
   deleted: boolean
+  actor?: ActorModel
   createdAt?: Date
   updatedAt?: Date
-  createdBy?: number
 }
 
 export interface TipoProcedimentoAttributes
@@ -102,6 +102,6 @@ const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
   }
 )
 
-TipoProcedimento.belongsTo(User, { foreignKey: 'createdBy' })
+TipoProcedimento.belongsTo(Actor, { foreignKey: 'createdBy' })
 
 export default TipoProcedimento

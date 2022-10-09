@@ -1,14 +1,17 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 
 export class TipoProcedimentoUseCase {
-  static belongsToPublico = (user: UserModel, tipo: TipoProcedimentoModel) => {
+  static belongsToPublico = (
+    actor: ActorModel,
+    tipo: TipoProcedimentoModel
+  ) => {
     if (tipo.publicos.length === 0) {
       return true
     }
 
     return tipo.publicos.reduce((belongs, publico) => {
-      if (user.publico.includes(publico)) {
+      if (actor.publico.includes(publico)) {
         return true
       }
 

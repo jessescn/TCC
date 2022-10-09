@@ -1,13 +1,14 @@
 import { ReadTipoProcedimentoController } from 'controllers/tipo-procedimento/read'
 import { baseSetup } from 'controllers/__mocks__'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('ReadTipoProcedimento Controller', () => {
   const tipoProcedimentos = createMockList<TipoProcedimentoModel>(2)
-  const { user, spies, response } = baseSetup('tipo_procedimento_read')
+  const { actor, spies, response } = baseSetup('tipo_procedimento_read')
 
   const makeSut = () => {
     const service = {
@@ -27,7 +28,7 @@ describe('ReadTipoProcedimento Controller', () => {
   })
 
   it('should return all tipoProcedimentos', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
@@ -36,25 +37,29 @@ describe('ReadTipoProcedimento Controller', () => {
     expect(response.json).toBeCalledWith(tipoProcedimentos)
   })
 
-  it('should return only tipoProcedimentos owned by user', async () => {
-    const userWithLimitedScope = createMock<UserModel>({
-      permissoes: { tipo_procedimento_read: 'owned' }
+  it('should return only tipoProcedimentos owned by actor', async () => {
+    const actorWithLimitedScope = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: { tipo_procedimento_read: 'owned' }
+      })
     })
-    const request = createMock<Request>({ user: userWithLimitedScope })
+    const request = createMock<Request>({ actor: actorWithLimitedScope })
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
 
     expect(service.findAll).toBeCalledWith({
-      createdBy: userWithLimitedScope.id
+      createdBy: actorWithLimitedScope.id
     })
   })
 
-  it('should throw an UnauthorizedError if user does not have permission', async () => {
-    const userWithoutPermission = createMock<UserModel>({
-      permissoes: { tipo_procedimento_read: 'not_allowed' }
+  it('should throw an UnauthorizedError if actor does not have permission', async () => {
+    const actorWithoutPermission = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: {}
+      })
     })
-    const request = createMock<Request>({ user: userWithoutPermission })
+    const request = createMock<Request>({ actor: actorWithoutPermission })
     const { sut } = makeSut()
 
     await sut.exec(request, response as any)

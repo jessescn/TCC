@@ -1,7 +1,7 @@
 import { errorResponseHandler } from 'controllers'
 import jwt from 'jsonwebtoken'
 import { IRepository } from 'repository'
-import { UsuarioRepository } from 'repository/sequelize/usuario'
+import { ActorRepository } from 'repository/sequelize/actor'
 import { Request, Response } from 'types/express'
 import {
   BadRequestError,
@@ -16,7 +16,7 @@ type Credentials = {
 }
 
 export class AuthController {
-  private repository: UsuarioRepository
+  private repository: ActorRepository
 
   constructor(repository: IRepository) {
     this.repository = repository
@@ -30,19 +30,19 @@ export class AuthController {
         throw new BadRequestError()
       }
 
-      const [user] = await this.repository.findAll({ email: data.email })
+      const [actor] = await this.repository.findAll({ email: data.email })
 
-      if (!user) {
+      if (!actor) {
         throw new NotFoundError()
       }
 
-      const isPasswordValid = await isValidPassword(data.password, user.senha)
+      const isPasswordValid = await isValidPassword(data.password, actor.senha)
 
       if (!isPasswordValid) {
         throw new UnauthorizedError()
       }
 
-      const token = jwt.sign({ data: user }, process.env.JWT_SECRET_KEY)
+      const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY)
 
       res.json({ token, expiresIn: process.env.JWT_TOKEN_EXPIRATION })
     } catch (error) {
@@ -52,7 +52,7 @@ export class AuthController {
 
   me = async (req: Request, res: Response) => {
     try {
-      res.json(req.user)
+      res.json(req.actor)
     } catch (error) {
       errorResponseHandler(res, error)
     }

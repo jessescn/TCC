@@ -7,42 +7,40 @@ import {
   InferCreationAttributes,
   Model
 } from 'sequelize'
-import { PermissionKeys, Roles } from 'types/auth/actors'
 import { ProcedimentoModel } from './procedimento'
+import Profile, { ProfileModel } from './profile'
 
-export interface UserModel {
+export interface ActorModel {
   id: number
   nome: string
   email: string
   senha: string
   deleted: boolean
-  permissoes: PermissionKeys
-  roles: Roles[]
+  profile?: ProfileModel
   publico: string[]
   procedimentos?: ProcedimentoModel[]
   createdAt?: Date
   updatedAt?: Date
 }
 
-export interface UserAttributes
+export interface ActorAttributes
   extends Model<
-    InferAttributes<UserAttributes>,
-    InferCreationAttributes<UserAttributes>
+    InferAttributes<ActorAttributes>,
+    InferCreationAttributes<ActorAttributes>
   > {
   id: CreationOptional<number>
   nome: string
   email: string
   senha: string
   deleted: CreationOptional<boolean>
-  permissoes: PermissionKeys
-  roles: Roles[]
+  permissoes?: number
   publico: string[]
   procedimentos?: ProcedimentoModel[]
   createdAt?: Date
   updatedAt?: Date
 }
 
-const User = sequelize.define<UserAttributes>('user', {
+const Actor = sequelize.define<ActorAttributes>('actor', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -65,14 +63,7 @@ const User = sequelize.define<UserAttributes>('user', {
     defaultValue: false
   },
   permissoes: {
-    type: DataTypes.JSON,
-    allowNull: false,
-    defaultValue: {}
-  },
-  roles: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
-    defaultValue: ['usuario']
+    type: DataTypes.NUMBER
   },
   publico: {
     type: DataTypes.ARRAY(DataTypes.STRING),
@@ -83,14 +74,17 @@ const User = sequelize.define<UserAttributes>('user', {
   updatedAt: DataTypes.DATE
 })
 
-User.prototype.toJSON = function () {
+Actor.belongsTo(Profile, { foreignKey: 'permissoes' })
+Profile.hasMany(Actor)
+
+Actor.prototype.toJSON = function () {
   const values = Object.assign({}, this.get())
 
   delete values.senha
   return values
 }
 
-User.beforeCreate(async (user, options) => {
+Actor.beforeCreate(async (user, options) => {
   try {
     const hash = await bcrypt.hash(user.senha, 10)
     user.setDataValue('senha', hash)
@@ -99,28 +93,4 @@ User.beforeCreate(async (user, options) => {
   }
 })
 
-type InitialUser = {
-  senha: string
-  email: string
-  roles: Roles[]
-  permissoes: PermissionKeys
-}
-
-export const createInitialUser = async ({
-  email,
-  permissoes,
-  roles,
-  senha
-}: InitialUser) => {
-  await User.findOrCreate({
-    where: { email },
-    defaults: {
-      senha,
-      email,
-      roles,
-      permissoes
-    }
-  })
-}
-
-export default User
+export default Actor

@@ -2,7 +2,7 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import User from 'domain/models/user'
+import User from 'domain/models/actor'
 import { includeableUser } from 'repository'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateFormulario, FormularioRepository } from '../formulario'

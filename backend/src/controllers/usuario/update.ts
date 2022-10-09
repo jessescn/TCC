@@ -1,23 +1,22 @@
 import { Controller, errorResponseHandler, Validation } from 'controllers'
-import { UserModel } from 'domain/models/user'
-import { IUsuarioService } from 'services/usuario'
-import { PermissionKey } from 'types/auth/actors'
+import { ActorModel } from 'domain/models/actor'
+import { PermissionKey } from 'domain/profiles'
+import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields: Validation = request => {
-  const validFields: (keyof Partial<UserModel>)[] = [
+  const validFields: (keyof Partial<ActorModel>)[] = [
     'nome',
-    'permissoes',
-    'roles',
+    'profile',
     'publico'
   ]
   notIncludesInvalidFields(request, validFields)
 }
 
-export class UpdateUsuarioController extends Controller<IUsuarioService> {
-  constructor(service: IUsuarioService) {
-    const permission: PermissionKey = 'user_update'
+export class UpdateActorController extends Controller<IActorService> {
+  constructor(service: IActorService) {
+    const permission: PermissionKey = 'actor_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
     super({ permission, validations, service })
@@ -28,11 +27,11 @@ export class UpdateUsuarioController extends Controller<IUsuarioService> {
       this.validateRequest(request)
 
       const { id } = request.params
-      const data = request.body as Partial<UserModel>
+      const data = request.body as Partial<ActorModel>
 
-      const updatedUsuario = await this.service.update(Number(id), data)
+      const updatedActor = await this.service.update(Number(id), data)
 
-      response.json(updatedUsuario)
+      response.json(updatedActor)
     } catch (error) {
       errorResponseHandler(response, error)
     }

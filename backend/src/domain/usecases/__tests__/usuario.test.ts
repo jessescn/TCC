@@ -1,36 +1,37 @@
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
+import { ProfileModel } from 'domain/models/profile'
 import { createMock } from 'ts-auto-mock'
-import { UsuarioUseCase } from '../usuario'
+import { ActorUseCase } from '../actor'
 
-describe('Usuario UseCases', () => {
-  const sut = UsuarioUseCase
+describe('Actor UseCases', () => {
+  const sut = ActorUseCase
 
   describe('filterByRole', () => {
     const usuarios = [
-      createMock<UserModel>({ roles: ['admin'] }),
-      createMock<UserModel>({
-        roles: ['colegiado', 'coordenacao', 'admin']
+      createMock<ActorModel>({
+        profile: createMock<ProfileModel>({ nome: 'admin' })
+      }),
+      createMock<ActorModel>({
+        profile: createMock<ProfileModel>({ nome: 'coordenacao' })
       })
     ]
 
     it('should filter users by specific role', () => {
       const result1 = sut.filterByRole(usuarios, 'admin')
-      const result2 = sut.filterByRole(usuarios, 'coordenacao')
-      const result3 = sut.filterByRole(usuarios, 'usuario')
+      const result2 = sut.filterByRole(usuarios, 'usuario')
 
-      expect(result1).toEqual(usuarios)
-      expect(result2).toEqual([usuarios[1]])
-      expect(result3).toEqual([])
+      expect(result1).toEqual([usuarios[0]])
+      expect(result2).toEqual([])
     })
   })
 
   describe('getPublicos', () => {
     const usuarios = [
-      createMock<UserModel>({ publico: ['publico1'] }),
-      createMock<UserModel>({
+      createMock<ActorModel>({ publico: ['publico1'] }),
+      createMock<ActorModel>({
         publico: ['publico1', 'publico2', 'publico3']
       }),
-      createMock<UserModel>({
+      createMock<ActorModel>({
         publico: ['publico2', 'publico4']
       })
     ]

@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 import { sequelize } from 'database'
 import Procedimento, { ProcedimentoModel } from 'domain/models/procedimento'
-import User, { UserModel } from 'domain/models/user'
+import Actor, { ActorModel } from 'domain/models/actor'
 import {
   CreationOptional,
   DataTypes,
@@ -17,7 +17,7 @@ export interface ComentarioModel {
   conteudo: string
   deleted: boolean
   procedimento?: ProcedimentoModel
-  user?: UserModel
+  actor?: ActorModel
   createdAt?: Date
   updatedAt?: Date
 }
@@ -32,9 +32,9 @@ export interface ComentarioAttributes
   conteudo: string
   deleted: CreationOptional<boolean>
   procedimento?: ProcedimentoModel
-  user?: UserModel
   createdAt?: Date
   updatedAt?: Date
+  createdBy?: CreationOptional<number>
 }
 
 const Comentario = sequelize.define<ComentarioAttributes>('comentario', {
@@ -58,7 +58,7 @@ const Comentario = sequelize.define<ComentarioAttributes>('comentario', {
 })
 
 Comentario.belongsTo(Procedimento)
-Comentario.belongsTo(User, { foreignKey: 'createdBy' })
+Comentario.belongsTo(Actor, { foreignKey: 'createdBy' })
 Procedimento.hasMany(Comentario)
 
 export default Comentario

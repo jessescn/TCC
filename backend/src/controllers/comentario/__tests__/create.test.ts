@@ -1,14 +1,15 @@
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateComentarioController } from '../create'
 import { NewComentario } from 'repository/sequelize/comentario'
 import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'domain/models/comentario'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('CreateComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-  const { user, response, spies } = baseSetup('comentario_create')
+  const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
+  const { actor, response, spies } = baseSetup('comentario_create')
 
   const newComentario = createMock<NewComentario>({
     conteudo: 'test',
@@ -29,25 +30,25 @@ describe('CreateComentario Controller', () => {
   })
 
   it('should receive a request and response with the created comentario', async () => {
-    const request = createMock<Request>({ body: newComentario, user })
+    const request = createMock<Request>({ body: newComentario, actor })
 
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
 
-    expect(service.create).toBeCalledWith(request.user, newComentario)
+    expect(service.create).toBeCalledWith(request.actor, newComentario)
     expect(response.status).toBeCalledWith(HttpStatusCode.created)
     expect(spies.sendSpy).toBeCalledWith(comentario)
   })
 
-  it('should response with unauthorized error code if user does not have access', async () => {
-    const userWithoutAccess = createMock<UserModel>({
-      permissoes: { comentario_create: 'not_allowed' }
+  it('should response with unauthorized error code if actor does not have access', async () => {
+    const actorWithoutAccess = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({ permissoes: {} })
     })
 
     const request = createMock<Request>({
       body: newComentario,
-      user: userWithoutAccess
+      actor: actorWithoutAccess
     })
 
     const { sut } = makeSut()
@@ -62,7 +63,10 @@ describe('CreateComentario Controller', () => {
     const incompleteNewComentario = createMock<NewComentario>()
     delete incompleteNewComentario.conteudo
 
-    const request = createMock<Request>({ body: incompleteNewComentario, user })
+    const request = createMock<Request>({
+      body: incompleteNewComentario,
+      actor
+    })
 
     const { sut } = makeSut()
 

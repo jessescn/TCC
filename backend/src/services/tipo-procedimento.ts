@@ -2,7 +2,7 @@ import {
   TipoProcedimentoAttributes,
   TipoProcedimentoModel
 } from 'domain/models/tipo-procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import { FormularioRepository } from 'repository/sequelize/formulario'
 import {
@@ -16,7 +16,7 @@ import { BadRequestError, NotFoundError } from 'types/express/errors'
 export interface ITipoProcedimentoService
   extends IService<TipoProcedimentoAttributes, TipoProcedimentoQuery> {
   create: (
-    usuario: UserModel,
+    actor: ActorModel,
     data: NewTipoProcedimento
   ) => Promise<TipoProcedimentoAttributes>
   update: (
@@ -57,7 +57,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
     return tipoProcedimento
   }
 
-  async create(usuario: UserModel, data: NewTipoProcedimento) {
+  async create(actor: ActorModel, data: NewTipoProcedimento) {
     await this.checkIfFormulariosExists(data.formularios)
 
     const newTipoProcedimento = await this.tipoProcedimentoRepo.create({
@@ -69,7 +69,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
       dataFim: data.dataFim,
       dataInicio: data.dataInicio,
       descricao: data.descricao,
-      createdBy: usuario.id
+      createdBy: actor.id
     })
 
     return newTipoProcedimento

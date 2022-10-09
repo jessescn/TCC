@@ -1,21 +1,20 @@
 import { baseSetup } from 'controllers/__mocks__'
-
-import { UserModel } from 'domain/models/user'
-import { NewUsuario } from 'repository/sequelize/usuario'
+import { ActorModel } from 'domain/models/actor'
+import { NewActor } from 'repository/sequelize/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
-import { CreateUsuarioController } from '../create'
+import { CreateActorController } from '../create'
 
-describe('CreateUsuario Controller', () => {
-  const usuario = createMock<UserModel>()
-  const { user, response, spies } = baseSetup('user_create')
+describe('CreateActor Controller', () => {
+  const usuario = createMock<ActorModel>()
+  const { actor, response, spies } = baseSetup('actor_create')
 
   const makeSut = () => {
     const service = {
       create: jest.fn().mockResolvedValue(usuario)
     }
 
-    return { sut: new CreateUsuarioController(service as any), service }
+    return { sut: new CreateActorController(service as any), service }
   }
 
   afterEach(() => {
@@ -25,8 +24,8 @@ describe('CreateUsuario Controller', () => {
   })
 
   it('should create a new usuario', async () => {
-    const data = createMock<NewUsuario>()
-    const request = createMock<Request>({ user, body: data })
+    const data = createMock<NewActor>()
+    const request = createMock<Request>({ actor, body: data })
 
     const { sut, service } = makeSut()
 
@@ -39,18 +38,7 @@ describe('CreateUsuario Controller', () => {
 
   it('should respond with BadRequest if request body does not contains some mandatory field', async () => {
     const data = { email: 'test@teste.com', nome: 'test' }
-    const request = createMock<Request>({ user, body: data })
-
-    const { sut } = makeSut()
-
-    await sut.exec(request, response as any)
-
-    expect(response.status).toBeCalledWith(HttpStatusCode.badRequest)
-  })
-
-  it('should respond with BadRequest if request body contains some invalid role', async () => {
-    const data = createMock<NewUsuario>({ roles: ['randomRole' as any] })
-    const request = createMock<Request>({ user, body: data })
+    const request = createMock<Request>({ actor, body: data })
 
     const { sut } = makeSut()
 

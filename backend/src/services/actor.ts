@@ -1,27 +1,26 @@
-import { UserAttributes, UserModel } from 'domain/models/user'
+import { ActorAttributes, ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
-import {
-  NewUsuario,
-  UsuarioQuery,
-  UsuarioRepository
-} from 'repository/sequelize/usuario'
+import { NewActor, ActorQuery } from 'repository/sequelize/actor'
 import { IService } from 'services'
-import { ConflictError, NotFoundError } from 'types/express/errors'
-import { UsuarioUseCase } from 'domain/usecases/usuario'
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError
+} from 'types/express/errors'
+import { ActorUseCase } from 'domain/usecases/actor'
+import { ProfileRepository } from 'repository/sequelize/profile'
 
-export interface IUsuarioService
-  extends IService<UserAttributes, UsuarioQuery> {
-  create: (data: NewUsuario) => Promise<UserAttributes>
-  update: (id: number, data: Partial<UserModel>) => Promise<UserAttributes>
+export interface IActorService extends IService<ActorAttributes, ActorQuery> {
+  create: (data: NewActor) => Promise<ActorAttributes>
+  update: (id: number, data: Partial<ActorModel>) => Promise<ActorAttributes>
   getPublicos: () => Promise<string[]>
 }
 
-export class UsuarioService implements IUsuarioService {
-  private repository: UsuarioRepository
-
-  constructor(repository: IRepository) {
-    this.repository = repository
-  }
+export class ActorService implements IActorService {
+  constructor(
+    private readonly repository: IRepository,
+    private readonly profileRepo: ProfileRepository
+  ) {}
 
   private checkIfUserAlreadyExistsByEmail = async (email: string) => {
     const [usuario] = await this.repository.findAll({ email })
@@ -41,15 +40,23 @@ export class UsuarioService implements IUsuarioService {
     return usuario
   }
 
-  async create(data: NewUsuario) {
+  private checkIfProfileExists = async (profileId: number) => {
+    const profile = await this.profileRepo.findOne(profileId)
+
+    if (!profile) {
+      throw new BadRequestError('Invalid profile')
+    }
+  }
+
+  async create(data: NewActor) {
     await this.checkIfUserAlreadyExistsByEmail(data.email)
+    await this.checkIfProfileExists(data.profile)
 
     const usuario = await this.repository.create({
       email: data.email,
       nome: data.nome,
       senha: data.senha,
-      roles: data.roles,
-      permissoes: data.permissoes
+      permissoes: data.profile
     })
 
     return usuario
@@ -67,11 +74,11 @@ export class UsuarioService implements IUsuarioService {
     return usuario
   }
 
-  async findAll(query: UsuarioQuery = {}) {
+  async findAll(query: ActorQuery = {}) {
     return this.repository.findAll(query)
   }
 
-  async update(id: number, data: Partial<UserModel>) {
+  async update(id: number, data: Partial<ActorModel>) {
     await this.checkIfUserAlreadyExists(id)
 
     return this.repository.update(id, data)
@@ -80,6 +87,6 @@ export class UsuarioService implements IUsuarioService {
   async getPublicos() {
     const usuarios = await this.findAll()
 
-    return UsuarioUseCase.getPublicos(usuarios)
+    return ActorUseCase.getPublicos(usuarios)
   }
 }

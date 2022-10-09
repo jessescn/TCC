@@ -1,7 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { FormularioModel } from 'domain/models/formulario'
+import { PermissionKey } from 'domain/profiles'
 import { IFormularioService } from 'services/formulario'
-import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
@@ -12,7 +12,7 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 
 export class UpdateFormularioController extends Controller<IFormularioService> {
   constructor(service: IFormularioService) {
-    const permission: keyof PermissionKeys = 'form_update'
+    const permission: PermissionKey = 'formulario_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
     super({ permission, validations, service })

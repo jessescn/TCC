@@ -1,4 +1,4 @@
-import { PermissionKey } from 'types/auth/actors'
+import { PermissionKey } from 'domain/profiles'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { RequestError } from 'types/express/errors'
 import { validateMandatoryFields } from 'utils/fields'
@@ -62,7 +62,7 @@ export abstract class Controller<T> implements IController {
   hasPermissions = (req: Request) => {
     if (!this.permission) return
 
-    const permissionValue = req.user.permissoes[this.permission]
+    const permissionValue = req.actor.profile.permissoes[this.permission]
     checkPermissionResource(permissionValue)
   }
 

@@ -1,30 +1,30 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UserModel } from 'domain/models/user'
-import { IUsuarioService } from 'services/usuario'
-import { PermissionKey } from 'types/auth/actors'
+import { ActorModel } from 'domain/models/actor'
+import { PermissionKey } from 'domain/profiles'
+import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 
-export class ReadUsuarioController extends Controller<IUsuarioService> {
-  constructor(service: IUsuarioService) {
-    const permission: PermissionKey = 'user_read'
+export class ReadActorController extends Controller<IActorService> {
+  constructor(service: IActorService) {
+    const permission: PermissionKey = 'actor_read'
 
     super({ permission, service })
   }
 
-  private getQueryByScope = (usuario: UserModel) => {
-    const scope = usuario.permissoes[this.permission]
+  private getQueryByScope = (actor: ActorModel) => {
+    const scope = actor.profile.permissoes[this.permission]
 
-    return scope === 'owned' ? { id: usuario.id } : {}
+    return scope === 'owned' ? { id: actor.id } : {}
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const query = this.getQueryByScope(request.user)
-      const usuarios = await this.service.findAll(query)
+      const query = this.getQueryByScope(request.actor)
+      const actors = await this.service.findAll(query)
 
-      response.json(usuarios)
+      response.json(actors)
     } catch (error) {
       errorResponseHandler(response, error)
     }

@@ -7,7 +7,7 @@ import { CreateTipoProcedimentoController } from '../create'
 
 describe('CreateTipoProcedimento Controller', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
-  const { user, spies, response } = baseSetup('tipo_procedimento_create')
+  const { actor, spies, response } = baseSetup('tipo_procedimento_create')
 
   const makeSut = () => {
     const service = {
@@ -25,20 +25,20 @@ describe('CreateTipoProcedimento Controller', () => {
 
   it('should create a new tipoProcedimento', async () => {
     const data = createMock<NewTipoProcedimento>()
-    const request = createMock<Request>({ user, body: data })
+    const request = createMock<Request>({ actor, body: data })
 
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
 
-    expect(service.create).toBeCalledWith(user, data)
+    expect(service.create).toBeCalledWith(actor, data)
     expect(response.status).toBeCalledWith(HttpStatusCode.created)
     expect(spies.sendSpy).toBeCalledWith(tipoProcedimento)
   })
 
   it('should respond with BadRequestError if data does not contains all mandatory fields', async () => {
     const data = { colegiado: true }
-    const request = createMock<Request>({ user, body: data })
+    const request = createMock<Request>({ actor, body: data })
 
     const { sut, service } = makeSut()
 

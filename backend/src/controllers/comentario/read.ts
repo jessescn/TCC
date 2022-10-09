@@ -1,29 +1,29 @@
 import { errorResponseHandler } from 'controllers'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { ComentarioQuery } from 'repository/sequelize/comentario'
 import { IComentarioService } from 'services/comentario'
-import { PermissionKeys } from 'types/auth/actors'
+import { PermissionKey } from 'domain/profiles'
 import { Request, Response } from 'types/express'
 import { ComentarioController } from '.'
 
 export class ReadComentarioController extends ComentarioController {
   constructor(service: IComentarioService) {
-    const permission: keyof PermissionKeys = 'comentario_delete'
+    const permission: PermissionKey = 'comentario_read'
 
     super({ permission, service })
   }
 
-  getQueryByScope(usuario: UserModel): ComentarioQuery {
-    const scope = usuario.permissoes[this.permission]
+  getQueryByScope(actor: ActorModel): ComentarioQuery {
+    const scope = actor.profile.permissoes[this.permission]
 
-    return scope === 'owned' ? { user: { id: usuario.id } } : {}
+    return scope === 'owned' ? { createdBy: actor.id } : {}
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const query = this.getQueryByScope(request.user)
+      const query = this.getQueryByScope(request.actor)
       const comentarios = await this.service.findAll(query)
 
       response.json(comentarios)

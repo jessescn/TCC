@@ -1,13 +1,14 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { FormularioModel } from 'domain/models/formulario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadFormularioController } from '../read'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('ReadFormulario Controller', () => {
   const formulario = createMock<FormularioModel>()
-  const { user, response, spies } = baseSetup('form_read')
+  const { actor, response, spies } = baseSetup('formulario_read')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +25,7 @@ describe('ReadFormulario Controller', () => {
   })
 
   it('should respond with all formularios', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
 
     const { sut, service } = makeSut()
 
@@ -34,26 +35,30 @@ describe('ReadFormulario Controller', () => {
     expect(response.json).toBeCalledWith([formulario])
   })
 
-  it('should respond with only formularios createdBy user', async () => {
-    const userWithLimitedPrivileges = createMock<UserModel>({
-      permissoes: { form_read: 'owned' }
+  it('should respond with only formularios createdBy actor', async () => {
+    const actorWithLimitedPrivileges = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: { formulario_read: 'owned' }
+      })
     })
-    const request = createMock<Request>({ user: userWithLimitedPrivileges })
+    const request = createMock<Request>({ actor: actorWithLimitedPrivileges })
 
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
 
     expect(service.findAll).toBeCalledWith({
-      createdBy: userWithLimitedPrivileges.id
+      createdBy: actorWithLimitedPrivileges.id
     })
   })
 
-  it('should respond with UnauthorizedError if user does not have privileges', async () => {
-    const userWithoutPrivileges = createMock<UserModel>({
-      permissoes: { form_read: 'not_allowed' }
+  it('should respond with UnauthorizedError if actor does not have privileges', async () => {
+    const actorWithoutPrivileges = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: {}
+      })
     })
-    const request = createMock<Request>({ user: userWithoutPrivileges })
+    const request = createMock<Request>({ actor: actorWithoutPrivileges })
 
     const { sut, service } = makeSut()
 

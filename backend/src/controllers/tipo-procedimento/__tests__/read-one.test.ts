@@ -6,7 +6,7 @@ import { HttpStatusCode, Request } from 'types/express'
 
 describe('ReadOneTipoProcedimento Controller', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
-  const { user, spies, response } = baseSetup('tipo_procedimento_read')
+  const { actor, spies, response } = baseSetup('tipo_procedimento_read')
 
   const makeSut = () => {
     const service = {
@@ -26,7 +26,7 @@ describe('ReadOneTipoProcedimento Controller', () => {
   })
 
   it('should return an existing tipoProcedimento by id', async () => {
-    const request = createMock<Request>({ params: { id: '1' }, user })
+    const request = createMock<Request>({ params: { id: '1' }, actor })
     const { service, sut } = makeSut()
 
     await sut.exec(request, response as any)
@@ -36,7 +36,7 @@ describe('ReadOneTipoProcedimento Controller', () => {
   })
 
   it('should respond with BadRequestError if id is not provided', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
     const { sut } = makeSut()
 
     await sut.exec(request, response as any)

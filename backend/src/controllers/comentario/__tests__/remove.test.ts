@@ -1,14 +1,15 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'domain/models/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { NotFoundError } from 'types/express/errors'
 import { DeleteComentarioController } from '../delete'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('RemoveComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-  const { user, response, spies } = baseSetup('comentario_delete')
+  const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
+  const { actor, response, spies } = baseSetup('comentario_delete')
 
   const makeSut = () => {
     const service = {
@@ -26,7 +27,7 @@ describe('RemoveComentario Controller', () => {
   })
 
   it('should receive a request with id and remove the respective comentario', async () => {
-    const request = createMock<Request>({ params: { id: '1' }, user })
+    const request = createMock<Request>({ params: { id: '1' }, actor })
 
     const { sut, service } = makeSut()
 
@@ -36,14 +37,16 @@ describe('RemoveComentario Controller', () => {
     expect(response.json).toBeCalledWith(comentario)
   })
 
-  it('should response with unauthorized error if user cannot delete the comentario', async () => {
-    const userWithoutPermission = createMock<UserModel>({
-      permissoes: { comentario_delete: 'not_allowed' }
+  it('should response with unauthorized error if actor cannot delete the comentario', async () => {
+    const actorWithoutPermission = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: {}
+      })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithoutPermission
+      actor: actorWithoutPermission
     })
 
     const { sut, service } = makeSut()
@@ -54,14 +57,16 @@ describe('RemoveComentario Controller', () => {
     expect(response.status).toBeCalledWith(HttpStatusCode.unauthorized)
   })
 
-  it('should response with unauthorized error if user hasnt scope to delete the comentario', async () => {
-    const userWithoutPermission = createMock<UserModel>({
-      permissoes: { comentario_delete: 'owned' }
+  it('should response with unauthorized error if actor hasnt scope to delete the comentario', async () => {
+    const actorWithoutPermission = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: { comentario_delete: 'owned' }
+      })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithoutPermission
+      actor: actorWithoutPermission
     })
 
     const { sut, service } = makeSut()
@@ -81,7 +86,7 @@ describe('RemoveComentario Controller', () => {
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user
+      actor
     })
 
     await sut.exec(request, response as any)

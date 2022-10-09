@@ -1,13 +1,14 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'domain/models/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadComentarioController } from '../read'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('ReadComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-  const { user, response, spies } = baseSetup('comentario_read')
+  const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
+  const { actor, response, spies } = baseSetup('comentario_read')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +25,7 @@ describe('ReadComentario Controller', () => {
   })
 
   it('should respond with all comentarios', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
 
     const { sut, service } = makeSut()
 
@@ -34,29 +35,33 @@ describe('ReadComentario Controller', () => {
     expect(response.json).toBeCalledWith([comentario])
   })
 
-  it('should respond with only comentario owned by user if scope is "owned"', async () => {
-    const userWithLimitedScope = createMock<UserModel>({
-      permissoes: { comentario_delete: 'owned' }
+  it('should respond with only comentario owned by actor if scope is "owned"', async () => {
+    const actorWithLimitedScope = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: { comentario_read: 'owned' }
+      })
     })
 
-    const request = createMock<Request>({ user: userWithLimitedScope })
+    const request = createMock<Request>({ actor: actorWithLimitedScope })
 
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
 
     expect(service.findAll).toBeCalledWith({
-      user: { id: userWithLimitedScope.id }
+      createdBy: actorWithLimitedScope.id
     })
     expect(response.json).toBeCalledWith([comentario])
   })
 
-  it('should respond with unauthorized error if user hasnt privileges to access the resource', async () => {
-    const userWithoutPrivilege = createMock<UserModel>({
-      permissoes: { comentario_delete: 'not_allowed' }
+  it('should respond with unauthorized error if actor hasnt privileges to access the resource', async () => {
+    const actorWithoutPrivilege = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: {}
+      })
     })
 
-    const request = createMock<Request>({ user: userWithoutPrivilege })
+    const request = createMock<Request>({ actor: actorWithoutPrivilege })
 
     const { sut } = makeSut()
 

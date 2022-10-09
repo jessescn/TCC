@@ -1,41 +1,25 @@
-import { Controller, errorResponseHandler, Validation } from 'controllers'
-import { CreateUsuario, NewUsuario } from 'repository/sequelize/usuario'
-import { IUsuarioService } from 'services/usuario'
-import { PermissionKey, rolesMap } from 'types/auth/actors'
+import { Controller, errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
+import { NewActor } from 'repository/sequelize/actor'
+import { IActorService } from 'services/actor'
 import { HttpStatusCode, Request, Response } from 'types/express'
-import { BadRequestError } from 'types/express/errors'
+export class CreateActorController extends Controller<IActorService> {
+  constructor(service: IActorService) {
+    const permission: PermissionKey = 'actor_create'
+    const mandatoryFields = ['email', 'nome', 'senha', 'profile']
 
-const hasOnlyAvailableRoles: Validation = request => {
-  const availableRoles = rolesMap
-
-  const { roles } = request.body as CreateUsuario
-
-  if (!roles || roles.length === 0) return
-
-  roles.forEach(role => {
-    if (!availableRoles.includes(role)) {
-      throw new BadRequestError(`${role} is not a valid user role`)
-    }
-  })
-}
-export class CreateUsuarioController extends Controller<IUsuarioService> {
-  constructor(service: IUsuarioService) {
-    const validations = [hasOnlyAvailableRoles]
-    const permission: PermissionKey = 'user_create'
-    const mandatoryFields = ['email', 'nome', 'senha']
-
-    super({ mandatoryFields, permission, validations, service })
+    super({ mandatoryFields, permission, service })
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const data = request.body as NewUsuario
+      const data = request.body as NewActor
 
-      const newUsuario = await this.service.create(data)
+      const newActor = await this.service.create(data)
 
-      response.status(HttpStatusCode.created).send(newUsuario)
+      response.status(HttpStatusCode.created).send(newActor)
     } catch (error) {
       errorResponseHandler(response, error)
     }

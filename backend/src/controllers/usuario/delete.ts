@@ -1,12 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { IUsuarioService } from 'services/usuario'
-import { PermissionKey } from 'types/auth/actors'
+import { PermissionKey } from 'domain/profiles'
+import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
-export class DeleteUsuarioController extends Controller<IUsuarioService> {
-  constructor(service: IUsuarioService) {
-    const permission: PermissionKey = 'user_delete'
+export class DeleteActorController extends Controller<IActorService> {
+  constructor(service: IActorService) {
+    const permission: PermissionKey = 'actor_delete'
     const validations = [hasNumericId]
 
     super({ permission, validations, service })
@@ -18,9 +18,9 @@ export class DeleteUsuarioController extends Controller<IUsuarioService> {
 
       const { id } = request.params
 
-      const deletedUsuario = await this.service.delete(Number(id))
+      const deletedActor = await this.service.delete(Number(id))
 
-      response.json(deletedUsuario)
+      response.json(deletedActor)
     } catch (error) {
       errorResponseHandler(response, error)
     }

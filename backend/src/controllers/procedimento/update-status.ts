@@ -25,7 +25,7 @@ const checkIfHasInvalidStatus: Validation = request => {
 
 export class UpdateStatusProcedimentoController extends Controller<IProcedimentoService> {
   constructor(service: IProcedimentoService) {
-    const permission: PermissionKey = 'procedimento_status'
+    const permission: PermissionKey = 'procedimento_update'
     const validations = [hasNumericId, checkIfHasInvalidStatus]
 
     super({ permission, validations, service })

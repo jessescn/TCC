@@ -6,7 +6,7 @@ import { UpdateTipoProcedimentoController } from '../update'
 
 describe('UpdateTipoProcedimento Controller', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
-  const { user, spies, response } = baseSetup('tipo_procedimento_update')
+  const { actor, spies, response } = baseSetup('tipo_procedimento_update')
 
   const makeSut = () => {
     const service = {
@@ -28,7 +28,7 @@ describe('UpdateTipoProcedimento Controller', () => {
   it('should update an existing tipoProcedimentos', async () => {
     const data: Partial<TipoProcedimentoModel> = { escopo: 'test' }
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })
@@ -43,7 +43,7 @@ describe('UpdateTipoProcedimento Controller', () => {
   it('should respond with BadRequest if body includes invalid field to update', async () => {
     const data: Partial<TipoProcedimentoModel> = { id: 1 }
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })

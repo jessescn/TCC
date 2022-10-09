@@ -1,5 +1,5 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { TipoProcedimentoUseCase } from '../tipo-procedimento'
 
@@ -7,8 +7,8 @@ describe('TipoProcedimento UseCases', () => {
   const sut = TipoProcedimentoUseCase
 
   describe('belongsToPublico', () => {
-    const user1 = createMock<UserModel>({ publico: ['publico2'] })
-    const user2 = createMock<UserModel>({ publico: ['publico4'] })
+    const user1 = createMock<ActorModel>({ publico: ['publico2'] })
+    const user2 = createMock<ActorModel>({ publico: ['publico4'] })
 
     const tipoProcedimento = createMock<TipoProcedimentoModel>({
       publicos: ['publico1', 'publico2', 'publico3']

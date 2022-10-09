@@ -3,7 +3,7 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import User from 'domain/models/user'
+import User from 'domain/models/actor'
 import { includeableUser, IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 

@@ -6,7 +6,7 @@ import { ReadOneFormularioController } from '../read-one'
 
 describe('ReadOneFormulario Controller', () => {
   const formulario = createMock<FormularioModel>()
-  const { user, response, spies } = baseSetup('form_delete')
+  const { actor, response, spies } = baseSetup('formulario_read')
 
   const makeSut = () => {
     const service = {
@@ -23,7 +23,7 @@ describe('ReadOneFormulario Controller', () => {
   })
 
   it('should respond with a formulario finded by id', async () => {
-    const request = createMock<Request>({ user, params: { id: '1' } })
+    const request = createMock<Request>({ actor, params: { id: '1' } })
 
     const { sut, service } = makeSut()
 
@@ -34,7 +34,7 @@ describe('ReadOneFormulario Controller', () => {
   })
 
   it('should respond with BadRequest if request does not have id on params', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
 
     const { sut, service } = makeSut()
 

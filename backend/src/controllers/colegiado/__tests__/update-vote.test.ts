@@ -6,7 +6,7 @@ import { UpdateVoteController } from '../update-vote'
 
 describe('UpdateVote Controller', () => {
   const procedimento = createMock<ProcedimentoModel>()
-  const { user, response, spies } = baseSetup('colegiado_vote')
+  const { actor, response, spies } = baseSetup('colegiado_update_vote')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +24,7 @@ describe('UpdateVote Controller', () => {
   it('should update/create a vote in an existing procedimento', async () => {
     const data = createMock<VotoProcedimento>({ autor: 1, aprovado: true })
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })
@@ -39,7 +39,7 @@ describe('UpdateVote Controller', () => {
 
   it('should respond with BadRequestError if some mandatory field is not provided', async () => {
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: { autor: 1 }
     })

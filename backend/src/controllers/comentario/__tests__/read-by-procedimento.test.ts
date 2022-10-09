@@ -1,13 +1,14 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'domain/models/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadCommentsByProcedimentoController } from '../read-by-procedimento'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('ReadByProcedimento Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-  const { user, response, spies } = baseSetup('colegiado_comments')
+  const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
+  const { actor, response, spies } = baseSetup('colegiado_comments_read')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +25,7 @@ describe('ReadByProcedimento Controller', () => {
   })
 
   it('should response with all comentarios filtered by specific procedimentoId', async () => {
-    const request = createMock<Request>({ params: { id: '1' }, user })
+    const request = createMock<Request>({ params: { id: '1' }, actor })
 
     const { sut, service } = makeSut()
 
@@ -34,15 +35,17 @@ describe('ReadByProcedimento Controller', () => {
     expect(response.json).toBeCalledWith([comentario])
   })
 
-  it('should response with only comentarios which has user as author', async () => {
-    const userWithLimitedPermission = createMock<UserModel>({
+  it('should response with only comentarios which has actor as author', async () => {
+    const actorWithLimitedPermission = createMock<ActorModel>({
       id: 2,
-      permissoes: { colegiado_comments: 'owned' }
+      profile: createMock<ProfileModel>({
+        permissoes: { colegiado_comments_read: 'owned' }
+      })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithLimitedPermission
+      actor: actorWithLimitedPermission
     })
 
     const { sut, service } = makeSut()
@@ -50,21 +53,21 @@ describe('ReadByProcedimento Controller', () => {
     await sut.exec(request, response as any)
 
     expect(service.findAll).toBeCalledWith({
-      user: { id: userWithLimitedPermission.id },
+      createdBy: actorWithLimitedPermission.id,
       procedimentoId: 1
     })
     expect(response.json).toBeCalledWith([comentario])
   })
 
-  it('should response with unauthorized error if user does not have resource access privileges', async () => {
-    const userWithoutPermission = createMock<UserModel>({
+  it('should response with unauthorized error if actor does not have resource access privileges', async () => {
+    const actorWithoutPermission = createMock<ActorModel>({
       id: 2,
-      permissoes: { colegiado_comments: 'not_allowed' }
+      profile: createMock<ProfileModel>({ permissoes: {} })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithoutPermission
+      actor: actorWithoutPermission
     })
 
     const { sut } = makeSut()

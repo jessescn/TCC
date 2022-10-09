@@ -1,5 +1,5 @@
 import { FormularioModel } from 'domain/models/formulario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import { FormularioQuery, NewFormulario } from 'repository/sequelize/formulario'
 import { FormularioService } from 'services/formulario'
@@ -15,7 +15,7 @@ describe('Formulario Service', () => {
       create: jest.fn().mockResolvedValue(formulario)
     })
 
-    const usuario = createMock<UserModel>({ id: 1 })
+    const usuario = createMock<ActorModel>({ id: 1 })
     const newFormulario = createMock<NewFormulario>()
 
     it('should create a new formulario', async () => {

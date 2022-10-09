@@ -38,15 +38,15 @@ export class AuthTokenMiddleware extends Middleware {
     }) as JwtPayload
   }
 
-  private appendUserToRequest = (request: Request) => {
+  private appendActorToRequest = (request: Request) => {
     const { payload } = this.verifyAndDecodeToken(request)
-    request.user = payload.data
+    request.actor = payload.data
   }
 
   exec = (req: Request, res: Response, next: NextFunction) => {
     try {
       this.validateRequest(req)
-      this.appendUserToRequest(req)
+      this.appendActorToRequest(req)
       next()
     } catch (error) {
       errorResponseHandler(error, res)

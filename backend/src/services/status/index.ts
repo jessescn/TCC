@@ -1,5 +1,5 @@
 import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
-import { UserAttributes } from 'domain/models/user'
+import { UserAttributes } from 'domain/models/actor'
 import { makeCorrecoesPendentesStatusHandler } from 'factories/services/status/correcoes-pendentes-factory'
 import { makeCriadoStatusHandler } from 'factories/services/status/criado-factory'
 import { makeDeferidoStatusHandler } from 'factories/services/status/deferido-factory'

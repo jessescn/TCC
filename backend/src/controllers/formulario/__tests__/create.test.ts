@@ -7,7 +7,7 @@ import { CreateFormularioController } from '../create'
 
 describe('CreateFormulario Controller', () => {
   const formulario = createMock<FormularioModel>()
-  const { user, spies, response } = baseSetup('form_create')
+  const { actor, spies, response } = baseSetup('formulario_create')
 
   const makeSut = () => {
     const service = {
@@ -28,13 +28,13 @@ describe('CreateFormulario Controller', () => {
       nome: 'test',
       campos: []
     })
-    const request = createMock<Request>({ user, body: newFormulario })
+    const request = createMock<Request>({ actor, body: newFormulario })
 
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
 
-    expect(service.create).toBeCalledWith(user, newFormulario)
+    expect(service.create).toBeCalledWith(actor, newFormulario)
     expect(response.status).toBeCalledWith(HttpStatusCode.created)
     expect(spies.sendSpy).toBeCalledWith(formulario)
   })
@@ -44,7 +44,7 @@ describe('CreateFormulario Controller', () => {
       campos: []
     } as any
     const request = createMock<Request>({
-      user,
+      actor,
       body: newFormularioWithoutFields
     })
 

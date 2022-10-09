@@ -1,12 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
 import { ITipoProcedimentoService } from 'services/tipo-procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
 export class DeleteTipoProcedimentoController extends Controller<ITipoProcedimentoService> {
   constructor(service: ITipoProcedimentoService) {
-    const permission: PermissionKey = 'tipo_procedimento_update'
+    const permission: PermissionKey = 'tipo_procedimento_delete'
     const validations = [hasNumericId]
 
     super({ validations, permission, service })

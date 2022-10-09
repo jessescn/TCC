@@ -6,7 +6,7 @@ import { hasNumericId } from 'utils/request'
 
 export class HomologateProcedimentoController extends Controller<IColegiadoService> {
   constructor(service: IColegiadoService) {
-    const permission: PermissionKey = 'procedimento_homologacao'
+    const permission: PermissionKey = 'procedimento_homologate'
     const validations = [hasNumericId]
 
     super({ permission, validations, service })

@@ -1,13 +1,14 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'domain/models/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadOneComentarioController } from '../read-one'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('ReadOneComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-  const { user, response, spies } = baseSetup('comentario_read')
+  const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
+  const { actor, response, spies } = baseSetup('comentario_read')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +25,7 @@ describe('ReadOneComentario Controller', () => {
   })
 
   it('should respond with a specific comentario by id', async () => {
-    const request = createMock<Request>({ params: { id: '1' }, user })
+    const request = createMock<Request>({ params: { id: '1' }, actor })
 
     const { sut, service } = makeSut()
 
@@ -34,14 +35,16 @@ describe('ReadOneComentario Controller', () => {
     expect(response.json).toBeCalledWith(comentario)
   })
 
-  it('should respond with unauthorized error if user have limited scope', async () => {
-    const userWithLimitedPrivileges = createMock<UserModel>({
-      permissoes: { comentario_read: 'owned' }
+  it('should respond with unauthorized error if actor have limited scope', async () => {
+    const actorWithLimitedPrivileges = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({
+        permissoes: { comentario_read: 'owned' }
+      })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithLimitedPrivileges
+      actor: actorWithLimitedPrivileges
     })
 
     const { sut } = makeSut()
@@ -51,14 +54,14 @@ describe('ReadOneComentario Controller', () => {
     expect(response.status).toBeCalledWith(HttpStatusCode.unauthorized)
   })
 
-  it('should respond with unauthorized error if user hasnt access privileges', async () => {
-    const userWithoutPrivileges = createMock<UserModel>({
-      permissoes: { comentario_read: 'not_allowed' }
+  it('should respond with unauthorized error if actor hasnt access privileges', async () => {
+    const actorWithoutPrivileges = createMock<ActorModel>({
+      profile: createMock<ProfileModel>({ permissoes: {} })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithoutPrivileges
+      actor: actorWithoutPrivileges
     })
 
     const { sut } = makeSut()

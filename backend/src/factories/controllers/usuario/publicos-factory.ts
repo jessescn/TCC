@@ -1,6 +1,6 @@
 import { PublicosUsuarioController } from 'controllers/usuario/publicos'
-import { makeUsuarioService } from 'factories/services/usuario-factory'
+import { makeActorService } from 'factories/services/actor-factory'
 
 export const makePublicosUsuarioController = () => {
-  return new PublicosUsuarioController(makeUsuarioService())
+  return new PublicosUsuarioController(makeActorService())
 }

@@ -1,7 +1,7 @@
 import { errorResponseHandler } from 'controllers'
 import { ComentarioModel } from 'domain/models/comentario'
+import { PermissionKey } from 'domain/profiles'
 import { IComentarioService } from 'services/comentario'
-import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 import { ComentarioController } from '.'
@@ -13,7 +13,7 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
 
 export class UpdateComentarioController extends ComentarioController {
   constructor(service: IComentarioService) {
-    const permission: keyof PermissionKeys = 'comentario_update'
+    const permission: PermissionKey = 'comentario_update'
     const validations = [hasNumericId, notIncludesInvalidUpdateFields]
 
     super({ validations, permission, service })
@@ -26,7 +26,7 @@ export class UpdateComentarioController extends ComentarioController {
       const { id } = request.params
       const data = request.body as Partial<ComentarioModel>
 
-      await this.checkUserPermissionScope(request.user, Number(id))
+      await this.checkUserPermissionScope(request.actor, Number(id))
 
       const updatedComentario = await this.service.update(Number(id), data)
 

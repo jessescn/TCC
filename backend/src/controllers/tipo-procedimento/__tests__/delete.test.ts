@@ -6,7 +6,7 @@ import { DeleteTipoProcedimentoController } from '../delete'
 
 describe('DeleteTipoProcedimento Controller', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
-  const { user, spies, response } = baseSetup('tipo_procedimento_update')
+  const { actor, spies, response } = baseSetup('tipo_procedimento_delete')
 
   const makeSut = () => {
     const service = {
@@ -26,7 +26,7 @@ describe('DeleteTipoProcedimento Controller', () => {
   })
 
   it('should delete an existing tipoProcedimento', async () => {
-    const request = createMock<Request>({ params: { id: '1' }, user })
+    const request = createMock<Request>({ params: { id: '1' }, actor })
     const { sut, service } = makeSut()
 
     await sut.exec(request, response as any)
@@ -36,7 +36,7 @@ describe('DeleteTipoProcedimento Controller', () => {
   })
 
   it('should respond with BadRequestError if id is not provided', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
     const { sut } = makeSut()
 
     await sut.exec(request, response as any)

@@ -1,13 +1,13 @@
 import { Controller, errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
 import { IFormularioService } from 'services/formulario'
-import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
 export class ReadOneFormularioController extends Controller<IFormularioService> {
   constructor(service: IFormularioService) {
     const validations = [hasNumericId]
-    const permission: keyof PermissionKeys = 'form_read'
+    const permission: PermissionKey = 'formulario_read'
 
     super({ validations, permission, service })
   }

@@ -1,11 +1,11 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { IUsuarioService } from 'services/usuario'
-import { PermissionKey } from 'types/auth/actors'
+import { PermissionKey } from 'domain/profiles'
+import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
-export class ReadOneUsuarioController extends Controller<IUsuarioService> {
-  constructor(service: IUsuarioService) {
-    const permission: PermissionKey = 'user_read'
+export class ReadOneActorController extends Controller<IActorService> {
+  constructor(service: IActorService) {
+    const permission: PermissionKey = 'actor_read'
     const validations = [hasNumericId]
 
     super({ permission, validations, service })
@@ -17,9 +17,9 @@ export class ReadOneUsuarioController extends Controller<IUsuarioService> {
 
       const { id } = request.params
 
-      const usuario = await this.service.findOne(Number(id))
+      const actor = await this.service.findOne(Number(id))
 
-      response.json(usuario)
+      response.json(actor)
     } catch (error) {
       errorResponseHandler(response, error)
     }

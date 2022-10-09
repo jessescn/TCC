@@ -6,7 +6,7 @@ import { DeleteFormularioController } from '../delete'
 
 describe('DeleteFormulario Controller', () => {
   const formulario = createMock<FormularioModel>()
-  const { response, user, spies } = baseSetup('form_delete')
+  const { response, actor, spies } = baseSetup('formulario_delete')
 
   const makeSut = () => {
     const service = {
@@ -24,7 +24,7 @@ describe('DeleteFormulario Controller', () => {
   })
 
   it('should delete an existing formulario', async () => {
-    const request = createMock<Request>({ user, params: { id: '1' } })
+    const request = createMock<Request>({ actor, params: { id: '1' } })
 
     const { sut, service } = makeSut()
 
@@ -35,7 +35,7 @@ describe('DeleteFormulario Controller', () => {
   })
 
   it('should respond with badRequest if does not have id param', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
 
     const { sut, service } = makeSut()
 

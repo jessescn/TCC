@@ -1,19 +1,18 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { UserModel } from 'domain/models/user'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
-import { PublicosUsuarioController } from '../publicos'
+import { PublicosController } from '../publicos'
 
-describe('PublicosUsuario Controller', () => {
+describe('PublicosActor Controller', () => {
   const publicos = ['publico1', 'publico2']
-  const { user, response, spies } = baseSetup('user_publicos')
+  const { actor, response, spies } = baseSetup()
 
   const makeSut = () => {
     const service = {
       getPublicos: jest.fn().mockResolvedValue(publicos)
     }
 
-    return { sut: new PublicosUsuarioController(service as any), service }
+    return { sut: new PublicosController(service as any), service }
   }
 
   afterEach(() => {
@@ -23,7 +22,7 @@ describe('PublicosUsuario Controller', () => {
   })
 
   it('should find an existing usuario by id', async () => {
-    const request = createMock<Request>({ user, params: { id: '1' } })
+    const request = createMock<Request>({ actor, params: { id: '1' } })
     const { service, sut } = makeSut()
 
     await sut.exec(request, response as any)
@@ -32,15 +31,17 @@ describe('PublicosUsuario Controller', () => {
     expect(response.json).toBeCalledWith(publicos)
   })
 
-  it('should respond with Unauthorized if does not have permission', async () => {
-    const userWithoutPermission = createMock<UserModel>({
-      permissoes: { user_publicos: 'not_allowed' }
-    })
-    const request = createMock<Request>({ user: userWithoutPermission })
-    const { sut } = makeSut()
+  it('should respond with InternalServerError if some unknown error happen', async () => {
+    const service = {
+      getPublicos: jest.fn().mockRejectedValue(new Error())
+    }
+    const sut = new PublicosController(service as any)
+
+    const request = createMock<Request>({ actor, params: { id: '1' } })
 
     await sut.exec(request, response as any)
 
-    expect(response.status).toBeCalledWith(HttpStatusCode.unauthorized)
+    expect(service.getPublicos).toBeCalled()
+    expect(response.status).toBeCalledWith(HttpStatusCode.serverError)
   })
 })

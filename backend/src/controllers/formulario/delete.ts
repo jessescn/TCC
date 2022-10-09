@@ -1,12 +1,12 @@
 import { hasNumericId } from 'utils/request'
 import { Controller, errorResponseHandler } from 'controllers'
-import { PermissionKeys } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { IFormularioService } from 'services/formulario'
+import { PermissionKey } from 'domain/profiles'
 
 export class DeleteFormularioController extends Controller<IFormularioService> {
   constructor(service: IFormularioService) {
-    const permission: keyof PermissionKeys = 'form_delete'
+    const permission: PermissionKey = 'formulario_delete'
     const validations = [hasNumericId]
 
     super({ permission, validations, service })

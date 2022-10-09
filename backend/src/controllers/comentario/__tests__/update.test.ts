@@ -1,13 +1,14 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ComentarioModel } from 'domain/models/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { UpdateComentarioController } from '../update'
+import { ProfileModel } from 'domain/models/profile'
 
 describe('UpdateComentario Controller', () => {
-  const comentario = createMock<ComentarioModel>({ user: { id: 2 } })
-  const { response, spies, user } = baseSetup('comentario_update')
+  const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
+  const { response, spies, actor } = baseSetup('comentario_update')
 
   const makeSut = () => {
     const service = {
@@ -28,7 +29,7 @@ describe('UpdateComentario Controller', () => {
     const data: Partial<ComentarioModel> = { conteudo: '' }
     const request = createMock<Request>({
       params: { id: '1' },
-      user,
+      actor,
       body: data
     })
 
@@ -40,11 +41,11 @@ describe('UpdateComentario Controller', () => {
     expect(response.json).toBeCalledWith(comentario)
   })
 
-  it('should respond with BadRequestError error if user try to update an invalid field', async () => {
+  it('should respond with BadRequestError error if actor try to update an invalid field', async () => {
     const data: Partial<ComentarioModel> = { createdAt: new Date() }
     const request = createMock<Request>({
       params: { id: '1' },
-      user,
+      actor,
       body: data
     })
 
@@ -55,18 +56,18 @@ describe('UpdateComentario Controller', () => {
     expect(response.status).toBeCalledWith(HttpStatusCode.badRequest)
   })
 
-  it('should respond with unauthorizedError if user does not have privileges to update the comentario', async () => {
+  it('should respond with unauthorizedError if actor does not have privileges to update the comentario', async () => {
     const data: Partial<ComentarioModel> = { conteudo: '' }
-    const userWithoutPrivileges = createMock<UserModel>({
+    const actorWithoutPrivileges = createMock<ActorModel>({
       id: 1,
-      permissoes: {
-        comentario_update: 'not_allowed'
-      }
+      profile: createMock<ProfileModel>({
+        permissoes: {}
+      })
     })
 
     const request = createMock<Request>({
       params: { id: '1' },
-      user: userWithoutPrivileges,
+      actor: actorWithoutPrivileges,
       body: data
     })
 

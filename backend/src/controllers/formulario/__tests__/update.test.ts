@@ -6,7 +6,7 @@ import { UpdateFormularioController } from '../update'
 
 describe('UpdateFormulario Controller', () => {
   const formulario = createMock<FormularioModel>()
-  const { response, spies, user } = baseSetup('form_update')
+  const { response, spies, actor } = baseSetup('formulario_update')
 
   const makeSut = () => {
     const service = {
@@ -25,7 +25,7 @@ describe('UpdateFormulario Controller', () => {
   it('should update an existing formulario', async () => {
     const data: Partial<FormularioModel> = { nome: 'teste' }
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })
@@ -41,7 +41,7 @@ describe('UpdateFormulario Controller', () => {
   it('should respond with BadRequest error if request body contains invalid update data', async () => {
     const invalidData: Partial<FormularioModel> = { id: 2 }
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: invalidData
     })

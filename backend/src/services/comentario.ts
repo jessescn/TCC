@@ -3,22 +3,19 @@ import {
   ComentarioRepository,
   NewComentario
 } from './../repository/sequelize/comentario'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { NotFoundError } from 'types/express/errors'
-import { ComentarioAttributes, ComentarioModel } from 'domain/models/comentario'
+import { ComentarioModel } from 'domain/models/comentario'
 import { IRepository } from 'repository'
 import { IService } from 'services'
 
 export interface IComentarioService
-  extends IService<ComentarioAttributes, ComentarioQuery> {
+  extends IService<ComentarioModel, ComentarioQuery> {
   update: (
     id: number,
     data: Partial<ComentarioModel>
-  ) => Promise<ComentarioAttributes>
-  create: (
-    usuario: UserModel,
-    data: NewComentario
-  ) => Promise<ComentarioAttributes>
+  ) => Promise<ComentarioModel>
+  create: (actor: ActorModel, data: NewComentario) => Promise<ComentarioModel>
 }
 
 export class ComentarioService implements IComentarioService {
@@ -28,11 +25,11 @@ export class ComentarioService implements IComentarioService {
     this.repository = repository
   }
 
-  async create(usuario: UserModel, data: NewComentario) {
+  async create(actor: ActorModel, data: NewComentario) {
     const newComentario = await this.repository.create({
       conteudo: data.conteudo,
       procedimentoId: data.procedimento,
-      createdBy: usuario.id
+      createdBy: actor.id
     })
 
     return newComentario

@@ -1,6 +1,6 @@
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import {
   NewTipoProcedimento,
@@ -28,7 +28,7 @@ describe('TipoProcedimento Service', () => {
       findAll: jest.fn().mockResolvedValue(formularios)
     })
 
-    const usuario = createMock<UserModel>({ id: 1 })
+    const usuario = createMock<ActorModel>({ id: 1 })
     const data = createMock<NewTipoProcedimento>()
 
     it('should create a new tipoProcedimento', async () => {

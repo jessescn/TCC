@@ -1,7 +1,7 @@
 import { Status } from 'domain/models/procedimento'
 import { IRepository } from 'repository'
 import templates from 'templates'
-import { UsuarioUseCase } from 'domain/usecases/usuario'
+import { UsuarioUseCase } from 'domain/usecases/actor'
 import { HandlerProps, StatusHandler } from '.'
 import { MailSender } from 'repository/nodemailer/mail'
 

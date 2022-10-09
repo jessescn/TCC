@@ -1,13 +1,10 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { IUsuarioService } from 'services/usuario'
-import { PermissionKey } from 'types/auth/actors'
+import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 
-export class PublicosUsuarioController extends Controller<IUsuarioService> {
-  constructor(service: IUsuarioService) {
-    const permission: PermissionKey = 'user_publicos'
-
-    super({ permission, service })
+export class PublicosController extends Controller<IActorService> {
+  constructor(service: IActorService) {
+    super({ service })
   }
 
   exec = async (request: Request, response: Response) => {

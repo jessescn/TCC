@@ -4,7 +4,7 @@ import {
   Revisao,
   TStatus
 } from 'domain/models/procedimento'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 import { TipoProcedimentoUseCase } from 'domain/usecases/tipo-procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
@@ -26,7 +26,7 @@ import { IProcedimentoStatusService } from './procedimento-status'
 export interface IProcedimentoService
   extends IService<ProcedimentoAttributes, ProcedimentoQuery> {
   create: (
-    usuario: UserModel,
+    actor: ActorModel,
     data: NewProcedimento
   ) => Promise<ProcedimentoAttributes>
   update: (
@@ -35,7 +35,7 @@ export interface IProcedimentoService
   ) => Promise<ProcedimentoAttributes>
   newReview: (
     id: number,
-    usuario: UserModel,
+    actor: ActorModel,
     review: NewRevisao
   ) => Promise<ProcedimentoAttributes>
   updateStatus: (id: number, status: TStatus) => Promise<ProcedimentoAttributes>
@@ -66,10 +66,10 @@ export class ProcedimentoService implements IProcedimentoService {
     return tipoProcedimento
   }
 
-  private async checkIfUserBelongsToPublico(usuario: UserModel, tipo: number) {
+  private async checkIfUserBelongsToPublico(actor: ActorModel, tipo: number) {
     const tipoProcedimento = await this.checkIfTipoProcedimentoExists(tipo)
 
-    if (!TipoProcedimentoUseCase.belongsToPublico(usuario, tipoProcedimento)) {
+    if (!TipoProcedimentoUseCase.belongsToPublico(actor, tipoProcedimento)) {
       throw new UnauthorizedError(
         'Does not have permission to this procedimento'
       )
@@ -111,13 +111,13 @@ export class ProcedimentoService implements IProcedimentoService {
     return procedimento
   }
 
-  async create(usuario: UserModel, data: NewProcedimento) {
-    await this.checkIfUserBelongsToPublico(usuario, data.tipo)
+  async create(actor: ActorModel, data: NewProcedimento) {
+    await this.checkIfUserBelongsToPublico(actor, data.tipo)
 
     const created = await this.procedimentoRepo.create({
       respostas: data.respostas,
       tipo: data.tipo,
-      createdBy: usuario.id,
+      createdBy: actor.id,
       votos: []
     })
 
@@ -177,13 +177,13 @@ export class ProcedimentoService implements IProcedimentoService {
     return this.updateStatus(procedimento.id, nextStatus)
   }
 
-  async newReview(id: number, usuario: UserModel, data: NewRevisao) {
+  async newReview(id: number, actor: ActorModel, data: NewRevisao) {
     const procedimento = await this.checkIfProcedimentoExists(id)
 
     const revisao: Revisao = {
       ...data,
       data: new Date().toISOString(),
-      autor: usuario
+      autor: actor
     }
 
     await this.procedimentoRepo.newRevisao(id, revisao)

@@ -1,19 +1,19 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { UserModel } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
-import { DeleteUsuarioController } from '../delete'
+import { DeleteActorController } from '../delete'
 
-describe('DeleteUsuario Controller', () => {
-  const usuario = createMock<UserModel>()
-  const { user, response, spies } = baseSetup('user_delete')
+describe('DeleteActor Controller', () => {
+  const usuario = createMock<ActorModel>()
+  const { actor, response, spies } = baseSetup('actor_delete')
 
   const makeSut = () => {
     const service = {
       delete: jest.fn().mockResolvedValue(usuario)
     }
 
-    return { sut: new DeleteUsuarioController(service as any), service }
+    return { sut: new DeleteActorController(service as any), service }
   }
 
   afterEach(() => {
@@ -22,8 +22,8 @@ describe('DeleteUsuario Controller', () => {
     spies.jsonSpy.mockClear()
   })
 
-  it('should delete an existing usuario', async () => {
-    const request = createMock<Request>({ user, params: { id: '1' } })
+  it('should delete an existing actor', async () => {
+    const request = createMock<Request>({ actor, params: { id: '1' } })
     const { service, sut } = makeSut()
 
     await sut.exec(request, response as any)
@@ -33,7 +33,7 @@ describe('DeleteUsuario Controller', () => {
   })
 
   it('should respond with BadRequest if does not contains id on params', async () => {
-    const request = createMock<Request>({ user })
+    const request = createMock<Request>({ actor })
     const { sut } = makeSut()
 
     await sut.exec(request, response as any)

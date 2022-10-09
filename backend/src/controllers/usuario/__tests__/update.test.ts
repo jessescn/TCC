@@ -1,21 +1,20 @@
 import { baseSetup } from 'controllers/__mocks__'
 
-import { UserModel } from 'domain/models/user'
-import { NewUsuario } from 'repository/sequelize/usuario'
+import { ActorModel } from 'domain/models/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
-import { UpdateUsuarioController } from '../update'
+import { UpdateActorController } from '../update'
 
 describe('UpdateUsuario Controller', () => {
-  const usuario = createMock<UserModel>()
-  const { user, response, spies } = baseSetup('user_update')
+  const usuario = createMock<ActorModel>()
+  const { actor, response, spies } = baseSetup('actor_update')
 
   const makeSut = () => {
     const service = {
       update: jest.fn().mockResolvedValue(usuario)
     }
 
-    return { sut: new UpdateUsuarioController(service as any), service }
+    return { sut: new UpdateActorController(service as any), service }
   }
 
   afterEach(() => {
@@ -25,9 +24,9 @@ describe('UpdateUsuario Controller', () => {
   })
 
   it('should update an existing usuario', async () => {
-    const data: Partial<UserModel> = { nome: 'new name' }
+    const data: Partial<ActorModel> = { nome: 'new name' }
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })
@@ -41,23 +40,12 @@ describe('UpdateUsuario Controller', () => {
   })
 
   it('should respond with BadRequest if request body contains invalid update field', async () => {
-    const data: Partial<UserModel> = { id: 2 }
+    const data: Partial<ActorModel> = { id: 2 }
     const request = createMock<Request>({
-      user,
+      actor,
       params: { id: '1' },
       body: data
     })
-
-    const { sut } = makeSut()
-
-    await sut.exec(request, response as any)
-
-    expect(response.status).toBeCalledWith(HttpStatusCode.badRequest)
-  })
-
-  it('should respond with BadRequest if request body contains some invalid role', async () => {
-    const data = createMock<NewUsuario>({ roles: ['randomRole' as any] })
-    const request = createMock<Request>({ user, body: data })
 
     const { sut } = makeSut()
 

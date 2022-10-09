@@ -2,3 +2,6 @@ jest.config.js
 .env
 db-data
 .env.example
+dist
+node_modules
+coverage

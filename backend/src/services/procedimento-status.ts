@@ -5,10 +5,10 @@ import {
   statusList,
   TStatus
 } from 'domain/models/procedimento'
-import { UserAttributes } from 'domain/models/user'
+import { ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import { MailSender } from 'repository/nodemailer/mail'
-import { UsuarioRepository } from 'repository/sequelize/usuario'
+import { ActorRepository } from 'repository/sequelize/actor'
 import templates from 'templates'
 import { StatusHandlerMap } from './status'
 
@@ -20,14 +20,14 @@ export interface IProcedimentoStatusService {
 }
 
 export class ProcedimentoStatusService implements IProcedimentoStatusService {
-  private usuarioRepo: UsuarioRepository
+  private actorRepo: ActorRepository
 
-  constructor(usuarioRepo: IRepository) {
-    this.usuarioRepo = usuarioRepo
+  constructor(actorRepo: IRepository) {
+    this.actorRepo = actorRepo
   }
 
   private sendUpdateStatusEmail = async (
-    autor: UserAttributes,
+    autor: ActorModel,
     procedimento: ProcedimentoModel,
     status: Status
   ) => {
@@ -40,7 +40,7 @@ export class ProcedimentoStatusService implements IProcedimentoStatusService {
   }
 
   async execute(procedimento: ProcedimentoAttributes, novoStatus: TStatus) {
-    const autor = await this.usuarioRepo.findOne(procedimento.createdBy)
+    const autor = await this.actorRepo.findOne(procedimento.createdBy)
 
     const status = await StatusHandlerMap[novoStatus].execute({
       autor,

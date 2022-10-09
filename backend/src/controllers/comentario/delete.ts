@@ -1,6 +1,6 @@
 import { errorResponseHandler } from 'controllers'
 import { IComentarioService } from 'services/comentario'
-import { PermissionKeys } from 'types/auth/actors'
+import { PermissionKey } from 'domain/profiles'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 import { ComentarioController } from '.'
@@ -8,7 +8,7 @@ import { ComentarioController } from '.'
 export class DeleteComentarioController extends ComentarioController {
   constructor(service: IComentarioService) {
     const validations = [hasNumericId]
-    const permission: keyof PermissionKeys = 'comentario_delete'
+    const permission: PermissionKey = 'comentario_delete'
 
     super({ validations, permission, service })
   }
@@ -19,7 +19,7 @@ export class DeleteComentarioController extends ComentarioController {
 
       const { id } = request.params
 
-      await this.checkUserPermissionScope(request.user, Number(id))
+      await this.checkUserPermissionScope(request.actor, Number(id))
 
       const deletedComentario = await this.service.delete(Number(id))
 

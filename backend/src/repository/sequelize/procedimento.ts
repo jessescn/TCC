@@ -9,7 +9,7 @@ import Procedimento, {
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
-import User from 'domain/models/user'
+import User from 'domain/models/actor'
 import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'

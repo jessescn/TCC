@@ -45,10 +45,7 @@ import {
   readOneFormularioController,
   updateFormularioController
 } from 'factories/controllers/formulario'
-import {
-  authTokenMiddleware,
-  permissionsMiddleware
-} from 'factories/middlewares'
+import { authTokenMiddleware } from 'factories/middlewares'
 
 const routes = Router()
 
@@ -56,7 +53,6 @@ routes.post('/token', authController.token)
 routes.post('/users', createUsuarioController.exec)
 
 routes.use(authTokenMiddleware.exec)
-routes.use(permissionsMiddleware.exec)
 
 routes.get('/me', authController.me)
 

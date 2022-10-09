@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* istanbul ignore file */
 import { sequelize } from 'database'
-import User, { UserModel } from 'domain/models/user'
+import Actor, { ActorModel } from 'domain/models/actor'
 import {
   CreationOptional,
   DataTypes,
@@ -57,7 +57,7 @@ export type Status = {
 export type Revisao = {
   comentario: string
   data: string
-  autor: UserModel
+  autor: ActorModel
   campos: CampoInvalido[]
 }
 
@@ -127,8 +127,8 @@ const Procedimento = sequelize.define<ProcedimentoAttributes>('procedimento', {
 })
 
 Procedimento.belongsTo(TipoProcedimento, { foreignKey: 'tipo' })
-Procedimento.belongsTo(User, { foreignKey: 'createdBy' })
+Procedimento.belongsTo(Actor, { foreignKey: 'createdBy' })
 
-User.hasMany(Procedimento)
+Actor.hasMany(Procedimento)
 
 export default Procedimento
