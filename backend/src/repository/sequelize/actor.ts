@@ -1,4 +1,5 @@
 import Actor, { ActorAttributes, ActorModel } from 'domain/models/actor'
+import Profile from 'domain/models/profile'
 import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
@@ -15,11 +16,19 @@ export type NewActor = CreateActor
 
 export class ActorRepository implements IRepository {
   findAll = async (query: ActorQuery = {}) => {
-    return Actor.findAll({ where: { deleted: false, ...query } })
+    return Actor.findAll({
+      where: { deleted: false, ...query },
+      attributes: { exclude: ['profileId', 'permissoes'] },
+      include: [Profile]
+    })
   }
 
   findOne = async (id: number) => {
-    return Actor.findOne({ where: { id, deleted: false } })
+    return Actor.findOne({
+      where: { id, deleted: false },
+      attributes: { exclude: ['profileId', 'permissoes'] },
+      include: [Profile]
+    })
   }
 
   create = async (data: CreateActor) => {

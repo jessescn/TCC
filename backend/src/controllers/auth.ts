@@ -1,7 +1,6 @@
 import { errorResponseHandler } from 'controllers'
 import jwt from 'jsonwebtoken'
-import { IRepository } from 'repository'
-import { ActorRepository } from 'repository/sequelize/actor'
+import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 import {
   BadRequestError,
@@ -16,11 +15,7 @@ type Credentials = {
 }
 
 export class AuthController {
-  private repository: ActorRepository
-
-  constructor(repository: IRepository) {
-    this.repository = repository
-  }
+  constructor(private readonly service: IActorService) {}
 
   token = async (req: Request, res: Response) => {
     try {
@@ -30,7 +25,7 @@ export class AuthController {
         throw new BadRequestError()
       }
 
-      const [actor] = await this.repository.findAll({ email: data.email })
+      const [actor] = await this.service.findAll({ email: data.email })
 
       if (!actor) {
         throw new NotFoundError()

@@ -14,7 +14,7 @@ export const createInitialProfile = async ({
   nome,
   permissoes
 }: CreateProfile) => {
-  await Profile.findOrCreate({
+  return Profile.findOrCreate({
     where: { nome },
     defaults: {
       nome,
@@ -25,6 +25,7 @@ export const createInitialProfile = async ({
 
 export const createInitialUser = async ({
   email,
+  nome,
   senha,
   profile
 }: CreateActor) => {
@@ -33,6 +34,7 @@ export const createInitialUser = async ({
     defaults: {
       senha,
       email,
+      nome,
       permissoes: profile
     }
   })
@@ -59,14 +61,18 @@ export const createInitialTipoProcedimento = async (
 }
 
 export const populateInitialData = async () => {
-  await createInitialProfile({ nome: 'admin', permissoes: actors.admin })
+  const [profile] = await createInitialProfile({
+    nome: 'admin',
+    permissoes: actors.admin
+  })
+
   await createInitialProfile({ nome: 'usuario', permissoes: actors.usuario })
 
   await createInitialUser({
     nome: 'admin',
     email: process.env.ADMIN_EMAIL,
     senha: process.env.ADMIN_PASSWORD,
-    profile: 1
+    profile: profile.id
   })
 
   await createInitialFormulario(mock.formulario)

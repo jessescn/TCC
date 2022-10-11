@@ -63,7 +63,7 @@ const Actor = sequelize.define<ActorAttributes>('actor', {
     defaultValue: false
   },
   permissoes: {
-    type: DataTypes.NUMBER
+    type: DataTypes.INTEGER
   },
   publico: {
     type: DataTypes.ARRAY(DataTypes.STRING),

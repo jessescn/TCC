@@ -1,6 +1,6 @@
-import { DeleteUsuarioController } from 'controllers/actor/delete'
+import { DeleteActorController } from 'controllers/actor/delete'
 import { makeActorService } from 'factories/services/actor-factory'
 
-export const makeDeleteUsuarioController = () => {
-  return new DeleteUsuarioController(makeActorService())
+export const makeDeleteActorController = () => {
+  return new DeleteActorController(makeActorService())
 }

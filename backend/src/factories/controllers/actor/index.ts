@@ -1,13 +1,13 @@
-import { makeCreateUsuarioController } from './create-factory'
-import { makeDeleteUsuarioController } from './delete-factory'
-import { makePublicosUsuarioController } from './publicos-factory'
-import { makeReadUsuarioController } from './read-factory'
-import { makeReadOneUsuarioController } from './read-one-factory'
-import { makeUpdateUsuarioController } from './update-factory'
+import { makeCreateActorController } from './create-factory'
+import { makeDeleteActorController } from './delete-factory'
+import { makePublicosController } from './publicos-factory'
+import { makeReadActorController } from './read-factory'
+import { makeReadOneActorController } from './read-one-factory'
+import { makeUpdateActorController } from './update-factory'
 
-export const createUsuarioController = makeCreateUsuarioController()
-export const readUsuarioController = makeReadUsuarioController()
-export const readOneUsuarioController = makeReadOneUsuarioController()
-export const updateUsuarioController = makeUpdateUsuarioController()
-export const deleteUsuarioController = makeDeleteUsuarioController()
-export const publicosUsuarioController = makePublicosUsuarioController()
+export const createActorController = makeCreateActorController()
+export const readActorController = makeReadActorController()
+export const readOneActorController = makeReadOneActorController()
+export const updateActorController = makeUpdateActorController()
+export const deleteActorController = makeDeleteActorController()
+export const publicosController = makePublicosController()

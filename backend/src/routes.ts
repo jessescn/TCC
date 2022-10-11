@@ -11,12 +11,12 @@ import {
   updateStatusProcedimentoController
 } from 'factories/controllers/procedimento'
 import {
-  createUsuarioController,
-  deleteUsuarioController,
-  publicosUsuarioController,
-  readOneUsuarioController,
-  readUsuarioController,
-  updateUsuarioController
+  createActorController,
+  deleteActorController,
+  publicosController,
+  readOneActorController,
+  readActorController,
+  updateActorController
 } from 'factories/controllers/actor'
 
 import {
@@ -50,17 +50,17 @@ import { authTokenMiddleware } from 'factories/middlewares'
 const routes = Router()
 
 routes.post('/token', authController.token)
-routes.post('/users', createUsuarioController.exec)
+routes.post('/users', createActorController.exec)
 
 routes.use(authTokenMiddleware.exec)
 
 routes.get('/me', authController.me)
 
-routes.get('/users/publicos', publicosUsuarioController.exec)
-routes.get('/users', readUsuarioController.exec)
-routes.get('/users/:id', readOneUsuarioController.exec)
-routes.put('/users/:id', updateUsuarioController.exec)
-routes.delete('/users/:id', deleteUsuarioController.exec)
+routes.get('/users/publicos', publicosController.exec)
+routes.get('/users', readActorController.exec)
+routes.get('/users/:id', readOneActorController.exec)
+routes.put('/users/:id', updateActorController.exec)
+routes.delete('/users/:id', deleteActorController.exec)
 
 routes.get('/formularios', readFormularioController.exec)
 routes.get('/formularios/:id', readOneFormularioController.exec)

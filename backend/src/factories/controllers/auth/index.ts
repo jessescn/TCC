@@ -1,8 +1,8 @@
 import { AuthController } from 'controllers/auth'
-import { makeActorRepository } from 'factories/repositories/actor-factory'
+import { makeActorService } from 'factories/services/actor-factory'
 
 export const makeAuthController = () => {
-  return new AuthController(makeActorRepository())
+  return new AuthController(makeActorService())
 }
 
 export const authController = makeAuthController()

@@ -3,9 +3,9 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import User from 'domain/models/actor'
-import { includeableUser, IRepository } from 'repository'
+import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
+import Actor from 'domain/models/actor'
 
 export type FormularioQuery = WhereOptions<
   InferAttributes<FormularioAttributes>
@@ -27,8 +27,8 @@ export type NewFormulario = {
 export class FormularioRepository implements IRepository {
   findAll = async (query: FormularioQuery = {}) => {
     const formularios = await Formulario.findAll({
-      include: [includeableUser],
-      where: { deleted: false, ...query }
+      where: { deleted: false, ...query },
+      include: [Actor]
     })
 
     return formularios
@@ -37,14 +37,14 @@ export class FormularioRepository implements IRepository {
   findOne = async (id: number) => {
     const formulario = await Formulario.findOne({
       where: { id, deleted: false },
-      include: [includeableUser]
+      include: [Actor]
     })
 
     return formulario
   }
 
   create = async (data: CreateFormulario) => {
-    const newFormulario = await Formulario.create(data, { include: [User] })
+    const newFormulario = await Formulario.create(data, { include: [Actor] })
 
     return newFormulario
   }

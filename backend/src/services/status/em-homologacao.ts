@@ -1,7 +1,7 @@
 import { Status } from 'domain/models/procedimento'
 import { IRepository } from 'repository'
 import templates from 'templates'
-import { UsuarioUseCase } from 'domain/usecases/actor'
+import { ActorUseCase } from 'domain/usecases/actor'
 import { HandlerProps, StatusHandler } from '.'
 import { MailSender } from 'repository/nodemailer/mail'
 
@@ -12,7 +12,7 @@ export class EmHomologacaoStatusHandler implements StatusHandler {
     const sendEmailColegiado = async () => {
       // Envia email aos membros do colegiado avisando que um novo procedimento está para ser votado
       const usuarios = await this.usuarioRepo.findAll({})
-      const colegiado = UsuarioUseCase.filterByRole(usuarios, 'colegiado')
+      const colegiado = ActorUseCase.filterByRole(usuarios, 'colegiado')
 
       if (colegiado.length === 0) return
 
