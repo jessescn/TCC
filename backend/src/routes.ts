@@ -17,7 +17,7 @@ import {
   readOneUsuarioController,
   readUsuarioController,
   updateUsuarioController
-} from 'factories/controllers/usuario'
+} from 'factories/controllers/actor'
 
 import {
   createComentarioController,

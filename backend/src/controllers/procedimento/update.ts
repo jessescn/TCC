@@ -1,7 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { ProcedimentoModel } from 'domain/models/procedimento'
+import { PermissionKey } from 'domain/profiles'
 import { IProcedimentoService } from 'services/procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
@@ -29,11 +29,15 @@ export class UpdateProcedimentoController extends Controller<IProcedimentoServic
       const { id } = request.params
       const data = request.body as Partial<ProcedimentoModel>
 
-      const procedimento = await this.service.update(Number(id), data)
+      const procedimento = await this.service.update(Number(id), {
+        revisoes: data.revisoes,
+        respostas: data.respostas,
+        votos: data.votos
+      })
 
       response.json(procedimento)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

@@ -1,4 +1,4 @@
-import { PublicosUsuarioController } from 'controllers/usuario/publicos'
+import { PublicosUsuarioController } from 'controllers/actor/publicos'
 import { makeActorService } from 'factories/services/actor-factory'
 
 export const makePublicosUsuarioController = () => {

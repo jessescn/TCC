@@ -1,7 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
 import { NewRevisao } from 'repository/sequelize/procedimento'
 import { IProcedimentoService } from 'services/procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
@@ -28,13 +28,13 @@ export class ReviewProcedimentoController extends Controller<IProcedimentoServic
 
       const procedimento = await this.service.newReview(
         Number(id),
-        request.user,
+        request.actor,
         data
       )
 
       response.json(procedimento)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

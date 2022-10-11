@@ -3,13 +3,13 @@ import {
   statusList as availableStatus,
   TStatus
 } from 'domain/models/procedimento'
+import { PermissionKey } from 'domain/profiles'
 import { IProcedimentoService } from 'services/procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { BadRequestError } from 'types/express/errors'
 import { hasNumericId } from 'utils/request'
 
-type UpdateStatusProcedimento = {
+export type UpdateStatusProcedimento = {
   status: TStatus
 }
 
@@ -45,7 +45,7 @@ export class UpdateStatusProcedimentoController extends Controller<IProcedimento
 
       response.json(procedimento)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

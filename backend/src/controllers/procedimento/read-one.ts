@@ -1,6 +1,6 @@
 import { Controller, errorResponseHandler } from 'controllers'
+import { PermissionKey } from 'domain/profiles'
 import { IProcedimentoService } from 'services/procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
@@ -22,7 +22,7 @@ export class ReadOneProcedimentoController extends Controller<IProcedimentoServi
 
       response.json(procedimento)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

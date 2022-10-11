@@ -1,7 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { UserModel } from 'domain/models/actor'
+import { ActorModel } from 'domain/models/actor'
+import { PermissionKey } from 'domain/profiles'
 import { IProcedimentoService } from 'services/procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { Request, Response } from 'types/express'
 
 export class ReadProcedimentoController extends Controller<IProcedimentoService> {
@@ -11,22 +11,22 @@ export class ReadProcedimentoController extends Controller<IProcedimentoService>
     super({ permission, service })
   }
 
-  private getQueryByScope(usuario: UserModel) {
-    const scope = usuario.permissoes[this.permission]
+  private getQueryByScope(actor: ActorModel) {
+    const scope = actor.profile.permissoes[this.permission]
 
-    return scope === 'owned' ? { createdBy: usuario.id } : {}
+    return scope === 'owned' ? { createdBy: actor.id } : {}
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const query = this.getQueryByScope(request.user)
+      const query = this.getQueryByScope(request.actor)
       const procedimentos = await this.service.findAll(query)
 
       response.json(procedimentos)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }

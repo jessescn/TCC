@@ -1,15 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import {
-  CreateProcedimento,
-  NewProcedimento
-} from 'repository/sequelize/procedimento'
+import { PermissionKey } from 'domain/profiles'
+import { NewProcedimento } from 'repository/sequelize/procedimento'
 import { IProcedimentoService } from 'services/procedimento'
-import { PermissionKey } from 'types/auth/actors'
 import { HttpStatusCode, Request, Response } from 'types/express'
 
 export class CreateProcedimentoController extends Controller<IProcedimentoService> {
   constructor(service: IProcedimentoService) {
-    const mandatoryFields: (keyof CreateProcedimento)[] = ['tipo', 'respostas']
+    const mandatoryFields: (keyof NewProcedimento)[] = ['tipo', 'respostas']
     const permission: PermissionKey = 'procedimento_create'
 
     super({ permission, mandatoryFields, service })
@@ -21,11 +18,11 @@ export class CreateProcedimentoController extends Controller<IProcedimentoServic
 
       const data = request.body as NewProcedimento
 
-      const procedimento = await this.service.create(request.user, data)
+      const procedimento = await this.service.create(request.actor, data)
 
       response.status(HttpStatusCode.created).send(procedimento)
     } catch (error) {
-      errorResponseHandler(error, response)
+      errorResponseHandler(response, error)
     }
   }
 }
