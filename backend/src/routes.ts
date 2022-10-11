@@ -45,9 +45,10 @@ import {
   readOneFormularioController,
   updateFormularioController
 } from 'factories/controllers/formulario'
-import { authTokenMiddleware } from 'factories/middlewares'
+import { makeAuthTokenMiddleware } from 'factories/middlewares/authorization-factory'
 
 const routes = Router()
+const authTokenMiddleware = makeAuthTokenMiddleware()
 
 routes.post('/token', authController.token)
 routes.post('/users', createActorController.exec)
