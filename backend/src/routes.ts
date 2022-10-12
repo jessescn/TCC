@@ -19,6 +19,8 @@ import {
   updateActorController
 } from 'factories/controllers/actor'
 
+import { readProfileController } from 'factories/controllers/profile'
+
 import {
   createComentarioController,
   deleteComentarioController,
@@ -62,6 +64,8 @@ routes.get('/users', readActorController.exec)
 routes.get('/users/:id', readOneActorController.exec)
 routes.put('/users/:id', updateActorController.exec)
 routes.delete('/users/:id', deleteActorController.exec)
+
+routes.get('/profiles', readProfileController.exec)
 
 routes.get('/formularios', readFormularioController.exec)
 routes.get('/formularios/:id', readOneFormularioController.exec)

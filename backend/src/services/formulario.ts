@@ -1,5 +1,5 @@
-import { FormularioAttributes, FormularioModel } from 'domain/models/formulario'
 import { ActorModel } from 'domain/models/actor'
+import { FormularioModel } from 'domain/models/formulario'
 import { IRepository } from 'repository'
 import {
   FormularioQuery,
@@ -10,15 +10,12 @@ import { IService } from 'services'
 import { NotFoundError } from 'types/express/errors'
 
 export interface IFormularioService
-  extends IService<FormularioAttributes, FormularioQuery> {
+  extends IService<FormularioModel, FormularioQuery> {
   update: (
     id: number,
     data: Partial<FormularioModel>
-  ) => Promise<FormularioAttributes>
-  create: (
-    actor: ActorModel,
-    data: NewFormulario
-  ) => Promise<FormularioAttributes>
+  ) => Promise<FormularioModel>
+  create: (actor: ActorModel, data: NewFormulario) => Promise<FormularioModel>
 }
 
 export class FormularioService implements IFormularioService {

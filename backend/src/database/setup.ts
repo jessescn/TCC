@@ -67,6 +67,10 @@ export const populateInitialData = async () => {
   })
 
   await createInitialProfile({ nome: 'usuario', permissoes: actors.usuario })
+  await createInitialProfile({
+    nome: 'colegiado',
+    permissoes: actors.colegiado
+  })
 
   await createInitialUser({
     nome: 'admin',

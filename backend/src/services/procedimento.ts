@@ -24,21 +24,21 @@ import {
 import { IProcedimentoStatusService } from './procedimento-status'
 
 export interface IProcedimentoService
-  extends IService<ProcedimentoAttributes, ProcedimentoQuery> {
+  extends IService<ProcedimentoModel, ProcedimentoQuery> {
   create: (
     actor: ActorModel,
     data: NewProcedimento
-  ) => Promise<ProcedimentoAttributes>
+  ) => Promise<ProcedimentoModel>
   update: (
     id: number,
     data: Partial<ProcedimentoModel>
-  ) => Promise<ProcedimentoAttributes>
+  ) => Promise<ProcedimentoModel>
   newReview: (
     id: number,
     actor: ActorModel,
     review: NewRevisao
-  ) => Promise<ProcedimentoAttributes>
-  updateStatus: (id: number, status: TStatus) => Promise<ProcedimentoAttributes>
+  ) => Promise<ProcedimentoModel>
+  updateStatus: (id: number, status: TStatus) => Promise<ProcedimentoModel>
 }
 
 export class ProcedimentoService implements IProcedimentoService {

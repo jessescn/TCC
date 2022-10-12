@@ -1,28 +1,25 @@
-import {
-  TipoProcedimentoAttributes,
-  TipoProcedimentoModel
-} from 'domain/models/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { IRepository } from 'repository'
 import { FormularioRepository } from 'repository/sequelize/formulario'
 import {
   NewTipoProcedimento,
-  TipoProcedimentoRepository,
-  TipoProcedimentoQuery
+  TipoProcedimentoQuery,
+  TipoProcedimentoRepository
 } from 'repository/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 
 export interface ITipoProcedimentoService
-  extends IService<TipoProcedimentoAttributes, TipoProcedimentoQuery> {
+  extends IService<TipoProcedimentoModel, TipoProcedimentoQuery> {
   create: (
     actor: ActorModel,
     data: NewTipoProcedimento
-  ) => Promise<TipoProcedimentoAttributes>
+  ) => Promise<TipoProcedimentoModel>
   update: (
     id: number,
     data: Partial<TipoProcedimentoModel>
-  ) => Promise<TipoProcedimentoAttributes>
+  ) => Promise<TipoProcedimentoModel>
 }
 
 export class TipoProcedimentoService implements ITipoProcedimentoService {

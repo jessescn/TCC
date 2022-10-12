@@ -1,5 +1,6 @@
 import {
   ProcedimentoAttributes,
+  ProcedimentoModel,
   TStatus,
   VotoProcedimento
 } from 'domain/models/procedimento'
@@ -9,12 +10,9 @@ import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
 
 export interface IColegiadoService {
-  updateVote: (
-    id: number,
-    vote: VotoProcedimento
-  ) => Promise<ProcedimentoAttributes>
-  deleteVote: (id: number, autor: number) => Promise<ProcedimentoAttributes>
-  homologate: (id: number) => Promise<ProcedimentoAttributes>
+  updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
+  deleteVote: (id: number, autor: number) => Promise<ProcedimentoModel>
+  homologate: (id: number) => Promise<ProcedimentoModel>
 }
 
 export class ColegiadoService implements IColegiadoService {

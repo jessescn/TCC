@@ -1,14 +1,14 @@
-import { ActorAttributes, ActorModel } from 'domain/models/actor'
+import { ActorModel } from 'domain/models/actor'
+import { ActorUseCase } from 'domain/usecases/actor'
 import { IRepository } from 'repository'
-import { NewActor, ActorQuery } from 'repository/sequelize/actor'
+import { ActorQuery, NewActor } from 'repository/sequelize/actor'
+import { ProfileRepository } from 'repository/sequelize/profile'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
-import { ActorUseCase } from 'domain/usecases/actor'
-import { ProfileRepository } from 'repository/sequelize/profile'
 
-export interface IActorService extends IService<ActorAttributes, ActorQuery> {
-  create: (data: NewActor) => Promise<ActorAttributes>
-  update: (id: number, data: Partial<ActorModel>) => Promise<ActorAttributes>
+export interface IActorService extends IService<ActorModel, ActorQuery> {
+  create: (data: NewActor) => Promise<ActorModel>
+  update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
   getPublicos: () => Promise<string[]>
 }
 

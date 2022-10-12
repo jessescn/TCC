@@ -15,7 +15,6 @@ export interface ProfileModel {
   createdAt?: Date
   updatedAt?: Date
 }
-
 export interface ProfileAttributes
   extends Model<
     InferAttributes<ProfileAttributes>,
