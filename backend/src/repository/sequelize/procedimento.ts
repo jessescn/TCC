@@ -9,10 +9,9 @@ import Procedimento, {
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
-import User from 'domain/models/actor'
 import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
 import { IProcedimentoRepo } from 'repository'
-import { Includeable, InferAttributes, WhereOptions } from 'sequelize/types'
+import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type CreateProcedimento = {
   tipo: number
@@ -33,13 +32,6 @@ export type NewRevisao = {
   campos: CampoInvalido[]
 }
 
-export const includeableUser: Includeable = {
-  model: User,
-  as: 'user',
-  required: false,
-  attributes: ['nome', 'email', 'id']
-}
-
 export type ProcedimentoQuery = WhereOptions<
   InferAttributes<ProcedimentoAttributes>
 >
@@ -47,7 +39,7 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
   findOne = async (id: number) => {
     const procedimento = await Procedimento.findOne({
       where: { id, deleted: false },
-      include: [TipoProcedimento, Comentario, includeableUser]
+      include: [TipoProcedimento, Comentario]
     })
 
     return procedimento
@@ -55,7 +47,7 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
 
   findAll = async (query: ProcedimentoQuery = {}) => {
     const procedimentos = await Procedimento.findAll({
-      include: [TipoProcedimento, Comentario, includeableUser],
+      include: [TipoProcedimento, Comentario],
       where: { deleted: false, ...query }
     })
 

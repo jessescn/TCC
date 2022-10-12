@@ -2,8 +2,6 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import User from 'domain/models/actor'
-import { includeableUser } from 'repository'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateFormulario, FormularioRepository } from '../formulario'
 
@@ -29,7 +27,6 @@ describe('Formulario Repository', () => {
 
       expect(result).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
-        include: [includeableUser],
         where: { deleted: false }
       })
     })
@@ -40,7 +37,6 @@ describe('Formulario Repository', () => {
       await sut.findAll(query)
 
       expect(Formulario.findAll).toBeCalledWith({
-        include: [includeableUser],
         where: { deleted: false, ...query }
       })
     })
@@ -58,8 +54,7 @@ describe('Formulario Repository', () => {
 
       expect(result).toEqual(formulario)
       expect(Formulario.findOne).toBeCalledWith({
-        where: { id: 2, deleted: false },
-        include: [includeableUser]
+        where: { id: 2, deleted: false }
       })
     })
   })
@@ -71,15 +66,17 @@ describe('Formulario Repository', () => {
       jest
         .spyOn(Formulario, 'create')
         .mockResolvedValueOnce(formulario as FormularioAttributes)
+
+      jest
+        .spyOn(Formulario, 'findOne')
+        .mockResolvedValueOnce(formulario as FormularioAttributes)
     })
 
     it('should create a new formulario', async () => {
       const result = await sut.create(createFormulario)
 
       expect(result).toEqual(formulario)
-      expect(Formulario.create).toBeCalledWith(createFormulario, {
-        include: [User]
-      })
+      expect(Formulario.create).toBeCalledWith(createFormulario)
     })
   })
 

@@ -3,7 +3,7 @@ import Comentario, {
   ComentarioModel
 } from 'domain/models/comentario'
 import Procedimento from 'domain/models/procedimento'
-import { includeableUser, IRepository } from 'repository'
+import { IRepository } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type ComentarioQuery = WhereOptions<
@@ -24,7 +24,7 @@ export type CreateComentario = {
 export class ComentarioRepository implements IRepository {
   findAll = async (query: ComentarioQuery = {}) => {
     const comentarios = await Comentario.findAll({
-      include: [includeableUser, Procedimento],
+      include: [Procedimento],
       where: { deleted: false, ...query }
     })
 
@@ -34,7 +34,7 @@ export class ComentarioRepository implements IRepository {
   findOne = async (id: number) => {
     const comentario = await Comentario.findOne({
       where: { id, deleted: false },
-      include: [includeableUser, Procedimento]
+      include: [Procedimento]
     })
 
     return comentario
@@ -42,7 +42,7 @@ export class ComentarioRepository implements IRepository {
 
   create = async (data: CreateComentario) => {
     const comentario = await Comentario.create(data, {
-      include: [includeableUser, Procedimento]
+      include: [Procedimento]
     })
 
     return comentario

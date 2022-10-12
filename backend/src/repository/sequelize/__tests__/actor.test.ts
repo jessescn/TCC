@@ -1,6 +1,10 @@
 import Actor, { ActorAttributes, ActorModel } from 'domain/models/actor'
 import { createMock, createMockList } from 'ts-auto-mock'
-import { CreateActor, ActorRepository } from '../actor'
+import {
+  CreateActor,
+  ActorRepository,
+  InclusivableActorOptions
+} from '../actor'
 
 describe('Actor Repository', () => {
   const actors = createMockList<ActorModel>(2)
@@ -24,7 +28,8 @@ describe('Actor Repository', () => {
 
       expect(result).toEqual(actors)
       expect(Actor.findAll).toBeCalledWith({
-        where: { deleted: false }
+        where: { deleted: false },
+        ...InclusivableActorOptions
       })
     })
 
@@ -35,7 +40,8 @@ describe('Actor Repository', () => {
 
       expect(result).toEqual(actors)
       expect(Actor.findAll).toBeCalledWith({
-        where: { deleted: false, ...query }
+        where: { deleted: false, ...query },
+        ...InclusivableActorOptions
       })
     })
   })
@@ -51,24 +57,31 @@ describe('Actor Repository', () => {
       const result = await sut.findOne(1)
 
       expect(result).toEqual(actor)
-      expect(Actor.findOne).toBeCalledWith({ where: { id: 1, deleted: false } })
+      expect(Actor.findOne).toBeCalledWith({
+        where: { id: 1, deleted: false },
+        ...InclusivableActorOptions
+      })
     })
   })
 
   describe('create', () => {
-    const createactor = createMock<CreateActor>()
+    const createActor = createMock<CreateActor>()
 
     beforeEach(() => {
       jest
         .spyOn(Actor, 'create')
         .mockResolvedValueOnce(actor as ActorAttributes)
+
+      jest
+        .spyOn(Actor, 'findOne')
+        .mockResolvedValueOnce(actor as ActorAttributes)
     })
 
     it('should create a new actor', async () => {
-      const result = await sut.create(createactor)
+      const result = await sut.create(createActor)
 
       expect(result).toEqual(actor)
-      expect(Actor.create).toBeCalledWith(createactor)
+      expect(Actor.create).toBeCalledWith(createActor)
     })
   })
 
@@ -89,7 +102,10 @@ describe('Actor Repository', () => {
       const result = await sut.update(1, data)
 
       expect(result).toEqual(actorWithSpies)
-      expect(Actor.findOne).toBeCalledWith({ where: { id: 1, deleted: false } })
+      expect(Actor.findOne).toBeCalledWith({
+        where: { id: 1, deleted: false },
+        ...InclusivableActorOptions
+      })
       expect(actorWithSpies.set).toBeCalledWith(data)
       expect(actorWithSpies.save).toBeCalled()
     })
@@ -110,7 +126,10 @@ describe('Actor Repository', () => {
       const result = await sut.destroy(1)
 
       expect(result).toEqual(actorWithSpies)
-      expect(Actor.findOne).toBeCalledWith({ where: { id: 1, deleted: false } })
+      expect(Actor.findOne).toBeCalledWith({
+        where: { id: 1, deleted: false },
+        ...InclusivableActorOptions
+      })
       expect(actorWithSpies.set).toBeCalledWith({ deleted: true })
       expect(actorWithSpies.save).toBeCalled()
     })

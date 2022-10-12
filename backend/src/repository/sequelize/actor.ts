@@ -12,27 +12,36 @@ export type CreateActor = {
   profile: number
 }
 
-export type NewActor = CreateActor
+export type NewActor = {
+  nome: string
+  email: string
+  senha: string
+}
+
+export const InclusivableActorOptions = {
+  attributes: { exclude: ['profileId', 'permissoes'] },
+  include: [Profile]
+}
 
 export class ActorRepository implements IRepository {
   findAll = async (query: ActorQuery = {}) => {
     return Actor.findAll({
       where: { deleted: false, ...query },
-      attributes: { exclude: ['profileId', 'permissoes'] },
-      include: [Profile]
+      ...InclusivableActorOptions
     })
   }
 
   findOne = async (id: number) => {
     return Actor.findOne({
       where: { id, deleted: false },
-      attributes: { exclude: ['profileId', 'permissoes'] },
-      include: [Profile]
+      ...InclusivableActorOptions
     })
   }
 
   create = async (data: CreateActor) => {
-    return Actor.create(data)
+    const { id } = await Actor.create(data)
+
+    return this.findOne(id)
   }
 
   update = async (id: number, data: Partial<ActorModel>) => {

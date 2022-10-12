@@ -1,14 +1,12 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { PermissionKey } from 'domain/profiles'
 import { NewActor } from 'repository/sequelize/actor'
 import { IActorService } from 'services/actor'
 import { HttpStatusCode, Request, Response } from 'types/express'
 export class CreateActorController extends Controller<IActorService> {
   constructor(service: IActorService) {
-    const permission: PermissionKey = 'actor_create'
-    const mandatoryFields = ['email', 'nome', 'senha', 'profile']
+    const mandatoryFields = ['email', 'nome', 'senha']
 
-    super({ mandatoryFields, permission, service })
+    super({ mandatoryFields, service })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -17,7 +15,11 @@ export class CreateActorController extends Controller<IActorService> {
 
       const data = request.body as NewActor
 
-      const newActor = await this.service.create(data)
+      const newActor = await this.service.create({
+        email: data.email,
+        nome: data.nome,
+        senha: data.senha
+      })
 
       response.status(HttpStatusCode.created).send(newActor)
     } catch (error) {

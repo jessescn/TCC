@@ -4,7 +4,6 @@ import Comentario, {
   ComentarioModel
 } from 'domain/models/comentario'
 import { createMock, createMockList } from 'ts-auto-mock'
-import { includeableUser } from 'repository'
 import Procedimento from 'domain/models/procedimento'
 
 describe('Comentario Repository', () => {
@@ -29,7 +28,7 @@ describe('Comentario Repository', () => {
 
       expect(result).toEqual(comentarios)
       expect(Comentario.findAll).toBeCalledWith({
-        include: [includeableUser, Procedimento],
+        include: [Procedimento],
         where: { deleted: false }
       })
     })
@@ -38,7 +37,7 @@ describe('Comentario Repository', () => {
       await sut.findAll({ id: 2 })
 
       expect(Comentario.findAll).toBeCalledWith({
-        include: [includeableUser, Procedimento],
+        include: [Procedimento],
         where: { deleted: false, id: 2 }
       })
     })
@@ -57,7 +56,7 @@ describe('Comentario Repository', () => {
       expect(result).toEqual(comentario)
       expect(Comentario.findOne).toBeCalledWith({
         where: { id: 2, deleted: false },
-        include: [includeableUser, Procedimento]
+        include: [Procedimento]
       })
     })
   })
@@ -76,7 +75,7 @@ describe('Comentario Repository', () => {
 
       expect(result).toEqual(comentario)
       expect(Comentario.create).toBeCalledWith(createComentario, {
-        include: [includeableUser, Procedimento]
+        include: [Procedimento]
       })
     })
   })

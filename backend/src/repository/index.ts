@@ -1,13 +1,4 @@
-import User from 'domain/models/actor'
-import { Includeable } from 'sequelize/types'
 import { EmailTemplate } from 'templates'
-
-export const includeableUser: Includeable = {
-  model: User,
-  as: 'user',
-  required: false,
-  attributes: ['nome', 'email']
-}
 
 export interface IRepository {
   findOne: (primaryKey: any) => Promise<any>

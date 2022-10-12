@@ -9,7 +9,7 @@ import Procedimento, {
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
-import { includeableUser, ProcedimentoRepository } from '../procedimento'
+import { ProcedimentoRepository } from '../procedimento'
 
 describe('Procedimento Repository', () => {
   const procedimento = createMock<ProcedimentoModel>()
@@ -34,7 +34,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimento)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
     })
   })
@@ -51,7 +51,7 @@ describe('Procedimento Repository', () => {
 
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
-        include: [TipoProcedimento, Comentario, includeableUser],
+        include: [TipoProcedimento, Comentario],
         where: { deleted: false }
       })
     })
@@ -63,7 +63,7 @@ describe('Procedimento Repository', () => {
 
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
-        include: [TipoProcedimento, Comentario, includeableUser],
+        include: [TipoProcedimento, Comentario],
         where: { deleted: false, ...query }
       })
     })
@@ -119,7 +119,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
       expect(procedimentoWithSpies.save).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith(data)
@@ -145,7 +145,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
       expect(procedimentoWithSpies.save).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({ deleted: true })
@@ -173,7 +173,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
       expect(procedimentoWithSpies.set).toBeCalledWith({ votos: [vote] })
       expect(procedimentoWithSpies.save).toBeCalled()
@@ -202,7 +202,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
       expect(procedimentoWithSpies.set).toBeCalledWith({ votos: [] })
       expect(procedimentoWithSpies.save).toBeCalled()
@@ -233,7 +233,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 10, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
       expect(procedimentoWithSpies.set).toBeCalledWith({
         status: [...procedimentoWithSpies.status, status]
@@ -263,7 +263,7 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentoWithSpies)
       expect(Procedimento.findOne).toBeCalledWith({
         where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario, includeableUser]
+        include: [TipoProcedimento, Comentario]
       })
       expect(procedimentoWithSpies.set).toBeCalledWith({ revisoes: [revisao] })
       expect(procedimentoWithSpies.save).toBeCalled()

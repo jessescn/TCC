@@ -4,11 +4,7 @@ import { IRepository } from 'repository'
 import { NewActor, ActorQuery } from 'repository/sequelize/actor'
 import { ActorService } from 'services/actor'
 import { createMock } from 'ts-auto-mock'
-import {
-  BadRequestError,
-  ConflictError,
-  NotFoundError
-} from 'types/express/errors'
+import { ConflictError, NotFoundError } from 'types/express/errors'
 
 describe('Actor Service', () => {
   const actor = createMock<ActorModel>()
@@ -19,7 +15,8 @@ describe('Actor Service', () => {
   ]
 
   const profileRepo = createMock<IRepository>({
-    findOne: jest.fn().mockResolvedValue(profile)
+    findOne: jest.fn().mockResolvedValue(profile),
+    findAll: jest.fn().mockResolvedValue([profile])
   })
 
   describe('create', () => {
@@ -39,7 +36,7 @@ describe('Actor Service', () => {
         email: data.email,
         nome: data.nome,
         senha: data.senha,
-        permissoes: data.profile
+        permissoes: profile.id
       })
       expect(repo.findAll).toBeCalled()
     })
@@ -56,20 +53,6 @@ describe('Actor Service', () => {
       }
 
       expect(shouldThrow).rejects.toThrow(ConflictError)
-    })
-
-    it('should throw a BadRequestError if profile does not exists', async () => {
-      const profileRepo = createMock<IRepository>({
-        findOne: jest.fn().mockResolvedValue(undefined)
-      })
-
-      const sut = new ActorService(repo, profileRepo)
-
-      const shouldThrow = async () => {
-        await sut.create(data)
-      }
-
-      expect(shouldThrow).rejects.toThrow(BadRequestError)
     })
   })
 

@@ -19,9 +19,5 @@ export default {
   tipo_procedimento_create: 'owned',
   tipo_procedimento_delete: 'owned',
   tipo_procedimento_read: 'owned',
-  tipo_procedimento_update: 'owned',
-  actor_create: 'owned',
-  actor_delete: 'owned',
-  actor_read: 'owned',
-  actor_update: 'owned'
+  tipo_procedimento_update: 'owned'
 }

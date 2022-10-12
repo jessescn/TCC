@@ -2,11 +2,7 @@ import { ActorAttributes, ActorModel } from 'domain/models/actor'
 import { IRepository } from 'repository'
 import { NewActor, ActorQuery } from 'repository/sequelize/actor'
 import { IService } from 'services'
-import {
-  BadRequestError,
-  ConflictError,
-  NotFoundError
-} from 'types/express/errors'
+import { ConflictError, NotFoundError } from 'types/express/errors'
 import { ActorUseCase } from 'domain/usecases/actor'
 import { ProfileRepository } from 'repository/sequelize/profile'
 
@@ -23,40 +19,36 @@ export class ActorService implements IActorService {
   ) {}
 
   private checkIfUserAlreadyExistsByEmail = async (email: string) => {
-    const [usuario] = await this.repository.findAll({ email })
+    const [actor] = await this.repository.findAll({ email })
 
-    if (usuario) {
+    if (actor) {
       throw new ConflictError('user already exists')
     }
   }
 
   private checkIfUserAlreadyExists = async (id: number) => {
-    const usuario = await this.repository.findOne(id)
+    const actor = await this.repository.findOne(id)
 
-    if (!usuario) {
+    if (!actor) {
       throw new NotFoundError()
     }
 
-    return usuario
+    return actor
   }
 
-  private checkIfProfileExists = async (profileId: number) => {
-    const profile = await this.profileRepo.findOne(profileId)
-
-    if (!profile) {
-      throw new BadRequestError('Invalid profile')
-    }
+  private getBaseProfile = async () => {
+    return this.profileRepo.findAll({ nome: 'usuario' })
   }
 
   async create(data: NewActor) {
     await this.checkIfUserAlreadyExistsByEmail(data.email)
-    await this.checkIfProfileExists(data.profile)
+    const [profile] = await this.getBaseProfile()
 
     const usuario = await this.repository.create({
       email: data.email,
       nome: data.nome,
       senha: data.senha,
-      permissoes: data.profile
+      permissoes: profile.id
     })
 
     return usuario
