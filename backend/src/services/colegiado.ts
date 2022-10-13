@@ -4,7 +4,7 @@ import {
   TStatus,
   VotoProcedimento
 } from 'domain/models/procedimento'
-import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
@@ -28,7 +28,7 @@ export class ColegiadoService implements IColegiadoService {
   }
 
   private async handleMajorityVotes(procedimento: ProcedimentoAttributes) {
-    const novoStatus: TStatus = ProcedimentoUseCase.isProcedimentoAprovado(
+    const novoStatus: TStatus = ProcedimentoHelper.isProcedimentoAprovado(
       procedimento
     )
       ? 'deferido'
@@ -52,7 +52,7 @@ export class ColegiadoService implements IColegiadoService {
   private async checkIfProcedimentoIsOnHomologation(
     procedimento: ProcedimentoAttributes
   ) {
-    const status = ProcedimentoUseCase.getCurrentStatus(procedimento)
+    const status = ProcedimentoHelper.getCurrentStatus(procedimento)
 
     if (status !== 'em_homologacao') {
       throw new BadRequestError('Cannot homologate from this current status.')
@@ -80,7 +80,7 @@ export class ColegiadoService implements IColegiadoService {
 
     const procedimento = await this.repository.updateVote(id, data)
 
-    const isMaioriaVotos = ProcedimentoUseCase.isMaioria(procedimento.votos)
+    const isMaioriaVotos = ProcedimentoHelper.isMaioria(procedimento.votos)
 
     if (isMaioriaVotos) {
       return this.handleMajorityVotes(procedimento)

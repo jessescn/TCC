@@ -1,9 +1,9 @@
 import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
 import { createMock } from 'ts-auto-mock'
-import { ProcedimentoUseCase } from '../procedimento'
+import { ProcedimentoHelper } from '../procedimento'
 
-describe('Procedimento UseCase', () => {
-  const sut = ProcedimentoUseCase
+describe('Procedimento Helper', () => {
+  const sut = ProcedimentoHelper
   const votes = [
     createMock<VotoProcedimento>({ autor: 1, aprovado: true }),
     createMock<VotoProcedimento>({ autor: 2, aprovado: true })

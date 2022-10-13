@@ -1,10 +1,10 @@
 import { ActorModel } from 'domain/models/actor'
 import { ProfileModel } from 'domain/models/profile'
 import { createMock } from 'ts-auto-mock'
-import { ActorUseCase } from '../actor'
+import { ActorHelper } from '../actor'
 
-describe('Actor UseCases', () => {
-  const sut = ActorUseCase
+describe('Actor Helper', () => {
+  const sut = ActorHelper
 
   describe('filterByRole', () => {
     const usuarios = [

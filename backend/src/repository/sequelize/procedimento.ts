@@ -9,7 +9,7 @@ import Procedimento, {
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
-import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { IProcedimentoRepo } from 'repository'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
@@ -91,7 +91,7 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
   updateVote = async (id: number, newVote: VotoProcedimento) => {
     const procedimento = await this.findOne(id)
 
-    const votes = ProcedimentoUseCase.insertOrUpdateVote(
+    const votes = ProcedimentoHelper.insertOrUpdateVote(
       procedimento.votos,
       newVote
     )

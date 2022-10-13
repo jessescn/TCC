@@ -5,8 +5,8 @@ import {
   TStatus
 } from 'domain/models/procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { ProcedimentoUseCase } from 'domain/usecases/procedimento'
-import { TipoProcedimentoUseCase } from 'domain/usecases/tipo-procedimento'
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
+import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
 import { IProcedimentoRepo, IRepository } from 'repository'
 import {
   NewProcedimento,
@@ -69,7 +69,7 @@ export class ProcedimentoService implements IProcedimentoService {
   private async checkIfUserBelongsToPublico(actor: ActorModel, tipo: number) {
     const tipoProcedimento = await this.checkIfTipoProcedimentoExists(tipo)
 
-    if (!TipoProcedimentoUseCase.belongsToPublico(actor, tipoProcedimento)) {
+    if (!TipoProcedimentoHelper.belongsToPublico(actor, tipoProcedimento)) {
       throw new UnauthorizedError(
         'Does not have permission to this procedimento'
       )
@@ -90,7 +90,7 @@ export class ProcedimentoService implements IProcedimentoService {
     procedimento: ProcedimentoAttributes
   ) {
     const isOnPendingChangesStatus =
-      ProcedimentoUseCase.getCurrentStatus(procedimento) ===
+      ProcedimentoHelper.getCurrentStatus(procedimento) ===
       'correcoes_pendentes'
 
     if (!isOnPendingChangesStatus) {

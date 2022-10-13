@@ -1,6 +1,6 @@
 import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
 
-export class ProcedimentoUseCase {
+export class ProcedimentoHelper {
   static insertOrUpdateVote = (
     votes: VotoProcedimento[],
     newVote: VotoProcedimento

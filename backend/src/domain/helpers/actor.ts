@@ -1,7 +1,7 @@
 import { ActorModel } from 'domain/models/actor'
 import { Profiles } from 'domain/profiles'
 
-export class ActorUseCase {
+export class ActorHelper {
   static filterByRole(actors: ActorModel[], profile: Profiles) {
     return actors.filter(actor => actor.profile.nome === profile)
   }

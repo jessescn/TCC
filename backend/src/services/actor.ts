@@ -1,5 +1,5 @@
 import { ActorModel } from 'domain/models/actor'
-import { ActorUseCase } from 'domain/usecases/actor'
+import { ActorHelper } from 'domain/helpers/actor'
 import { IRepository } from 'repository'
 import { ActorQuery, NewActor } from 'repository/sequelize/actor'
 import { ProfileRepository } from 'repository/sequelize/profile'
@@ -79,6 +79,6 @@ export class ActorService implements IActorService {
   async getPublicos() {
     const usuarios = await this.findAll()
 
-    return ActorUseCase.getPublicos(usuarios)
+    return ActorHelper.getPublicos(usuarios)
   }
 }

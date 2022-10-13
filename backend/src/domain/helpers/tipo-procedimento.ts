@@ -1,7 +1,7 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
 
-export class TipoProcedimentoUseCase {
+export class TipoProcedimentoHelper {
   static belongsToPublico = (
     actor: ActorModel,
     tipo: TipoProcedimentoModel
