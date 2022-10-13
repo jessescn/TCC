@@ -1,14 +1,20 @@
 import { ComentarioModel } from 'domain/models/comentario'
 import { ActorModel } from 'domain/models/actor'
-import { IRepository } from 'repository'
+import { IProcedimentoRepo, IRepository } from 'repository'
 import { NewComentario } from 'repository/sequelize/comentario'
 import { ComentarioService } from 'services/comentario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { NotFoundError } from 'types/express/errors'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 
 describe('Comentario Service', () => {
   const comentario = createMock<ComentarioModel>()
+  const procedimento = createMock<ProcedimentoModel>()
   const comentarios = createMockList<ComentarioModel>(2)
+
+  const procedimentoRepo = createMock<IProcedimentoRepo>({
+    findOne: jest.fn().mockResolvedValue(procedimento)
+  })
 
   describe('create', () => {
     const repo = createMock<IRepository>({
@@ -18,7 +24,7 @@ describe('Comentario Service', () => {
     const usuario = createMock<ActorModel>()
 
     it('should create a new comentario', async () => {
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
       const result = await sut.create(usuario, newComentario)
 
       expect(result).toEqual(comentario)
@@ -28,6 +34,20 @@ describe('Comentario Service', () => {
         createdBy: usuario.id
       })
     })
+
+    it('should throw a NotFoundError if procedimento does not exists', async () => {
+      const procedimentoRepo = createMock<IProcedimentoRepo>({
+        findOne: jest.fn().mockResolvedValue(undefined)
+      })
+
+      const sut = new ComentarioService(repo, procedimentoRepo)
+
+      const shouldThrow = async () => {
+        await sut.create(usuario, newComentario)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
+    })
   })
 
   describe('findOne', () => {
@@ -35,7 +55,7 @@ describe('Comentario Service', () => {
       const repo = createMock<IRepository>({
         findOne: jest.fn().mockResolvedValue(comentario)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const result = await sut.findOne(1)
 
@@ -47,7 +67,7 @@ describe('Comentario Service', () => {
       const repo = createMock<IRepository>({
         findOne: jest.fn().mockResolvedValue(undefined)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const shouldThrow = async () => {
         await sut.findOne(1)
@@ -62,7 +82,7 @@ describe('Comentario Service', () => {
       const repo = createMock<IRepository>({
         findAll: jest.fn().mockResolvedValue(comentarios)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const result = await sut.findAll()
 
@@ -75,7 +95,7 @@ describe('Comentario Service', () => {
       const repo = createMock<IRepository>({
         findAll: jest.fn().mockResolvedValue(comentarios)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       await sut.findAll(query)
 
@@ -89,7 +109,7 @@ describe('Comentario Service', () => {
         findOne: jest.fn().mockResolvedValue(comentario),
         destroy: jest.fn().mockResolvedValue(comentario)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const result = await sut.delete(1)
 
@@ -101,7 +121,7 @@ describe('Comentario Service', () => {
       const repo = createMock<IRepository>({
         findOne: jest.fn().mockResolvedValue(undefined)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const shouldThrow = async () => {
         await sut.delete(1)
@@ -118,7 +138,7 @@ describe('Comentario Service', () => {
         findOne: jest.fn().mockResolvedValue(comentario),
         update: jest.fn().mockResolvedValue(comentario)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const result = await sut.update(1, data)
 
@@ -130,7 +150,7 @@ describe('Comentario Service', () => {
       const repo = createMock<IRepository>({
         findOne: jest.fn().mockResolvedValue(undefined)
       })
-      const sut = new ComentarioService(repo)
+      const sut = new ComentarioService(repo, procedimentoRepo)
 
       const shouldThrow = async () => {
         await sut.update(1, { procedimentoId: 1 })
