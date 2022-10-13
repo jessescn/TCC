@@ -20,7 +20,10 @@ export class ProfileRepository implements IRepository {
   }
 
   create = async (data: CreateProfile) => {
-    return Profile.create(data)
+    return Profile.create({
+      nome: data.nome,
+      permissoes: data.permissoes
+    })
   }
 
   update = async (id: number, data: Partial<ProfileModel>) => {

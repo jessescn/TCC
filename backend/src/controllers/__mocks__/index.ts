@@ -7,7 +7,7 @@ export const baseSetup = (permissao?: PermissionKey) => {
   const permissoes = permissao ? { [permissao]: 'all' } : {}
 
   const actor = createMock<ActorModel>({
-    profile: createMock<ProfileModel>({ permissoes })
+    profile: createMock<ProfileModel>({ permissoes, id: 1 })
   })
 
   const sendSpy = jest.fn()

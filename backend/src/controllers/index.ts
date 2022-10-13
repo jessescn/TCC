@@ -20,6 +20,13 @@ export const errorResponseHandler = (res: Response, error: any) => {
 export type Validation = (request: Request) => void
 
 export type ControllerProps<T> = {
+  validations: Validation[]
+  permission?: PermissionKey
+  mandatoryFields: string[]
+  service: T
+}
+
+export type Props<T> = {
   validations?: Validation[]
   permission?: PermissionKey
   mandatoryFields?: string[]
@@ -29,7 +36,7 @@ export type ControllerProps<T> = {
 export abstract class Controller<T> implements IController {
   protected props: ControllerProps<T>
 
-  constructor(props: ControllerProps<T>) {
+  constructor(props: Props<T>) {
     const defaultValidations = [
       this.hasPermissions,
       this.includesMandatoryFields
@@ -37,6 +44,7 @@ export abstract class Controller<T> implements IController {
 
     this.props = {
       ...props,
+      mandatoryFields: props.mandatoryFields || [],
       validations: [...defaultValidations, ...(props.validations || [])]
     }
   }
@@ -46,11 +54,11 @@ export abstract class Controller<T> implements IController {
   }
 
   get mandatoryFields() {
-    return this.props.mandatoryFields || []
+    return this.props.mandatoryFields
   }
 
   get validations() {
-    return this.props.validations || []
+    return this.props.validations
   }
 
   get service() {

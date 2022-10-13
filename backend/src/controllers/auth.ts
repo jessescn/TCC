@@ -11,7 +11,7 @@ import { isValidPassword } from 'utils/password'
 
 type Credentials = {
   email: string
-  password: string
+  senha: string
 }
 
 export class AuthController {
@@ -21,7 +21,7 @@ export class AuthController {
     try {
       const data: Credentials = req.body
 
-      if (!data.email || !data.password) {
+      if (!data.email || !data.senha) {
         throw new BadRequestError()
       }
 
@@ -31,7 +31,7 @@ export class AuthController {
         throw new NotFoundError()
       }
 
-      const isPasswordValid = await isValidPassword(data.password, actor.senha)
+      const isPasswordValid = await isValidPassword(data.senha, actor.senha)
 
       if (!isPasswordValid) {
         throw new UnauthorizedError()
@@ -45,11 +45,17 @@ export class AuthController {
     }
   }
 
-  me = async (req: Request, res: Response) => {
+  me = async (request: Request, response: Response) => {
     try {
-      res.json(req.actor)
+      const { actor } = request
+
+      if (!actor) {
+        throw new UnauthorizedError('invalid token')
+      }
+
+      response.json(request.actor)
     } catch (error) {
-      errorResponseHandler(res, error)
+      errorResponseHandler(response, error)
     }
   }
 }

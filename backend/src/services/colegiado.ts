@@ -49,7 +49,7 @@ export class ColegiadoService implements IColegiadoService {
     return procedimento
   }
 
-  private async checkIfProcedimentoIsOnHomologation(
+  private checkIfProcedimentoIsOnHomologation(
     procedimento: ProcedimentoAttributes
   ) {
     const status = ProcedimentoHelper.getCurrentStatus(procedimento)

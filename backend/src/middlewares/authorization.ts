@@ -43,13 +43,13 @@ export class AuthTokenMiddleware extends Middleware {
     request.actor = payload.data
   }
 
-  exec = (req: Request, res: Response, next: NextFunction) => {
+  exec = (request: Request, response: Response, next: NextFunction) => {
     try {
-      this.validateRequest(req)
-      this.appendActorToRequest(req)
+      this.validateRequest(request)
+      this.appendActorToRequest(request)
       next()
     } catch (error) {
-      errorResponseHandler(error, res)
+      errorResponseHandler(response, error)
     }
   }
 }
