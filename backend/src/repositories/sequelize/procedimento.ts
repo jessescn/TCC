@@ -10,7 +10,7 @@ import Procedimento, {
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { IProcedimentoRepo } from 'repository'
+import { IProcedimentoRepo } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type CreateProcedimento = {

@@ -1,4 +1,4 @@
-import { FormularioRepository } from 'repository/sequelize/formulario'
+import { FormularioRepository } from 'repositories/sequelize/formulario'
 import { makeFormularioRepository } from '../formulario-factory'
 
 describe('FormularioRepository Factory', () => {

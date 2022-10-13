@@ -3,7 +3,7 @@ import Comentario, {
   ComentarioModel
 } from 'domain/models/comentario'
 import Procedimento from 'domain/models/procedimento'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type ComentarioQuery = WhereOptions<

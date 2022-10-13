@@ -19,7 +19,7 @@ um novo modelo em **/domain/models**. Caso Exista alguma relacão com outra enti
 ### 2.Repository
 
 Caso seja uma nova entidade no sistema, deve ser criado um novo repositório que implementa a interface IRepository. O repositório deve
-ser criado em **/repository/sequelize/**. Além disso, deve ser criado uma factory para esse repositório em **/factories/repositories/**
+ser criado em **/repositories/sequelize/**. Além disso, deve ser criado uma factory para esse repositório em **/factories/repositories/**
 seguindo o formato das outras factories.
 
 Caso seja um novo recurso em uma entidade existente. Verificar se os métodos que já existem não satisfazem, por exemplo, caso queira buscar

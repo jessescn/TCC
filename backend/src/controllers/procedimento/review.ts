@@ -1,6 +1,6 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'domain/profiles'
-import { NewRevisao } from 'repository/sequelize/procedimento'
+import { NewRevisao } from 'repositories/sequelize/procedimento'
 import { IProcedimentoService } from 'services/procedimento'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'

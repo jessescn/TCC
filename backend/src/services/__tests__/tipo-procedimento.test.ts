@@ -1,11 +1,11 @@
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import {
   NewTipoProcedimento,
   TipoProcedimentoQuery
-} from 'repository/sequelize/tipo-procedimento'
+} from 'repositories/sequelize/tipo-procedimento'
 import { TipoProcedimentoService } from 'services/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { BadRequestError, NotFoundError } from 'types/express/errors'

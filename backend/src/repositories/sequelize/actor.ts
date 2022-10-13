@@ -1,6 +1,6 @@
 import Actor, { ActorAttributes, ActorModel } from 'domain/models/actor'
 import Profile from 'domain/models/profile'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type ActorQuery = WhereOptions<InferAttributes<ActorAttributes>>

@@ -1,6 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { FormularioModel } from 'domain/models/formulario'
-import { NewFormulario } from 'repository/sequelize/formulario'
+import { NewFormulario } from 'repositories/sequelize/formulario'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateFormularioController } from '../create'

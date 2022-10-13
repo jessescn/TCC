@@ -1,6 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ActorModel } from 'domain/models/actor'
-import { NewActor } from 'repository/sequelize/actor'
+import { NewActor } from 'repositories/sequelize/actor'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateActorController } from '../create'

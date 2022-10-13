@@ -1,12 +1,12 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ProcedimentoModel, Resposta, Status } from 'domain/models/procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { IProcedimentoRepo, IRepository } from 'repository'
+import { IProcedimentoRepo, IRepository } from 'repositories'
 import {
   NewProcedimento,
   NewRevisao,
   ProcedimentoQuery
-} from 'repository/sequelize/procedimento'
+} from 'repositories/sequelize/procedimento'
 import { ProcedimentoService } from 'services/procedimento'
 import { IProcedimentoStatusService } from 'services/procedimento-status'
 import { createMock, createMockList } from 'ts-auto-mock'

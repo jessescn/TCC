@@ -1,7 +1,7 @@
 import { Status } from 'domain/models/procedimento'
 import { ActorHelper } from 'domain/helpers/actor'
-import { IRepository } from 'repository'
-import { MailSender } from 'repository/nodemailer/mail'
+import { IRepository } from 'repositories'
+import { MailSender } from 'repositories/nodemailer/mail'
 import templates from 'templates'
 import { HandlerProps, StatusHandler } from '.'
 

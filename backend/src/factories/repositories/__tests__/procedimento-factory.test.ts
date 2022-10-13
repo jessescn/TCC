@@ -1,4 +1,4 @@
-import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
+import { ProcedimentoRepository } from 'repositories/sequelize/procedimento'
 import { makeProcedimentoRepository } from '../procedimento-factory'
 
 describe('ProcedimentoRepository Factory', () => {

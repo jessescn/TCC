@@ -1,6 +1,6 @@
 import { errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'domain/profiles'
-import { NewComentario } from 'repository/sequelize/comentario'
+import { NewComentario } from 'repositories/sequelize/comentario'
 import { IComentarioService } from 'services/comentario'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { ComentarioController } from '.'

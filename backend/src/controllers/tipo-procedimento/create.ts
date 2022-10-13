@@ -1,6 +1,6 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'domain/profiles'
-import { NewTipoProcedimento } from 'repository/sequelize/tipo-procedimento'
+import { NewTipoProcedimento } from 'repositories/sequelize/tipo-procedimento'
 import { ITipoProcedimentoService } from 'services/tipo-procedimento'
 import { HttpStatusCode, Request, Response } from 'types/express'
 

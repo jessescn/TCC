@@ -1,12 +1,12 @@
 import { ActorModel } from 'domain/models/actor'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { IRepository } from 'repository'
-import { FormularioRepository } from 'repository/sequelize/formulario'
+import { IRepository } from 'repositories'
+import { FormularioRepository } from 'repositories/sequelize/formulario'
 import {
   NewTipoProcedimento,
   TipoProcedimentoQuery,
   TipoProcedimentoRepository
-} from 'repository/sequelize/tipo-procedimento'
+} from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 

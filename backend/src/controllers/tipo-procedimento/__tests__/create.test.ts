@@ -1,6 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { NewTipoProcedimento } from 'repository/sequelize/tipo-procedimento'
+import { NewTipoProcedimento } from 'repositories/sequelize/tipo-procedimento'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { CreateTipoProcedimentoController } from '../create'

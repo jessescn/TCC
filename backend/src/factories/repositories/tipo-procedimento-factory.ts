@@ -1,4 +1,4 @@
-import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
+import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 
 export const makeTipoProcedimentoRepository = () => {
   return new TipoProcedimentoRepository()

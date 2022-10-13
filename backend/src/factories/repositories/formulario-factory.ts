@@ -1,4 +1,4 @@
-import { FormularioRepository } from 'repository/sequelize/formulario'
+import { FormularioRepository } from 'repositories/sequelize/formulario'
 
 export const makeFormularioRepository = () => {
   return new FormularioRepository()

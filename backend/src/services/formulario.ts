@@ -1,11 +1,11 @@
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import {
   FormularioQuery,
   FormularioRepository,
   NewFormulario
-} from 'repository/sequelize/formulario'
+} from 'repositories/sequelize/formulario'
 import { IService } from 'services'
 import { NotFoundError } from 'types/express/errors'
 

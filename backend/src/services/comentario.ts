@@ -2,13 +2,13 @@ import {
   ComentarioQuery,
   ComentarioRepository,
   NewComentario
-} from './../repository/sequelize/comentario'
+} from '../repositories/sequelize/comentario'
 import { ActorModel } from 'domain/models/actor'
 import { NotFoundError } from 'types/express/errors'
 import { ComentarioModel } from 'domain/models/comentario'
-import { IProcedimentoRepo, IRepository } from 'repository'
+import { IProcedimentoRepo, IRepository } from 'repositories'
 import { IService } from 'services'
-import { ProcedimentoRepository } from 'repository/sequelize/procedimento'
+import { ProcedimentoRepository } from 'repositories/sequelize/procedimento'
 
 export interface IComentarioService
   extends IService<ComentarioModel, ComentarioQuery> {

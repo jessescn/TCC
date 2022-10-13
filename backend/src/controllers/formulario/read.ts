@@ -1,7 +1,7 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { ActorModel } from 'domain/models/actor'
 import { PermissionKey } from 'domain/profiles'
-import { FormularioQuery } from 'repository/sequelize/formulario'
+import { FormularioQuery } from 'repositories/sequelize/formulario'
 import { IFormularioService } from 'services/formulario'
 import { Request, Response } from 'types/express'
 

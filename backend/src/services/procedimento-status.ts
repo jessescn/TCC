@@ -6,9 +6,9 @@ import {
   TStatus
 } from 'domain/models/procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { IRepository } from 'repository'
-import { MailSender } from 'repository/nodemailer/mail'
-import { ActorRepository } from 'repository/sequelize/actor'
+import { IRepository } from 'repositories'
+import { MailSender } from 'repositories/nodemailer/mail'
+import { ActorRepository } from 'repositories/sequelize/actor'
 import templates from 'templates'
 import { StatusHandlerMap } from './status'
 

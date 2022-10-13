@@ -1,6 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
 import { ProcedimentoModel } from 'domain/models/procedimento'
-import { NewRevisao } from 'repository/sequelize/procedimento'
+import { NewRevisao } from 'repositories/sequelize/procedimento'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReviewProcedimentoController } from '../review'

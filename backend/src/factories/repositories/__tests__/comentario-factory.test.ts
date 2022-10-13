@@ -1,4 +1,4 @@
-import { ComentarioRepository } from 'repository/sequelize/comentario'
+import { ComentarioRepository } from 'repositories/sequelize/comentario'
 import { makeComentarioRepository } from '../comentario-factory'
 
 describe('ComentarioRepository Factory', () => {

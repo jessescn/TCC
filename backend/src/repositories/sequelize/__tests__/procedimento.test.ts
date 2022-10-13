@@ -1,4 +1,4 @@
-import { CreateProcedimento } from 'repository/sequelize/procedimento'
+import { CreateProcedimento } from 'repositories/sequelize/procedimento'
 import Comentario from 'domain/models/comentario'
 import Procedimento, {
   ProcedimentoAttributes,

@@ -3,7 +3,7 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type FormularioQuery = WhereOptions<

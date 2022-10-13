@@ -1,9 +1,9 @@
 import { Status } from 'domain/models/procedimento'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import templates from 'templates'
 import { ActorHelper } from 'domain/helpers/actor'
 import { HandlerProps, StatusHandler } from '.'
-import { MailSender } from 'repository/nodemailer/mail'
+import { MailSender } from 'repositories/nodemailer/mail'
 
 export class EmHomologacaoStatusHandler implements StatusHandler {
   private usuarioRepo: IRepository

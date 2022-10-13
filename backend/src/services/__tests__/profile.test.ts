@@ -1,6 +1,6 @@
 import { ProfileModel } from 'domain/models/profile'
-import { IRepository } from 'repository'
-import { ProfileQuery } from 'repository/sequelize/profile'
+import { IRepository } from 'repositories'
+import { ProfileQuery } from 'repositories/sequelize/profile'
 import { NewProfile, ProfileService } from 'services/profile'
 import { createMock } from 'ts-auto-mock'
 import { ConflictError, NotFoundError } from 'types/express/errors'

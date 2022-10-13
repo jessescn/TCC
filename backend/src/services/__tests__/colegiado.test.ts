@@ -3,7 +3,7 @@ import {
   Status,
   VotoProcedimento
 } from 'domain/models/procedimento'
-import { IProcedimentoRepo } from 'repository'
+import { IProcedimentoRepo } from 'repositories'
 import { ColegiadoService } from 'services/colegiado'
 import { createMock } from 'ts-auto-mock'
 import { BadRequestError, NotFoundError } from 'types/express/errors'

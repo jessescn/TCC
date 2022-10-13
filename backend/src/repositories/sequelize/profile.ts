@@ -1,6 +1,6 @@
 import Profile, { ProfileAttributes, ProfileModel } from 'domain/models/profile'
 import { Permissions } from 'domain/profiles'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type ProfileQuery = WhereOptions<InferAttributes<ProfileAttributes>>

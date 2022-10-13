@@ -1,4 +1,4 @@
-import { ActorRepository } from 'repository/sequelize/actor'
+import { ActorRepository } from 'repositories/sequelize/actor'
 import { makeActorRepository } from '../actor-factory'
 
 describe('ActorRepository Factory', () => {

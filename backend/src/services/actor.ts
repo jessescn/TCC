@@ -1,8 +1,8 @@
 import { ActorModel } from 'domain/models/actor'
 import { ActorHelper } from 'domain/helpers/actor'
-import { IRepository } from 'repository'
-import { ActorQuery, NewActor } from 'repository/sequelize/actor'
-import { ProfileRepository } from 'repository/sequelize/profile'
+import { IRepository } from 'repositories'
+import { ActorQuery, NewActor } from 'repositories/sequelize/actor'
+import { ProfileRepository } from 'repositories/sequelize/profile'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 
@@ -44,14 +44,14 @@ export class ActorService implements IActorService {
     await this.checkIfUserAlreadyExistsByEmail(data.email)
     const [profile] = await this.getBaseProfile()
 
-    const usuario = await this.repository.create({
+    const actor = await this.repository.create({
       email: data.email,
       nome: data.nome,
       senha: data.senha,
       permissoes: profile.id
     })
 
-    return usuario
+    return actor
   }
 
   async delete(id: number) {
@@ -61,9 +61,9 @@ export class ActorService implements IActorService {
   }
 
   async findOne(id: number) {
-    const usuario = await this.checkIfUserAlreadyExists(id)
+    const actor = await this.checkIfUserAlreadyExists(id)
 
-    return usuario
+    return actor
   }
 
   async findAll(query: ActorQuery = {}) {
@@ -77,8 +77,8 @@ export class ActorService implements IActorService {
   }
 
   async getPublicos() {
-    const usuarios = await this.findAll()
+    const actors = await this.findAll()
 
-    return ActorHelper.getPublicos(usuarios)
+    return ActorHelper.getPublicos(actors)
   }
 }

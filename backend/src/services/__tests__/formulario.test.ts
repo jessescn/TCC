@@ -1,7 +1,10 @@
 import { FormularioModel } from 'domain/models/formulario'
 import { ActorModel } from 'domain/models/actor'
-import { IRepository } from 'repository'
-import { FormularioQuery, NewFormulario } from 'repository/sequelize/formulario'
+import { IRepository } from 'repositories'
+import {
+  FormularioQuery,
+  NewFormulario
+} from 'repositories/sequelize/formulario'
 import { FormularioService } from 'services/formulario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { NotFoundError } from 'types/express/errors'

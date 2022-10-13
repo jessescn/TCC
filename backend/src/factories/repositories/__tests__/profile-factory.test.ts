@@ -1,4 +1,4 @@
-import { ProfileRepository } from 'repository/sequelize/profile'
+import { ProfileRepository } from 'repositories/sequelize/profile'
 import { makeProfileRepository } from '../profile-factory'
 
 describe('ProfileRepository Factory', () => {

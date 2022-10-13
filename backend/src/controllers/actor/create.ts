@@ -1,5 +1,5 @@
 import { Controller, errorResponseHandler } from 'controllers'
-import { NewActor } from 'repository/sequelize/actor'
+import { NewActor } from 'repositories/sequelize/actor'
 import { IActorService } from 'services/actor'
 import { HttpStatusCode, Request, Response } from 'types/express'
 export class CreateActorController extends Controller<IActorService> {

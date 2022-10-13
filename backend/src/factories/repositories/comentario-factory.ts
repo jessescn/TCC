@@ -1,4 +1,4 @@
-import { ComentarioRepository } from 'repository/sequelize/comentario'
+import { ComentarioRepository } from 'repositories/sequelize/comentario'
 
 export const makeComentarioRepository = () => {
   return new ComentarioRepository()

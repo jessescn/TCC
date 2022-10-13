@@ -1,5 +1,5 @@
-import { NewFormulario } from 'repository/sequelize/formulario'
-import { NewTipoProcedimento } from 'repository/sequelize/tipo-procedimento'
+import { NewFormulario } from 'repositories/sequelize/formulario'
+import { NewTipoProcedimento } from 'repositories/sequelize/tipo-procedimento'
 
 const formulario: NewFormulario = {
   nome: 'Solicitação de Homologação de Comissão Examinadora de Defesa de Dissertação de Mestrado',

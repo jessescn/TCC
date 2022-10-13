@@ -7,14 +7,14 @@ import {
 import { ActorModel } from 'domain/models/actor'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
-import { IProcedimentoRepo, IRepository } from 'repository'
+import { IProcedimentoRepo, IRepository } from 'repositories'
 import {
   NewProcedimento,
   NewRevisao,
   ProcedimentoQuery,
   ProcedimentoRepository
-} from 'repository/sequelize/procedimento'
-import { TipoProcedimentoRepository } from 'repository/sequelize/tipo-procedimento'
+} from 'repositories/sequelize/procedimento'
+import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import {
   BadRequestError,

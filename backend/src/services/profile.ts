@@ -1,7 +1,7 @@
 import { ProfileModel } from 'domain/models/profile'
 import { Permissions } from 'domain/profiles'
-import { IRepository } from 'repository'
-import { ProfileQuery } from 'repository/sequelize/profile'
+import { IRepository } from 'repositories'
+import { ProfileQuery } from 'repositories/sequelize/profile'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 

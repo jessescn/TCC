@@ -1,7 +1,7 @@
 import { errorResponseHandler } from 'controllers'
 import { ActorModel } from 'domain/models/actor'
 import { PermissionKey } from 'domain/profiles'
-import { ComentarioQuery } from 'repository/sequelize/comentario'
+import { ComentarioQuery } from 'repositories/sequelize/comentario'
 import { IComentarioService } from 'services/comentario'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'

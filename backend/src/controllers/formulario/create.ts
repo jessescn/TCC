@@ -1,6 +1,6 @@
 import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'domain/profiles'
-import { NewFormulario } from 'repository/sequelize/formulario'
+import { NewFormulario } from 'repositories/sequelize/formulario'
 import { IFormularioService } from 'services/formulario'
 import { HttpStatusCode, Request, Response } from 'types/express'
 

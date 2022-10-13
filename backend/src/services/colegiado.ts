@@ -5,7 +5,7 @@ import {
   VotoProcedimento
 } from 'domain/models/procedimento'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { IProcedimentoRepo } from 'repository'
+import { IProcedimentoRepo } from 'repositories'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
 

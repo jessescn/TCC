@@ -2,7 +2,7 @@ import TipoProcedimento, {
   TipoProcedimentoAttributes,
   TipoProcedimentoModel
 } from 'domain/models/tipo-procedimento'
-import { IRepository } from 'repository'
+import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
 
 export type TipoProcedimentoQuery = WhereOptions<
