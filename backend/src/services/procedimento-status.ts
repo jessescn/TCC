@@ -1,5 +1,4 @@
 import {
-  ProcedimentoAttributes,
   ProcedimentoModel,
   Status,
   statusList,
@@ -14,7 +13,7 @@ import { StatusHandlerMap } from './status'
 
 export interface IProcedimentoStatusService {
   execute: (
-    procedimento: ProcedimentoAttributes,
+    procedimento: ProcedimentoModel,
     novoStatus: TStatus
   ) => Promise<Status>
 }
@@ -39,7 +38,7 @@ export class ProcedimentoStatusService implements IProcedimentoStatusService {
     await MailSender.send(email)
   }
 
-  async execute(procedimento: ProcedimentoAttributes, novoStatus: TStatus) {
+  async execute(procedimento: ProcedimentoModel, novoStatus: TStatus) {
     const autor = await this.actorRepo.findOne(procedimento.createdBy)
 
     const status = await StatusHandlerMap[novoStatus].execute({

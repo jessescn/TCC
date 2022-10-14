@@ -6,17 +6,17 @@ import templates from 'templates'
 import { HandlerProps, StatusHandler } from '.'
 
 export class EmAnaliseStatusHandler implements StatusHandler {
-  private usuarioRepo: IRepository
+  private actorRepo: IRepository
 
-  constructor(usuarioRepo: IRepository) {
-    this.usuarioRepo = usuarioRepo
+  constructor(actorRepo: IRepository) {
+    this.actorRepo = actorRepo
   }
 
   execute = async ({ procedimento }: HandlerProps) => {
     const sendEmailCoordenacao = async () => {
       // Envia email a coordenacão avisando de um novo procedimento está pronto para ser analisado
-      const usuarios = await this.usuarioRepo.findAll({})
-      const coordenacaoUsers = ActorHelper.filterByRole(usuarios, 'coordenacao')
+      const actors = await this.actorRepo.findAll({})
+      const coordenacaoUsers = ActorHelper.filterByRole(actors, 'coordenacao')
 
       if (coordenacaoUsers.length === 0) return
 

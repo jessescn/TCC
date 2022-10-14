@@ -1,5 +1,5 @@
+import { ActorModel } from 'domain/models/actor'
 import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
-import { ActorAttributes } from 'domain/models/actor'
 import { makeCorrecoesPendentesStatusHandler } from 'factories/services/status/correcoes-pendentes-factory'
 import { makeCriadoStatusHandler } from 'factories/services/status/criado-factory'
 import { makeDeferidoStatusHandler } from 'factories/services/status/deferido-factory'
@@ -9,7 +9,7 @@ import { makeIndeferidoStatusHandler } from 'factories/services/status/indeferid
 
 export type HandlerProps = {
   procedimento: ProcedimentoModel
-  autor: ActorAttributes
+  autor: ActorModel
 }
 
 export interface StatusHandler {
