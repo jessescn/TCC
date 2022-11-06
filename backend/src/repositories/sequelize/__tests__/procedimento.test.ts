@@ -52,7 +52,11 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
         include: [TipoProcedimento, Comentario],
-        where: { deleted: false }
+        where: { deleted: false },
+        order: [
+          ['id', 'ASC'],
+          ['updatedAt', 'DESC']
+        ]
       })
     })
 
@@ -64,7 +68,11 @@ describe('Procedimento Repository', () => {
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
         include: [TipoProcedimento, Comentario],
-        where: { deleted: false, ...query }
+        where: { deleted: false, ...query },
+        order: [
+          ['id', 'ASC'],
+          ['updatedAt', 'DESC']
+        ]
       })
     })
   })

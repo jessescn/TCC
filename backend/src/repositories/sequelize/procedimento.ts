@@ -48,7 +48,11 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
   findAll = async (query: ProcedimentoQuery = {}) => {
     const procedimentos = await Procedimento.findAll({
       include: [TipoProcedimento, Comentario],
-      where: { deleted: false, ...query }
+      where: { deleted: false, ...query },
+      order: [
+        ['id', 'ASC'],
+        ['updatedAt', 'DESC']
+      ]
     })
 
     return procedimentos

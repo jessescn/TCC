@@ -29,6 +29,7 @@ describe('Formulario Repository', () => {
       expect(result).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
         where: {},
+        order: [['id', 'ASC']],
         include: [
           {
             model: Actor,
@@ -45,6 +46,7 @@ describe('Formulario Repository', () => {
 
       expect(Formulario.findAll).toBeCalledWith({
         where: { ...query },
+        order: [['id', 'ASC']],
         include: [
           {
             model: Actor,

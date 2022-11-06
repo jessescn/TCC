@@ -32,7 +32,8 @@ describe('Tipo Procedimento Repository', () => {
 
       expect(result).toEqual(tipoProcedimentos)
       expect(TipoProcedimento.findAll).toBeCalledWith({
-        where: { deleted: false }
+        where: { deleted: false },
+        order: [['id', 'ASC']]
       })
     })
 
@@ -43,7 +44,8 @@ describe('Tipo Procedimento Repository', () => {
 
       expect(result).toEqual(tipoProcedimentos)
       expect(TipoProcedimento.findAll).toBeCalledWith({
-        where: { deleted: false, ...query }
+        where: { deleted: false, ...query },
+        order: [['id', 'ASC']]
       })
     })
   })
