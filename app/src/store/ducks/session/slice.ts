@@ -3,7 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from '../../../domain/models/user'
 import { Credentials } from '../../../services/auth'
 
-export type LoginStatus = 'pristine' | 'loading' | 'success' | 'failure'
+export type LoginStatus = {
+  status: 'pristine' | 'loading' | 'success' | 'failure'
+  message?: string
+}
 
 export type State = {
   currentUser: UserModel | null
@@ -14,21 +17,21 @@ export type State = {
 const userLocalStorage = localStorage.getItem('session_user')
 
 export const initialState: State = {
-  loginStatus: 'pristine',
+  loginStatus: { status: 'pristine' },
   isSidebarOpen: false,
   currentUser: userLocalStorage ? JSON.parse(userLocalStorage) : null
 }
 
 const reducers = {
   login: (state: State, action: PayloadAction<Credentials>) => {
-    state.loginStatus = 'loading'
+    state.loginStatus = { status: 'loading' }
   },
   loginSuccess: (state: State, action: PayloadAction<UserModel>) => {
-    state.loginStatus = 'success'
+    state.loginStatus = { status: 'success' }
     state.currentUser = action.payload
   },
-  loginFailure: (state: State) => {
-    state.loginStatus = 'failure'
+  loginFailure: (state: State, action: PayloadAction<string | undefined>) => {
+    state.loginStatus = { status: 'failure', message: action.payload }
   },
   logout: () => {
     localStorage.removeItem('session_user')

@@ -22,7 +22,7 @@ export class ActorService implements IActorService {
     const [actor] = await this.repository.findAll({ email })
 
     if (actor) {
-      throw new ConflictError('user already exists')
+      throw new ConflictError('Usuário já existe')
     }
   }
 

@@ -8,7 +8,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import { User } from 'domain/entity/user'
-import { Roles } from 'domain/types/actors'
+import { ProfileType } from 'domain/types/actors'
 import { IconType } from 'react-icons'
 import { GrUserAdmin } from 'react-icons/gr'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -18,7 +18,7 @@ export type NavItemProps = {
   icon?: IconType
   title: string
   url: string
-  roles?: Roles[]
+  profiles?: ProfileType[]
   strict?: boolean
   style?: StyleProps
   isSubitem?: boolean
@@ -28,7 +28,7 @@ export default function NavItem({
   icon,
   title,
   url,
-  roles = [],
+  profiles = [],
   strict = false,
   style,
   isSubitem = false
@@ -38,6 +38,7 @@ export default function NavItem({
   const location = useLocation()
 
   const isCurrentRoute = location.pathname === url
+  const isAdmin = currentUser?.profile.nome === 'admin'
 
   const handleNavigate = () => {
     navigate(url)
@@ -52,14 +53,15 @@ export default function NavItem({
 
   const linkStyle = isCurrentRoute ? selectedStyle : {}
 
-  const validation = strict ? User.haveAllRoles : User.haveOneRole
+  const validation = User.includesInProfiles
 
   const havePermission =
-    roles.length > 0
+    isAdmin ||
+    (profiles.length > 0
       ? currentUser
-        ? validation(currentUser, roles)
+        ? validation(currentUser, profiles)
         : false
-      : true
+      : true)
 
   return !havePermission ? null : (
     <Flex

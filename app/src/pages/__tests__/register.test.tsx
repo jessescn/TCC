@@ -85,14 +85,14 @@ describe('Página Register', () => {
 
     const newUser: RegisterForm = {
       email: 'test@teste.com',
-      name: 'teste name',
-      password: 'pass@1234',
+      nome: 'teste name',
+      senha: 'pass@1234',
       confirmPassword: 'pass@1234'
     }
 
-    userEvent.type(screen.getByLabelText('Nome Completo'), newUser.name)
+    userEvent.type(screen.getByLabelText('Nome Completo'), newUser.nome)
     userEvent.type(screen.getByLabelText('Email'), newUser.email)
-    userEvent.type(screen.getByLabelText('Senha'), newUser.password)
+    userEvent.type(screen.getByLabelText('Senha'), newUser.senha)
     userEvent.type(
       screen.getByLabelText('Confirmar Senha'),
       newUser.confirmPassword
@@ -120,14 +120,14 @@ describe('Página Register', () => {
 
     const newUser: RegisterForm = {
       email: 'teste.com', // invalid email
-      name: 'teste name',
-      password: 'pass@1234',
+      nome: 'teste name',
+      senha: 'pass@1234',
       confirmPassword: 'pass@1235' // different from password
     }
 
-    userEvent.type(screen.getByLabelText('Nome Completo'), newUser.name)
+    userEvent.type(screen.getByLabelText('Nome Completo'), newUser.nome)
     userEvent.type(screen.getByLabelText('Email'), newUser.email)
-    userEvent.type(screen.getByLabelText('Senha'), newUser.password)
+    userEvent.type(screen.getByLabelText('Senha'), newUser.senha)
     userEvent.type(
       screen.getByLabelText('Confirmar Senha'),
       newUser.confirmPassword

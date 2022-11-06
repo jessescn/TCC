@@ -12,7 +12,7 @@ import type { NavItemProps } from './nav-item'
 import NavItem from './nav-item'
 
 import { User } from 'domain/entity/user'
-import { Roles } from 'domain/types/actors'
+import { ProfileType } from 'domain/types/actors'
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai'
 import { selectors, useSelector } from 'store'
 
@@ -20,7 +20,7 @@ type Props = {
   icon: IconType
   title: string
   items: NavItemProps[]
-  roles?: Roles[]
+  profiles?: ProfileType[]
   strict?: boolean
 }
 
@@ -28,17 +28,17 @@ export default function NavSubItems({
   icon,
   title,
   items,
-  roles = [],
+  profiles = [],
   strict
 }: Props) {
   const currentUser = useSelector(selectors.session.getCurrentUser)
 
-  const validation = strict ? User.haveAllRoles : User.haveOneRole
+  const validation = User.includesInProfiles
 
   const havePermission =
-    roles.length > 0
+    profiles.length > 0
       ? currentUser
-        ? validation(currentUser, roles)
+        ? validation(currentUser, profiles)
         : false
       : true
 

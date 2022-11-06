@@ -1,4 +1,5 @@
-import { Box, Button, Center, Flex, Text } from '@chakra-ui/react'
+import { Box, Center, Flex, Text } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 import Link from 'components/atoms/link'
 import Screen from 'components/atoms/screen'
 import Alert from 'components/molecules/alert'
@@ -11,7 +12,7 @@ import { actions, store, useSelector, selectors } from '../store'
 
 type LoginForm = {
   email: string
-  password: string
+  senha: string
 }
 
 export default function Login() {
@@ -26,7 +27,7 @@ export default function Login() {
   const status = useSelector(selectors.session.getAuthStatus)
 
   useEffect(() => {
-    if (status === 'success') {
+    if (status.status === 'success') {
       navigate('/')
     }
   }, [status])
@@ -80,42 +81,34 @@ export default function Login() {
               />
               <FormInput
                 mt="12px"
-                id="password"
+                id="senha"
                 placeholder="******"
                 type="password"
-                isInvalid={Boolean(errors.password)}
+                isInvalid={Boolean(errors.senha)}
                 label={{
                   text: 'Senha',
                   props: {
                     fontSize: { base: '14px', md: '16px' },
-                    htmlFor: 'password'
+                    htmlFor: 'senha'
                   }
                 }}
-                register={register('password', {
+                register={register('senha', {
                   required: { value: true, message: '*senha obrigatória' }
                 })}
                 errors={[
                   {
-                    text: errors.password?.message,
-                    condition: Boolean(errors.password)
+                    text: errors.senha?.message,
+                    condition: Boolean(errors.senha)
                   }
                 ]}
               />
               <Center mt="32px" flexDir="column" mb="16px">
-                <Button
-                  isLoading={status === 'loading'}
-                  type="submit"
-                  color="initial.white"
-                  bgColor="primary.dark"
-                  mb="8px"
-                  _hover={{ bgColor: 'primary.default' }}
-                  fontSize={{ base: '14px', md: '16px' }}
-                >
+                <Button isLoading={status.status === 'loading'} type="submit">
                   Acessar
                 </Button>
-                {status === 'failure' && (
+                {status.status === 'failure' && (
                   <Text mt="8px" color="info.error" fontSize="12px">
-                    credenciais inválidas!
+                    {status.message || 'credenciais inválidas!'}
                   </Text>
                 )}
                 <Link redirectTo="/cadastro">

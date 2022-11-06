@@ -1,4 +1,5 @@
-import { Box, Button, Center, Flex, Link, Text } from '@chakra-ui/react'
+import { Box, Center, Flex, Link, Text } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 import Screen from 'components/atoms/screen'
 import FormInput, { ErrorText } from 'components/molecules/forms/input'
 import LogoPanel from 'components/organisms/logo-panel'
@@ -8,6 +9,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { CreateUser } from 'services/user'
 import { actions, store, useSelector, selectors } from 'store'
 import { validateEmail } from 'utils/validation'
+import PasswordStrengthBar from 'react-password-strength-bar'
 
 type fieldProps = {
   id: string
@@ -30,7 +32,8 @@ export default function Register() {
     register,
     handleSubmit,
     getValues,
-    formState: { errors }
+    formState: { errors },
+    watch
   } = useForm<RegisterForm>({ mode: 'onSubmit', reValidateMode: 'onChange' })
 
   const status = useSelector(selectors.user.getCreateUserStatus)
@@ -40,20 +43,20 @@ export default function Register() {
   }
 
   useEffect(() => {
-    if (status === 'success') {
+    if (status.status === 'success') {
       navigate('/login')
     }
   }, [status])
 
   const nameProps: fieldProps = {
-    invalid: Boolean(errors.name),
-    id: 'name',
+    invalid: Boolean(errors.nome),
+    id: 'nome',
     placeholder: 'Ex. João da Silva',
     label: 'Nome Completo',
-    register: register('name', {
+    register: register('nome', {
       required: { value: true, message: '*campo obrigatório' }
     }),
-    errors: [{ text: errors.name?.message, condition: Boolean(errors.name) }]
+    errors: [{ text: errors.nome?.message, condition: Boolean(errors.nome) }]
   }
 
   const emailProps: fieldProps = {
@@ -80,17 +83,19 @@ export default function Register() {
   }
 
   const passwordProps: fieldProps = {
-    invalid: Boolean(errors.password),
-    id: 'password',
+    invalid: Boolean(errors.senha),
+    id: 'senha',
     placeholder: '******',
     type: 'password',
     label: 'Senha',
-    register: register('password', {
-      required: { value: true, message: '*campo obrigatório' }
+    register: register('senha', {
+      required: { value: true, message: '*campo obrigatório' },
+      minLength: {
+        value: 8,
+        message: 'A senha deve conter ao menos 8 caracteres'
+      }
     }),
-    errors: [
-      { text: errors.password?.message, condition: Boolean(errors.password) }
-    ]
+    errors: [{ text: errors.senha?.message, condition: Boolean(errors.senha) }]
   }
 
   const confirmPasswordProps: fieldProps = {
@@ -102,7 +107,7 @@ export default function Register() {
     register: register('confirmPassword', {
       required: { value: true, message: '*campo obrigatório' },
       validate: (value: string) => {
-        const password = getValues('password')
+        const password = getValues('senha')
 
         return value === password
       }
@@ -154,38 +159,47 @@ export default function Register() {
             data-testid="register-form"
           >
             {formFields.map(field => (
-              <FormInput
-                key={field.id}
-                id={field.id}
-                type={field.type}
-                isInvalid={field.invalid}
-                placeholder={field.placeholder}
-                label={{
-                  text: field.label,
-                  props: {
-                    fontSize: { base: '14px', md: '16px' },
-                    htmlFor: field.id
-                  }
-                }}
-                register={field.register}
-                errors={field.errors}
-              />
+              <>
+                <FormInput
+                  key={field.id}
+                  id={field.id}
+                  type={field.type}
+                  isInvalid={field.invalid}
+                  placeholder={field.placeholder}
+                  label={{
+                    text: field.label,
+                    props: {
+                      fontSize: { base: '14px', md: '16px' },
+                      htmlFor: field.id
+                    }
+                  }}
+                  register={field.register}
+                  errors={field.errors}
+                />
+                {field.id === 'senha' && (
+                  <PasswordStrengthBar
+                    style={{ marginTop: '10px' }}
+                    password={watch('senha')}
+                    scoreWords={[
+                      'muito fraco',
+                      'fraco',
+                      'mediano',
+                      'forte',
+                      'muito forte'
+                    ]}
+                    shortScoreWord="senha muito curta"
+                    minLength={8}
+                  />
+                )}
+              </>
             ))}
             <Center mt="32px" flexDir="column" mb="16px">
-              <Button
-                type="submit"
-                color="initial.white"
-                bgColor="primary.dark"
-                isLoading={status === 'loading'}
-                mb="8px"
-                _hover={{ bgColor: 'primary.default' }}
-                fontSize={{ base: '14px', md: '16px' }}
-              >
+              <Button type="submit" isLoading={status.status === 'loading'}>
                 Cadastrar
               </Button>
-              {status === 'failure' && (
+              {status.status === 'failure' && (
                 <Text mt="8px" color="info.error" fontSize="12px">
-                  erro ao criar novo usuário
+                  {status.message || 'erro ao criar novo usuário'}
                 </Text>
               )}
               <RouterLink to="/login">

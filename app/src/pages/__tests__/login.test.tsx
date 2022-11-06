@@ -64,7 +64,7 @@ describe('Página Login', () => {
 
     const loginForm = {
       email: 'teste@teste.com',
-      password: 'pass@1234'
+      senha: 'pass@1234'
     }
 
     userEvent.type(screen.getByLabelText('Email'), 'teste@teste.com')

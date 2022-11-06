@@ -10,8 +10,7 @@ function* createUser(action: PayloadAction<CreateUser>) {
     yield call(() => UserService.create(action.payload))
 
     yield put(actions.createSuccess())
-  } catch (error) {
-    console.warn(error)
-    yield put(actions.createFailure())
+  } catch (error: any) {
+    yield put(actions.createFailure(error?.response?.data))
   }
 }

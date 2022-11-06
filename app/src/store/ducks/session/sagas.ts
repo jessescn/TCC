@@ -29,8 +29,7 @@ export function* authUser(action: PayloadAction<Credentials>) {
     localStorage.setItem('session_user', JSON.stringify(data.data))
 
     yield put(actions.loginSuccess(data.data))
-  } catch (error) {
-    console.warn(error)
-    yield put(actions.loginFailure())
+  } catch (error: any) {
+    yield put(actions.loginFailure(error?.response?.data))
   }
 }

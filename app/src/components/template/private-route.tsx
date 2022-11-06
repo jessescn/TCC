@@ -3,17 +3,17 @@ import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
 import { User } from 'domain/entity/user'
 import { UserModel } from 'domain/models/user'
-import { Roles } from 'domain/types/actors'
+import { ProfileType } from 'domain/types/actors'
 import { useStore } from 'hooks/useStore'
 import { Navigate, useLocation } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
 type Props = {
   children: JSX.Element
-  requiredRoles?: Roles[]
+  allowedProfiles?: ProfileType[]
 }
 
-function PrivateRoute({ children, requiredRoles = [] }: Props) {
+function PrivateRoute({ children, allowedProfiles = [] }: Props) {
   const location = useLocation()
 
   useStore(['tipoProcedimento', 'formulario', 'procedimento'])
@@ -28,10 +28,13 @@ function PrivateRoute({ children, requiredRoles = [] }: Props) {
 
   const userModel: UserModel = JSON.parse(user)
 
-  const haveRequiredRoles = User.haveAllRoles(userModel, requiredRoles)
+  const isAllowed =
+    allowedProfiles.length > 0
+      ? User.includesInProfiles(userModel, allowedProfiles)
+      : true
 
-  if (!haveRequiredRoles) {
-    return <Navigate to="/" state={{ from: location }} replace />
+  if (!isAllowed) {
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
 
   function closeSidebar() {

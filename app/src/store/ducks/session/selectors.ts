@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { Roles } from 'domain/types/actors'
+import { ProfileType } from 'domain/types/actors'
 import { State } from '..'
 
 export const getRoot = (state: State) => {
@@ -16,7 +16,7 @@ export const getAuthStatus = createSelector([getRoot], state => {
 
 export const is = createSelector(
   [getCurrentUser],
-  currentUser => (role: Roles) => {
-    return currentUser?.roles.includes(role)
+  currentUser => (profile: ProfileType) => {
+    return currentUser?.profile.nome === profile
   }
 )

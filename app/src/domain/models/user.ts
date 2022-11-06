@@ -1,10 +1,19 @@
-import { Roles } from 'domain/types/actors'
+import { ProfileType } from 'domain/types/actors'
 
 export interface UserModel {
   id: number
   nome: string
   email: string
-  roles: Roles[]
+  profile: ProfileModel
+  publico: string[]
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface ProfileModel {
+  id: number
+  nome: ProfileType
+  permissoes: Record<string, string>
   createdAt?: string
   updatedAt?: string
 }

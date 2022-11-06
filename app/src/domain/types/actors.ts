@@ -1,4 +1,4 @@
-export type Roles =
+export type ProfileType =
   | 'usuario'
   | 'admin'
   | 'coordenador'

@@ -49,7 +49,7 @@ export default function Routes() {
       <Route
         path="/formularios"
         element={
-          <PrivateRoute requiredRoles={['admin']}>
+          <PrivateRoute allowedProfiles={['admin']}>
             <ListaFormularios />
           </PrivateRoute>
         }
@@ -57,7 +57,7 @@ export default function Routes() {
       <Route
         path="/formularios/edit"
         element={
-          <PrivateRoute requiredRoles={['admin']}>
+          <PrivateRoute allowedProfiles={['admin']}>
             <DetalhesFormulario />
           </PrivateRoute>
         }
@@ -65,7 +65,7 @@ export default function Routes() {
       <Route
         path="/tipo-procedimentos"
         element={
-          <PrivateRoute requiredRoles={['admin']}>
+          <PrivateRoute allowedProfiles={['admin']}>
             <ListaTipoProcedimentos />
           </PrivateRoute>
         }
@@ -73,7 +73,7 @@ export default function Routes() {
       <Route
         path="/tipo-procedimentos/edit"
         element={
-          <PrivateRoute requiredRoles={['admin']}>
+          <PrivateRoute allowedProfiles={['admin']}>
             <DetalhesTipoProcedimentos />
           </PrivateRoute>
         }

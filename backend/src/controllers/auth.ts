@@ -28,13 +28,13 @@ export class AuthController {
       const [actor] = await this.service.findAll({ email: data.email })
 
       if (!actor) {
-        throw new NotFoundError()
+        throw new NotFoundError('Usuário não existe')
       }
 
       const isPasswordValid = await isValidPassword(data.senha, actor.senha)
 
       if (!isPasswordValid) {
-        throw new UnauthorizedError()
+        throw new UnauthorizedError('Email ou senha inválidos')
       }
 
       const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY)
@@ -50,7 +50,7 @@ export class AuthController {
       const { actor } = request
 
       if (!actor) {
-        throw new UnauthorizedError('invalid token')
+        throw new UnauthorizedError('token inválido')
       }
 
       response.json(request.actor)

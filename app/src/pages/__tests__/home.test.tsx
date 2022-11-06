@@ -6,6 +6,8 @@ describe('Página Home', () => {
   test('deve renderizar os componentes corretamente', () => {
     render(<Home />)
 
-    expect(screen.getByText('Computação UFCG')).toBeInTheDocument()
+    expect(
+      screen.getByText('Novo Sistema de Procedimentos da Pós-Graduacão')
+    ).toBeInTheDocument()
   })
 })

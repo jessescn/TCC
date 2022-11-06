@@ -34,19 +34,6 @@ export default function Home() {
           >
             Novo Sistema de Procedimentos da Pós-Graduacão
           </Text>
-          <Text my="16px" textAlign="justify" fontSize="14px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a
-            semper tortor. Fusce ut laoreet dui, sed ultricies mauris. Nulla ut
-            elementum leo, non suscipit mi. Duis posuere euismod tempor. Donec
-            faucibus sed lectus ut imperdiet. In vitae elementum risus, vitae
-            maximus tortor. Aliquam erat volutpat. Mauris rhoncus suscipit nisl
-            in cursus. Maecenas facilisis velit nibh, ac vestibulum ligula
-            facilisis sit amet. Mauris nec ipsum tortor. Aliquam erat volutpat.
-            Vivamus pulvinar velit ut risus malesuada sagittis. Aliquam in lacus
-            in risus luctus egestas sed ac tellus. Cras sit amet risus non
-            tortor eleifend placerat. Aliquam fringilla ligula at facilisis
-            varius.
-          </Text>
         </Box>
       </Box>
     </Screen>

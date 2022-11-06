@@ -3,9 +3,9 @@ import { UserModel } from '../domain/models/user'
 import { httpClient } from './config'
 
 export type CreateUser = {
-  name: string
+  nome: string
   email: string
-  password: string
+  senha: string
 }
 
 export const UserService = {

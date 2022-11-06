@@ -1,12 +1,14 @@
 import '@fontsource/inter'
+import React from 'react'
 import PageWrapper from 'components/template/page-wrapper'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
 import Routes from './routes'
 
-const root = createRoot(document.getElementById('root') as HTMLElement)
-
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
-  <PageWrapper>
-    <Routes />
-  </PageWrapper>
+  <React.StrictMode>
+    <PageWrapper>
+      <Routes />
+    </PageWrapper>
+  </React.StrictMode>
 )

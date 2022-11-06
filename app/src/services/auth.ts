@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios'
 import { UserModel } from '../domain/models/user'
 
 export type Credentials = {
-  password: string
+  senha: string
   email: string
 }
 

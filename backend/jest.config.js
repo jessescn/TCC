@@ -3,13 +3,11 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   collectCoverage: true,
-  setupFiles: [
-    "<rootDir>/jest/config.ts"
-  ],
+  setupFiles: ['<rootDir>/jest/config.ts'],
   rootDir: './src',
   globals: {
-      "ts-jest": {
-        "compiler": "ttypescript"
-      }
+    'ts-jest': {
+      compiler: 'ttypescript'
     }
+  }
 }

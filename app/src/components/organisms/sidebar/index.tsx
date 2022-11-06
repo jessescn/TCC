@@ -131,7 +131,7 @@ const Sidebar = () => {
               <NavSubItems
                 icon={BsListCheck}
                 title="Coordenação"
-                roles={['admin', 'coordenador']}
+                profiles={['admin', 'coordenador']}
                 items={[
                   {
                     title: 'Todos os procedimentos',
@@ -149,19 +149,19 @@ const Sidebar = () => {
                 icon={FaVoteYea}
                 title="Homologação"
                 url="/colegiado/procedimentos"
-                roles={['admin', 'colegiado']}
+                profiles={['admin', 'colegiado']}
               />
               <NavItem
                 icon={AiOutlineFileAdd}
                 title="Tipo de Procedimentos"
                 url="/tipo-procedimentos"
-                roles={['admin']}
+                profiles={['admin']}
               />
               <NavItem
                 icon={AiOutlineForm}
                 title="Formulários"
                 url="/formularios"
-                roles={['admin']}
+                profiles={['admin']}
               />
             </Box>
           </Flex>

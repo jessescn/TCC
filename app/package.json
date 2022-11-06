@@ -26,6 +26,7 @@
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.30.0",
     "react-icons": "^4.3.1",
+    "react-password-strength-bar": "^0.4.1",
     "react-redux": "^8.0.1",
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
