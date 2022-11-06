@@ -1,3 +1,4 @@
+import Actor from 'domain/models/actor'
 import Formulario, {
   FormularioAttributes,
   FormularioModel
@@ -27,7 +28,13 @@ describe('Formulario Repository', () => {
 
       expect(result).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
-        where: { deleted: false }
+        where: { deleted: false },
+        include: [
+          {
+            model: Actor,
+            attributes: ['nome']
+          }
+        ]
       })
     })
 
@@ -37,7 +44,13 @@ describe('Formulario Repository', () => {
       await sut.findAll(query)
 
       expect(Formulario.findAll).toBeCalledWith({
-        where: { deleted: false, ...query }
+        where: { deleted: false, ...query },
+        include: [
+          {
+            model: Actor,
+            attributes: ['nome']
+          }
+        ]
       })
     })
   })

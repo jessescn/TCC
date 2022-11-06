@@ -1,17 +1,5 @@
 version: '3'
 services:
-  app:
-    image: 'node:latest'
-    build: .
-    ports:
-      - 8000:8000
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    links:
-      - postgres
-
   postgres:
     image: 'postgres:latest'
     ports:

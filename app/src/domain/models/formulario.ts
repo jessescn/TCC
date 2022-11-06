@@ -26,5 +26,5 @@ export interface FormularioModel {
   createdAt?: string
   updatedAt?: string
   createdBy?: number
-  user?: UserModel
+  actor?: UserModel
 }

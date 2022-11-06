@@ -178,6 +178,7 @@ export default function Register() {
                 />
                 {field.id === 'senha' && (
                   <PasswordStrengthBar
+                    key="password-strenght"
                     style={{ marginTop: '10px' }}
                     password={watch('senha')}
                     scoreWords={[

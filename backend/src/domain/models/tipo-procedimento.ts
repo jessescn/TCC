@@ -40,14 +40,14 @@ export interface TipoProcedimentoAttributes
   status: CreationOptional<TipoProcedimentoStatus>
   dataInicio: CreationOptional<string>
   dataFim: CreationOptional<string>
-  escopo: string
+  escopo: CreationOptional<string>
   formularios: number[]
   publicos: string[]
   colegiado: boolean
-  deleted: boolean
-  createdAt?: Date
-  updatedAt?: Date
-  createdBy?: number
+  deleted: CreationOptional<boolean>
+  createdAt?: CreationOptional<Date>
+  updatedAt?: CreationOptional<Date>
+  createdBy?: CreationOptional<number>
 }
 
 const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
@@ -63,7 +63,7 @@ const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
       allowNull: false
     },
     descricao: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING(1000)
     },
     status: {
       type: DataTypes.STRING,

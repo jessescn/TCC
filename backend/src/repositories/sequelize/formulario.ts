@@ -1,3 +1,4 @@
+import Actor from 'domain/models/actor'
 import Formulario, {
   CampoFormulario,
   FormularioAttributes,
@@ -25,8 +26,16 @@ export type NewFormulario = {
 
 export class FormularioRepository implements IRepository {
   findAll = async (query: FormularioQuery = {}) => {
+    console.log({ query })
+
     const formularios = await Formulario.findAll({
-      where: { deleted: false, ...query }
+      where: { deleted: false, ...query },
+      include: [
+        {
+          model: Actor,
+          attributes: ['nome']
+        }
+      ]
     })
 
     return formularios

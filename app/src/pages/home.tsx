@@ -1,7 +1,10 @@
 import { Box, Center, Image, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
+import { useStore } from 'hooks/useStore'
 
 export default function Home() {
+  useStore(['tipoProcedimento'])
+
   return (
     <Screen py="24px" height="fit-content">
       <Box

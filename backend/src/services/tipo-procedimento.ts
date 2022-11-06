@@ -37,7 +37,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   private async checkIfFormulariosExists(ids: number[]) {
     if (ids.length === 0) return
 
-    const formularios = await this.formularioRepo.findAll({ id: { in: ids } })
+    const formularios = await this.formularioRepo.findAll({ id: 1 })
 
     if (formularios.length !== ids.length) {
       throw new BadRequestError()
