@@ -28,7 +28,7 @@ describe('Formulario Repository', () => {
 
       expect(result).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
-        where: { deleted: false },
+        where: {},
         include: [
           {
             model: Actor,
@@ -44,7 +44,7 @@ describe('Formulario Repository', () => {
       await sut.findAll(query)
 
       expect(Formulario.findAll).toBeCalledWith({
-        where: { deleted: false, ...query },
+        where: { ...query },
         include: [
           {
             model: Actor,

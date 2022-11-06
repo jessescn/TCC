@@ -27,4 +27,5 @@ export interface FormularioModel {
   updatedAt?: string
   createdBy?: number
   actor?: UserModel
+  deleted: boolean
 }

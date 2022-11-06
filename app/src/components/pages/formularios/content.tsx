@@ -1,6 +1,14 @@
-import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  Checkbox,
+  Divider,
+  Flex,
+  Icon,
+  Text
+} from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { MdSearchOff } from 'react-icons/md'
 
 import FormulariosTable from 'components/pages/formularios/table'
@@ -11,6 +19,7 @@ import { Button } from 'components/atoms/button'
 export function Content() {
   const navigate = useNavigate()
 
+  const [includeDeleted, setIncludeDeleted] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [term, setTerm] = useState('')
 
@@ -22,6 +31,12 @@ export function Content() {
     setCurrentPage(1)
     setTerm(termo)
   }
+
+  const formulariosToRender = useMemo(() => {
+    return includeDeleted
+      ? formularios
+      : formularios.filter(form => !form.deleted)
+  }, [formularios])
 
   return (
     <Box
@@ -48,7 +63,7 @@ export function Content() {
           maxW="365px"
           height="35px"
           fontSize="14px"
-          placeholder="Ex.Busca por ID, nome, autor e status"
+          placeholder="Buscar por ID ou nome"
           onChange={e => handleSearch(e.target.value)}
           label={{
             text: 'Buscar formulários',
@@ -67,7 +82,16 @@ export function Content() {
           Novo Formulário
         </Button>
       </Flex>
-      {formularios.length > 0 ? (
+      <Flex my="10px">
+        <Checkbox
+          size="sm"
+          isChecked={includeDeleted}
+          onChange={e => setIncludeDeleted(e.target.checked)}
+        >
+          <Text fontSize="14px">Incluir deletados</Text>
+        </Checkbox>
+      </Flex>
+      {formulariosToRender.length > 0 ? (
         <Box
           mt="24px"
           borderColor="secondary.dark"
@@ -76,7 +100,7 @@ export function Content() {
           p="16px"
         >
           <FormulariosTable
-            formularios={formularios}
+            formularios={formulariosToRender}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />

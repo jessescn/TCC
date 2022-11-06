@@ -25,12 +25,12 @@ export const getFormulariosBySearch = createSelector(
       forms.filter(form => {
         if (search.localeCompare(String(form.id)) === 0) return true
 
-        const terms = search.split(' ')
-        let includes = false
+        const terms = search.split(' ').filter(term => term.trim() !== '')
+        let includes = true
 
         terms.forEach(term => {
-          if (form.nome.includes(term)) {
-            includes = true
+          if (!form.nome.toLowerCase().includes(term.toLowerCase())) {
+            includes = false
           }
         })
 
