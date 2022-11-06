@@ -18,6 +18,7 @@ import ListaHomologacao from 'pages/colegiado/lista-homologacao'
 import ProcedimentosCoordenacao from 'pages/coordenador/procedimentos'
 import EstatisticasProcedimento from 'pages/coordenador/estatisticas'
 import AnaliseProcedimento from 'pages/coordenador/analise-procedimento'
+import NotFound from 'pages/404'
 
 export default function Routes() {
   return (
@@ -49,7 +50,7 @@ export default function Routes() {
       <Route
         path="/formularios"
         element={
-          <PrivateRoute allowedProfiles={['admin']}>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <ListaFormularios />
           </PrivateRoute>
         }
@@ -57,7 +58,7 @@ export default function Routes() {
       <Route
         path="/formularios/edit"
         element={
-          <PrivateRoute allowedProfiles={['admin']}>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <DetalhesFormulario />
           </PrivateRoute>
         }
@@ -65,7 +66,7 @@ export default function Routes() {
       <Route
         path="/tipo-procedimentos"
         element={
-          <PrivateRoute allowedProfiles={['admin']}>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <ListaTipoProcedimentos />
           </PrivateRoute>
         }
@@ -73,7 +74,7 @@ export default function Routes() {
       <Route
         path="/tipo-procedimentos/edit"
         element={
-          <PrivateRoute allowedProfiles={['admin']}>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <DetalhesTipoProcedimentos />
           </PrivateRoute>
         }
@@ -97,7 +98,7 @@ export default function Routes() {
       <Route
         path="/colegiado/procedimentos/:id"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedProfiles={['coordenacao', 'colegiado']}>
             <HomologarProcedimento />
           </PrivateRoute>
         }
@@ -105,7 +106,7 @@ export default function Routes() {
       <Route
         path="/colegiado/procedimentos"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedProfiles={['coordenacao', 'colegiado']}>
             <ListaHomologacao />
           </PrivateRoute>
         }
@@ -113,7 +114,7 @@ export default function Routes() {
       <Route
         path="/coordenacao/procedimentos"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <ProcedimentosCoordenacao />
           </PrivateRoute>
         }
@@ -121,7 +122,7 @@ export default function Routes() {
       <Route
         path="/coordenacao/procedimentos/:id"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <AnaliseProcedimento />
           </PrivateRoute>
         }
@@ -129,7 +130,7 @@ export default function Routes() {
       <Route
         path="/coordenacao/estatisticas"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedProfiles={['coordenacao']}>
             <EstatisticasProcedimento />
           </PrivateRoute>
         }
@@ -142,6 +143,7 @@ export default function Routes() {
           </PrivateRoute>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </RoutesWrapper>
   )
 }

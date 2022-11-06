@@ -19,19 +19,23 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
 
   const user = localStorage.getItem('session_user')
 
+  console.log({ user })
+
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
   const userModel: UserModel = JSON.parse(user)
+  const isAdmin = userModel.profile.nome === 'admin'
 
   const isAllowed =
-    allowedProfiles.length > 0
+    isAdmin ||
+    (allowedProfiles.length > 0
       ? User.includesInProfiles(userModel, allowedProfiles)
-      : true
+      : true)
 
   if (!isAllowed) {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    return <Navigate to="/404" state={{ from: location }} replace />
   }
 
   function closeSidebar() {

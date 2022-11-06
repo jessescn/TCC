@@ -131,7 +131,7 @@ const Sidebar = () => {
               <NavSubItems
                 icon={BsListCheck}
                 title="Coordenação"
-                profiles={['admin', 'coordenador']}
+                profiles={['admin', 'coordenacao']}
                 items={[
                   {
                     title: 'Todos os procedimentos',

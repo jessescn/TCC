@@ -1,6 +1,6 @@
 export type ProfileType =
   | 'usuario'
   | 'admin'
-  | 'coordenador'
+  | 'coordenacao'
   | 'secretaria'
   | 'colegiado'

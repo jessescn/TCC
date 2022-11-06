@@ -8,6 +8,7 @@ type Status = 'pristine' | 'loading' | 'success' | 'failure'
 export type State = {
   tipoProcedimentos: TipoProcedimentoModel[]
   status: Status
+  statusUpdate: Status
 }
 
 export type UpdatePayload = {
@@ -19,7 +20,8 @@ export type CreatePayload = NovoTipoProcedimento
 
 export const initialState: State = {
   tipoProcedimentos: [],
-  status: 'pristine'
+  status: 'pristine',
+  statusUpdate: 'pristine'
 }
 
 const reducers = {
@@ -50,13 +52,13 @@ const reducers = {
     state.status = 'failure'
   },
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
-    state.status = 'loading'
+    state.statusUpdate = 'loading'
   },
   updateSuccess: (
     state: State,
     action: PayloadAction<TipoProcedimentoModel>
   ) => {
-    state.status = 'success'
+    state.statusUpdate = 'success'
 
     const indexof = state.tipoProcedimentos
       .map(elm => elm.id)
@@ -64,7 +66,7 @@ const reducers = {
     state.tipoProcedimentos.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
-    state.status = 'failure'
+    state.statusUpdate = 'failure'
   },
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'
@@ -80,6 +82,10 @@ const reducers = {
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'
+  },
+  resetStatus: (state: State) => {
+    state.status = 'pristine'
+    state.statusUpdate = 'pristine'
   }
 }
 

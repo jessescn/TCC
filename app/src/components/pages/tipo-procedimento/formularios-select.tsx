@@ -24,7 +24,7 @@ export default function FormularioSelect({ tipoProcedimento }: Props) {
 
   const formOptions = formularios.map(formulario => ({
     value: formulario.id,
-    label: formulario.nome
+    label: `id: ${formulario.id} - ${formulario.nome}`
   }))
 
   useEffect(() => {
@@ -60,6 +60,11 @@ export default function FormularioSelect({ tipoProcedimento }: Props) {
         value={selectedFormOptions}
         onChange={value => setSelectedFormOptions(value as any)}
       />
+      {selectedFormOptions.length === 0 && (
+        <Text mt="6px" fontSize="10px" color="#E53E3E">
+          Selecione ao menos um formulário
+        </Text>
+      )}
     </Box>
   )
 }
