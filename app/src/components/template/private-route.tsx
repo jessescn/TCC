@@ -19,8 +19,6 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
 
   const user = localStorage.getItem('session_user')
 
-  console.log({ user })
-
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }

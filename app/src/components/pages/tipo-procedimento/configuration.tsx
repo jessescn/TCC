@@ -7,6 +7,7 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
+import { ErrorMessage } from 'components/molecules/forms/error-message'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { useFormContext } from 'react-hook-form'
 import { formatISODate } from 'utils/format'
@@ -23,14 +24,6 @@ const Configuration = ({ tipoProcedimento }: Props) => {
     formState: { errors }
   } = useFormContext()
 
-  const renderErrorMessage = (fieldName: string) => {
-    return !errors[fieldName] ? null : (
-      <Text mt="6px" fontSize="10px" color="#E53E3E">
-        {errors[fieldName]?.message}
-      </Text>
-    )
-  }
-
   return (
     <Stack spacing="24px">
       <Box alignItems="center">
@@ -45,7 +38,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
             required: { value: true, message: 'Nome obrigatório' }
           })}
         />
-        {renderErrorMessage('nome')}
+        <ErrorMessage errors={errors} fieldName="nome" />
       </Box>
       <Box>
         <Text fontSize="14px" mb="8px" fontWeight="bold">

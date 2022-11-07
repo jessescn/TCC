@@ -12,11 +12,12 @@ import {
 } from '@chakra-ui/react'
 import { FocusableElement } from '@chakra-ui/utils'
 import { Button as CustomButton } from 'components/atoms/button'
+import { ErrorMessage } from 'components/molecules/forms/error-message'
 import { FormularioModel } from 'domain/models/formulario'
 import { useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
-import { DuplicateFormModal } from './duplcate-modal'
+import { DuplicateFormModal } from './duplicate-modal'
 import EditForm from './edit-form'
 import { Footer } from './footer'
 
@@ -25,7 +26,11 @@ type Props = {
 }
 
 export default function Content({ formulario }: Props) {
-  const { register, reset } = useFormContext()
+  const {
+    register,
+    reset,
+    formState: { errors }
+  } = useFormContext()
 
   const [showGeneral, setShowGeneral] = useState(true)
   const [showForm, setShowForm] = useState(true)
@@ -62,11 +67,12 @@ export default function Content({ formulario }: Props) {
               />
             }
           >
-            Configuracões Gerais
+            Configurações Gerais
           </Button>
           <CustomButton
+            size="sm"
             fontSize="14px"
-            onClick={() => duplicateModalControls.onOpen()}
+            onClick={duplicateModalControls.onOpen}
           >
             Duplicar formulário
           </CustomButton>
@@ -79,13 +85,17 @@ export default function Content({ formulario }: Props) {
               </Text>
               <Input
                 size="sm"
+                isInvalid={errors['nome']}
                 defaultValue={formulario?.nome}
-                {...register('nome', { required: true })}
+                {...register('nome', {
+                  required: { value: true, message: 'Nome obrigatório' }
+                })}
               />
+              <ErrorMessage errors={errors} fieldName="nome" />
             </Box>
             <Box>
               <Text fontSize="14px" mb="8px" fontWeight="bold">
-                Descricão:
+                Descrição:
               </Text>
               <Textarea
                 size="sm"
@@ -106,7 +116,10 @@ export default function Content({ formulario }: Props) {
             <Icon as={showForm ? MdOutlineExpandLess : MdOutlineExpandMore} />
           }
         >
-          Configuracão dos Campos
+          Configuração dos Campos
+          <Text fontSize="12px" fontWeight="normal">
+            (Ao menos um campo é obrigatório)
+          </Text>
         </Button>
         <Collapse in={showForm} animateOpacity>
           <EditForm />

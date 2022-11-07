@@ -43,7 +43,7 @@ export const DuplicateFormModal = ({
 
   const formOptions = formularios.map(formulario => ({
     value: formulario,
-    label: formulario.nome
+    label: `${formulario.nome} (id:${formulario.id})`
   }))
 
   const handleConfirm = () => {

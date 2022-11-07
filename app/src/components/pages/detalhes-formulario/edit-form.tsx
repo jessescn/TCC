@@ -1,9 +1,10 @@
 import { Box, Button, Flex, Icon, Stack } from '@chakra-ui/react'
+import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
+import lodash from 'lodash'
 import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlineClear, AiOutlinePlus } from 'react-icons/ai'
 import Campo, { CampoFormulario } from './campo'
-import lodash from 'lodash'
 
 export default function EditForm() {
   const { setValue, watch } = useFormContext()
@@ -20,6 +21,10 @@ export default function EditForm() {
     }
 
     setValue('campos', [...campos, novoCampo])
+  }, [campos, setValue])
+
+  const handleClearAll = useCallback(() => {
+    setValue('campos', [])
   }, [campos, setValue])
 
   const handleDuplicate = useCallback(
@@ -68,31 +73,52 @@ export default function EditForm() {
   }
 
   return (
-    <Box>
-      <Flex justifyContent="flex-end" my="8px">
-        <Button
-          bgColor="primary.dark"
-          _hover={{ bgColor: 'primary.default' }}
-          color="initial.white"
-          aria-label=""
-          size="xs"
-          leftIcon={<Icon as={AiOutlinePlus} />}
-          onClick={handleAddCampo}
-        >
-          Adicionar Campo
-        </Button>
-      </Flex>
-      <Stack spacing="24px">
-        {campos.map(campo => (
-          <Campo
-            key={campo.ordem}
-            campo={campo}
-            onDelete={handleDelete}
-            onDuplicate={handleDuplicate}
-            onUpdate={handleUpdate}
-          />
-        ))}
-      </Stack>
-    </Box>
+    <>
+      <Box>
+        <Flex justifyContent="space-between" my="8px">
+          <SimpleConfirmationButton
+            onCancelButtonText="cancelar"
+            onConfirmButtonText="Apagar"
+            onConfirm={handleClearAll}
+            title="Apagar Todos"
+            content="Deseja apagar todos os campos?"
+            style={{
+              bgColor: 'primary.dark',
+              _hover: { bgColor: 'primary.default' },
+              color: 'initial.white',
+              'aria-label': '',
+              size: 'xs',
+              leftIcon: <Icon as={AiOutlineClear} />,
+              disabled: campos.length === 0
+            }}
+          >
+            Limpar tudo
+          </SimpleConfirmationButton>
+          <Button
+            bgColor="primary.dark"
+            _hover={{ bgColor: 'primary.default' }}
+            color="initial.white"
+            aria-label=""
+            size="xs"
+            leftIcon={<Icon as={AiOutlinePlus} />}
+            onClick={handleAddCampo}
+            ml="8px"
+          >
+            Adicionar Campo
+          </Button>
+        </Flex>
+        <Stack spacing="24px">
+          {campos.map(campo => (
+            <Campo
+              key={campo.ordem}
+              campo={campo}
+              onDelete={handleDelete}
+              onDuplicate={handleDuplicate}
+              onUpdate={handleUpdate}
+            />
+          ))}
+        </Stack>
+      </Box>
+    </>
   )
 }
