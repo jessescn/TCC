@@ -1,24 +1,22 @@
-import { Box, Button, Divider, Flex } from '@chakra-ui/react'
+import { Box, Divider } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-import Configuration from 'components/pages/tipo-procedimento/configuration'
-import Header from 'components/pages/tipo-procedimento/header'
+import Configuration from 'components/pages/detalhes-tipo-procedimento/configuration'
+import Header from 'components/pages/detalhes-tipo-procedimento/header'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { NovoTipoProcedimento } from 'services/tipo-procedimentos'
-import { formatISODate } from 'utils/format'
+import { formatISODate, formatISODateToLocalTime } from 'utils/format'
+import Footer from './footer'
 
 export default function Content() {
-  const navigate = useNavigate()
   const formControls = useForm()
 
   const [searchParams] = useSearchParams()
 
   const id = Number(searchParams.get('id'))
-
-  const status = useSelector(state => state.tipoProcedimento.statusUpdate)
 
   const loadForm = useRef(false)
   const tipoProcedimento = !isNaN(id)
@@ -33,8 +31,8 @@ export default function Content() {
     formControls.reset({
       ...tipoProcedimento,
       colegiado: String(tipoProcedimento.colegiado),
-      dataInicio: formatISODate(tipoProcedimento.dataInicio),
-      dataFim: formatISODate(tipoProcedimento.dataFim)
+      dataInicio: formatISODateToLocalTime(tipoProcedimento.dataInicio),
+      dataFim: formatISODateToLocalTime(tipoProcedimento.dataFim)
     })
     loadForm.current = true
   }, [tipoProcedimento])
@@ -92,16 +90,6 @@ export default function Content() {
     handleUpdate(data)
   }
 
-  useEffect(() => {
-    if (status === 'success') {
-      store.dispatch(actions.tipoProcedimento.resetStatus())
-      navigate('/tipo-procedimentos')
-    }
-  }, [status])
-
-  const formularios = formControls.watch('formularios', []) as number[]
-  const isTipoProcedimentoInvalido = (formularios || []).length === 0
-
   return (
     <Box
       w="100%"
@@ -117,31 +105,7 @@ export default function Content() {
           <Header tipo={tipoProcedimento} />
           <Divider my="24px" borderColor="secondary.dark" />
           <Configuration tipoProcedimento={tipoProcedimento} />
-          <Flex justifyContent="flex-end">
-            <Button
-              bgColor="initial.white"
-              borderColor="primary.dark"
-              borderWidth={1}
-              color="primary.dark"
-              size="sm"
-              mr="8px"
-              mt="16px"
-              onClick={() => navigate('/tipo-procedimentos')}
-            >
-              Voltar
-            </Button>
-            <Button
-              isLoading={status === 'loading'}
-              bgColor="primary.dark"
-              color="initial.white"
-              size="sm"
-              mt="16px"
-              type="submit"
-              isDisabled={isTipoProcedimentoInvalido}
-            >
-              Salvar
-            </Button>
-          </Flex>
+          <Footer tipoProcedimento={tipoProcedimento} />
         </form>
       </FormProvider>
     </Box>

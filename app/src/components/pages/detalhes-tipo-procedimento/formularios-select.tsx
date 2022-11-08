@@ -22,10 +22,12 @@ export default function FormularioSelect({ tipoProcedimento }: Props) {
 
   const formularios = useSelector(selectors.formulario.getFormularios)
 
-  const formOptions = formularios.map(formulario => ({
-    value: formulario.id,
-    label: `id: ${formulario.id} - ${formulario.nome}`
-  }))
+  const formOptions = formularios
+    .filter(formulario => !formulario.deleted)
+    .map(formulario => ({
+      value: formulario.id,
+      label: `id: ${formulario.id} - ${formulario.nome}`
+    }))
 
   useEffect(() => {
     if (

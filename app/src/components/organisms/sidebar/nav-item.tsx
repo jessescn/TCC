@@ -10,7 +10,6 @@ import {
 import { User } from 'domain/entity/user'
 import { ProfileType } from 'domain/types/actors'
 import { IconType } from 'react-icons'
-import { GrUserAdmin } from 'react-icons/gr'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 

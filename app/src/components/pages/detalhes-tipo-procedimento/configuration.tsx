@@ -10,7 +10,7 @@ import {
 import { ErrorMessage } from 'components/molecules/forms/error-message'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { useFormContext } from 'react-hook-form'
-import { formatISODate } from 'utils/format'
+import { formatISODateToLocalTime } from 'utils/format'
 import FormularioSelect from './formularios-select'
 import PublicosSelect from './publicos-select'
 
@@ -21,6 +21,7 @@ type Props = {
 const Configuration = ({ tipoProcedimento }: Props) => {
   const {
     register,
+    watch,
     formState: { errors }
   } = useFormContext()
 
@@ -88,10 +89,9 @@ const Configuration = ({ tipoProcedimento }: Props) => {
             size="sm"
             ml="8px"
             w="fit-content"
-            type="date"
-            defaultValue={formatISODate(
-              tipoProcedimento?.dataInicio || new Date().toISOString()
-            )}
+            type="datetime-local"
+            max={watch('dataFim')}
+            defaultValue={formatISODateToLocalTime(new Date().toISOString())}
             {...register('dataInicio')}
           />
         </Flex>
@@ -103,10 +103,9 @@ const Configuration = ({ tipoProcedimento }: Props) => {
             size="sm"
             ml="8px"
             w="fit-content"
-            type="date"
-            defaultValue={formatISODate(
-              tipoProcedimento?.dataFim || new Date().toISOString()
-            )}
+            type="datetime-local"
+            defaultValue={formatISODateToLocalTime(new Date().toISOString())}
+            min={watch('dataInicio')}
             {...register('dataFim')}
           />
         </Flex>

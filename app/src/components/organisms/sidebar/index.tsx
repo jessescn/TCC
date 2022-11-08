@@ -24,6 +24,7 @@ import NavItem from './nav-item'
 import NavSubItems from './nav-subitems'
 
 import { AiOutlineClose, AiOutlineFileAdd, AiOutlineForm } from 'react-icons/ai'
+import { User } from 'domain/entity/user'
 
 export const invisibleStyle = {
   '&::-webkit-scrollbar': {
@@ -43,6 +44,10 @@ const Sidebar = () => {
 
   const procedimentosAbertos = useSelector(
     selectors.tipoProcedimento.getTipoProcedimentosAbertos
+  ).filter(procedimento =>
+    currentUser
+      ? User.includesInPublicos(currentUser, procedimento.publicos)
+      : false
   )
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)

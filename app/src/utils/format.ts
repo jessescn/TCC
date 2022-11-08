@@ -5,3 +5,7 @@ export const formatDate = (date: string) => {
 export const formatISODate = (date?: string) => {
   return date ? new Date(date).toISOString().slice(0, 10) : ''
 }
+
+export const formatISODateToLocalTime = (date?: string) => {
+  return date ? new Date(date).toISOString().slice(0, 16) : ''
+}

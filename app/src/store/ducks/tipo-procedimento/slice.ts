@@ -9,6 +9,7 @@ export type State = {
   tipoProcedimentos: TipoProcedimentoModel[]
   status: Status
   statusUpdate: Status
+  statusCreate: Status
 }
 
 export type UpdatePayload = {
@@ -21,7 +22,8 @@ export type CreatePayload = NovoTipoProcedimento
 export const initialState: State = {
   tipoProcedimentos: [],
   status: 'pristine',
-  statusUpdate: 'pristine'
+  statusUpdate: 'pristine',
+  statusCreate: 'pristine'
 }
 
 const reducers = {
@@ -39,17 +41,17 @@ const reducers = {
     state.status = 'failure'
   },
   create: (state: State, action: PayloadAction<CreatePayload>) => {
-    state.status = 'loading'
+    state.statusCreate = 'loading'
   },
   createSuccess: (
     state: State,
     action: PayloadAction<TipoProcedimentoModel>
   ) => {
-    state.status = 'success'
+    state.statusCreate = 'success'
     state.tipoProcedimentos = [...state.tipoProcedimentos, action.payload]
   },
   createFailure: (state: State) => {
-    state.status = 'failure'
+    state.statusCreate = 'failure'
   },
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
     state.statusUpdate = 'loading'
@@ -86,6 +88,7 @@ const reducers = {
   resetStatus: (state: State) => {
     state.status = 'pristine'
     state.statusUpdate = 'pristine'
+    state.statusCreate = 'pristine'
   }
 }
 
