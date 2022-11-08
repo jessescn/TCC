@@ -38,7 +38,11 @@ export default function Form() {
       return
     }
 
-    const updatedForm: FormularioModel = { ...formulario, ...data }
+    const updatedForm: Partial<FormularioModel> = {
+      campos: data.campos ?? formulario.campos,
+      nome: data.nome ?? formulario.nome,
+      descricao: data.descricao ?? formulario.descricao
+    }
 
     store.dispatch(
       actions.formulario.update({ data: updatedForm, id: formulario.id })
