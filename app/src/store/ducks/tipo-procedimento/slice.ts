@@ -78,9 +78,13 @@ const reducers = {
     action: PayloadAction<TipoProcedimentoModel>
   ) => {
     state.status = 'success'
-    state.tipoProcedimentos = state.tipoProcedimentos.filter(
-      tipo => tipo.id !== action.payload.id
+    const idx = state.tipoProcedimentos.findIndex(
+      tipo => tipo.id === action.payload.id
     )
+
+    if (idx !== -1) {
+      state.tipoProcedimentos.splice(idx, 1, action.payload)
+    }
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'

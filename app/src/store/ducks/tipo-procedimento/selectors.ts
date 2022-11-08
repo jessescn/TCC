@@ -2,6 +2,8 @@ import { TipoProcedimento } from 'domain/entity/tipo-procedimento'
 import { createSelector } from '@reduxjs/toolkit'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { State } from '..'
+import { searchByKeys } from 'utils/search'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
 export const getRoot = (state: State) => {
   return state.tipoProcedimento
@@ -40,21 +42,12 @@ export const getTipoProcedimentosBySearch = createSelector(
   [getTipoProcedimentos],
   tipos => {
     return (search: string) =>
-      tipos.filter(tipo => {
-        if (search.localeCompare(String(tipo.id)) === 0) return true
-
-        if (search.includes(tipo.status)) return true
-
-        const terms = search.split(' ')
-        let includes = false
-
-        terms.forEach(term => {
-          if (tipo.nome.includes(term)) {
-            includes = true
-          }
-        })
-
-        return includes
-      })
+      tipos.filter(tipo =>
+        searchByKeys<TipoProcedimentoModel>(
+          tipo,
+          ['nome', 'id', 'status'],
+          search
+        )
+      )
   }
 )

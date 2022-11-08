@@ -1,6 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { searchByKeys } from 'utils/search'
 import { State } from '..'
 
 export const getRoot = (state: State) => {
@@ -22,20 +24,9 @@ export const getFormulariosBySearch = createSelector(
   [getFormularios],
   forms => {
     return (search: string) =>
-      forms.filter(form => {
-        if (search.localeCompare(String(form.id)) === 0) return true
-
-        const terms = search.split(' ').filter(term => term.trim() !== '')
-        let includes = true
-
-        terms.forEach(term => {
-          if (!form.nome.toLowerCase().includes(term.toLowerCase())) {
-            includes = false
-          }
-        })
-
-        return includes
-      })
+      forms.filter(form =>
+        searchByKeys<FormularioModel>(form, ['nome', 'id'], search)
+      )
   }
 )
 

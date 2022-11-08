@@ -1,4 +1,12 @@
-import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  Checkbox,
+  Divider,
+  Flex,
+  Icon,
+  Text
+} from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
 import FormInput from 'components/molecules/forms/input'
 import { useState } from 'react'
@@ -12,6 +20,7 @@ export function Content() {
   const navigate = useNavigate()
 
   const [currentPage, setCurrentPage] = useState(1)
+  const [includeDeleted, setIncludeDeleted] = useState(false)
   const [term, setTerm] = useState('')
 
   const tipoProcedimentos = useSelector(state =>
@@ -22,6 +31,10 @@ export function Content() {
     setCurrentPage(1)
     setTerm(termo)
   }
+
+  const tipoProcedimentosToRender = includeDeleted
+    ? tipoProcedimentos
+    : tipoProcedimentos.filter(tipo => !tipo.deleted)
 
   return (
     <Box
@@ -69,10 +82,19 @@ export function Content() {
           Novo Tipo de Procedimento
         </Button>
       </Flex>
-      {tipoProcedimentos.length > 0 ? (
+      <Box mt="10px">
+        <Checkbox
+          size="sm"
+          checked={includeDeleted}
+          onChange={e => setIncludeDeleted(e.target.checked)}
+        >
+          Incluir deletados
+        </Checkbox>
+      </Box>
+      {tipoProcedimentosToRender.length > 0 ? (
         <Table
           currentPage={currentPage}
-          tipoProcedimentos={tipoProcedimentos}
+          tipoProcedimentos={tipoProcedimentosToRender}
           setCurrentPage={setCurrentPage}
         />
       ) : (

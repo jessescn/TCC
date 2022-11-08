@@ -35,7 +35,7 @@ export type CreateTipoProcedimento = {
 export class TipoProcedimentoRepository implements IRepository {
   findAll = async (query: TipoProcedimentoQuery = {}) => {
     const tipoProcedimentos = await TipoProcedimento.findAll({
-      where: { deleted: false, ...query },
+      where: { ...query },
       order: [['id', 'ASC']]
     })
 

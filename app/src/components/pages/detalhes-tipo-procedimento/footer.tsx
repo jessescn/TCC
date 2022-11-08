@@ -20,7 +20,8 @@ const Footer = ({ tipoProcedimento }: Props) => {
   const isLoading = statusCreate === 'loading' || statusUpdate === 'loading'
 
   const formularios = watch('formularios', []) as number[]
-  const isTipoProcedimentoInvalido = (formularios || []).length === 0
+  const isTipoProcedimentoInvalido =
+    (formularios || []).length === 0 || tipoProcedimento?.deleted
 
   useEffect(() => {
     if (statusUpdate === 'success' || statusCreate === 'success') {
