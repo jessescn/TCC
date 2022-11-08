@@ -47,7 +47,7 @@ export default function EscolhaMultiplaBuilder({
   return (
     <RadioGroup>
       {opcoes.map((campo, idx) => (
-        <Flex my="8px">
+        <Flex my="8px" key={`${campo}-${idx}`}>
           <Radio isDisabled size="lg" key={`${campo}-${idx}`} />
           <Input
             ml="8px"

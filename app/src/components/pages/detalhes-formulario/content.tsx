@@ -124,7 +124,7 @@ export default function Content({ formulario }: Props) {
         <Collapse in={showForm} animateOpacity>
           <EditForm />
         </Collapse>
-        <Footer />
+        <Footer formulario={formulario} />
       </Box>
       {duplicateModalControls.isOpen && (
         <DuplicateFormModal

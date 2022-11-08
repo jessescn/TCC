@@ -3,7 +3,6 @@ import {
   Icon,
   IconButton,
   Input,
-  List,
   ListItem,
   OrderedList,
   Radio,
@@ -132,8 +131,8 @@ export default function GrelhaMultiplaBuilder({
           />
         </Flex>
         {colunas.map((coluna: string, idx: number) => (
-          <Flex mb="16px" height="40px">
-            <Radio isDisabled size="lg" key={`${campo}-${idx}`} />
+          <Flex mb="16px" height="40px" key={`${coluna}-${idx}`}>
+            <Radio isDisabled size="lg" />
             <Input
               ml="8px"
               border="none"

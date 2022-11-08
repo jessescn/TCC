@@ -47,7 +47,7 @@ export default function CaixaVerificacaoBuilder({
   return (
     <CheckboxGroup>
       {caixas.map((campo, idx) => (
-        <Flex my="8px">
+        <Flex my="8px" key={`${campo}-${idx}`}>
           <Checkbox isDisabled size="lg" key={`${campo}-${idx}`} />
           <Input
             ml="8px"

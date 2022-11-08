@@ -8,8 +8,6 @@ type Props = {
 }
 
 export const ErrorMessage = ({ errors, fieldName }: Props) => {
-  console.log(errors)
-
   return !errors[fieldName] ? null : (
     <Text mt="6px" fontSize="10px" color="#E53E3E">
       {errors[fieldName]?.message}

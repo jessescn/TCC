@@ -131,8 +131,8 @@ export default function GrelhaVerificacaoBuilder({
           />
         </Flex>
         {colunas.map((coluna: string, idx: number) => (
-          <Flex mb="16px" height="40px">
-            <Checkbox isDisabled size="lg" key={`${campo}-${idx}`} />
+          <Flex mb="16px" height="40px" key={`${coluna}-${idx}`}>
+            <Checkbox isDisabled size="lg" />
             <Input
               ml="8px"
               border="none"
