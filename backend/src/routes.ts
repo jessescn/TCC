@@ -52,6 +52,10 @@ import { makeAuthTokenMiddleware } from 'factories/middlewares/authorization-fac
 const routes = Router()
 const authTokenMiddleware = makeAuthTokenMiddleware()
 
+routes.get('/', (req, res) => {
+  res.send('api is running!')
+})
+
 routes.post('/token', authController.token)
 routes.post('/users', createActorController.exec)
 
