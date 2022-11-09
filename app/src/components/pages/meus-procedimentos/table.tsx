@@ -14,12 +14,6 @@ type Props = {
 const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
   const navigate = useNavigate()
 
-  const sorted = [...procedimentos]
-
-  sorted.sort(function (a, b) {
-    return a.id - b.id
-  })
-
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
 
@@ -36,7 +30,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
     >
       <SimpleTable
         currentPage={currentPage}
-        totalPages={Math.ceil(sorted.length / 5)}
+        totalPages={Math.ceil(procedimentos.length / 5)}
         onChangePage={setCurrentPage}
         onClickRow={handleRedirect}
         columns={[
@@ -47,7 +41,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
           { content: 'Última atualizacão', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '15%' } }
         ]}
-        rows={sorted.map(procedimento => {
+        rows={procedimentos.map(procedimento => {
           const status = getCurrentStatus(procedimento)
 
           return [

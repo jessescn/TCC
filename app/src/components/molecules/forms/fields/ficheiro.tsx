@@ -10,9 +10,11 @@ import {
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoFicheiro } from 'domain/types/campo-tipos'
 import { useGetValorCampo } from 'hooks/useGetValorCampo'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { AiOutlineClose, AiOutlineUpload } from 'react-icons/ai'
 import { BaseCampoProps } from '.'
+import { ErrorWrapper } from './error-wrapper'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoFicheiro>
@@ -22,9 +24,12 @@ export function CampoFicheiro({
   formulario,
   ...props
 }: Props) {
+  const { clearErrors, setError } = useFormContext()
   const campo = useGetValorCampo(formulario, props.ordem)
 
   const addedFiles: File[] = campo?.valor || []
+
+  const fieldName = `field${props.ordem}`
 
   const ref = useRef<HTMLInputElement>(null)
   const { quantidade_arquivos } = props.configuracao_campo
@@ -46,13 +51,25 @@ export function CampoFicheiro({
     onUpdateResposta({ ordem: props.ordem, valor: filteredFiles })
   }
 
+  useEffect(() => {
+    if (!props.obrigatorio || campo === undefined) return
+
+    const isInvalid = addedFiles.length === 0
+
+    if (isInvalid) {
+      setError(fieldName, { message: 'Selecione ao menos um arquivo' })
+    } else {
+      clearErrors(fieldName)
+    }
+  }, [campo])
+
   return (
-    <Box>
+    <ErrorWrapper fieldName={fieldName}>
       <CampoParagrafo {...props} />
       {addedFiles.length > 0 && (
         <Box mt="16px">
-          {addedFiles.map(file => (
-            <Flex alignItems="center">
+          {addedFiles.map((file, idx) => (
+            <Flex alignItems="center" key={`${file.name}-${idx}`}>
               <Text lineHeight="32px" fontSize="12px">
                 {file.name}
               </Text>
@@ -89,6 +106,6 @@ export function CampoFicheiro({
         multiple={quantidade_arquivos > 1}
         maxW="fit-content"
       />
-    </Box>
+    </ErrorWrapper>
   )
 }

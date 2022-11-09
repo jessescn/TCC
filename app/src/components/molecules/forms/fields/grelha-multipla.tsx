@@ -12,7 +12,10 @@ import {
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoGrelhaMultipla } from 'domain/types/campo-tipos'
 import { useGetValorCampo } from 'hooks/useGetValorCampo'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { BaseCampoProps } from '.'
+import { ErrorWrapper } from './error-wrapper'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaMultipla>
@@ -22,9 +25,12 @@ export function CampoGrelhaMultipla({
   formulario,
   ...props
 }: Props) {
+  const { setError, clearErrors } = useFormContext()
   const campo = useGetValorCampo(formulario, props.ordem)
 
   const currentValue: number[][] = campo?.valor || []
+
+  const fieldName = `field${props.ordem}`
 
   const { colunas, linhas } = props.configuracao_campo
 
@@ -57,8 +63,20 @@ export function CampoGrelhaMultipla({
     return `[${value[0]},${value[1]}]`
   }
 
+  useEffect(() => {
+    if (!props.obrigatorio) return
+
+    const isInvalid = campo === undefined
+
+    if (isInvalid) {
+      setError(fieldName, { message: 'Selecione ao menos uma opção' })
+    } else {
+      clearErrors(fieldName)
+    }
+  }, [campo])
+
   return (
-    <Box>
+    <ErrorWrapper fieldName={fieldName}>
       <CampoParagrafo {...props} />
       <Table>
         <Thead>
@@ -92,6 +110,6 @@ export function CampoGrelhaMultipla({
           ))}
         </Tbody>
       </Table>
-    </Box>
+    </ErrorWrapper>
   )
 }

@@ -19,14 +19,16 @@ export default function Footer({
   const navigate = useNavigate()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const submitStatus = useSelector(state => state.procedimento.statusSubmit)
+  const isLoading = submitStatus === 'loading'
 
   const SubmitButton = (
     <Button
       bgColor="primary.dark"
       color="initial.white"
-      display="block"
       size="sm"
       onClick={onOpen}
+      isLoading={isLoading}
+      loadingText="Submetendo"
     >
       Submeter Procedimento
     </Button>
@@ -67,7 +69,7 @@ export default function Footer({
             color="primary.dark"
             size="sm"
             mr="8px"
-            isLoading={submitStatus === 'loading'}
+            hidden={isLoading}
             onClick={() => onChangeForm(currentIdx - 1)}
           >
             Voltar

@@ -1,14 +1,25 @@
 import { Box, Flex, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoEscolhaMultipla } from 'domain/types/campo-tipos'
-import { useState } from 'react'
+import { useGetValorCampo } from 'hooks/useGetValorCampo'
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { BaseCampoProps } from '.'
+import { ErrorWrapper } from './error-wrapper'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoEscolhaMultipla>
 
-export function CampoEscolhaMultipla({ onUpdateResposta, ...props }: Props) {
+export function CampoEscolhaMultipla({
+  onUpdateResposta,
+  formulario,
+  ...props
+}: Props) {
   const [valorOutro, setValorOutro] = useState('')
+  const { setError, clearErrors } = useFormContext()
+  const campo = useGetValorCampo(formulario, props.ordem)
+
+  const fieldName = `field${props.ordem}`
 
   const { opcoes, outro } = props.configuracao_campo
 
@@ -18,8 +29,20 @@ export function CampoEscolhaMultipla({ onUpdateResposta, ...props }: Props) {
     onUpdateResposta({ ordem: props.ordem, valor })
   }
 
+  useEffect(() => {
+    if (!props.obrigatorio) return
+
+    const isInvalid = campo === undefined
+
+    if (isInvalid) {
+      setError(fieldName, { message: 'Selecione ao menos uma opção' })
+    } else {
+      clearErrors(fieldName)
+    }
+  }, [campo])
+
   return (
-    <Box>
+    <ErrorWrapper fieldName={fieldName}>
       <CampoParagrafo {...props} />
       <Box mt="16px">
         <RadioGroup onChange={handleChange}>
@@ -53,6 +76,6 @@ export function CampoEscolhaMultipla({ onUpdateResposta, ...props }: Props) {
           </Stack>
         </RadioGroup>
       </Box>
-    </Box>
+    </ErrorWrapper>
   )
 }

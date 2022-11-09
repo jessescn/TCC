@@ -32,7 +32,9 @@ export default function Formulario({
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true })
 
   const navigate = useNavigate()
-  const statusUpdate = useSelector(state => state.procedimento.status)
+  const statusUpdate = useSelector(
+    state => state.procedimento.statusUpdateStatus
+  )
   const saveChangesModalControls = useDisclosure()
 
   const methods = useForm<CustomFormModel>({
@@ -52,7 +54,7 @@ export default function Formulario({
   useEffect(() => {
     if (statusUpdate === 'success') {
       store.dispatch(actions.procedimento.resetStatus())
-      navigate(-1)
+      navigate('/meus-procedimentos')
     }
   }, [statusUpdate])
 

@@ -12,7 +12,10 @@ import {
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoGrelhaVerificacao } from 'domain/types/campo-tipos'
 import { useGetValorCampo } from 'hooks/useGetValorCampo'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { BaseCampoProps } from '.'
+import { ErrorWrapper } from './error-wrapper'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoGrelhaVerificacao>
@@ -22,18 +25,23 @@ export function CampoGrelhaVerificacao({
   formulario,
   ...props
 }: Props) {
+  const { setError, clearErrors } = useFormContext()
   const campo = useGetValorCampo(formulario, props.ordem)
 
   const currentValue: number[][][] = campo?.valor || []
+
+  const fieldName = `field${props.ordem}`
 
   const { colunas, linhas } = props.configuracao_campo
 
   function handleChange(value: string[], row: number) {
     const parsedValue: number[][] = value.map(stringValue =>
       JSON.parse(stringValue)
-    )
+    ) // [0, 0]
 
-    const idx = currentValue.findIndex(value => value[0][0] === row)
+    const idx = currentValue.findIndex(value => {
+      return value?.[0]?.[0] === row
+    })
 
     if (idx === -1) {
       onUpdateResposta({
@@ -43,7 +51,7 @@ export function CampoGrelhaVerificacao({
       return
     }
 
-    const copyValue = [...currentValue]
+    const copyValue = JSON.parse(JSON.stringify(currentValue))
 
     copyValue.splice(idx, 1, parsedValue)
     onUpdateResposta({
@@ -53,13 +61,25 @@ export function CampoGrelhaVerificacao({
   }
 
   function getCurrentValuesByRow(rowIdx: number) {
-    const values = currentValue.find(valor => valor[0][0] === rowIdx) || []
+    const values = currentValue.find(valor => valor?.[0]?.[0] === rowIdx) || []
 
-    return values.map(value => `[${value[0]},${value[1]}]`)
+    return values.map(value => `[${value?.[0]},${value?.[1]}]`)
   }
 
+  useEffect(() => {
+    if (!props.obrigatorio) return
+
+    const isInvalid = false
+
+    if (isInvalid) {
+      setError(fieldName, { message: 'Selecione ao menos uma opção por linha' })
+    } else {
+      clearErrors(fieldName)
+    }
+  }, [campo])
+
   return (
-    <Box>
+    <ErrorWrapper fieldName={fieldName}>
       <CampoParagrafo {...props} />
       <Table>
         <Thead>
@@ -73,14 +93,17 @@ export function CampoGrelhaVerificacao({
         <Tbody>
           {linhas.map((linha, idx) => (
             <CheckboxGroup
-              key={`linha-${idx}`}
+              key={`${campo?.ordem}-linha-${idx}`}
               onChange={(value: string[]) => handleChange(value, idx)}
               defaultValue={getCurrentValuesByRow(idx)}
             >
               <Tr>
                 <Td>{linha}</Td>
                 {colunas.map((_, colunaIdx) => (
-                  <Td textAlign="center" key={`linha-${idx}-${colunaIdx}`}>
+                  <Td
+                    textAlign="center"
+                    key={`${campo?.ordem}-linha-${idx}-${colunaIdx}`}
+                  >
                     <Checkbox
                       disabled={!props.editable}
                       value={`[${idx},${colunaIdx}]`}
@@ -92,6 +115,6 @@ export function CampoGrelhaVerificacao({
           ))}
         </Tbody>
       </Table>
-    </Box>
+    </ErrorWrapper>
   )
 }

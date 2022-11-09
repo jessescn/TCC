@@ -23,7 +23,7 @@ export function searchByKeys<T>(value: T, keys: (keyof T)[], term: string) {
       includesStrings(String(value[key]), subterm)
     )
 
-    if (matchedSubterms.length > 0) {
+    if (matchedSubterms.length === subterms.length) {
       matches = true
       return
     }

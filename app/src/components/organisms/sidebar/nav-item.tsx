@@ -28,7 +28,6 @@ export default function NavItem({
   title,
   url,
   profiles = [],
-  strict = false,
   style,
   isSubitem = false
 }: NavItemProps) {

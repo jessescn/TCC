@@ -4,6 +4,7 @@ import Sidebar from 'components/organisms/sidebar'
 import { User } from 'domain/entity/user'
 import { UserModel } from 'domain/models/user'
 import { ProfileType } from 'domain/types/actors'
+import { useStore } from 'hooks/useStore'
 import { Navigate, useLocation } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
@@ -14,6 +15,8 @@ type Props = {
 
 function PrivateRoute({ children, allowedProfiles = [] }: Props) {
   const location = useLocation()
+
+  useStore(['procedimento', 'tipoProcedimento', 'formulario'])
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
 

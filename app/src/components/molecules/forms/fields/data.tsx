@@ -3,13 +3,19 @@ import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoData } from 'domain/types/campo-tipos'
 import { useGetValorCampo } from 'hooks/useGetValorCampo'
 import { debounce } from 'lodash'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { BaseCampoProps } from '.'
+import { ErrorWrapper } from './error-wrapper'
 import { CampoParagrafo } from './paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoData>
 
 export function CampoData({ onUpdateResposta, formulario, ...props }: Props) {
+  const { setError, clearErrors } = useFormContext()
   const campo = useGetValorCampo(formulario, props.ordem)
+
+  const fieldName = `field${props.ordem}`
 
   const handleChangeData = debounce(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,8 +24,20 @@ export function CampoData({ onUpdateResposta, formulario, ...props }: Props) {
     400
   )
 
+  useEffect(() => {
+    if (!props.obrigatorio) return
+
+    const isInvalid = String(campo?.valor).trim() === ''
+
+    if (isInvalid) {
+      setError(fieldName, { message: 'Campo obrigatório' })
+    } else {
+      clearErrors(fieldName)
+    }
+  }, [campo])
+
   return (
-    <Box>
+    <ErrorWrapper fieldName={fieldName}>
       <CampoParagrafo {...props} />
       <Input
         mt="16px"
@@ -31,6 +49,6 @@ export function CampoData({ onUpdateResposta, formulario, ...props }: Props) {
         defaultValue={campo?.valor}
         onChange={handleChangeData}
       />
-    </Box>
+    </ErrorWrapper>
   )
 }
