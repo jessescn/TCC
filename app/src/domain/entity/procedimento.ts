@@ -5,6 +5,7 @@ import {
   Resposta,
   RespostaCampo
 } from 'domain/models/procedimento'
+import { removeAccents } from 'utils/format'
 import { getCurrentStatus } from 'utils/procedimento'
 
 export class Procedimento {
@@ -54,38 +55,40 @@ export class Procedimento {
     return respostas.find(resposta => resposta.formulario === formularioId)
   }
 
+  static matchBySearch(procedimento: ProcedimentoModel, term: string) {
+    const termAsLowerCase = term.toLowerCase()
+    const termCleaned = removeAccents(termAsLowerCase)
+
+    if (termCleaned.localeCompare(String(procedimento.id)) === 0) return true
+
+    const lastStatus = getCurrentStatus(procedimento)?.split('_').join(' ')
+
+    if (lastStatus && lastStatus.includes(term)) return true
+
+    const procedimentoNome = removeAccents(
+      procedimento.tipo_procedimento?.nome || ''
+    ).toLowerCase()
+
+    const terms = term.split(' ')
+    let includes = false
+
+    terms.forEach(term => {
+      if (procedimentoNome.includes(term.toLowerCase())) {
+        includes = true
+      }
+    })
+
+    return includes
+  }
+
   static search(procedimentos: ProcedimentoModel[], term: string) {
     if (term.trim().length === 0) {
       return procedimentos
     }
 
-    return procedimentos.filter(procedimento => {
-      if (
-        term
-          .toLowerCase()
-          .localeCompare(String(procedimento.id).toLowerCase()) === 0
-      )
-        return true
-
-      const lastStatus = getCurrentStatus(procedimento)
-
-      if (lastStatus && term.includes(lastStatus)) return true
-
-      const terms = term.split(' ')
-      let includes = false
-
-      terms.forEach(term => {
-        if (
-          procedimento.tipo_procedimento?.nome
-            .toLowerCase()
-            .includes(term.toLowerCase())
-        ) {
-          includes = true
-        }
-      })
-
-      return includes
-    })
+    return procedimentos.filter(procedimento =>
+      this.matchBySearch(procedimento, term)
+    )
   }
 
   static getCampoByFormulario(

@@ -9,3 +9,7 @@ export const formatISODate = (date?: string) => {
 export const formatISODateToLocalTime = (date?: string) => {
   return date ? new Date(date).toISOString().slice(0, 16) : ''
 }
+
+export const removeAccents = (value: string) => {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
