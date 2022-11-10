@@ -60,7 +60,7 @@ export interface ProcedimentoModel {
   votos?: VotoProcedimento[]
   tipo_procedimento?: TipoProcedimentoModel
   comentarios: ComentarioModel[]
-  user?: UserModel
+  actor?: UserModel
   createdBy?: number
   createdAt?: string
   updatedAt?: string

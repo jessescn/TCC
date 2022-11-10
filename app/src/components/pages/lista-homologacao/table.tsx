@@ -47,7 +47,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
         rows={sorted.map(procedimento => [
           { content: procedimento.id },
           { content: procedimento.tipo_procedimento?.nome },
-          { content: procedimento.user?.nome || '-' },
+          { content: procedimento.actor?.nome || '-' },
           {
             content: !procedimento.createdAt
               ? '-'

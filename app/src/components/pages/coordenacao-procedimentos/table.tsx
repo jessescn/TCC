@@ -18,7 +18,11 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
   const sorted = [...procedimentos]
 
   sorted.sort(function (a, b) {
-    return a.id - b.id
+    const today = new Date()
+    const date1 = b.updatedAt ? new Date(b.updatedAt) : today
+    const date2 = a.updatedAt ? new Date(a.updatedAt) : today
+
+    return date1.getTime() - date2.getTime()
   })
 
   const handleRedirect = (element: Cell[]) => {
@@ -44,8 +48,9 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
         columns={[
           { content: 'ID', props: { width: '10%' } },
           { content: 'Nome', props: { width: '40%' } },
-          { content: 'Status', props: { width: '15%' } },
-          { content: 'Formulários', props: { width: '15%' } },
+          { content: 'Autor', props: { width: '10%' } },
+          { content: 'Status', props: { width: '10%' } },
+          { content: 'Formulários', props: { width: '10%' } },
           { content: 'Última atualizacão', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '15%' } }
         ]}
@@ -55,6 +60,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
           return [
             { content: procedimento.id },
             { content: procedimento.tipo_procedimento?.nome },
+            { content: procedimento.actor?.nome || '-' },
             { content: status ? statusList[status].label : '-' },
             {
               content: procedimento.tipo_procedimento?.formularios.length || 0

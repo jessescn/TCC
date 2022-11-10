@@ -8,7 +8,7 @@ export default {
   comentario_update: 'owned',
   formulario_create: 'owned',
   formulario_delete: 'owned',
-  formulario_read: 'owned',
+  formulario_read: 'all',
   formulario_update: 'owned',
   procedimento_create: 'owned',
   procedimento_read: 'owned',
@@ -18,6 +18,6 @@ export default {
   procedimento_review: 'owned',
   tipo_procedimento_create: 'owned',
   tipo_procedimento_delete: 'owned',
-  tipo_procedimento_read: 'owned',
+  tipo_procedimento_read: 'all',
   tipo_procedimento_update: 'owned'
 }

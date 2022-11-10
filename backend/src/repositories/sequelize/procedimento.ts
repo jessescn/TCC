@@ -12,6 +12,7 @@ import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { IProcedimentoRepo } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
+import Actor from 'domain/models/actor'
 
 export type CreateProcedimento = {
   tipo: number
@@ -47,7 +48,14 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
 
   findAll = async (query: ProcedimentoQuery = {}) => {
     const procedimentos = await Procedimento.findAll({
-      include: [TipoProcedimento, Comentario],
+      include: [
+        TipoProcedimento,
+        Comentario,
+        {
+          model: Actor,
+          attributes: ['nome']
+        }
+      ],
       where: { deleted: false, ...query },
       order: [
         ['id', 'ASC'],
