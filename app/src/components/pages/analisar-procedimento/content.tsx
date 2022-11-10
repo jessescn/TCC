@@ -33,6 +33,8 @@ export default function Content({ formularios, procedimento }: Props) {
   )
 
   const statusRevisao = useSelector(state => state.procedimento.statusRevisao)
+  const isLoading =
+    statusRevisao === 'loading' || statusUpdateStatus === 'loading'
 
   const [feedback, setFeedback] = useState('')
   const [camposInvalidos, setCamposInvalidos] = useState<CustomCampoInvalido[]>(
@@ -114,6 +116,7 @@ export default function Content({ formularios, procedimento }: Props) {
           variant="unstyled"
           mr="8px"
           onClick={handleClearInvalidations}
+          hidden={isLoading}
         >
           Limpar correção
         </Button>
@@ -127,7 +130,7 @@ export default function Content({ formularios, procedimento }: Props) {
           mx="8px"
           disabled={camposInvalidos.length === 0}
           onClick={invalidModalControls.onOpen}
-          isLoading={statusUpdateStatus === 'loading'}
+          hidden={isLoading}
         >
           Submeter Correções
         </Button>
@@ -138,9 +141,10 @@ export default function Content({ formularios, procedimento }: Props) {
           bgColor="initial.white"
           color="primary.dark"
           _hover={{ color: 'initial.white', bgColor: 'primary.dark' }}
-          isLoading={statusUpdateStatus === 'loading'}
+          isLoading={isLoading}
           onClick={confirmApproveControls.onOpen}
           disabled={camposInvalidos.length > 0}
+          loadingText="Salvando"
         >
           Aprovar
         </Button>

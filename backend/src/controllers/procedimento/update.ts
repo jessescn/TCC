@@ -29,11 +29,7 @@ export class UpdateProcedimentoController extends Controller<IProcedimentoServic
       const { id } = request.params
       const data = request.body as Partial<ProcedimentoModel>
 
-      const procedimento = await this.service.update(Number(id), {
-        revisoes: data.revisoes,
-        respostas: data.respostas,
-        votos: data.votos
-      })
+      const procedimento = await this.service.update(Number(id), data)
 
       response.json(procedimento)
     } catch (error) {

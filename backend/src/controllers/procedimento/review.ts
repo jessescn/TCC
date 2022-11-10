@@ -9,7 +9,7 @@ export class ReviewProcedimentoController extends Controller<IProcedimentoServic
   constructor(service: IProcedimentoService) {
     const permission: PermissionKey = 'procedimento_review'
     const validations = [hasNumericId]
-    const mandatoryFields = ['aprovado', 'comentario', 'campos']
+    const mandatoryFields = ['comentario', 'campos']
 
     super({
       permission,

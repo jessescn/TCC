@@ -35,6 +35,8 @@ export default function Formulario({
   const statusUpdate = useSelector(
     state => state.procedimento.statusUpdateStatus
   )
+
+  const isLoading = statusUpdate === 'loading'
   const saveChangesModalControls = useDisclosure()
 
   const methods = useForm<CustomFormModel>({
@@ -92,9 +94,10 @@ export default function Formulario({
           <Button
             bgColor="primary.dark"
             color="initial.white"
-            display="block"
             size="sm"
             onClick={saveChangesModalControls.onOpen}
+            isLoading={isLoading}
+            loadingText="Salvando"
           >
             Salvar alterações
           </Button>

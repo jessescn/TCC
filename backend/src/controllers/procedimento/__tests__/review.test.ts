@@ -27,7 +27,6 @@ describe('ReviewProcedimento Controller', () => {
   })
 
   const data = createMock<NewRevisao>({
-    aprovado: true,
     comentario: 'comentario',
     campos: []
   })

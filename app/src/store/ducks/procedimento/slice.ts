@@ -60,10 +60,10 @@ const reducers = {
     state.status = 'failure'
   },
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
-    state.status = 'loading'
+    state.statusUpdateStatus = 'loading'
   },
   updateSuccess: (state: State, action: PayloadAction<ProcedimentoModel>) => {
-    state.status = 'success'
+    state.statusUpdateStatus = 'success'
 
     const indexof = state.procedimentos
       .map(elm => elm.id)
@@ -71,7 +71,7 @@ const reducers = {
     state.procedimentos.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
-    state.status = 'failure'
+    state.statusUpdateStatus = 'failure'
   },
   create: (state: State, action: PayloadAction<CreatePayload>) => {
     state.statusSubmit = 'loading'
