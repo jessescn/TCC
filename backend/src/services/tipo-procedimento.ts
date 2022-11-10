@@ -48,7 +48,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
     const tipoProcedimento = await this.tipoProcedimentoRepo.findOne(id)
 
     if (!tipoProcedimento) {
-      throw new NotFoundError()
+      throw new NotFoundError(`Tipo Procedimento ${id} não encontrado.`)
     }
 
     return tipoProcedimento

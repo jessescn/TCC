@@ -6,6 +6,8 @@ import {
   FormularioRepository,
   NewFormulario
 } from 'repositories/sequelize/formulario'
+import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
+import { Op } from 'sequelize'
 import { IService } from 'services'
 import { NotFoundError } from 'types/express/errors'
 
@@ -20,9 +22,11 @@ export interface IFormularioService
 
 export class FormularioService implements IFormularioService {
   private repository: FormularioRepository
+  private tipoProcedimentoRepo: TipoProcedimentoRepository
 
-  constructor(repository: IRepository) {
+  constructor(repository: IRepository, tipoProcedimentoRepo: IRepository) {
     this.repository = repository
+    this.tipoProcedimentoRepo = tipoProcedimentoRepo
   }
 
   async create(actor: ActorModel, data: NewFormulario) {
@@ -56,8 +60,22 @@ export class FormularioService implements IFormularioService {
     return this.repository.findAll(query)
   }
 
+  private async inactivateAllTiposWithForm(id: number) {
+    const tipoProcedimentos = await this.tipoProcedimentoRepo.findAll({
+      formularios: { [Op.contains]: [id] }
+    })
+
+    tipoProcedimentos.forEach(async tipoProcedimento => {
+      tipoProcedimento.set({ status: 'inativo' })
+
+      await tipoProcedimento.save()
+    })
+  }
+
   async delete(id: number) {
     await this.checkIfFormularioExists(id)
+
+    await this.inactivateAllTiposWithForm(id)
 
     return this.repository.destroy(id)
   }

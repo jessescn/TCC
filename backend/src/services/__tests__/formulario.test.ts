@@ -8,10 +8,13 @@ import {
 import { FormularioService } from 'services/formulario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { NotFoundError } from 'types/express/errors'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
 describe('Formulario Service', () => {
-  const formulario = createMock<FormularioModel>()
+  const formulario = createMock<FormularioModel>({ id: 1 })
   const formularios = createMockList<FormularioModel>(2)
+
+  const tipoRepo = createMock<IRepository>()
 
   describe('create', () => {
     const repo = createMock<IRepository>({
@@ -22,7 +25,7 @@ describe('Formulario Service', () => {
     const newFormulario = createMock<NewFormulario>()
 
     it('should create a new formulario', async () => {
-      const sut = new FormularioService(repo)
+      const sut = new FormularioService(repo, tipoRepo)
       const result = await sut.create(usuario, newFormulario)
 
       expect(result).toEqual(formulario)
@@ -41,7 +44,7 @@ describe('Formulario Service', () => {
     })
 
     it('should find an existing formulario by id', async () => {
-      const sut = new FormularioService(repo)
+      const sut = new FormularioService(repo, tipoRepo)
       const result = await sut.findOne(1)
 
       expect(result).toEqual(formulario)
@@ -52,7 +55,7 @@ describe('Formulario Service', () => {
       const repoWithUndefined = createMock<IRepository>({
         findOne: jest.fn().mockResolvedValue(undefined)
       })
-      const sut = new FormularioService(repoWithUndefined)
+      const sut = new FormularioService(repoWithUndefined, tipoRepo)
 
       const shouldThrow = async () => {
         await sut.findOne(1)
@@ -68,7 +71,7 @@ describe('Formulario Service', () => {
     })
 
     it('should find all formularios', async () => {
-      const sut = new FormularioService(repo)
+      const sut = new FormularioService(repo, tipoRepo)
       const result = await sut.findAll()
 
       expect(result).toEqual(formularios)
@@ -77,7 +80,7 @@ describe('Formulario Service', () => {
 
     it('should find formularios which matches the provided query', async () => {
       const query: FormularioQuery = { campos: [] }
-      const sut = new FormularioService(repo)
+      const sut = new FormularioService(repo, tipoRepo)
 
       const result = await sut.findAll(query)
 
@@ -87,25 +90,41 @@ describe('Formulario Service', () => {
   })
 
   describe('delete', () => {
+    const tipoProcedimento = createMock<TipoProcedimentoModel>({
+      formularios: [1]
+    })
+    const tipoProcedimentoWithSpies = {
+      ...tipoProcedimento,
+      set: jest.fn(),
+      save: jest.fn()
+    }
+    const tipoRepo = createMock<IRepository>({
+      findAll: jest.fn().mockResolvedValue([tipoProcedimentoWithSpies])
+    })
+
     const repo = createMock<IRepository>({
       findOne: jest.fn().mockResolvedValue(formulario),
       destroy: jest.fn().mockResolvedValue(formulario)
     })
 
     it('should delete an existing formulario', async () => {
-      const sut = new FormularioService(repo)
+      const sut = new FormularioService(repo, tipoRepo)
       const result = await sut.delete(1)
 
       expect(result).toEqual(formulario)
       expect(repo.findOne).toBeCalledWith(1)
       expect(repo.destroy).toBeCalledWith(1)
+      expect(tipoProcedimentoWithSpies.set).toBeCalledWith({
+        status: 'inativo'
+      })
+      expect(tipoProcedimentoWithSpies.save).toBeCalled()
     })
 
     it('should throw an NotFoundError if formulario does not exist', async () => {
       const repoWithUndefined = createMock<IRepository>({
         findOne: jest.fn().mockResolvedValue(undefined)
       })
-      const sut = new FormularioService(repoWithUndefined)
+      const sut = new FormularioService(repoWithUndefined, tipoRepo)
 
       const shouldThrow = async () => {
         await sut.delete(1)
@@ -124,7 +143,7 @@ describe('Formulario Service', () => {
     const data: Partial<FormularioModel> = { descricao: 'test' }
 
     it('should update an existing formulario', async () => {
-      const sut = new FormularioService(repo)
+      const sut = new FormularioService(repo, tipoRepo)
 
       const result = await sut.update(1, data)
 

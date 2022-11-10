@@ -37,7 +37,9 @@ export class AuthController {
         throw new UnauthorizedError('Email ou senha inválidos')
       }
 
-      const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY)
+      const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_TOKEN_EXPIRATION
+      })
 
       res.json({ token, expiresIn: process.env.JWT_TOKEN_EXPIRATION })
     } catch (error) {
