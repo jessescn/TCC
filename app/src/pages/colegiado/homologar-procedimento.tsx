@@ -38,7 +38,7 @@ const HomologarProcedimento = () => {
   }
 
   return (
-    <Screen py="24px">
+    <Screen py="24px" h="auto">
       {!procedimento ? (
         <Flex justifyContent="center">
           <Spinner />
@@ -63,7 +63,7 @@ const HomologarProcedimento = () => {
               />
             </Box>
             <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-            <Box>
+            <Box minH="85%">
               <Content procedimento={procedimento} formularios={formularios} />
             </Box>
             <Flex mt="8px">

@@ -22,6 +22,7 @@ import {
   UnauthorizedError
 } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
+import { getCurrentStatus } from 'utils/value'
 
 export interface IProcedimentoService
   extends IService<ProcedimentoModel, ProcedimentoQuery> {
@@ -177,8 +178,20 @@ export class ProcedimentoService implements IProcedimentoService {
     return this.updateStatus(procedimento.id, nextStatus)
   }
 
+  private checkIfCanReceiveReviews(procedimento: ProcedimentoModel) {
+    const currentStatus = getCurrentStatus(procedimento)
+
+    if (currentStatus !== 'em_analise') {
+      throw new BadRequestError(
+        'Não é possível analisar esse procedimento neste status'
+      )
+    }
+  }
+
   async newReview(id: number, actor: ActorModel, data: NewRevisao) {
     const procedimento = await this.checkIfProcedimentoExists(id)
+
+    this.checkIfCanReceiveReviews(procedimento)
 
     const revisao: Revisao = {
       ...data,

@@ -224,6 +224,9 @@ describe('Procedimento Service', () => {
   })
 
   describe('newReview', () => {
+    const procedimento = createMock<ProcedimentoModel>({
+      status: [{ data: new Date().toISOString(), status: 'em_analise' }]
+    })
     const tipoProcedimento = createMock<TipoProcedimentoModel>({
       colegiado: true
     })
@@ -302,6 +305,26 @@ describe('Procedimento Service', () => {
         procedimento,
         'correcoes_pendentes'
       )
+    })
+
+    it('should throw error if procedimento is not in em_analise status', async () => {
+      const procedimento = createMock<ProcedimentoModel>({
+        status: [{ data: new Date().toISOString(), status: 'criado' }]
+      })
+
+      const repo = createMock<IProcedimentoRepo>({
+        findOne: jest.fn().mockResolvedValue(procedimento),
+        newRevisao: jest.fn().mockResolvedValue(procedimento),
+        updateStatus: jest.fn().mockResolvedValue(procedimento)
+      })
+
+      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+
+      const shouldThrow = async () => {
+        await sut.newReview(1, usuario, data)
+      }
+
+      expect(shouldThrow).rejects.toThrow(BadRequestError)
     })
   })
 })
