@@ -1,3 +1,4 @@
+import Actor from 'domain/models/actor'
 import Comentario, {
   ComentarioAttributes,
   ComentarioModel
@@ -24,7 +25,13 @@ export type CreateComentario = {
 export class ComentarioRepository implements IRepository {
   findAll = async (query: ComentarioQuery = {}) => {
     const comentarios = await Comentario.findAll({
-      include: [Procedimento],
+      include: [
+        Procedimento,
+        {
+          model: Actor,
+          attributes: ['nome', 'email']
+        }
+      ],
       where: { deleted: false, ...query }
     })
 

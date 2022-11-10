@@ -1,5 +1,7 @@
+import { format } from 'date-fns'
+
 export const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('en-GB')
+  return format(new Date(date), 'dd/MM/yyyy hh:mm a')
 }
 
 export const formatISODate = (date?: string) => {

@@ -40,14 +40,20 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
-          { content: 'Nome', props: { width: '40%' } },
+          { content: 'Nome', props: { width: '45%' } },
           { content: 'Autor', props: { width: '15%' } },
-          { content: 'Criado em', props: { width: '20%' } }
+          { content: 'Atualizado em', props: { width: '15%' } },
+          { content: 'Criado em', props: { width: '15%' } }
         ]}
         rows={sorted.map(procedimento => [
           { content: procedimento.id },
           { content: procedimento.tipo_procedimento?.nome },
           { content: procedimento.actor?.nome || '-' },
+          {
+            content: !procedimento.updatedAt
+              ? '-'
+              : formatDate(procedimento.updatedAt)
+          },
           {
             content: !procedimento.createdAt
               ? '-'

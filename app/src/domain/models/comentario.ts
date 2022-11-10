@@ -3,7 +3,7 @@ import { UserModel } from './user'
 export interface ComentarioModel {
   id: number
   conteudo: string
-  user: UserModel
+  actor?: UserModel
   createdAt: string
 }
 

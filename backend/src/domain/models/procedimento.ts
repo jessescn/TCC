@@ -17,7 +17,7 @@ export const statusList = {
   em_analise: { label: 'Em análise', color: 'info.warning' },
   em_homologacao: { label: 'Em homologação', color: 'info.warning' },
   deferido: { label: 'Deferido', color: 'info.warning' },
-  indeferido: { label: 'Infererido', color: 'info.warning' }
+  indeferido: { label: 'Indeferido', color: 'info.warning' }
 }
 
 export type TStatus =

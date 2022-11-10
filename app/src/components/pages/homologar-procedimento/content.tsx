@@ -28,7 +28,7 @@ const Content = ({ procedimento, formularios }: Props) => {
   }
 
   return (
-    <Box h="100%">
+    <Box>
       <Flex justifyContent="space-between">
         <Stack spacing="16px">
           <Flex alignItems="center">
@@ -57,7 +57,7 @@ const Content = ({ procedimento, formularios }: Props) => {
         <Votes procedimento={procedimento} />
       </Flex>
       <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
-      <Box overflowY="auto" height="80%">
+      <Box>
         {formularioSelecionado && (
           <Formulario
             formulario={formularioSelecionado}

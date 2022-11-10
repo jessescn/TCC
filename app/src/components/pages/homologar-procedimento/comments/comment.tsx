@@ -14,10 +14,10 @@ const Comment = ({ comentario }: Props) => {
       <Box w="100%">
         <Flex alignItems="center">
           <Text fontSize="10px" fontWeight="bold" mr="8px">
-            {comentario?.user.nome || 'Anônimo'}
+            {comentario?.actor?.nome || 'Anônimo'}
           </Text>
           <Text fontSize="10px" color="secondary.dark">
-            {comentario?.user.email}
+            {comentario?.actor?.email}
           </Text>
         </Flex>
         <Text

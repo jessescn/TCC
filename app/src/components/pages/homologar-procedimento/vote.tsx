@@ -37,7 +37,7 @@ const Votes = ({ procedimento }: Props) => {
   const [vote, setVote] = useState(currentVote?.aprovado)
 
   function handleConfirmVote() {
-    if (!vote || !isColegiado) return
+    if (vote === undefined || !isColegiado) return
 
     store.dispatch(
       actions.procedimento.vote({
@@ -156,6 +156,11 @@ const Votes = ({ procedimento }: Props) => {
       {currentStatus !== 'em_homologacao' && (
         <Text mt="8px" fontSize="10px" color="info.error">
           Não é mais possível votar nesse procedimento
+        </Text>
+      )}
+      {!isColegiado && (
+        <Text fontSize="10px" color="info.error">
+          Apenas membros do colegiado podem votar
         </Text>
       )}
       <ConfirmVote
