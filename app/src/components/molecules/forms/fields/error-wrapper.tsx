@@ -1,22 +1,20 @@
 import { Box } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { ErrorMessage } from '../error-message'
+import { SimpleErrorMessage } from '../simple-error-message'
 
 type Props = {
   children: ReactNode
-  fieldName: string
+  isInvalid: boolean
+  message?: string
 }
 
-export const ErrorWrapper = ({ children, fieldName }: Props) => {
-  const {
-    formState: { errors }
-  } = useFormContext()
-
+export const ErrorWrapper = ({ children, isInvalid, message }: Props) => {
   return (
     <Box>
       {children}
-      <ErrorMessage errors={errors} fieldName={fieldName} />
+      {isInvalid && (
+        <SimpleErrorMessage message={message || 'Campo inválido'} />
+      )}
     </Box>
   )
 }

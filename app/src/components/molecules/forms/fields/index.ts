@@ -8,14 +8,21 @@ import { CampoGrelhaMultipla } from './grelha-multipla'
 import { CampoGrelhaVerificacao } from './grelha-verificacao'
 import { CampoHora } from './hora'
 import { CampoParagrafo } from './paragrafo'
-import { CampoResposta } from './resposta'
+import { CampoResposta } from './campo-resposta'
 
-export type BaseCampoProps = {
+export type CampoProps = {
   formulario: FormularioModel
   editable: boolean
   isInvalido?: boolean
   onInvalide?: (ordem: number) => void
-  onUpdateResposta: (novoCampo: RespostaCampo) => void
+  onUpdateResposta?: (novoCampo: RespostaCampo) => void
+}
+
+export type BaseCampoProps = CampoProps & {
+  name: string
+  isInvalid: boolean
+  campo?: RespostaCampo
+  onChange: (novoCampo: RespostaCampo) => void
 }
 
 type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>

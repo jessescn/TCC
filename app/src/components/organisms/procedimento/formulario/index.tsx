@@ -2,11 +2,12 @@ import { Button, Collapse, Flex, Icon, useDisclosure } from '@chakra-ui/react'
 import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
 import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel, Resposta } from 'domain/models/procedimento'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { BsChevronBarExpand, BsChevronExpand } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
+import { loadFields } from 'utils/procedimento'
 import SaveChangesModal from './modals/save-changes'
 import RenderContent from './render-campos'
 
@@ -39,8 +40,10 @@ export default function Formulario({
   const isLoading = statusUpdate === 'loading'
   const saveChangesModalControls = useDisclosure()
 
+  const defaultFields = loadFields(procedimento)
+
   const methods = useForm<CustomFormModel>({
-    defaultValues: { respostas: procedimento.respostas }
+    defaultValues: { respostas: procedimento.respostas, ...defaultFields }
   })
 
   const updateResposta = (data: CustomFormModel) => {

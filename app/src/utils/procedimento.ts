@@ -5,3 +5,14 @@ export const getCurrentStatus = (procedimento: ProcedimentoModel) => {
 
   return procedimento.status[procedimento.status.length - 1]?.status
 }
+
+export const loadFields = (procedimento: ProcedimentoModel) =>
+  procedimento.respostas.reduce((current, resposta) => {
+    console.log(resposta.campos)
+
+    const fields = resposta.campos.reduce((curr, campo) => {
+      return { ...curr, [`field${campo.ordem}`]: campo }
+    }, {}) as any
+
+    return { ...current, ...fields }
+  }, {})

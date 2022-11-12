@@ -1,51 +1,34 @@
 import { Box, Flex, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import { CampoFormulario } from 'domain/models/formulario'
 import { CampoTipoEscolhaMultipla } from 'domain/types/campo-tipos'
-import { useGetValorCampo } from 'hooks/useGetValorCampo'
-import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { BaseCampoProps } from '.'
-import { ErrorWrapper } from './error-wrapper'
-import { CampoParagrafo } from './paragrafo'
+import { useState } from 'react'
+import { BaseCampoProps } from '..'
+import { ErrorWrapper } from '../error-wrapper'
+import { CampoParagrafo } from '../paragrafo'
 
 type Props = BaseCampoProps & CampoFormulario<CampoTipoEscolhaMultipla>
 
-export function CampoEscolhaMultipla({
-  onUpdateResposta,
-  formulario,
+export function BaseCampoEscolhaMultipla({
+  onChange,
+  campo,
+  isInvalid,
   ...props
 }: Props) {
   const [valorOutro, setValorOutro] = useState('')
-  const { setError, clearErrors } = useFormContext()
-  const campo = useGetValorCampo(formulario, props.ordem)
-
-  const fieldName = `field${props.ordem}`
 
   const { opcoes, outro } = props.configuracao_campo
 
   function handleChange(value: any) {
     const valor = value === 'outro' ? valorOutro : value
 
-    onUpdateResposta({ ordem: props.ordem, valor })
+    onChange({ ordem: props.ordem, valor })
   }
 
-  useEffect(() => {
-    if (!props.obrigatorio) return
-
-    const isInvalid = campo === undefined
-
-    if (isInvalid) {
-      setError(fieldName, { message: 'Selecione ao menos uma opção' })
-    } else {
-      clearErrors(fieldName)
-    }
-  }, [campo])
-
   return (
-    <ErrorWrapper fieldName={fieldName}>
+    <ErrorWrapper isInvalid={isInvalid} message="Selecione ao menos uma opção">
       <CampoParagrafo {...props} />
       <Box mt="16px">
-        <RadioGroup onChange={handleChange}>
+        <RadioGroup onChange={handleChange} defaultValue={campo?.valor}>
           <Stack spacing="16px">
             {opcoes.map(opcao => (
               <Radio

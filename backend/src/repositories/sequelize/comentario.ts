@@ -49,7 +49,13 @@ export class ComentarioRepository implements IRepository {
 
   create = async (data: CreateComentario) => {
     const comentario = await Comentario.create(data, {
-      include: [Procedimento]
+      include: [
+        Procedimento,
+        {
+          model: Actor,
+          attributes: ['nome', 'email']
+        }
+      ]
     })
 
     return comentario
