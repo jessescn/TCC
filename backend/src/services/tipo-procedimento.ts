@@ -38,10 +38,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   private async checkIfFormulariosExists(ids: number[]) {
     if (ids.length === 0) return
 
-    const formularios = await this.formularioRepo.findAll(
-      { id: ids },
-      { page: 1, per_page: 1000, term: null }
-    )
+    const formularios = await this.formularioRepo.findAll({ id: ids })
 
     if (formularios.length !== ids.length) {
       throw new BadRequestError()
@@ -83,7 +80,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   async findAll(query: TipoProcedimentoQuery, pagination: Pagination) {
     const tipoProcedimentos = await this.tipoProcedimentoRepo.findAll(
       query,
-      pagination
+      pagination.term
     )
 
     const paginated = paginateList(tipoProcedimentos, pagination)

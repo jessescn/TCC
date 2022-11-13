@@ -4,7 +4,7 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import { IRepository, Pagination } from 'repositories'
+import { IRepository } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import { isNumber } from 'utils/value'
 
@@ -26,14 +26,12 @@ export type NewFormulario = {
 }
 
 export class FormularioRepository implements IRepository {
-  findAll = async (query: FormularioQuery, pagination: Pagination) => {
-    const searchId = isNumber(pagination.term)
-      ? { id: { [Op.eq]: pagination.term } }
-      : {}
-    const search = pagination.term
+  findAll = async (query: FormularioQuery, term?: string) => {
+    const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
+    const search = term
       ? {
           [Op.or]: [
-            { nome: { [Op.substring]: '%' + pagination.term + '%' } },
+            { nome: { [Op.substring]: '%' + term + '%' } },
             { ...searchId }
           ]
         }

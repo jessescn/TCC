@@ -45,6 +45,7 @@ import {
 import {
   createFormularioController,
   deleteFormularioController,
+  readFormulariosByTipoController,
   readFormularioController,
   readOneFormularioController,
   updateFormularioController
@@ -74,6 +75,10 @@ routes.delete('/users/:id', deleteActorController.exec)
 routes.get('/profiles', readProfileController.exec)
 
 routes.get('/formularios', readFormularioController.exec)
+routes.get(
+  '/formularios/tipo-procedimento/:id',
+  readFormulariosByTipoController.exec
+)
 routes.get('/formularios/:id', readOneFormularioController.exec)
 routes.post('/formularios', createFormularioController.exec)
 routes.put('/formularios/:id', updateFormularioController.exec)

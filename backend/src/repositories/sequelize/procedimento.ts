@@ -12,7 +12,7 @@ import Procedimento, {
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
-import { IProcedimentoRepo, Pagination } from 'repositories'
+import { IProcedimentoRepo } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import { getCurrentStatus, isNumber } from 'utils/value'
 
@@ -48,10 +48,8 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     return procedimento
   }
 
-  findAll = async (query: ProcedimentoQuery, pagination: Pagination) => {
-    const searchId = isNumber(pagination.term)
-      ? { id: { [Op.eq]: pagination.term } }
-      : {}
+  findAll = async (query: ProcedimentoQuery, term?: string | null) => {
+    const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
 
     const procedimentosById = await Procedimento.findAll({
       include: [
@@ -66,9 +64,9 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
       order: [['updatedAt', 'DESC']]
     })
 
-    const whereTipo = pagination.term
+    const whereTipo = term
       ? {
-          [Op.or]: [{ nome: { [Op.substring]: '%' + pagination.term + '%' } }]
+          [Op.or]: [{ nome: { [Op.substring]: '%' + term + '%' } }]
         }
       : {}
 
@@ -89,15 +87,15 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     })
 
     const procedimentos =
-      isNumber(pagination.term) && procedimentosById.length > 0
+      isNumber(term) && procedimentosById.length > 0
         ? procedimentosById
         : procedimentosByName
 
     return procedimentos
   }
 
-  findAllByStatus = async (status: TStatus, pagination: Pagination) => {
-    const procedimentos = await this.findAll({}, pagination)
+  findAllByStatus = async (status: TStatus, term?: string | null) => {
+    const procedimentos = await this.findAll({}, term)
 
     const filteredByStatus = procedimentos.filter(
       procedimento => getCurrentStatus(procedimento) === status

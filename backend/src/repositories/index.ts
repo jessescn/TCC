@@ -14,7 +14,7 @@ export type PaginationResponse<T> = {
 
 export interface IRepository {
   findOne: (primaryKey: any) => Promise<any>
-  findAll: (query: any, pagination?: Pagination) => Promise<any>
+  findAll: (query: any, term?: string | null) => Promise<any>
   create: (data: any) => Promise<any>
   update: (primaryKey: any, data: any) => Promise<any>
   destroy: (primaryKey: any) => Promise<any>
@@ -25,7 +25,7 @@ export interface IMailRepository {
 }
 
 export interface IProcedimentoRepo extends IRepository {
-  findAllByStatus: (status: TStatus, pagination?: Pagination) => Promise<any>
+  findAllByStatus: (status: TStatus, term?: string | null) => Promise<any>
   updateVote: (primaryKey: any, vote: any) => Promise<any>
   removeVote: (primaryKey: any, autor: any) => Promise<any>
   updateStatus: (primaryKey: any, status: any) => Promise<any>

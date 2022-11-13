@@ -20,6 +20,14 @@ export const FormService = {
       url: `/formularios?${query}`
     })
   },
+  listByTipo: (tipoId: number) => {
+    return httpClient.request<
+      AxiosResponse<PaginationResponse<FormularioModel>>
+    >({
+      method: 'get',
+      url: `/formularios/tipo-procedimento/${tipoId}`
+    })
+  },
   create: (payload: NovoFormulario) => {
     return httpClient.request<AxiosResponse<FormularioModel[]>>({
       method: 'post',

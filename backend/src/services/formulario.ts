@@ -19,6 +19,7 @@ export interface IFormularioService
     data: Partial<FormularioModel>
   ) => Promise<FormularioModel>
   create: (actor: ActorModel, data: NewFormulario) => Promise<FormularioModel>
+  findByTipo: (tipoId: number) => Promise<FormularioModel[]>
 }
 
 export class FormularioService implements IFormularioService {
@@ -58,7 +59,7 @@ export class FormularioService implements IFormularioService {
   }
 
   async findAll(query: FormularioQuery = {}, pagination: Pagination) {
-    const formularios = await this.repository.findAll(query, pagination)
+    const formularios = await this.repository.findAll(query, pagination.term)
 
     const paginated = paginateList(formularios, pagination)
 
@@ -68,13 +69,26 @@ export class FormularioService implements IFormularioService {
     }
   }
 
+  async findByTipo(tipoId: number) {
+    const [tipoProcedimento] = await this.tipoProcedimentoRepo.findAll({
+      id: tipoId
+    })
+
+    if (!tipoProcedimento) {
+      throw new NotFoundError(`Tipo Procedimento ${tipoId} não encontrado`)
+    }
+
+    if (tipoProcedimento.formularios.length === 0) return []
+
+    return this.repository.findAll({
+      id: tipoProcedimento.formularios
+    })
+  }
+
   private async inactivateAllTiposWithForm(id: number) {
-    const formularios = await this.tipoProcedimentoRepo.findAll(
-      {
-        formularios: { [Op.contains]: [id] }
-      },
-      { page: 1, per_page: 1000, term: null }
-    )
+    const formularios = await this.tipoProcedimentoRepo.findAll({
+      formularios: { [Op.contains]: [id] }
+    })
 
     formularios.forEach(async tipoProcedimento => {
       tipoProcedimento.set({ status: 'inativo' })

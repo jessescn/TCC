@@ -2,7 +2,7 @@ import TipoProcedimento, {
   TipoProcedimentoAttributes,
   TipoProcedimentoModel
 } from 'domain/models/tipo-procedimento'
-import { IRepository, Pagination } from 'repositories'
+import { IRepository } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import { isNumber } from 'utils/value'
 
@@ -34,15 +34,13 @@ export type CreateTipoProcedimento = {
 }
 
 export class TipoProcedimentoRepository implements IRepository {
-  findAll = async (query: TipoProcedimentoQuery, pagination: Pagination) => {
-    const searchId = isNumber(pagination.term)
-      ? { id: { [Op.eq]: pagination.term } }
-      : {}
-    const search = pagination.term
+  findAll = async (query: TipoProcedimentoQuery, term?: string) => {
+    const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
+    const search = term
       ? {
           [Op.or]: [
-            { nome: { [Op.substring]: '%' + pagination.term + '%' } },
-            { status: { [Op.eq]: pagination.term } },
+            { nome: { [Op.substring]: '%' + term + '%' } },
+            { status: { [Op.eq]: term } },
             { ...searchId }
           ]
         }
