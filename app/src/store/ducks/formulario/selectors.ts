@@ -9,6 +9,10 @@ export const getRoot = (state: State) => {
   return state.formulario
 }
 
+export const getPagination = createSelector([getRoot], state => {
+  return state.pagination
+})
+
 export const getFormularios = createSelector([getRoot], state => {
   return state.formularios
 })

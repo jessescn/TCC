@@ -67,13 +67,8 @@ const reducers = {
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
     state.statusUpdate = 'loading'
   },
-  updateSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
+  updateSuccess: (state: State) => {
     state.statusUpdate = 'success'
-
-    const indexof = state.formularios
-      .map(elm => elm.id)
-      .indexOf(action.payload.id)
-    state.formularios.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
     state.statusUpdate = 'failure'
@@ -81,11 +76,8 @@ const reducers = {
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'
   },
-  deleteSuccess: (state: State, action: PayloadAction<FormularioModel>) => {
+  deleteSuccess: (state: State) => {
     state.status = 'success'
-    state.formularios = state.formularios.filter(
-      form => form.id !== action.payload.id
-    )
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'
