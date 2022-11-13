@@ -1,6 +1,7 @@
 import { makeCreateProcedimentoController } from './create-factory'
 import { makeDeleteProcedimentoController } from './delete-factory'
 import { makeHomologateProcedimentoController } from './homologate-factory'
+import { makeReadActorProcedimentoController } from './read-actor-factory'
 import { makeReadProcedimentoController } from './read-factory'
 import { makeReadOneProcedimentoController } from './read-one-factory'
 import { makeReviewProcedimentoController } from './review-factory'
@@ -17,3 +18,5 @@ export const updateStatusProcedimentoController =
 export const homologateProcedimentoController =
   makeHomologateProcedimentoController()
 export const reviewProcedimentoController = makeReviewProcedimentoController()
+export const readActorProcedimentoController =
+  makeReadActorProcedimentoController()

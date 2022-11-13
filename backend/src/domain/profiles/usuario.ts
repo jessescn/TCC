@@ -12,6 +12,7 @@ export default {
   formulario_update: 'owned',
   procedimento_create: 'owned',
   procedimento_read: 'owned',
+  procedimento_actor_read: 'all',
   procedimento_update: 'owned',
   procedimento_delete: 'owned',
   procedimento_homologate: 'owned',

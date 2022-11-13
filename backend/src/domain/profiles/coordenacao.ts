@@ -12,6 +12,7 @@ export default {
   formulario_update: 'all',
   procedimento_create: 'all',
   procedimento_read: 'all',
+  procedimento_actor_read: 'all',
   procedimento_update: 'all',
   procedimento_delete: 'all',
   procedimento_homologate: 'all',

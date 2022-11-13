@@ -6,7 +6,7 @@ import { actions, store } from 'store'
 export default function MeusProcedimentos() {
   useEffect(() => {
     store.dispatch(
-      actions.procedimento.list({ page: 1, per_page: 5, term: null })
+      actions.meusProcedimentos.list({ page: 1, per_page: 5, term: null })
     )
   }, [])
 

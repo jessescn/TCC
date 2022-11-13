@@ -5,6 +5,7 @@ import * as userSlice from './user'
 import * as tipoProcedimentoSlice from './tipo-procedimento'
 import * as formularioSlice from './formulario'
 import * as procedimentoSlice from './procedimento'
+import * as meusProcedimentosSlice from './meus-procedimentos'
 
 export type State = {
   session: sessionSlice.State
@@ -12,6 +13,7 @@ export type State = {
   procedimento: procedimentoSlice.State
   tipoProcedimento: tipoProcedimentoSlice.State
   formulario: formularioSlice.State
+  meusProcedimentos: meusProcedimentosSlice.State
 }
 
 export const reducer = {
@@ -19,7 +21,8 @@ export const reducer = {
   user: userSlice.reducer,
   tipoProcedimento: tipoProcedimentoSlice.reducer,
   formulario: formularioSlice.reducer,
-  procedimento: procedimentoSlice.reducer
+  procedimento: procedimentoSlice.reducer,
+  meusProcedimentos: meusProcedimentosSlice.reducer
 }
 
 export const actions = Object.freeze({
@@ -27,7 +30,8 @@ export const actions = Object.freeze({
   user: userSlice.actions,
   tipoProcedimento: tipoProcedimentoSlice.actions,
   formulario: formularioSlice.actions,
-  procedimento: procedimentoSlice.actions
+  procedimento: procedimentoSlice.actions,
+  meusProcedimentos: meusProcedimentosSlice.actions
 })
 
 export const selectors = Object.freeze({
@@ -35,7 +39,8 @@ export const selectors = Object.freeze({
   procedimento: procedimentoSlice.selectors,
   user: userSlice.selectors,
   tipoProcedimento: tipoProcedimentoSlice.selectors,
-  formulario: formularioSlice.selectors
+  formulario: formularioSlice.selectors,
+  meusProcedimentos: meusProcedimentosSlice.selectors
 })
 
 export const sagas = function* () {
@@ -44,6 +49,7 @@ export const sagas = function* () {
     ...userSlice.sagas,
     ...tipoProcedimentoSlice.sagas,
     ...formularioSlice.sagas,
-    ...procedimentoSlice.sagas
+    ...procedimentoSlice.sagas,
+    ...meusProcedimentosSlice.sagas
   ])
 }

@@ -1,22 +1,16 @@
-import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
 import Table from 'components/pages/procedimentos/lista/table'
-import { useState } from 'react'
-import { MdSearchOff } from 'react-icons/md'
 
-import { selectors, useSelector } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 
 export function Content() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [term, setTerm] = useState('')
-
-  const procedimentos = useSelector(state =>
-    selectors.procedimento.getMeusProcedimentosBySearch(state)(term)
-  )
+  const pagination = useSelector(selectors.meusProcedimentos.getPagination)
 
   const handleSearch = (termo: string) => {
-    setCurrentPage(1)
-    setTerm(termo)
+    store.dispatch(
+      actions.meusProcedimentos.list({ ...pagination, page: 1, term: termo })
+    )
   }
 
   return (
@@ -56,20 +50,7 @@ export function Content() {
           }}
         />
       </Flex>
-      {procedimentos.length > 0 ? (
-        <Table
-          procedimentos={procedimentos}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      ) : (
-        <Center flexDir="column" h="40vh">
-          <Icon fontSize="45px" as={MdSearchOff} />
-          <Text textAlign="center" maxW="300px" fontSize="14px">
-            Nenhum procedimento encontrado.
-          </Text>
-        </Center>
-      )}
+      <Table />
     </Box>
   )
 }

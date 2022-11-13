@@ -4,6 +4,7 @@ import {
   createProcedimentoController,
   deleteProcedimentoController,
   homologateProcedimentoController,
+  readActorProcedimentoController,
   readOneProcedimentoController,
   readProcedimentoController,
   reviewProcedimentoController,
@@ -78,6 +79,7 @@ routes.put('/formularios/:id', updateFormularioController.exec)
 routes.delete('/formularios/:id', deleteFormularioController.exec)
 
 routes.get('/procedimentos', readProcedimentoController.exec)
+routes.get('/procedimentos/actor', readActorProcedimentoController.exec)
 routes.get('/procedimentos/:id', readOneProcedimentoController.exec)
 routes.post('/procedimentos', createProcedimentoController.exec)
 routes.put('/procedimentos/:id', updateProcedimentoController.exec)
