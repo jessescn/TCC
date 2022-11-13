@@ -1,4 +1,8 @@
-import { Controller, errorResponseHandler } from 'controllers'
+import {
+  Controller,
+  errorResponseHandler,
+  extractPagination
+} from 'controllers'
 import { ActorModel } from 'domain/models/actor'
 import { PermissionKey } from 'domain/profiles'
 import { IProcedimentoService } from 'services/procedimento'
@@ -21,8 +25,10 @@ export class ReadProcedimentoController extends Controller<IProcedimentoService>
     try {
       this.validateRequest(request)
 
+      const pagination = extractPagination(request)
+
       const query = this.getQueryByScope(request.actor)
-      const procedimentos = await this.service.findAll(query)
+      const procedimentos = await this.service.findAll(query, pagination)
 
       response.json(procedimentos)
     } catch (error) {

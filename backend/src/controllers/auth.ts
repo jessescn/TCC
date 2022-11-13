@@ -36,8 +36,6 @@ export class AuthController {
 
       const isPasswordValid = await isValidPassword(data.senha, actor.senha)
 
-      console.log({ isPasswordValid })
-
       if (!isPasswordValid) {
         throw new UnauthorizedError('Email ou senha inválidos')
       }
@@ -45,8 +43,6 @@ export class AuthController {
       const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY, {
         expiresIn: process.env.JWT_TOKEN_EXPIRATION
       })
-
-      console.log({ token })
 
       res.json({ token, expiresIn: process.env.JWT_TOKEN_EXPIRATION })
     } catch (error) {

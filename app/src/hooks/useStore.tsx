@@ -9,7 +9,7 @@ export const useStore = (entities: Entity[]) => {
   useEffect(() => {
     if (ref.current) return
     entities.forEach(entity => {
-      store.dispatch(actions[entity].list())
+      store.dispatch(actions[entity].list({ page: 1, per_page: 5, term: null }))
     })
     ref.current = true
   }, [])

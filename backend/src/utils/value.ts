@@ -2,6 +2,8 @@ import { ProcedimentoModel } from 'domain/models/procedimento'
 import { Pagination } from 'repositories'
 
 export const isNumber = (value: any) => {
+  if (value === null || value === undefined) return false
+
   return !isNaN(Number(value))
 }
 

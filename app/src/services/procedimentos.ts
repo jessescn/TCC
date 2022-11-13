@@ -6,7 +6,8 @@ import {
   Resposta,
   ProcedimentoStatus
 } from 'domain/models/procedimento'
-import { httpClient } from './config'
+import { buildQuery } from 'utils/format'
+import { httpClient, Pagination } from './config'
 
 export type NovoProcedimento = {
   tipo: number
@@ -33,10 +34,12 @@ export type RevisaoPayload = {
 }
 
 export const ProcedimentoService = {
-  list: () => {
+  list: (pagination: Pagination) => {
+    const query = buildQuery(pagination)
+
     return httpClient.request<AxiosResponse<ProcedimentoModel[]>>({
       method: 'get',
-      url: '/procedimentos'
+      url: `/procedimentos?${query}`
     })
   },
   create: (payload: NovoProcedimento) => {

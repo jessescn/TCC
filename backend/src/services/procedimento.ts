@@ -7,7 +7,7 @@ import {
 import { ActorModel } from 'domain/models/actor'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
-import { IProcedimentoRepo, IRepository } from 'repositories'
+import { IProcedimentoRepo, IRepository, Pagination } from 'repositories'
 import {
   NewProcedimento,
   NewRevisao,
@@ -135,8 +135,8 @@ export class ProcedimentoService implements IProcedimentoService {
     return this.checkIfProcedimentoExists(id)
   }
 
-  async findAll(query: ProcedimentoQuery = {}) {
-    return this.procedimentoRepo.findAll(query)
+  async findAll(query: ProcedimentoQuery, pagination: Pagination) {
+    return this.procedimentoRepo.findAll(query, pagination)
   }
 
   async updateStatus(id: number, novoStatus: TStatus) {

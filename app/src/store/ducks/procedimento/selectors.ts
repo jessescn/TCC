@@ -12,6 +12,10 @@ export const getProcedimentos = createSelector([getRoot], state => {
   return state.procedimentos
 })
 
+export const getPagination = createSelector([getRoot], state => {
+  return state.pagination
+})
+
 export const getProcedimentoById = createSelector(
   [getProcedimentos],
   procedimentos => (id: number) => {

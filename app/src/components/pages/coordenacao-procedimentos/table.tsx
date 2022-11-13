@@ -1,29 +1,18 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Center, Icon, Text } from '@chakra-ui/react'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
-import { ProcedimentoModel, statusList } from 'domain/models/procedimento'
+import { statusList } from 'domain/models/procedimento'
+import { MdSearchOff } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import { actions, store } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
 import { getCurrentStatus } from 'utils/procedimento'
 
-type Props = {
-  procedimentos: ProcedimentoModel[]
-  currentPage: number
-  setCurrentPage: (page: number) => void
-}
-
-const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
+const Table = () => {
   const navigate = useNavigate()
 
-  const sorted = [...procedimentos]
-
-  sorted.sort(function (a, b) {
-    const today = new Date()
-    const date1 = b.updatedAt ? new Date(b.updatedAt) : today
-    const date2 = a.updatedAt ? new Date(a.updatedAt) : today
-
-    return date1.getTime() - date2.getTime()
-  })
+  const pagination = useSelector(selectors.procedimento.getPagination)
+  const total = useSelector(state => state.procedimento.total)
+  const procedimentos = useSelector(selectors.procedimento.getProcedimentos)
 
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
@@ -32,7 +21,11 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
     navigate(`/coordenacao/procedimentos/${id}`)
   }
 
-  return (
+  const handleUpdateCurrentPage = (nextPage: number) => {
+    store.dispatch(actions.procedimento.list({ ...pagination, page: nextPage }))
+  }
+
+  return procedimentos.length > 0 ? (
     <Box
       mt="24px"
       borderColor="secondary.dark"
@@ -41,9 +34,9 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
       p="16px"
     >
       <SimpleTable
-        currentPage={currentPage}
-        totalPages={Math.ceil(sorted.length / 5)}
-        onChangePage={setCurrentPage}
+        currentPage={pagination.page}
+        totalPages={Math.ceil(total / pagination.per_page)}
+        onChangePage={handleUpdateCurrentPage}
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
@@ -54,7 +47,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
           { content: 'Última atualizacão', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '15%' } }
         ]}
-        rows={sorted.map(procedimento => {
+        rows={procedimentos.map(procedimento => {
           const status = getCurrentStatus(procedimento)
 
           return [
@@ -79,6 +72,13 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
         })}
       />
     </Box>
+  ) : (
+    <Center flexDir="column" h="40vh">
+      <Icon fontSize="45px" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="14px">
+        Nenhum procedimento encontrado.
+      </Text>
+    </Center>
   )
 }
 

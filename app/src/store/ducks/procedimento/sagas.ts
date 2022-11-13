@@ -3,8 +3,10 @@ import { AxiosResponse } from 'axios'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { UserModel } from 'domain/models/user'
 import { call, put, select, takeLatest } from 'redux-saga/effects'
+import { Pagination, PaginationResponse } from 'services/config'
 import { ProcedimentoService } from 'services/procedimentos'
 import { selectors } from '..'
+import { getPagination } from './selectors'
 import {
   actions,
   CreatePayload,
@@ -24,13 +26,12 @@ export const sagas = [
   takeLatest(actions.novaRevisao.type, novaRevisaoSaga)
 ]
 
-function* listSaga() {
+function* listSaga(action: PayloadAction<Pagination>) {
   try {
-    const response: AxiosResponse<ProcedimentoModel[]> = yield call(
-      ProcedimentoService.list
-    )
+    const response: AxiosResponse<PaginationResponse<ProcedimentoModel>> =
+      yield call(() => ProcedimentoService.list(action.payload))
 
-    yield put(actions.listSuccess(response.data as any))
+    yield put(actions.listSuccess(response.data))
   } catch (error) {
     yield put(actions.listFailure())
   }
@@ -50,11 +51,16 @@ function* createSaga(action: PayloadAction<CreatePayload>) {
 
 function* updateSaga(action: PayloadAction<UpdatePayload>) {
   try {
-    const response: AxiosResponse<ProcedimentoModel> = yield call(() =>
+    const currentPagination: Pagination = yield select(getPagination)
+    yield call(() =>
       ProcedimentoService.update(action.payload.id, action.payload.data)
     )
 
-    yield put(actions.updateSuccess(response.data))
+    yield put(actions.updateSuccess())
+    yield call(listSaga, {
+      payload: currentPagination,
+      type: actions.list.type
+    })
   } catch (error) {
     yield put(actions.updateFailure())
   }
@@ -62,11 +68,15 @@ function* updateSaga(action: PayloadAction<UpdatePayload>) {
 
 function* deleteSaga(action: PayloadAction<number>) {
   try {
-    const response: AxiosResponse<ProcedimentoModel> = yield call(() =>
-      ProcedimentoService.delete(action.payload)
-    )
+    const currentPagination: Pagination = yield select(getPagination)
 
-    yield put(actions.deleteSuccess(response.data))
+    yield call(() => ProcedimentoService.delete(action.payload))
+
+    yield put(actions.deleteSuccess())
+    yield call(listSaga, {
+      payload: currentPagination,
+      type: actions.list.type
+    })
   } catch (error) {
     yield put(actions.deleteFailure())
   }

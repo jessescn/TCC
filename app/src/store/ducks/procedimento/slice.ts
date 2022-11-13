@@ -4,6 +4,7 @@ import {
   ProcedimentoModel,
   ProcedimentoStatus
 } from 'domain/models/procedimento'
+import { Pagination, PaginationResponse } from 'services/config'
 import { NovoProcedimento, RevisaoPayload } from 'services/procedimentos'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
@@ -15,6 +16,8 @@ export type State = {
   statusVote: Status
   statusRevisao: Status
   statusUpdateStatus: Status
+  pagination: Pagination
+  total: number
 }
 
 export type UpdatePayload = {
@@ -45,16 +48,27 @@ export const initialState: State = {
   statusSubmit: 'pristine',
   status: 'pristine',
   statusUpdateStatus: 'pristine',
-  statusRevisao: 'pristine'
+  statusRevisao: 'pristine',
+  total: 0,
+  pagination: {
+    per_page: 5,
+    page: 1,
+    term: null
+  }
 }
 
 const reducers = {
-  list: (state: State) => {
+  list: (state: State, action: PayloadAction<Pagination>) => {
     state.status = 'loading'
+    state.pagination = action.payload
   },
-  listSuccess: (state: State, action: PayloadAction<ProcedimentoModel[]>) => {
+  listSuccess: (
+    state: State,
+    action: PayloadAction<PaginationResponse<ProcedimentoModel>>
+  ) => {
     state.status = 'success'
-    state.procedimentos = action.payload
+    state.total = action.payload.total
+    state.procedimentos = action.payload.data
   },
   listFailure: (state: State) => {
     state.status = 'failure'
@@ -62,13 +76,8 @@ const reducers = {
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
     state.statusUpdateStatus = 'loading'
   },
-  updateSuccess: (state: State, action: PayloadAction<ProcedimentoModel>) => {
+  updateSuccess: (state: State) => {
     state.statusUpdateStatus = 'success'
-
-    const indexof = state.procedimentos
-      .map(elm => elm.id)
-      .indexOf(action.payload.id)
-    state.procedimentos.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
     state.statusUpdateStatus = 'failure'
@@ -93,11 +102,8 @@ const reducers = {
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'
   },
-  deleteSuccess: (state: State, action: PayloadAction<ProcedimentoModel>) => {
+  deleteSuccess: (state: State) => {
     state.status = 'success'
-    state.procedimentos = state.procedimentos.filter(
-      form => form.id !== action.payload.id
-    )
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'

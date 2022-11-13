@@ -10,9 +10,10 @@ import Procedimento, {
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { IProcedimentoRepo } from 'repositories'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { IProcedimentoRepo, Pagination } from 'repositories'
+import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import Actor from 'domain/models/actor'
+import { isNumber, paginateList } from 'utils/value'
 
 export type CreateProcedimento = {
   tipo: number
@@ -46,24 +47,57 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     return procedimento
   }
 
-  findAll = async (query: ProcedimentoQuery = {}) => {
-    const procedimentos = await Procedimento.findAll({
+  findAll = async (query: ProcedimentoQuery, pagination: Pagination) => {
+    const searchId = isNumber(pagination.term)
+      ? { id: { [Op.eq]: pagination.term } }
+      : {}
+
+    const procedimentosById = await Procedimento.findAll({
       include: [
-        TipoProcedimento,
         Comentario,
+        TipoProcedimento,
         {
           model: Actor,
           attributes: ['nome']
         }
       ],
-      where: { deleted: false, ...query },
-      order: [
-        ['id', 'ASC'],
-        ['updatedAt', 'DESC']
-      ]
+      where: { deleted: false, ...query, ...searchId },
+      order: [['updatedAt', 'DESC']]
     })
 
-    return procedimentos
+    const whereTipo = pagination.term
+      ? {
+          [Op.or]: [{ nome: { [Op.substring]: '%' + pagination.term + '%' } }]
+        }
+      : {}
+
+    const procedimentosByName = await Procedimento.findAll({
+      include: [
+        Comentario,
+        {
+          model: Actor,
+          attributes: ['nome']
+        },
+        {
+          model: TipoProcedimento,
+          where: { ...whereTipo }
+        }
+      ],
+      where: { deleted: false, ...query },
+      order: [['updatedAt', 'DESC']]
+    })
+
+    const procedimentos =
+      isNumber(pagination.term) && procedimentosById.length > 0
+        ? procedimentosById
+        : procedimentosByName
+
+    const paginated = paginateList(procedimentos, pagination)
+
+    return {
+      total: procedimentos.length,
+      data: paginated
+    }
   }
 
   create = async (data: CreateProcedimento) => {
