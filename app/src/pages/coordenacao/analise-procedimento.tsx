@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Content from 'components/pages/analisar-procedimento/content'
+import Content from 'components/pages/coordenacao/analise-procedimento/content'
 import { useParams } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
 

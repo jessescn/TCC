@@ -1,6 +1,6 @@
 import Screen from 'components/atoms/screen'
 
-import Content from 'components/pages/detalhes-tipo-procedimento/content'
+import Content from 'components/pages/tipo-procedimentos/detalhes/content'
 
 export default function DetalhesTipoProcedimento() {
   return (

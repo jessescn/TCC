@@ -1,7 +1,7 @@
 import { Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Content from 'components/pages/novo-procedimento/content'
-import Header from 'components/pages/novo-procedimento/header'
+import Content from 'components/pages/procedimentos/novo/content'
+import Header from 'components/pages/procedimentos/novo/header'
 import { useParams } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
 

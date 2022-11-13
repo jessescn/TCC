@@ -1,5 +1,5 @@
 import { Button, Collapse, Flex, Icon, useDisclosure } from '@chakra-ui/react'
-import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
+import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento/content'
 import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel, Resposta } from 'domain/models/procedimento'
 import { useEffect, useMemo } from 'react'

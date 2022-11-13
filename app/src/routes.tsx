@@ -13,11 +13,11 @@ import DetalhesFormulario from './pages/formularios/detalhes'
 
 import DetalhesTipoProcedimentos from 'pages/tipo-procedimentos/detalhes'
 import NovoProcedimento from 'pages/procedimentos/novo'
-import HomologarProcedimento from 'pages/colegiado/homologar-procedimento'
-import ListaHomologacao from 'pages/colegiado/lista-homologacao'
-import ProcedimentosCoordenacao from 'pages/coordenador/procedimentos'
-import EstatisticasProcedimento from 'pages/coordenador/estatisticas'
-import AnaliseProcedimento from 'pages/coordenador/analise-procedimento'
+import HomologarProcedimento from 'pages/colegiado/homologacao'
+import ListaHomologacao from 'pages/colegiado/lista'
+import ProcedimentosCoordenacao from 'pages/coordenacao/procedimentos'
+import EstatisticasProcedimento from 'pages/coordenacao/estatisticas'
+import AnaliseProcedimento from 'pages/coordenacao/analise-procedimento'
 import NotFound from 'pages/404'
 
 export default function Routes() {

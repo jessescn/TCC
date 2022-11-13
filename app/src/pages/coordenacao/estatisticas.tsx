@@ -1,6 +1,6 @@
 import { Box, Divider, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Content from 'components/pages/estatisticas/content'
+import Content from 'components/pages/coordenacao/estatisticas/content'
 
 export default function EstatisticasProcedimento() {
   return (

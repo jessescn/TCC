@@ -1,4 +1,4 @@
-import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
+import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento/content'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import {
   ProcedimentoModel,

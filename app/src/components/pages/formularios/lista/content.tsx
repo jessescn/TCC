@@ -2,7 +2,7 @@ import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
 
 import { Button } from 'components/atoms/button'
-import FormulariosTable from 'components/pages/formularios/table'
+import FormulariosTable from 'components/pages/formularios/lista/table'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 

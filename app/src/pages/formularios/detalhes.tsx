@@ -5,8 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-import Content from 'components/pages/detalhes-formulario/content'
-import Header from '../../components/pages/detalhes-formulario/header'
+import Content from 'components/pages/formularios/detalhes/content'
+import Header from '../../components/pages/formularios/detalhes/header'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 
 type FormularioForm = {

@@ -1,6 +1,6 @@
 import Screen from 'components/atoms/screen'
 
-import { Content } from 'components/pages/formularios/content'
+import { Content } from 'components/pages/formularios/lista/content'
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 

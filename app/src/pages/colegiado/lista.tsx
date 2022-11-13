@@ -1,7 +1,7 @@
 import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import FormInput from 'components/molecules/forms/input'
-import Table from 'components/pages/lista-homologacao/table'
+import Table from 'components/pages/colegiado/lista/table'
 import { useState } from 'react'
 import { MdSearchOff } from 'react-icons/md'
 

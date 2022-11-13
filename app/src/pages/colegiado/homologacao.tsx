@@ -8,8 +8,8 @@ import {
   Tooltip
 } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Comments from 'components/pages/homologar-procedimento/comments'
-import Content from 'components/pages/homologar-procedimento/content'
+import Comments from 'components/pages/colegiado/homologacao/comments'
+import Content from 'components/pages/colegiado/homologacao/content'
 import Header from 'components/organisms/procedimento/header'
 import { useState } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'

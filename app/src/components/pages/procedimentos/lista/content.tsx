@@ -1,6 +1,6 @@
 import { Box, Center, Divider, Flex, Icon, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
-import Table from 'components/pages/meus-procedimentos/table'
+import Table from 'components/pages/procedimentos/lista/table'
 import { useState } from 'react'
 import { MdSearchOff } from 'react-icons/md'
 

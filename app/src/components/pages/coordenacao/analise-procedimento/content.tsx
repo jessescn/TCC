@@ -6,7 +6,7 @@ import {
   Text,
   useDisclosure
 } from '@chakra-ui/react'
-import InvalidFieldsModal from 'components/pages/analisar-procedimento/modals/invalid-fields'
+import InvalidFieldsModal from 'components/pages/coordenacao/analise-procedimento/modals/invalid-fields'
 import Procedimento from 'components/organisms/procedimento'
 import Header from 'components/organisms/procedimento/header'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'

@@ -1,6 +1,6 @@
 import { Box, Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Content from 'components/pages/detalhes-procedimento/content'
+import Content from 'components/pages/procedimentos/detalhes/content'
 import { useParams } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
 

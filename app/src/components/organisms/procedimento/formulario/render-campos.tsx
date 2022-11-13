@@ -1,6 +1,6 @@
 import { Box, Stack } from '@chakra-ui/react'
 import { campoComponente } from 'components/molecules/forms/fields'
-import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
+import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento/content'
 import { Procedimento } from 'domain/entity/procedimento'
 import { FormularioModel } from 'domain/models/formulario'
 import { Resposta, RespostaCampo } from 'domain/models/procedimento'

@@ -1,5 +1,5 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/meus-procedimentos/content'
+import { Content } from 'components/pages/procedimentos/lista/content'
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 

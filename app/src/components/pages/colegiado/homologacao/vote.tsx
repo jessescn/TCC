@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai'
 import { actions, selectors, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
-import ConfirmVote from '../../molecules/votes/confirm-vote'
+import ConfirmVote from '../../../molecules/votes/confirm-vote'
 
 export type VoteOption = 'yes' | 'no'
 

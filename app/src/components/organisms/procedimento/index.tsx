@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
-import { CustomCampoInvalido } from 'components/pages/analisar-procedimento/content'
+import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento/content'
 import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { useState } from 'react'

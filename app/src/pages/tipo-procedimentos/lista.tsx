@@ -1,6 +1,6 @@
 import Screen from 'components/atoms/screen'
 
-import { Content } from 'components/pages/tipo-procedimentos/content'
+import { Content } from 'components/pages/tipo-procedimentos/lista/content'
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 
