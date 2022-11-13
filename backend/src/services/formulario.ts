@@ -61,11 +61,14 @@ export class FormularioService implements IFormularioService {
   }
 
   private async inactivateAllTiposWithForm(id: number) {
-    const tipoProcedimentos = await this.tipoProcedimentoRepo.findAll({
-      formularios: { [Op.contains]: [id] }
-    })
+    const { data } = await this.tipoProcedimentoRepo.findAll(
+      {
+        formularios: { [Op.contains]: [id] }
+      },
+      { page: 1, per_page: 1000, term: null }
+    )
 
-    tipoProcedimentos.forEach(async tipoProcedimento => {
+    data.forEach(async tipoProcedimento => {
       tipoProcedimento.set({ status: 'inativo' })
 
       await tipoProcedimento.save()

@@ -1,7 +1,7 @@
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { IRepository, PaginationResponse } from 'repositories'
+import { IRepository, Pagination, PaginationResponse } from 'repositories'
 import { FormularioRepository } from 'repositories/sequelize/formulario'
 import {
   NewTipoProcedimento,
@@ -80,8 +80,8 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
     return this.checkIfTipoProcedimentoExists(id)
   }
 
-  async findAll(query: TipoProcedimentoQuery = {}) {
-    return this.tipoProcedimentoRepo.findAll(query)
+  async findAll(query: TipoProcedimentoQuery, pagination: Pagination) {
+    return this.tipoProcedimentoRepo.findAll(query, pagination)
   }
 
   async update(id: number, data: Partial<TipoProcedimentoModel>) {

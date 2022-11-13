@@ -10,6 +10,7 @@ import Procedimento, {
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { ProcedimentoRepository } from '../procedimento'
+import Actor from 'domain/models/actor'
 
 describe('Procedimento Repository', () => {
   const procedimento = createMock<ProcedimentoModel>()
@@ -51,7 +52,14 @@ describe('Procedimento Repository', () => {
 
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
-        include: [TipoProcedimento, Comentario],
+        include: [
+          TipoProcedimento,
+          Comentario,
+          {
+            model: Actor,
+            attributes: ['nome']
+          }
+        ],
         where: { deleted: false },
         order: [
           ['id', 'ASC'],
@@ -67,7 +75,14 @@ describe('Procedimento Repository', () => {
 
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
-        include: [TipoProcedimento, Comentario],
+        include: [
+          TipoProcedimento,
+          Comentario,
+          {
+            model: Actor,
+            attributes: ['nome']
+          }
+        ],
         where: { deleted: false, ...query },
         order: [
           ['id', 'ASC'],

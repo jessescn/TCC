@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { httpClient } from './config'
+import { buildQuery } from 'utils/format'
+import { httpClient, Pagination, PaginationResponse } from './config'
 
 export type NovoTipoProcedimento = {
   nome: string
@@ -12,10 +13,14 @@ export type NovoTipoProcedimento = {
 }
 
 export const TipoProcedimentoService = {
-  list: () => {
-    return httpClient.request<AxiosResponse<TipoProcedimentoModel[]>>({
+  list: (pagination: Pagination) => {
+    const query = buildQuery(pagination)
+
+    return httpClient.request<
+      AxiosResponse<PaginationResponse<TipoProcedimentoModel>>
+    >({
       method: 'get',
-      url: '/tipo-procedimentos'
+      url: `/tipo-procedimentos?${query}`
     })
   },
   create: (payload: NovoTipoProcedimento) => {

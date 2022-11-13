@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { actions, store } from 'store'
 
-export type Entity = 'tipoProcedimento' | 'procedimento'
+export type Entity = 'procedimento'
 
 export const useStore = (entities: Entity[]) => {
   const ref = useRef(false)

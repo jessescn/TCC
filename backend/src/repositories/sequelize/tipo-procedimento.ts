@@ -2,8 +2,9 @@ import TipoProcedimento, {
   TipoProcedimentoAttributes,
   TipoProcedimentoModel
 } from 'domain/models/tipo-procedimento'
-import { IRepository } from 'repositories'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { IRepository, Pagination } from 'repositories'
+import { InferAttributes, Op, WhereOptions } from 'sequelize'
+import { isNumber, paginateList } from 'utils/value'
 
 export type TipoProcedimentoQuery = WhereOptions<
   InferAttributes<TipoProcedimentoAttributes>
@@ -33,13 +34,31 @@ export type CreateTipoProcedimento = {
 }
 
 export class TipoProcedimentoRepository implements IRepository {
-  findAll = async (query: TipoProcedimentoQuery = {}) => {
+  findAll = async (query: TipoProcedimentoQuery, pagination: Pagination) => {
+    const searchId = isNumber(pagination.term)
+      ? { id: { [Op.eq]: pagination.term } }
+      : {}
+    const search = pagination.term
+      ? {
+          [Op.or]: [
+            { nome: { [Op.substring]: '%' + pagination.term + '%' } },
+            { status: { [Op.eq]: pagination.term } },
+            { ...searchId }
+          ]
+        }
+      : {}
+
     const tipoProcedimentos = await TipoProcedimento.findAll({
-      where: { ...query },
-      order: [['id', 'ASC']]
+      where: { ...query, ...search },
+      order: [['updatedAt', 'DESC']]
     })
 
-    return tipoProcedimentos
+    const paginated = paginateList(tipoProcedimentos, pagination)
+
+    return {
+      total: tipoProcedimentos.length,
+      data: paginated
+    }
   }
 
   findOne = async (id: number) => {

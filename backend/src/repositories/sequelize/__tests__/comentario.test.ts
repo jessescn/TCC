@@ -5,6 +5,7 @@ import Comentario, {
 } from 'domain/models/comentario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import Procedimento from 'domain/models/procedimento'
+import Actor from 'domain/models/actor'
 
 describe('Comentario Repository', () => {
   const sut = new ComentarioRepository()
@@ -28,7 +29,13 @@ describe('Comentario Repository', () => {
 
       expect(result).toEqual(comentarios)
       expect(Comentario.findAll).toBeCalledWith({
-        include: [Procedimento],
+        include: [
+          Procedimento,
+          {
+            model: Actor,
+            attributes: ['nome', 'email']
+          }
+        ],
         where: { deleted: false }
       })
     })
@@ -37,7 +44,13 @@ describe('Comentario Repository', () => {
       await sut.findAll({ id: 2 })
 
       expect(Comentario.findAll).toBeCalledWith({
-        include: [Procedimento],
+        include: [
+          Procedimento,
+          {
+            model: Actor,
+            attributes: ['nome', 'email']
+          }
+        ],
         where: { deleted: false, id: 2 }
       })
     })
@@ -75,7 +88,13 @@ describe('Comentario Repository', () => {
 
       expect(result).toEqual(comentario)
       expect(Comentario.create).toBeCalledWith(createComentario, {
-        include: [Procedimento]
+        include: [
+          Procedimento,
+          {
+            model: Actor,
+            attributes: ['nome', 'email']
+          }
+        ]
       })
     })
   })

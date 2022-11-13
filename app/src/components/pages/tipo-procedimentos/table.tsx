@@ -1,17 +1,24 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Center, Icon, Text } from '@chakra-ui/react'
 import SimpleTable from 'components/organisms/simple-table'
 import { format } from 'date-fns'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { MdSearchOff } from 'react-icons/md'
+import { actions, selectors, store, useSelector } from 'store'
 import { EditMenu } from './menu'
 
-type Props = {
-  tipoProcedimentos: TipoProcedimentoModel[]
-  currentPage: number
-  setCurrentPage: (page: number) => void
-}
+const Table = () => {
+  const pagination = useSelector(selectors.tipoProcedimento.getPagination)
+  const total = useSelector(state => state.tipoProcedimento.total)
+  const tipoProcedimentos = useSelector(
+    selectors.tipoProcedimento.getTipoProcedimentos
+  )
 
-const Table = ({ tipoProcedimentos, currentPage, setCurrentPage }: Props) => {
-  return (
+  const handleUpdateCurrentPage = (nextPage: number) => {
+    store.dispatch(
+      actions.tipoProcedimento.list({ ...pagination, page: nextPage })
+    )
+  }
+
+  return tipoProcedimentos.length > 0 ? (
     <>
       <Box
         mt="24px"
@@ -21,9 +28,9 @@ const Table = ({ tipoProcedimentos, currentPage, setCurrentPage }: Props) => {
         p="16px"
       >
         <SimpleTable
-          currentPage={currentPage}
-          totalPages={Math.ceil(tipoProcedimentos.length / 5)}
-          onChangePage={setCurrentPage}
+          currentPage={pagination.page}
+          totalPages={Math.ceil(total / pagination.per_page)}
+          onChangePage={handleUpdateCurrentPage}
           columns={[
             { content: 'ID', props: { width: '5%' } },
             { content: 'Nome', props: { width: '40%' } },
@@ -59,6 +66,14 @@ const Table = ({ tipoProcedimentos, currentPage, setCurrentPage }: Props) => {
         />
       </Box>
     </>
+  ) : (
+    <Center flexDir="column" h="40vh">
+      <Icon fontSize="45px" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="14px">
+        Nenhum formulário encontrado. Clique em 'Novo Formulário' para construir
+        um novo modelo
+      </Text>
+    </Center>
   )
 }
 

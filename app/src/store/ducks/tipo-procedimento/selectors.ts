@@ -13,6 +13,10 @@ export const getTipoProcedimentos = createSelector([getRoot], state => {
   return state.tipoProcedimentos
 })
 
+export const getPagination = createSelector([getRoot], state => {
+  return state.pagination
+})
+
 export const getTipoProcedimento = createSelector(
   [getTipoProcedimentos],
   tipoProcedimentos => (id: number) => {

@@ -106,7 +106,9 @@ describe('Formulario Service', () => {
       save: jest.fn()
     }
     const tipoRepo = createMock<IRepository>({
-      findAll: jest.fn().mockResolvedValue([tipoProcedimentoWithSpies])
+      findAll: jest
+        .fn()
+        .mockResolvedValue({ data: [tipoProcedimentoWithSpies], total: 1 })
     })
 
     const repo = createMock<IRepository>({

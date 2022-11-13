@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { Pagination, PaginationResponse } from 'services/config'
 import { NovoTipoProcedimento } from 'services/tipo-procedimentos'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
   tipoProcedimentos: TipoProcedimentoModel[]
+  total: number
   status: Status
   statusUpdate: Status
   statusCreate: Status
+  pagination: Pagination
 }
 
 export type UpdatePayload = {
@@ -21,21 +24,29 @@ export type CreatePayload = NovoTipoProcedimento
 
 export const initialState: State = {
   tipoProcedimentos: [],
+  total: 0,
   status: 'pristine',
   statusUpdate: 'pristine',
-  statusCreate: 'pristine'
+  statusCreate: 'pristine',
+  pagination: {
+    page: 1,
+    per_page: 5,
+    term: null
+  }
 }
 
 const reducers = {
-  list: (state: State) => {
+  list: (state: State, action: PayloadAction<Pagination>) => {
     state.status = 'loading'
+    state.pagination = action.payload
   },
   listSuccess: (
     state: State,
-    action: PayloadAction<TipoProcedimentoModel[]>
+    action: PayloadAction<PaginationResponse<TipoProcedimentoModel>>
   ) => {
     state.status = 'success'
-    state.tipoProcedimentos = action.payload
+    state.tipoProcedimentos = action.payload.data
+    state.total = action.payload.total
   },
   listFailure: (state: State) => {
     state.status = 'failure'
@@ -56,16 +67,8 @@ const reducers = {
   update: (state: State, action: PayloadAction<UpdatePayload>) => {
     state.statusUpdate = 'loading'
   },
-  updateSuccess: (
-    state: State,
-    action: PayloadAction<TipoProcedimentoModel>
-  ) => {
+  updateSuccess: (state: State) => {
     state.statusUpdate = 'success'
-
-    const indexof = state.tipoProcedimentos
-      .map(elm => elm.id)
-      .indexOf(action.payload.id)
-    state.tipoProcedimentos.splice(indexof, 1, action.payload)
   },
   updateFailure: (state: State) => {
     state.statusUpdate = 'failure'
@@ -73,18 +76,8 @@ const reducers = {
   delete: (state: State, action: PayloadAction<number>) => {
     state.status = 'loading'
   },
-  deleteSuccess: (
-    state: State,
-    action: PayloadAction<TipoProcedimentoModel>
-  ) => {
+  deleteSuccess: (state: State) => {
     state.status = 'success'
-    const idx = state.tipoProcedimentos.findIndex(
-      tipo => tipo.id === action.payload.id
-    )
-
-    if (idx !== -1) {
-      state.tipoProcedimentos.splice(idx, 1, action.payload)
-    }
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'

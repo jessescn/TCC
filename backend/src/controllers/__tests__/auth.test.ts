@@ -21,7 +21,9 @@ describe('Auth Controller', () => {
         senha: password
       }
 
-      const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY)
+      const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_TOKEN_EXPIRATION
+      })
 
       const request = createMock<Request>({ body: data })
       const response = createMock<Response>()

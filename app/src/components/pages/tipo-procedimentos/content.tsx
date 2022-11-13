@@ -1,40 +1,21 @@
-import {
-  Box,
-  Center,
-  Checkbox,
-  Divider,
-  Flex,
-  Icon,
-  Text
-} from '@chakra-ui/react'
+import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
 import FormInput from 'components/molecules/forms/input'
-import { useState } from 'react'
-import { MdSearchOff } from 'react-icons/md'
 
 import { useNavigate } from 'react-router-dom'
-import { selectors, useSelector } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import Table from './table'
 
 export function Content() {
   const navigate = useNavigate()
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [includeDeleted, setIncludeDeleted] = useState(false)
-  const [term, setTerm] = useState('')
-
-  const tipoProcedimentos = useSelector(state =>
-    selectors.tipoProcedimento.getTipoProcedimentosBySearch(state)(term)
-  )
+  const pagination = useSelector(selectors.tipoProcedimento.getPagination)
 
   const handleSearch = (termo: string) => {
-    setCurrentPage(1)
-    setTerm(termo)
+    store.dispatch(
+      actions.tipoProcedimento.list({ ...pagination, page: 1, term: termo })
+    )
   }
-
-  const tipoProcedimentosToRender = includeDeleted
-    ? tipoProcedimentos
-    : tipoProcedimentos.filter(tipo => !tipo.deleted)
 
   return (
     <Box
@@ -82,7 +63,7 @@ export function Content() {
           Novo Tipo de Procedimento
         </Button>
       </Flex>
-      <Box mt="10px">
+      {/* <Box mt="10px">
         <Checkbox
           size="sm"
           checked={includeDeleted}
@@ -90,22 +71,8 @@ export function Content() {
         >
           Incluir deletados
         </Checkbox>
-      </Box>
-      {tipoProcedimentosToRender.length > 0 ? (
-        <Table
-          currentPage={currentPage}
-          tipoProcedimentos={tipoProcedimentosToRender}
-          setCurrentPage={setCurrentPage}
-        />
-      ) : (
-        <Center flexDir="column" h="40vh">
-          <Icon fontSize="45px" as={MdSearchOff} />
-          <Text textAlign="center" maxW="300px" fontSize="14px">
-            Nenhum formulário encontrado. Clique em 'Novo Formulário' para
-            construir um novo modelo
-          </Text>
-        </Center>
-      )}
+      </Box> */}
+      <Table />
     </Box>
   )
 }

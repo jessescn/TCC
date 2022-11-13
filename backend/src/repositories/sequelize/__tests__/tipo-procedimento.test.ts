@@ -7,12 +7,18 @@ import {
   CreateTipoProcedimento,
   TipoProcedimentoRepository
 } from '../tipo-procedimento'
+import { Pagination } from 'repositories'
 
 describe('Tipo Procedimento Repository', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
   const tipoProcedimentos = createMockList<TipoProcedimentoModel>(2)
 
   const sut = new TipoProcedimentoRepository()
+  const pagination: Pagination = {
+    per_page: 1000,
+    page: 1,
+    term: null
+  }
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -28,24 +34,24 @@ describe('Tipo Procedimento Repository', () => {
     })
 
     it('should return all tipoProcedimentos', async () => {
-      const result = await sut.findAll()
+      const result = await sut.findAll({}, pagination)
 
-      expect(result).toEqual(tipoProcedimentos)
+      expect(result.data).toEqual(tipoProcedimentos)
       expect(TipoProcedimento.findAll).toBeCalledWith({
         where: {},
-        order: [['id', 'ASC']]
+        order: [['updatedAt', 'DESC']]
       })
     })
 
     it('should return only the tipoProcedimento which the query applies on', async () => {
       const query = { status: 'ativo' }
 
-      const result = await sut.findAll(query)
+      const result = await sut.findAll(query, pagination)
 
-      expect(result).toEqual(tipoProcedimentos)
+      expect(result.data).toEqual(tipoProcedimentos)
       expect(TipoProcedimento.findAll).toBeCalledWith({
         where: { ...query },
-        order: [['id', 'ASC']]
+        order: [['updatedAt', 'DESC']]
       })
     })
   })

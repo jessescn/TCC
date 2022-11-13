@@ -9,10 +9,14 @@ import { ProfileModel } from 'domain/models/profile'
 describe('ReadTipoProcedimento Controller', () => {
   const tipoProcedimentos = createMockList<TipoProcedimentoModel>(2)
   const { actor, spies, response } = baseSetup('tipo_procedimento_read')
+  const pagination = { page: 1, per_page: 1000, term: null }
 
   const makeSut = () => {
     const service = {
-      findAll: jest.fn().mockResolvedValue(tipoProcedimentos)
+      findAll: jest.fn().mockResolvedValue({
+        data: tipoProcedimentos,
+        total: tipoProcedimentos.length
+      })
     }
 
     return {
@@ -33,8 +37,11 @@ describe('ReadTipoProcedimento Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({})
-    expect(response.json).toBeCalledWith(tipoProcedimentos)
+    expect(service.findAll).toBeCalledWith({}, pagination)
+    expect(response.json).toBeCalledWith({
+      data: tipoProcedimentos,
+      total: tipoProcedimentos.length
+    })
   })
 
   it('should return only tipoProcedimentos owned by actor', async () => {
@@ -48,9 +55,12 @@ describe('ReadTipoProcedimento Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({
-      createdBy: actorWithLimitedScope.id
-    })
+    expect(service.findAll).toBeCalledWith(
+      {
+        createdBy: actorWithLimitedScope.id
+      },
+      pagination
+    )
   })
 
   it('should throw an UnauthorizedError if actor does not have permission', async () => {
