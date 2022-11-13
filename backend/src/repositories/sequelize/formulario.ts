@@ -6,7 +6,7 @@ import Formulario, {
 } from 'domain/models/formulario'
 import { IRepository, Pagination } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
-import { isNumber, paginateList } from 'utils/value'
+import { isNumber } from 'utils/value'
 
 export type FormularioQuery = WhereOptions<
   InferAttributes<FormularioAttributes>
@@ -50,12 +50,7 @@ export class FormularioRepository implements IRepository {
       ]
     })
 
-    const paginated = paginateList(formularios, pagination)
-
-    return {
-      total: formularios.length,
-      data: paginated
-    }
+    return formularios
   }
 
   findOne = async (id: number) => {

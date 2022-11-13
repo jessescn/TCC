@@ -7,7 +7,12 @@ import {
 import { ActorModel } from 'domain/models/actor'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
-import { IProcedimentoRepo, IRepository, Pagination } from 'repositories'
+import {
+  IProcedimentoRepo,
+  IRepository,
+  Pagination,
+  PaginationResponse
+} from 'repositories'
 import {
   NewProcedimento,
   NewRevisao,
@@ -22,7 +27,7 @@ import {
   UnauthorizedError
 } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
-import { getCurrentStatus } from 'utils/value'
+import { getCurrentStatus, paginateList } from 'utils/value'
 
 export interface IProcedimentoService
   extends IService<ProcedimentoModel, ProcedimentoQuery> {
@@ -40,6 +45,10 @@ export interface IProcedimentoService
     review: NewRevisao
   ) => Promise<ProcedimentoModel>
   updateStatus: (id: number, status: TStatus) => Promise<ProcedimentoModel>
+  findAllByStatus: (
+    status: TStatus,
+    pagination?: Pagination
+  ) => Promise<PaginationResponse<ProcedimentoModel>>
 }
 
 export class ProcedimentoService implements IProcedimentoService {
@@ -136,7 +145,28 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   async findAll(query: ProcedimentoQuery, pagination: Pagination) {
-    return this.procedimentoRepo.findAll(query, pagination)
+    const procedimentos = await this.procedimentoRepo.findAll(query, pagination)
+
+    const paginated = paginateList(procedimentos, pagination)
+
+    return {
+      total: procedimentos.length,
+      data: paginated
+    }
+  }
+
+  async findAllByStatus(status: TStatus, pagination: Pagination) {
+    const procedimentos = await this.procedimentoRepo.findAllByStatus(
+      status,
+      pagination
+    )
+
+    const paginated = paginateList(procedimentos, pagination)
+
+    return {
+      total: procedimentos.length,
+      data: paginated
+    }
   }
 
   async updateStatus(id: number, novoStatus: TStatus) {

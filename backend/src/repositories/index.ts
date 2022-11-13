@@ -1,3 +1,4 @@
+import { TStatus } from 'domain/models/procedimento'
 import { EmailTemplate } from 'templates'
 
 export type Pagination = {
@@ -24,6 +25,7 @@ export interface IMailRepository {
 }
 
 export interface IProcedimentoRepo extends IRepository {
+  findAllByStatus: (status: TStatus, pagination?: Pagination) => Promise<any>
   updateVote: (primaryKey: any, vote: any) => Promise<any>
   removeVote: (primaryKey: any, autor: any) => Promise<any>
   updateStatus: (primaryKey: any, status: any) => Promise<any>

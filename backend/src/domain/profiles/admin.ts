@@ -1,6 +1,7 @@
 export default {
   colegiado_delete_vote: 'all',
   colegiado_update_vote: 'all',
+  colegiado_read: 'all',
   comentario_create: 'all',
   comentario_delete: 'all',
   colegiado_comments_read: 'all',

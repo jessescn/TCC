@@ -1,3 +1,5 @@
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
+import Actor from 'domain/models/actor'
 import Comentario from 'domain/models/comentario'
 import Procedimento, {
   CampoInvalido,
@@ -6,14 +8,13 @@ import Procedimento, {
   Resposta,
   Revisao,
   Status,
+  TStatus,
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
-import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { IProcedimentoRepo, Pagination } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
-import Actor from 'domain/models/actor'
-import { isNumber, paginateList } from 'utils/value'
+import { getCurrentStatus, isNumber } from 'utils/value'
 
 export type CreateProcedimento = {
   tipo: number
@@ -92,12 +93,17 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
         ? procedimentosById
         : procedimentosByName
 
-    const paginated = paginateList(procedimentos, pagination)
+    return procedimentos
+  }
 
-    return {
-      total: procedimentos.length,
-      data: paginated
-    }
+  findAllByStatus = async (status: TStatus, pagination: Pagination) => {
+    const procedimentos = await this.findAll({}, pagination)
+
+    const filteredByStatus = procedimentos.filter(
+      procedimento => getCurrentStatus(procedimento) === status
+    )
+
+    return filteredByStatus
   }
 
   create = async (data: CreateProcedimento) => {

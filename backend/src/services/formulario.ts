@@ -10,6 +10,7 @@ import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedim
 import { Op } from 'sequelize'
 import { IService } from 'services'
 import { NotFoundError } from 'types/express/errors'
+import { paginateList } from 'utils/value'
 
 export interface IFormularioService
   extends IService<FormularioModel, FormularioQuery> {
@@ -57,18 +58,25 @@ export class FormularioService implements IFormularioService {
   }
 
   async findAll(query: FormularioQuery = {}, pagination: Pagination) {
-    return this.repository.findAll(query, pagination)
+    const formularios = await this.repository.findAll(query, pagination)
+
+    const paginated = paginateList(formularios, pagination)
+
+    return {
+      total: formularios.length,
+      data: paginated
+    }
   }
 
   private async inactivateAllTiposWithForm(id: number) {
-    const { data } = await this.tipoProcedimentoRepo.findAll(
+    const formularios = await this.tipoProcedimentoRepo.findAll(
       {
         formularios: { [Op.contains]: [id] }
       },
       { page: 1, per_page: 1000, term: null }
     )
 
-    data.forEach(async tipoProcedimento => {
+    formularios.forEach(async tipoProcedimento => {
       tipoProcedimento.set({ status: 'inativo' })
 
       await tipoProcedimento.save()

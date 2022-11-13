@@ -5,6 +5,7 @@ import * as userSlice from './user'
 import * as tipoProcedimentoSlice from './tipo-procedimento'
 import * as formularioSlice from './formulario'
 import * as procedimentoSlice from './procedimento'
+import * as colegiadoSlice from './colegiado'
 import * as meusProcedimentosSlice from './meus-procedimentos'
 
 export type State = {
@@ -14,6 +15,7 @@ export type State = {
   tipoProcedimento: tipoProcedimentoSlice.State
   formulario: formularioSlice.State
   meusProcedimentos: meusProcedimentosSlice.State
+  colegiado: colegiadoSlice.State
 }
 
 export const reducer = {
@@ -22,7 +24,8 @@ export const reducer = {
   tipoProcedimento: tipoProcedimentoSlice.reducer,
   formulario: formularioSlice.reducer,
   procedimento: procedimentoSlice.reducer,
-  meusProcedimentos: meusProcedimentosSlice.reducer
+  meusProcedimentos: meusProcedimentosSlice.reducer,
+  colegiado: colegiadoSlice.reducer
 }
 
 export const actions = Object.freeze({
@@ -31,7 +34,8 @@ export const actions = Object.freeze({
   tipoProcedimento: tipoProcedimentoSlice.actions,
   formulario: formularioSlice.actions,
   procedimento: procedimentoSlice.actions,
-  meusProcedimentos: meusProcedimentosSlice.actions
+  meusProcedimentos: meusProcedimentosSlice.actions,
+  colegiado: colegiadoSlice.actions
 })
 
 export const selectors = Object.freeze({
@@ -40,7 +44,8 @@ export const selectors = Object.freeze({
   user: userSlice.selectors,
   tipoProcedimento: tipoProcedimentoSlice.selectors,
   formulario: formularioSlice.selectors,
-  meusProcedimentos: meusProcedimentosSlice.selectors
+  meusProcedimentos: meusProcedimentosSlice.selectors,
+  colegiado: colegiadoSlice.selectors
 })
 
 export const sagas = function* () {
@@ -50,6 +55,7 @@ export const sagas = function* () {
     ...tipoProcedimentoSlice.sagas,
     ...formularioSlice.sagas,
     ...procedimentoSlice.sagas,
-    ...meusProcedimentosSlice.sagas
+    ...meusProcedimentosSlice.sagas,
+    ...colegiadoSlice.sagas
   ])
 }

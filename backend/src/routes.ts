@@ -39,6 +39,7 @@ import {
 } from 'factories/controllers/tipo-procedimento'
 import {
   deleteVoteController,
+  readEmHomologacaoController,
   voteController
 } from 'factories/controllers/colegiado'
 import {
@@ -94,6 +95,7 @@ routes.post(
 )
 routes.post('/procedimentos/:id/revisao', reviewProcedimentoController.exec)
 
+routes.get('/colegiado/procedimentos', readEmHomologacaoController.exec)
 routes.post('/colegiado/:id/vote', voteController.exec)
 routes.delete('/colegiado/:id/vote', deleteVoteController.exec)
 routes.get(

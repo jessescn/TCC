@@ -1,23 +1,16 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Center, Icon, Text } from '@chakra-ui/react'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
-import { ProcedimentoModel } from 'domain/models/procedimento'
+import { MdSearchOff } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
+import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
 
-type Props = {
-  procedimentos: ProcedimentoModel[]
-  currentPage: number
-  setCurrentPage: (page: number) => void
-}
-
-const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
+const Table = () => {
   const navigate = useNavigate()
 
-  const sorted = [...procedimentos]
-
-  sorted.sort(function (a, b) {
-    return a.id - b.id
-  })
+  const procedimentos = useSelector(selectors.colegiado.getProcedimentos)
+  const pagination = useSelector(selectors.colegiado.getPagination)
+  const total = useSelector(state => state.colegiado.total)
 
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
@@ -25,7 +18,11 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
     navigate(`/colegiado/procedimentos/${id}`)
   }
 
-  return (
+  const handleUpdateCurrentPage = (nextPage: number) => {
+    store.dispatch(actions.colegiado.list({ ...pagination, page: nextPage }))
+  }
+
+  return procedimentos.length > 0 ? (
     <Box
       mt="24px"
       borderColor="secondary.dark"
@@ -34,9 +31,9 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
       p="16px"
     >
       <SimpleTable
-        currentPage={currentPage}
-        totalPages={Math.ceil(sorted.length / 5)}
-        onChangePage={setCurrentPage}
+        currentPage={pagination.page}
+        totalPages={Math.ceil(total / pagination.per_page)}
+        onChangePage={handleUpdateCurrentPage}
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
@@ -45,7 +42,7 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
           { content: 'Atualizado em', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '15%' } }
         ]}
-        rows={sorted.map(procedimento => [
+        rows={procedimentos.map(procedimento => [
           { content: procedimento.id },
           { content: procedimento.tipo_procedimento?.nome },
           { content: procedimento.actor?.nome || '-' },
@@ -62,6 +59,13 @@ const Table = ({ procedimentos, currentPage, setCurrentPage }: Props) => {
         ])}
       />
     </Box>
+  ) : (
+    <Center flexDir="column" h="40vh">
+      <Icon fontSize="45px" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="14px">
+        Nenhum procedimento encontrado.
+      </Text>
+    </Center>
   )
 }
 

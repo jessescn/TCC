@@ -1,7 +1,6 @@
 import { ActorModel } from 'domain/models/actor'
-import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { IRepository, Pagination, PaginationResponse } from 'repositories'
+import { IRepository, Pagination } from 'repositories'
 import { FormularioRepository } from 'repositories/sequelize/formulario'
 import {
   NewTipoProcedimento,
@@ -10,6 +9,7 @@ import {
 } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
+import { paginateList } from 'utils/value'
 
 export interface ITipoProcedimentoService
   extends IService<TipoProcedimentoModel, TipoProcedimentoQuery> {
@@ -38,12 +38,12 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   private async checkIfFormulariosExists(ids: number[]) {
     if (ids.length === 0) return
 
-    const response = (await this.formularioRepo.findAll(
+    const formularios = await this.formularioRepo.findAll(
       { id: ids },
       { page: 1, per_page: 1000, term: null }
-    )) as PaginationResponse<FormularioModel>
+    )
 
-    if (response.data.length !== ids.length) {
+    if (formularios.length !== ids.length) {
       throw new BadRequestError()
     }
   }
@@ -81,7 +81,17 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   }
 
   async findAll(query: TipoProcedimentoQuery, pagination: Pagination) {
-    return this.tipoProcedimentoRepo.findAll(query, pagination)
+    const tipoProcedimentos = await this.tipoProcedimentoRepo.findAll(
+      query,
+      pagination
+    )
+
+    const paginated = paginateList(tipoProcedimentos, pagination)
+
+    return {
+      total: tipoProcedimentos.length,
+      data: paginated
+    }
   }
 
   async update(id: number, data: Partial<TipoProcedimentoModel>) {

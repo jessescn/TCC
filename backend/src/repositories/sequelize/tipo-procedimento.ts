@@ -4,7 +4,7 @@ import TipoProcedimento, {
 } from 'domain/models/tipo-procedimento'
 import { IRepository, Pagination } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
-import { isNumber, paginateList } from 'utils/value'
+import { isNumber } from 'utils/value'
 
 export type TipoProcedimentoQuery = WhereOptions<
   InferAttributes<TipoProcedimentoAttributes>
@@ -48,17 +48,10 @@ export class TipoProcedimentoRepository implements IRepository {
         }
       : {}
 
-    const tipoProcedimentos = await TipoProcedimento.findAll({
+    return TipoProcedimento.findAll({
       where: { ...query, ...search },
       order: [['updatedAt', 'DESC']]
     })
-
-    const paginated = paginateList(tipoProcedimentos, pagination)
-
-    return {
-      total: tipoProcedimentos.length,
-      data: paginated
-    }
   }
 
   findOne = async (id: number) => {
