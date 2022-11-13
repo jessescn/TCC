@@ -1,4 +1,5 @@
 import { errorResponseHandler } from 'controllers'
+import { ActorModel } from 'domain/models/actor'
 import jwt from 'jsonwebtoken'
 import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
@@ -25,7 +26,9 @@ export class AuthController {
         throw new BadRequestError()
       }
 
-      const [actor] = await this.service.findAll({ email: data.email })
+      const [actor] = (await this.service.findAll({
+        email: data.email
+      })) as ActorModel[]
 
       if (!actor) {
         throw new NotFoundError('Usuário não existe')

@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import { httpClient } from './config'
+import { buildQuery } from 'utils/format'
+import { httpClient, Pagination, PaginationResponse } from './config'
 
 export type NovoFormulario = {
   nome: string
@@ -9,10 +10,14 @@ export type NovoFormulario = {
 }
 
 export const FormService = {
-  list: () => {
-    return httpClient.request<AxiosResponse<FormularioModel[]>>({
+  list: (pagination: Pagination) => {
+    const query = buildQuery(pagination)
+
+    return httpClient.request<
+      AxiosResponse<PaginationResponse<FormularioModel>>
+    >({
       method: 'get',
-      url: '/formularios'
+      url: `/formularios?${query}`
     })
   },
   create: (payload: NovoFormulario) => {

@@ -9,7 +9,7 @@ import {
   Tr
 } from '@chakra-ui/react'
 import Paginator from 'components/molecules/paginator'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 
 export type Cell = {
   content: ReactNode
@@ -34,16 +34,8 @@ const SimpleTable = ({
   currentPage,
   onChangePage,
   onClickRow,
-  numberRows = 5,
   totalPages
 }: Props) => {
-  const [visibleRows, setVisibleRows] = useState<Cell[][]>([])
-
-  useEffect(() => {
-    const start = (currentPage - 1) * numberRows
-    setVisibleRows(rows.slice(start, start + numberRows))
-  }, [rows, currentPage])
-
   return (
     <>
       <Table>
@@ -63,7 +55,7 @@ const SimpleTable = ({
           </Tr>
         </Thead>
         <Tbody>
-          {visibleRows.map((row, rowIdx) => (
+          {rows.map((row, rowIdx) => (
             <Tr
               cursor={onClickRow ? 'pointer' : 'inherit'}
               onClick={onClickRow ? () => onClickRow(row) : undefined}
@@ -87,7 +79,7 @@ const SimpleTable = ({
           ))}
         </Tbody>
       </Table>
-      {rows.length > numberRows && (
+      {totalPages > 1 && (
         <Flex mt="16px" justifyContent="flex-end">
           <Paginator
             currentPage={currentPage}

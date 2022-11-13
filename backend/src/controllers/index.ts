@@ -1,4 +1,5 @@
 import { PermissionKey, Scope } from 'domain/profiles'
+import { Pagination } from 'repositories'
 import { HttpStatusCode, Request, Response } from 'types/express'
 import { RequestError } from 'types/express/errors'
 import { validateMandatoryFields } from 'utils/fields'
@@ -15,6 +16,16 @@ export const errorResponseHandler = (res: Response, error: any) => {
   }
 
   res.status(HttpStatusCode.serverError).send()
+}
+
+export const extractPagination = (request: Request) => {
+  const pagination: Pagination = {
+    page: request.query.page ? Number(request.query.page) : 1,
+    per_page: request.query.per_page ? Number(request.query.per_page) : 1000,
+    term: (request.query.term as string) || null
+  }
+
+  return pagination
 }
 
 export type Validation = (request: Request) => void

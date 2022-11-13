@@ -1,8 +1,19 @@
 import { EmailTemplate } from 'templates'
 
+export type Pagination = {
+  per_page: number
+  page: number
+  term: string | null
+}
+
+export type PaginationResponse<T> = {
+  total: number
+  data: T[]
+}
+
 export interface IRepository {
   findOne: (primaryKey: any) => Promise<any>
-  findAll: (query: any) => Promise<any[]>
+  findAll: (query: any, pagination?: Pagination) => Promise<any>
   create: (data: any) => Promise<any>
   update: (primaryKey: any, data: any) => Promise<any>
   destroy: (primaryKey: any) => Promise<any>

@@ -5,14 +5,20 @@ import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { ReadFormularioController } from '../read'
 import { ProfileModel } from 'domain/models/profile'
+import { Pagination } from 'repositories'
 
 describe('ReadFormulario Controller', () => {
   const formulario = createMock<FormularioModel>()
+  const defaultPagination: Pagination = {
+    per_page: 1000,
+    page: 1,
+    term: null
+  }
   const { actor, response, spies } = baseSetup('formulario_read')
 
   const makeSut = () => {
     const service = {
-      findAll: jest.fn().mockResolvedValue([formulario])
+      findAll: jest.fn().mockResolvedValue({ data: [formulario], total: 1 })
     } as any
 
     return { sut: new ReadFormularioController(service), service }
@@ -31,8 +37,8 @@ describe('ReadFormulario Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({})
-    expect(response.json).toBeCalledWith([formulario])
+    expect(service.findAll).toBeCalledWith({}, defaultPagination)
+    expect(response.json).toBeCalledWith({ data: [formulario], total: 1 })
   })
 
   it('should respond with only formularios createdBy actor', async () => {
@@ -47,9 +53,12 @@ describe('ReadFormulario Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({
-      createdBy: actorWithLimitedPrivileges.id
-    })
+    expect(service.findAll).toBeCalledWith(
+      {
+        createdBy: actorWithLimitedPrivileges.id
+      },
+      defaultPagination
+    )
   })
 
   it('should respond with UnauthorizedError if actor does not have privileges', async () => {

@@ -4,8 +4,9 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import { IRepository } from 'repositories'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { IRepository, Pagination } from 'repositories'
+import { InferAttributes, Op, WhereOptions } from 'sequelize'
+import { isNumber, paginateList } from 'utils/value'
 
 export type FormularioQuery = WhereOptions<
   InferAttributes<FormularioAttributes>
@@ -25,10 +26,22 @@ export type NewFormulario = {
 }
 
 export class FormularioRepository implements IRepository {
-  findAll = async (query: FormularioQuery = {}) => {
+  findAll = async (query: FormularioQuery, pagination: Pagination) => {
+    const searchId = isNumber(pagination.term)
+      ? { id: { [Op.eq]: pagination.term } }
+      : {}
+    const search = pagination.term
+      ? {
+          [Op.or]: [
+            { nome: { [Op.substring]: '%' + pagination.term + '%' } },
+            { ...searchId }
+          ]
+        }
+      : {}
+
     const formularios = await Formulario.findAll({
-      where: { ...query },
-      order: [['id', 'ASC']],
+      where: { ...query, ...search },
+      order: [['updatedAt', 'DESC']],
       include: [
         {
           model: Actor,
@@ -37,7 +50,12 @@ export class FormularioRepository implements IRepository {
       ]
     })
 
-    return formularios
+    const paginated = paginateList(formularios, pagination)
+
+    return {
+      total: formularios.length,
+      data: paginated
+    }
   }
 
   findOne = async (id: number) => {

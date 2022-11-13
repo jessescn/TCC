@@ -1,42 +1,21 @@
-import {
-  Box,
-  Center,
-  Checkbox,
-  Divider,
-  Flex,
-  Icon,
-  Text
-} from '@chakra-ui/react'
+import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
-import { useMemo, useState } from 'react'
-import { MdSearchOff } from 'react-icons/md'
 
+import { Button } from 'components/atoms/button'
 import FormulariosTable from 'components/pages/formularios/table'
 import { useNavigate } from 'react-router-dom'
-import { selectors, useSelector } from 'store'
-import { Button } from 'components/atoms/button'
+import { actions, store, useSelector } from 'store'
 
 export function Content() {
   const navigate = useNavigate()
 
-  const [includeDeleted, setIncludeDeleted] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [term, setTerm] = useState('')
-
-  const formularios = useSelector(state =>
-    selectors.formulario.getFormulariosBySearch(state)(term)
-  )
+  const pagination = useSelector(state => state.formulario.pagination)
 
   const handleSearch = (termo: string) => {
-    setCurrentPage(1)
-    setTerm(termo)
+    store.dispatch(
+      actions.formulario.list({ ...pagination, page: 1, term: termo })
+    )
   }
-
-  const formulariosToRender = useMemo(() => {
-    return includeDeleted
-      ? formularios
-      : formularios.filter(form => !form.deleted)
-  }, [formularios])
 
   return (
     <Box
@@ -82,38 +61,15 @@ export function Content() {
           Novo Formulário
         </Button>
       </Flex>
-      <Flex my="10px">
-        <Checkbox
-          size="sm"
-          isChecked={includeDeleted}
-          onChange={e => setIncludeDeleted(e.target.checked)}
-        >
-          <Text fontSize="14px">Incluir deletados</Text>
-        </Checkbox>
-      </Flex>
-      {formulariosToRender.length > 0 ? (
-        <Box
-          mt="24px"
-          borderColor="secondary.dark"
-          borderWidth="1px"
-          borderRadius="8px"
-          p="16px"
-        >
-          <FormulariosTable
-            formularios={formulariosToRender}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </Box>
-      ) : (
-        <Center flexDir="column" h="40vh">
-          <Icon fontSize="45px" as={MdSearchOff} />
-          <Text textAlign="center" maxW="300px" fontSize="14px">
-            Nenhum formulário encontrado. Clique em 'Novo Formulário' para
-            construir um novo modelo
-          </Text>
-        </Center>
-      )}
+      <Box
+        mt="24px"
+        borderColor="secondary.dark"
+        borderWidth="1px"
+        borderRadius="8px"
+        p="16px"
+      >
+        <FormulariosTable />
+      </Box>
     </Box>
   )
 }

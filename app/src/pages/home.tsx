@@ -32,7 +32,7 @@ export default function Home() {
             fontSize="18px"
             fontWeight="bold"
           >
-            Novo Sistema de Procedimentos da Pós-Graduacão
+            Sistema de Procedimentos da Pós-Graduacão
           </Text>
         </Box>
       </Box>

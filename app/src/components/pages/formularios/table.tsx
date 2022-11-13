@@ -1,37 +1,35 @@
 import {
+  Center,
   Icon,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
   useDisclosure
 } from '@chakra-ui/react'
+import { MdSearchOff } from 'react-icons/md'
 import ConfirmModal from 'components/organisms/confirm-modal'
 import SimpleTable from 'components/organisms/simple-table'
 import { FormularioModel } from 'domain/models/formulario'
 import { useState } from 'react'
 import { AiFillEdit } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
-import { actions, store } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
 
-type Props = {
-  formularios: FormularioModel[]
-  currentPage: number
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
-}
-
-export default function FormulariosTable({
-  formularios,
-  currentPage,
-  setCurrentPage
-}: Props) {
-  const [pendingDeleted, setPendingDeleted] = useState<number | null>()
+export default function FormulariosTable() {
   const navigate = useNavigate()
   const confirmModalControls = useDisclosure()
 
-  const totalPages = Math.ceil(formularios.length / 5)
+  const formularios = useSelector(selectors.formulario.getFormularios)
+  const pagination = useSelector(state => state.formulario.pagination)
+  const total = useSelector(state => state.formulario.total)
+
+  const [pendingDeleted, setPendingDeleted] = useState<number | null>()
+
+  const totalPages = Math.ceil(total / pagination.per_page)
 
   const handleConfirmDeletion = () => {
     if (pendingDeleted) {
@@ -48,6 +46,10 @@ export default function FormulariosTable({
   const handleOpenConfirmModal = (id: number) => {
     setPendingDeleted(id)
     confirmModalControls.onOpen()
+  }
+
+  const handleUpdatePage = (newPage: number) => {
+    store.dispatch(actions.formulario.list({ ...pagination, page: newPage }))
   }
 
   const getEditMenu = (form: FormularioModel) => {
@@ -70,12 +72,12 @@ export default function FormulariosTable({
     )
   }
 
-  return (
+  return formularios.length > 0 ? (
     <>
       <SimpleTable
-        currentPage={currentPage}
+        currentPage={pagination.page}
+        onChangePage={handleUpdatePage}
         totalPages={totalPages}
-        onChangePage={setCurrentPage}
         columns={[
           { content: 'ID', props: { width: '10%' } },
           { content: 'Nome', props: { width: '55%' } },
@@ -102,5 +104,13 @@ export default function FormulariosTable({
         onConfirm={handleConfirmDeletion}
       />
     </>
+  ) : (
+    <Center flexDir="column" h="40vh">
+      <Icon fontSize="45px" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="14px">
+        Nenhum formulário encontrado. Clique em 'Novo Formulário' para construir
+        um novo modelo
+      </Text>
+    </Center>
   )
 }

@@ -1,6 +1,6 @@
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
-import { IRepository } from 'repositories'
+import { IRepository, Pagination } from 'repositories'
 import {
   FormularioQuery,
   FormularioRepository,
@@ -56,8 +56,8 @@ export class FormularioService implements IFormularioService {
     return formulario
   }
 
-  async findAll(query: FormularioQuery = {}) {
-    return this.repository.findAll(query)
+  async findAll(query: FormularioQuery = {}, pagination: Pagination) {
+    return this.repository.findAll(query, pagination)
   }
 
   private async inactivateAllTiposWithForm(id: number) {

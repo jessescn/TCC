@@ -2,6 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
 import { FormularioModel } from 'domain/models/formulario'
 import { call, put, takeLatest } from 'redux-saga/effects'
+import { Pagination, PaginationResponse } from 'services/config'
 import { FormService } from 'services/formularios'
 import { actions, CreatePayload, UpdatePayload } from './slice'
 
@@ -12,11 +13,12 @@ export const sagas = [
   takeLatest(actions.delete.type, deleteSaga)
 ]
 
-function* listSaga() {
+function* listSaga(action: PayloadAction<Pagination>) {
   try {
-    const forms: AxiosResponse<FormularioModel[]> = yield call(FormService.list)
+    const result: AxiosResponse<PaginationResponse<FormularioModel>> =
+      yield call(() => FormService.list(action.payload))
 
-    yield put(actions.listSuccess(forms.data))
+    yield put(actions.listSuccess(result.data))
   } catch (error) {
     yield put(actions.listFailure())
   }

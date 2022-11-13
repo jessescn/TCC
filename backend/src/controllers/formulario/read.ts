@@ -1,4 +1,8 @@
-import { Controller, errorResponseHandler } from 'controllers'
+import {
+  Controller,
+  errorResponseHandler,
+  extractPagination
+} from 'controllers'
 import { ActorModel } from 'domain/models/actor'
 import { PermissionKey } from 'domain/profiles'
 import { FormularioQuery } from 'repositories/sequelize/formulario'
@@ -22,11 +26,13 @@ export class ReadFormularioController extends Controller<IFormularioService> {
     try {
       this.validateRequest(request)
 
+      const pagination = extractPagination(request)
+
       const scope = this.getQueryByScope(request.actor)
 
-      const formularios = await this.service.findAll(scope)
+      const result = await this.service.findAll(scope, pagination)
 
-      response.json(formularios)
+      response.json(result)
     } catch (error) {
       errorResponseHandler(response, error)
     }

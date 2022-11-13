@@ -1,6 +1,7 @@
 import { ActorModel } from 'domain/models/actor'
+import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { IRepository } from 'repositories'
+import { IRepository, PaginationResponse } from 'repositories'
 import { FormularioRepository } from 'repositories/sequelize/formulario'
 import {
   NewTipoProcedimento,
@@ -37,9 +38,12 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   private async checkIfFormulariosExists(ids: number[]) {
     if (ids.length === 0) return
 
-    const formularios = await this.formularioRepo.findAll({ id: ids })
+    const response = (await this.formularioRepo.findAll(
+      { id: ids },
+      { page: 1, per_page: 1000, term: null }
+    )) as PaginationResponse<FormularioModel>
 
-    if (formularios.length !== ids.length) {
+    if (response.data.length !== ids.length) {
       throw new BadRequestError()
     }
   }

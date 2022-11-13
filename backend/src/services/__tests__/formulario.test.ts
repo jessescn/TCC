@@ -1,6 +1,7 @@
-import { FormularioModel } from 'domain/models/formulario'
 import { ActorModel } from 'domain/models/actor'
-import { IRepository } from 'repositories'
+import { FormularioModel } from 'domain/models/formulario'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { IRepository, Pagination } from 'repositories'
 import {
   FormularioQuery,
   NewFormulario
@@ -8,7 +9,6 @@ import {
 import { FormularioService } from 'services/formulario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { NotFoundError } from 'types/express/errors'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
 describe('Formulario Service', () => {
   const formulario = createMock<FormularioModel>({ id: 1 })
@@ -67,25 +67,32 @@ describe('Formulario Service', () => {
 
   describe('findAll', () => {
     const repo = createMock<IRepository>({
-      findAll: jest.fn().mockResolvedValue(formularios)
+      findAll: jest
+        .fn()
+        .mockResolvedValue({ data: formularios, total: formularios.length })
     })
+    const pagination: Pagination = {
+      per_page: 1000,
+      page: 1,
+      term: null
+    }
 
     it('should find all formularios', async () => {
       const sut = new FormularioService(repo, tipoRepo)
-      const result = await sut.findAll()
+      const result = await sut.findAll({}, pagination)
 
-      expect(result).toEqual(formularios)
-      expect(repo.findAll).toBeCalledWith({})
+      expect(result.data).toEqual(formularios)
+      expect(repo.findAll).toBeCalledWith({}, pagination)
     })
 
     it('should find formularios which matches the provided query', async () => {
       const query: FormularioQuery = { campos: [] }
       const sut = new FormularioService(repo, tipoRepo)
 
-      const result = await sut.findAll(query)
+      const result = await sut.findAll(query, pagination)
 
-      expect(result).toEqual(formularios)
-      expect(repo.findAll).toBeCalledWith(query)
+      expect(result.data).toEqual(formularios)
+      expect(repo.findAll).toBeCalledWith(query, pagination)
     })
   })
 

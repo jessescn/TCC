@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
+import { Pagination, PaginationResponse } from 'services/config'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
   formularios: FormularioModel[]
+  total: number
   status: Status
   statusCreate: Status
   statusUpdate: Status
+  pagination: Pagination
 }
 
 export type UpdatePayload = {
@@ -24,18 +27,29 @@ export type CreatePayload = {
 
 export const initialState: State = {
   formularios: [],
+  total: 0,
   status: 'pristine',
   statusCreate: 'pristine',
-  statusUpdate: 'pristine'
+  statusUpdate: 'pristine',
+  pagination: {
+    page: 1,
+    per_page: 5,
+    term: null
+  }
 }
 
 const reducers = {
-  list: (state: State) => {
+  list: (state: State, action: PayloadAction<Pagination>) => {
     state.status = 'loading'
+    state.pagination = action.payload
   },
-  listSuccess: (state: State, action: PayloadAction<FormularioModel[]>) => {
+  listSuccess: (
+    state: State,
+    action: PayloadAction<PaginationResponse<FormularioModel>>
+  ) => {
     state.status = 'success'
-    state.formularios = action.payload
+    state.total = action.payload.total
+    state.formularios = action.payload.data
   },
   listFailure: (state: State) => {
     state.status = 'failure'

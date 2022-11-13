@@ -3,6 +3,7 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
+import { Pagination } from 'repositories'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateFormulario, FormularioRepository } from '../formulario'
 
@@ -11,6 +12,11 @@ describe('Formulario Repository', () => {
   const formularios = createMockList<FormularioModel>(2)
 
   const sut = new FormularioRepository()
+  const pagination: Pagination = {
+    per_page: 1000,
+    page: 1,
+    term: null
+  }
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -24,12 +30,12 @@ describe('Formulario Repository', () => {
     })
 
     it('should return all formularios', async () => {
-      const result = await sut.findAll()
+      const result = await sut.findAll({}, pagination)
 
-      expect(result).toEqual(formularios)
+      expect(result.data).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
         where: {},
-        order: [['id', 'ASC']],
+        order: [['updatedAt', 'DESC']],
         include: [
           {
             model: Actor,
@@ -42,11 +48,11 @@ describe('Formulario Repository', () => {
     it('should pass the query to model method', async () => {
       const query = { nome: 'test' }
 
-      await sut.findAll(query)
+      await sut.findAll(query, pagination)
 
       expect(Formulario.findAll).toBeCalledWith({
         where: { ...query },
-        order: [['id', 'ASC']],
+        order: [['updatedAt', 'DESC']],
         include: [
           {
             model: Actor,

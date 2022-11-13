@@ -6,6 +6,7 @@ import { Middleware } from 'middlewares'
 import { UnauthorizedError } from 'types/express/errors'
 import { errorResponseHandler } from 'utils/response'
 import { IActorService } from 'services/actor'
+import { ActorModel } from 'domain/models/actor'
 
 export class AuthTokenMiddleware extends Middleware {
   constructor(private actorService: IActorService) {
@@ -46,9 +47,9 @@ export class AuthTokenMiddleware extends Middleware {
   private appendActorToRequest = async (request: Request) => {
     const { payload } = this.verifyAndDecodeToken(request)
 
-    const [actor] = await this.actorService.findAll({
+    const [actor] = (await this.actorService.findAll({
       email: payload.data.email
-    })
+    })) as ActorModel[]
 
     if (!actor) {
       throw new UnauthorizedError('Actor não encontrado')
