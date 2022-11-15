@@ -1,35 +1,21 @@
-import { Flex, Spinner } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import Content from 'components/pages/procedimentos/novo/content'
-import Header from 'components/pages/procedimentos/novo/header'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { selectors, useSelector } from 'store'
+import { actions, store } from 'store'
 
 export default function NovoProcedimento() {
   const { id } = useParams()
 
-  const tipoProcedimento = useSelector(state =>
-    selectors.tipoProcedimento.getTipoProcedimento(state)(Number(id))
-  )
-  const formularios = useSelector(state =>
-    selectors.formulario.getFormulariosByTipoProcedimento(state)(
-      tipoProcedimento
-    )
-  )
+  useEffect(() => {
+    if (id) {
+      store.dispatch(actions.tipoProcedimentoDetalhes.getInfo(id))
+    }
+  }, [id])
 
   return (
     <Screen py="24px" h="100%">
-      {!tipoProcedimento ? (
-        <Spinner />
-      ) : (
-        <Flex w="100%" h="100%" maxW="900px" flexDir="column">
-          <Header tipoProcedimento={tipoProcedimento} />
-          <Content
-            formularios={formularios}
-            tipoProcedimento={tipoProcedimento}
-          />
-        </Flex>
-      )}
+      <Content />
     </Screen>
   )
 }

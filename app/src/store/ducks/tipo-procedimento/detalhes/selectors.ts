@@ -13,6 +13,17 @@ export const getFormularios = createSelector([getRoot], state => {
   return state.formularios
 })
 
+export const getFormulariosFromTipo = createSelector(
+  [getFormularios, getTipoProcedimento],
+  (formularios, tipoProcedimento) => {
+    const formularioIds = tipoProcedimento?.formularios || []
+
+    return formularios.filter(formulario =>
+      formularioIds.includes(formulario.id)
+    )
+  }
+)
+
 export const getPublicos = createSelector([getRoot], state => {
   return state.publicos
 })

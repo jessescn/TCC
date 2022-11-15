@@ -1,29 +1,32 @@
-import { FormularioModel } from 'domain/models/formulario'
+import { Center, Flex } from '@chakra-ui/react'
+import { LoadingPage } from 'components/molecules/loading'
+import Header from 'components/pages/procedimentos/novo/header'
 import { Resposta } from 'domain/models/procedimento'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { useCallback, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { NovoProcedimento } from 'services/procedimentos'
-import { actions, store } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import Footer from './footer'
 import RenderFormulario from './render-formulario'
-
-type Props = {
-  formularios: FormularioModel[]
-  tipoProcedimento: TipoProcedimentoModel
-}
 
 export type Procedimento = {
   tipo: number
   respostas: Resposta[]
 }
 
-export default function Content({ formularios, tipoProcedimento }: Props) {
+export default function Content() {
   const [currentIdx, setCurrentIdx] = useState(0)
+
+  const tipoProcedimento = useSelector(
+    selectors.tipoProcedimentoDetalhes.getTipoProcedimento
+  )
+  const formularios = useSelector(
+    selectors.tipoProcedimentoDetalhes.getFormulariosFromTipo
+  )
 
   const methods = useForm<Procedimento>({
     defaultValues: {
-      tipo: tipoProcedimento.id,
+      tipo: tipoProcedimento?.id,
       respostas: formularios.map(formulario => ({
         campos: [],
         formulario: formulario.id
@@ -64,19 +67,24 @@ export default function Content({ formularios, tipoProcedimento }: Props) {
 
   const isLastForm = currentIdx === formularios.length - 1
 
-  return (
-    <FormProvider {...methods}>
-      <form id="novo-procedimento" onSubmit={methods.handleSubmit(onSubmit)}>
-        {formularios[currentIdx] && (
-          <RenderFormulario formulario={formularios[currentIdx]} />
-        )}
-        <Footer
-          currentIdx={currentIdx}
-          onChangeForm={handleSetCurrentIdx}
-          onClear={handleClear}
-          isLastForm={isLastForm}
-        />
-      </form>
-    </FormProvider>
+  return !tipoProcedimento ? (
+    <LoadingPage />
+  ) : (
+    <Flex w="100%" h="100%" maxW="900px" flexDir="column">
+      <Header tipoProcedimento={tipoProcedimento} />
+      <FormProvider {...methods}>
+        <form id="novo-procedimento" onSubmit={methods.handleSubmit(onSubmit)}>
+          {formularios[currentIdx] && (
+            <RenderFormulario formulario={formularios[currentIdx]} />
+          )}
+          <Footer
+            currentIdx={currentIdx}
+            onChangeForm={handleSetCurrentIdx}
+            onClear={handleClear}
+            isLastForm={isLastForm}
+          />
+        </form>
+      </FormProvider>
+    </Flex>
   )
 }
