@@ -1,27 +1,22 @@
 import { Box, Divider } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
 import Configuration from 'components/pages/tipo-procedimentos/detalhes/configuration'
 import Header from 'components/pages/tipo-procedimentos/detalhes/header'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { NovoTipoProcedimento } from 'services/tipo-procedimentos'
-import { formatISODate, formatISODateToLocalTime } from 'utils/format'
+import { formatISODateToLocalTime } from 'utils/format'
 import Footer from './footer'
 
 export default function Content() {
   const formControls = useForm()
 
-  const [searchParams] = useSearchParams()
-
-  const id = Number(searchParams.get('id'))
-
   const loadForm = useRef(false)
-  const tipoProcedimento = !isNaN(id)
-    ? useSelector(selectors.tipoProcedimento.getTipoProcedimento)(id)
-    : undefined
+  const tipoProcedimento = useSelector(
+    selectors.tipoProcedimentoDetalhes.getTipoProcedimento
+  )
 
   useEffect(() => {
     if (!tipoProcedimento || loadForm.current) {

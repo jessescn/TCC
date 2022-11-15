@@ -33,6 +33,7 @@ import {
 import {
   createTipoProcedimentoController,
   deleteTipoProcedimentoController,
+  getDetailsTipoProcedimentoController,
   readOneTipoProcedimentoController,
   readTipoProcedimentoController,
   updateTipoProcedimentoController
@@ -110,6 +111,10 @@ routes.get(
 
 routes.get('/tipo-procedimentos', readTipoProcedimentoController.exec)
 routes.get('/tipo-procedimentos/:id', readOneTipoProcedimentoController.exec)
+routes.get(
+  '/tipo-procedimentos/:id/detalhes',
+  getDetailsTipoProcedimentoController.exec
+)
 routes.post('/tipo-procedimentos', createTipoProcedimentoController.exec)
 routes.put('/tipo-procedimentos/:id', updateTipoProcedimentoController.exec)
 routes.delete('/tipo-procedimentos/:id', deleteTipoProcedimentoController.exec)

@@ -1,4 +1,5 @@
 import { ActorModel } from 'domain/models/actor'
+import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { IRepository, Pagination } from 'repositories'
 import { FormularioRepository } from 'repositories/sequelize/formulario'
@@ -11,6 +12,11 @@ import { IService } from 'services'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { paginateList } from 'utils/value'
 
+export type TipoProcedimentoDetails = {
+  tipo: TipoProcedimentoModel
+  formularios: FormularioModel[]
+}
+
 export interface ITipoProcedimentoService
   extends IService<TipoProcedimentoModel, TipoProcedimentoQuery> {
   create: (
@@ -21,6 +27,7 @@ export interface ITipoProcedimentoService
     id: number,
     data: Partial<TipoProcedimentoModel>
   ) => Promise<TipoProcedimentoModel>
+  details: (id: number) => Promise<TipoProcedimentoDetails>
 }
 
 export class TipoProcedimentoService implements ITipoProcedimentoService {
@@ -43,10 +50,18 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
     if (formularios.length !== ids.length) {
       throw new BadRequestError()
     }
+
+    return formularios
   }
 
-  private async checkIfTipoProcedimentoExists(id: number) {
-    const tipoProcedimento = await this.tipoProcedimentoRepo.findOne(id)
+  private async checkIfTipoProcedimentoExists(
+    id: number,
+    query: TipoProcedimentoQuery = { deleted: false }
+  ) {
+    const [tipoProcedimento] = await this.tipoProcedimentoRepo.findAll({
+      id,
+      ...query
+    })
 
     if (!tipoProcedimento) {
       throw new NotFoundError(`Tipo Procedimento ${id} não encontrado.`)
@@ -75,6 +90,19 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
 
   async findOne(id: number) {
     return this.checkIfTipoProcedimentoExists(id)
+  }
+
+  async details(id: number) {
+    const tipoProcedimento = await this.checkIfTipoProcedimentoExists(id, {})
+
+    const formularios = await this.formularioRepo.findAll({
+      deleted: false
+    })
+
+    return {
+      tipo: tipoProcedimento,
+      formularios
+    }
   }
 
   async findAll(query: TipoProcedimentoQuery, pagination: Pagination) {

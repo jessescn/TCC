@@ -3,6 +3,8 @@ import { all } from 'redux-saga/effects'
 import * as sessionSlice from './session'
 import * as userSlice from './user'
 import * as tipoProcedimentoSlice from './tipo-procedimento'
+import * as tipoProcedimentoDetalhesSlice from './tipo-procedimento/detalhes'
+
 import * as formularioSlice from './formulario'
 import * as procedimentoSlice from './procedimento'
 import * as colegiadoSlice from './colegiado'
@@ -13,6 +15,7 @@ export type State = {
   user: userSlice.State
   procedimento: procedimentoSlice.State
   tipoProcedimento: tipoProcedimentoSlice.State
+  tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.State
   formulario: formularioSlice.State
   meusProcedimentos: meusProcedimentosSlice.State
   colegiado: colegiadoSlice.State
@@ -22,6 +25,7 @@ export const reducer = {
   session: sessionSlice.reducer,
   user: userSlice.reducer,
   tipoProcedimento: tipoProcedimentoSlice.reducer,
+  tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.reducer,
   formulario: formularioSlice.reducer,
   procedimento: procedimentoSlice.reducer,
   meusProcedimentos: meusProcedimentosSlice.reducer,
@@ -32,6 +36,7 @@ export const actions = Object.freeze({
   session: sessionSlice.actions,
   user: userSlice.actions,
   tipoProcedimento: tipoProcedimentoSlice.actions,
+  tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.actions,
   formulario: formularioSlice.actions,
   procedimento: procedimentoSlice.actions,
   meusProcedimentos: meusProcedimentosSlice.actions,
@@ -43,6 +48,7 @@ export const selectors = Object.freeze({
   procedimento: procedimentoSlice.selectors,
   user: userSlice.selectors,
   tipoProcedimento: tipoProcedimentoSlice.selectors,
+  tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.selectors,
   formulario: formularioSlice.selectors,
   meusProcedimentos: meusProcedimentosSlice.selectors,
   colegiado: colegiadoSlice.selectors
@@ -56,6 +62,7 @@ export const sagas = function* () {
     ...formularioSlice.sagas,
     ...procedimentoSlice.sagas,
     ...meusProcedimentosSlice.sagas,
-    ...colegiadoSlice.sagas
+    ...colegiadoSlice.sagas,
+    ...tipoProcedimentoDetalhesSlice.sagas
   ])
 }

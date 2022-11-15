@@ -6,6 +6,7 @@ import { actions, store } from 'store'
 
 export default function TipoProcedimentos() {
   useEffect(() => {
+    store.dispatch(actions.tipoProcedimentoDetalhes.resetStatus())
     store.dispatch(
       actions.tipoProcedimento.list({ page: 1, per_page: 5, term: null })
     )

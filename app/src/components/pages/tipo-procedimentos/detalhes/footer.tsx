@@ -15,17 +15,19 @@ const Footer = ({ tipoProcedimento }: Props) => {
   const refSubmitButtom = useRef<HTMLButtonElement>(null)
   const { watch } = useFormContext()
 
+  const formularios = watch('formularios', []) as number[]
+
   const statusUpdate = useSelector(state => state.tipoProcedimento.statusUpdate)
   const statusCreate = useSelector(state => state.tipoProcedimento.statusCreate)
   const isLoading = statusCreate === 'loading' || statusUpdate === 'loading'
 
-  const formularios = watch('formularios', []) as number[]
   const isTipoProcedimentoInvalido =
     (formularios || []).length === 0 || tipoProcedimento?.deleted
 
   useEffect(() => {
     if (statusUpdate === 'success' || statusCreate === 'success') {
       store.dispatch(actions.tipoProcedimento.resetStatus())
+
       navigate('/tipo-procedimentos')
     }
   }, [statusUpdate, statusCreate])

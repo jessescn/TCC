@@ -1,7 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
 import MultipleSelect from 'components/atoms/multiple-select'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { selectors, useSelector } from 'store'
 
@@ -10,15 +8,10 @@ type Option = {
   label: string
 }
 
-type Props = {
-  tipoProcedimento?: TipoProcedimentoModel
-}
+export default function FormularioSelect() {
+  const { setValue, watch } = useFormContext()
 
-export default function FormularioSelect({ tipoProcedimento }: Props) {
-  const { setValue } = useFormContext()
-  const initialPopulated = useRef(false)
-
-  const [selectedFormOptions, setSelectedFormOptions] = useState<Option[]>([])
+  const selecionados = (watch('formularios') || []) as number[]
 
   const formularios = useSelector(selectors.formulario.getFormularios)
 
@@ -29,27 +22,16 @@ export default function FormularioSelect({ tipoProcedimento }: Props) {
       label: `id: ${formulario.id} - ${formulario.nome}`
     }))
 
-  useEffect(() => {
-    if (
-      initialPopulated.current ||
-      !tipoProcedimento ||
-      formOptions.length === 0
-    ) {
-      return
-    }
+  const getSelectedOptions = () => {
+    return formOptions.filter(option => selecionados.includes(option.value))
+  }
 
-    const options = formOptions.filter(option =>
-      tipoProcedimento?.formularios.includes(Number(option.value))
-    )
+  const handleOnChangeSelecionados = (value: any) => {
+    const newValues = value as Option[]
+    const ids = newValues.map(value => value.value)
 
-    setSelectedFormOptions(options)
-    initialPopulated.current = true
-  }, [formOptions, tipoProcedimento])
-
-  useEffect(() => {
-    const ids = selectedFormOptions.map(formOption => formOption.value)
     setValue('formularios', ids)
-  }, [selectedFormOptions])
+  }
 
   return (
     <Box>
@@ -59,10 +41,10 @@ export default function FormularioSelect({ tipoProcedimento }: Props) {
       <MultipleSelect
         isMulti
         options={formOptions}
-        value={selectedFormOptions}
-        onChange={value => setSelectedFormOptions(value as any)}
+        value={getSelectedOptions()}
+        onChange={handleOnChangeSelecionados}
       />
-      {selectedFormOptions.length === 0 && (
+      {getSelectedOptions().length === 0 && (
         <Text mt="6px" fontSize="10px" color="#E53E3E">
           Selecione ao menos um formulário
         </Text>
