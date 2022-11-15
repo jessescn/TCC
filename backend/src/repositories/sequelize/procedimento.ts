@@ -41,7 +41,7 @@ export type ProcedimentoQuery = WhereOptions<
 export class ProcedimentoRepository implements IProcedimentoRepo {
   findOne = async (id: number) => {
     const procedimento = await Procedimento.findOne({
-      where: { id, deleted: false },
+      where: { id },
       include: [TipoProcedimento, Comentario]
     })
 
@@ -53,7 +53,6 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
 
     const procedimentosById = await Procedimento.findAll({
       include: [
-        Comentario,
         TipoProcedimento,
         {
           model: Actor,
@@ -72,7 +71,6 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
 
     const procedimentosByName = await Procedimento.findAll({
       include: [
-        Comentario,
         {
           model: Actor,
           attributes: ['nome']

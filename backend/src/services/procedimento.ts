@@ -28,7 +28,18 @@ import {
 } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
 import { getCurrentStatus, paginateList } from 'utils/value'
+import { ComentarioModel } from 'domain/models/comentario'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { FormularioModel } from 'domain/models/formulario'
+import { ComentarioRepository } from 'repositories/sequelize/comentario'
+import { FormularioRepository } from 'repositories/sequelize/formulario'
 
+export type ProcedimentoDetails = {
+  procedimento: ProcedimentoModel
+  comentarios: ComentarioModel[]
+  tipoProcedimento: TipoProcedimentoModel
+  formularios: FormularioModel[]
+}
 export interface IProcedimentoService
   extends IService<ProcedimentoModel, ProcedimentoQuery> {
   create: (
@@ -49,21 +60,28 @@ export interface IProcedimentoService
     status: TStatus,
     pagination?: Pagination
   ) => Promise<PaginationResponse<ProcedimentoModel>>
+  details: (id: number) => Promise<ProcedimentoDetails>
 }
 
 export class ProcedimentoService implements IProcedimentoService {
   private procedimentoRepo: ProcedimentoRepository
   private tipoProcedimentoRepo: TipoProcedimentoRepository
+  private formularioRepo: FormularioRepository
   private statusService: IProcedimentoStatusService
+  private comentarioRepo: ComentarioRepository
 
   constructor(
     procedimentoRepo: IProcedimentoRepo,
     tipoProcedimentoRepo: IRepository,
+    comentarioRepo: IRepository,
+    formularioRepo: IRepository,
     statusService: IProcedimentoStatusService
   ) {
     this.procedimentoRepo = procedimentoRepo
     this.tipoProcedimentoRepo = tipoProcedimentoRepo
     this.statusService = statusService
+    this.comentarioRepo = comentarioRepo
+    this.formularioRepo = formularioRepo
   }
 
   private async checkIfTipoProcedimentoExists(tipo: number) {
@@ -142,6 +160,33 @@ export class ProcedimentoService implements IProcedimentoService {
 
   async findOne(id: number) {
     return this.checkIfProcedimentoExists(id)
+  }
+
+  async details(id: number) {
+    const procedimento = await this.checkIfProcedimentoExists(id)
+
+    if (!procedimento.tipo) {
+      throw new NotFoundError('procedimento sem tipo relacionado')
+    }
+
+    const tipoProcedimento = await this.checkIfTipoProcedimentoExists(
+      procedimento.tipo
+    )
+
+    const comentarios = await this.comentarioRepo.findAll({
+      procedimentoId: procedimento.id
+    })
+
+    const formularios = await this.formularioRepo.findAll({
+      id: tipoProcedimento.formularios
+    })
+
+    return {
+      formularios,
+      comentarios,
+      procedimento,
+      tipoProcedimento
+    }
   }
 
   async findAll(query: ProcedimentoQuery, pagination: Pagination) {

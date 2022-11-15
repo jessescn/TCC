@@ -10,14 +10,7 @@ export default function DetalhesTipoProcedimento() {
   const id = searchParams.get('id')
 
   useEffect(() => {
-    // store.dispatch(actions.tipoProcedimentoDetalhes.resetStatus())
-    // store.dispatch(
-    //   actions.formulario.list({ page: 1, per_page: 10000, term: null })
-    // )
-
-    // if (!isNaN(id) && id > 0) {
     store.dispatch(actions.tipoProcedimentoDetalhes.getInfo(id))
-    // }
   }, [])
 
   return (

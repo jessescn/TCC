@@ -17,20 +17,15 @@ import {
 } from 'domain/models/procedimento'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { actions, store, useSelector } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
 import ConfirmApproveModal from './modals/confirm-approve'
-
-type Props = {
-  procedimento: ProcedimentoModel
-  formularios: FormularioModel[]
-}
 
 export type CustomCampoInvalido = CampoInvalido & {
   campo: CampoFormulario
 }
 
-export default function Content({ formularios, procedimento }: Props) {
+export default function Content() {
   const navigate = useNavigate()
   const invalidModalControls = useDisclosure()
   const confirmApproveControls = useDisclosure()
@@ -38,11 +33,17 @@ export default function Content({ formularios, procedimento }: Props) {
   const statusUpdateStatus = useSelector(
     state => state.procedimento.statusUpdateStatus
   )
+  const procedimento = useSelector(
+    selectors.procedimentoDetalhes.getProcedimento
+  )
+  const formularios = useSelector(selectors.procedimentoDetalhes.getFormularios)
 
   const statusRevisao = useSelector(state => state.procedimento.statusRevisao)
   const isLoading =
     statusRevisao === 'loading' || statusUpdateStatus === 'loading'
-  const currentStatus = getCurrentStatus(procedimento)
+  const currentStatus = procedimento
+    ? getCurrentStatus(procedimento)
+    : undefined
   const canAnalyze = currentStatus === 'em_analise'
 
   const [feedback, setFeedback] = useState('')
@@ -71,6 +72,8 @@ export default function Content({ formularios, procedimento }: Props) {
   }
 
   const handleRequestAdjustment = () => {
+    if (!procedimento) return
+
     invalidModalControls.onClose()
     store.dispatch(
       actions.procedimento.novaRevisao({
@@ -84,6 +87,8 @@ export default function Content({ formularios, procedimento }: Props) {
   }
 
   const handleApproveProcedimento = () => {
+    if (!procedimento) return
+
     const nextStatus: ProcedimentoStatus = procedimento.tipo_procedimento
       ?.colegiado
       ? 'em_homologacao'
@@ -105,8 +110,16 @@ export default function Content({ formularios, procedimento }: Props) {
     }
   }, [statusUpdateStatus, statusRevisao])
 
-  return (
-    <Box h="100%">
+  return !procedimento ? null : (
+    <Box
+      w="100%"
+      h="100%"
+      maxW="1200px"
+      bgColor="initial.white"
+      borderRadius="8px"
+      px="24px"
+      py="32px"
+    >
       <Header procedimento={procedimento} status={currentStatus} />
       <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
       <Procedimento

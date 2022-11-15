@@ -3,6 +3,7 @@ import { authController } from 'factories/controllers/auth'
 import {
   createProcedimentoController,
   deleteProcedimentoController,
+  getDetailsProcedimentoController,
   homologateProcedimentoController,
   readActorProcedimentoController,
   readOneProcedimentoController,
@@ -87,6 +88,7 @@ routes.delete('/formularios/:id', deleteFormularioController.exec)
 routes.get('/procedimentos', readProcedimentoController.exec)
 routes.get('/procedimentos/actor', readActorProcedimentoController.exec)
 routes.get('/procedimentos/:id', readOneProcedimentoController.exec)
+routes.get('/procedimentos/:id/detalhes', getDetailsProcedimentoController.exec)
 routes.post('/procedimentos', createProcedimentoController.exec)
 routes.put('/procedimentos/:id', updateProcedimentoController.exec)
 routes.delete('/procedimentos/:id', deleteProcedimentoController.exec)

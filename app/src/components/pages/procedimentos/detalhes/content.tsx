@@ -1,26 +1,38 @@
-import { Box, Divider } from '@chakra-ui/react'
+import { Box, Divider, Flex, Spinner } from '@chakra-ui/react'
 import RenderProcedimento from 'components/organisms/procedimento'
 import Header from 'components/organisms/procedimento/header'
 import { Procedimento } from 'domain/entity/procedimento'
-import { FormularioModel } from 'domain/models/formulario'
-import { ProcedimentoModel } from 'domain/models/procedimento'
+import { selectors, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
 
-type Props = {
-  procedimento: ProcedimentoModel
-  formularios: FormularioModel[]
-}
-
-const Content = ({ procedimento, formularios }: Props) => {
-  const status = getCurrentStatus(procedimento)
-  const isEditable = status === 'correcoes_pendentes'
-  const camposInvalidos = Procedimento.getCamposInvalidos(
-    procedimento,
-    formularios
+const Content = () => {
+  const procedimento = useSelector(
+    selectors.procedimentoDetalhes.getProcedimento
   )
+  const formularios = useSelector(selectors.procedimentoDetalhes.getFormularios)
 
-  return (
-    <Box>
+  const status = procedimento ? getCurrentStatus(procedimento) : undefined
+  const isEditable = status === 'correcoes_pendentes'
+  const camposInvalidos = procedimento
+    ? Procedimento.getCamposInvalidos(procedimento, formularios)
+    : []
+
+  return !procedimento?.id ? (
+    <Flex justifyContent="center">
+      <Spinner />
+    </Flex>
+  ) : (
+    <Box
+      boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.2)"
+      w="100%"
+      h="100%"
+      maxW="1200px"
+      bgColor="initial.white"
+      borderRadius="8px"
+      px="24px"
+      py="32px"
+      position="relative"
+    >
       <Header
         procedimento={procedimento}
         status={getCurrentStatus(procedimento)}

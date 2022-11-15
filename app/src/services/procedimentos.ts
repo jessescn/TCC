@@ -1,11 +1,13 @@
 import { AxiosResponse } from 'axios'
 import { ComentarioModel } from 'domain/models/comentario'
+import { FormularioModel } from 'domain/models/formulario'
 import {
   CampoInvalido,
   ProcedimentoModel,
   Resposta,
   ProcedimentoStatus
 } from 'domain/models/procedimento'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { buildQuery } from 'utils/format'
 import { httpClient, Pagination } from './config'
 
@@ -13,6 +15,13 @@ export type NovoProcedimento = {
   tipo: number
   respostas: Resposta[]
   votos?: ProcedimentoStatus[]
+}
+
+export type ProcedimentoDetails = {
+  procedimento: ProcedimentoModel
+  comentarios: ComentarioModel[]
+  tipoProcedimento: TipoProcedimentoModel
+  formularios: FormularioModel[]
 }
 
 export type Vote = {
@@ -40,6 +49,12 @@ export const ProcedimentoService = {
     return httpClient.request<AxiosResponse<ProcedimentoModel[]>>({
       method: 'get',
       url: `/procedimentos?${query}`
+    })
+  },
+  details: (id: number) => {
+    return httpClient.request<AxiosResponse<ProcedimentoDetails>>({
+      method: 'get',
+      url: `/procedimentos/${id}/detalhes`
     })
   },
   create: (payload: NovoProcedimento) => {
