@@ -8,3 +8,11 @@ export const getRoot = (state: State) => {
 export const getTipoProcedimento = createSelector([getRoot], state => {
   return state.tipoProcedimento
 })
+
+export const getFormularios = createSelector([getRoot], state => {
+  return state.formularios
+})
+
+export const getPublicos = createSelector([getRoot], state => {
+  return state.publicos
+})

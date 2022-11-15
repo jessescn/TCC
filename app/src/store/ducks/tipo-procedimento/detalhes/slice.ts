@@ -2,15 +2,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import {
-  NovoTipoProcedimento,
-  TipoProcedimentoDetails
-} from 'services/tipo-procedimentos'
+import { NovoTipoProcedimento } from 'services/tipo-procedimentos'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
 export type State = {
   tipoProcedimento?: TipoProcedimentoModel
+  formularios: FormularioModel[]
+  publicos: string[]
   statusFetch: Status
 }
 
@@ -21,13 +20,24 @@ export type UpdatePayload = {
 
 export type CreatePayload = NovoTipoProcedimento
 
+export type TipoProcedimentoDetails = {
+  tipo?: TipoProcedimentoModel
+  formularios: FormularioModel[]
+  publicos: string[]
+}
+
 export const initialState: State = {
-  statusFetch: 'pristine'
+  statusFetch: 'pristine',
+  formularios: [],
+  publicos: []
 }
 
 const reducers = {
-  getInfo: (state: State, action: PayloadAction<number>) => {
+  getInfo: (state: State, action: PayloadAction<string | null>) => {
     state.statusFetch = 'loading'
+    state.formularios = []
+    state.publicos = []
+    state.tipoProcedimento = undefined
   },
   getInfoSuccess: (
     state: State,
@@ -35,6 +45,8 @@ const reducers = {
   ) => {
     state.statusFetch = 'success'
     state.tipoProcedimento = action.payload.tipo
+    state.formularios = action.payload.formularios
+    state.publicos = action.payload.publicos
   },
   getInfoFailure: (state: State) => {
     state.statusFetch = 'failure'

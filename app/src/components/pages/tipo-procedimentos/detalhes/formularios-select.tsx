@@ -13,14 +13,14 @@ export default function FormularioSelect() {
 
   const selecionados = (watch('formularios') || []) as number[]
 
-  const formularios = useSelector(selectors.formulario.getFormularios)
+  const formularios = useSelector(
+    selectors.tipoProcedimentoDetalhes.getFormularios
+  )
 
-  const formOptions = formularios
-    .filter(formulario => !formulario.deleted)
-    .map(formulario => ({
-      value: formulario.id,
-      label: `id: ${formulario.id} - ${formulario.nome}`
-    }))
+  const formOptions = formularios.map(formulario => ({
+    value: formulario.id,
+    label: `id: ${formulario.id} - ${formulario.nome}`
+  }))
 
   const getSelectedOptions = () => {
     return formOptions.filter(option => selecionados.includes(option.value))

@@ -9,7 +9,7 @@ export type NovoFormulario = {
   campos: CampoFormulario[]
 }
 
-export const FormService = {
+export const FormularioService = {
   list: (pagination: Pagination) => {
     const query = buildQuery(pagination)
 

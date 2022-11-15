@@ -54,7 +54,7 @@ export class TipoProcedimentoRepository implements IRepository {
 
   findOne = async (id: number) => {
     const tipoProcedimento = await TipoProcedimento.findOne({
-      where: { id, deleted: false }
+      where: { id }
     })
 
     return tipoProcedimento

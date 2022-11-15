@@ -27,7 +27,6 @@ export interface ITipoProcedimentoService
     id: number,
     data: Partial<TipoProcedimentoModel>
   ) => Promise<TipoProcedimentoModel>
-  details: (id: number) => Promise<TipoProcedimentoDetails>
 }
 
 export class TipoProcedimentoService implements ITipoProcedimentoService {
@@ -89,20 +88,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   }
 
   async findOne(id: number) {
-    return this.checkIfTipoProcedimentoExists(id)
-  }
-
-  async details(id: number) {
-    const tipoProcedimento = await this.checkIfTipoProcedimentoExists(id, {})
-
-    const formularios = await this.formularioRepo.findAll({
-      deleted: false
-    })
-
-    return {
-      tipo: tipoProcedimento,
-      formularios
-    }
+    return this.tipoProcedimentoRepo.findOne(id)
   }
 
   async findAll(query: TipoProcedimentoQuery, pagination: Pagination) {

@@ -111,7 +111,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
         </Flex>
       </Flex>
       <FormularioSelect />
-      <PublicosSelect tipoProcedimento={tipoProcedimento} />
+      <PublicosSelect />
     </Stack>
   )
 }

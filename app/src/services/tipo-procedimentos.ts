@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios'
-import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { buildQuery } from 'utils/format'
 import { httpClient, Pagination, PaginationResponse } from './config'
@@ -11,11 +10,6 @@ export type NovoTipoProcedimento = {
   dataFim?: Date
   escopo: string
   colegiado: boolean
-}
-
-export type TipoProcedimentoDetails = {
-  tipo: TipoProcedimentoModel
-  formularios: FormularioModel[]
 }
 
 export const TipoProcedimentoService = {
@@ -50,9 +44,9 @@ export const TipoProcedimentoService = {
     })
   },
   details: (id: number) => {
-    return httpClient.request<AxiosResponse<TipoProcedimentoDetails>>({
+    return httpClient.request<AxiosResponse<TipoProcedimentoModel>>({
       method: 'get',
-      url: `/tipo-procedimentos/${id}/detalhes`
+      url: `/tipo-procedimentos/${id}`
     })
   }
 }

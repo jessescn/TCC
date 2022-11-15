@@ -1,6 +1,5 @@
 import { makeCreateTipoProcedimentoController } from './create-factory'
 import { makeDeleteTipoProcedimentoController } from './delete-factory'
-import { makeGetDetailsTipoProcedimentoController } from './details-factory'
 import { makeReadTipoProcedimentoController } from './read-factory'
 import { makeReadOneTipoProcedimentoController } from './read-one-factory'
 import { makeUpdateTipoProcedimentoController } from './update-factory'
@@ -15,5 +14,3 @@ export const readTipoProcedimentoController =
   makeReadTipoProcedimentoController()
 export const readOneTipoProcedimentoController =
   makeReadOneTipoProcedimentoController()
-export const getDetailsTipoProcedimentoController =
-  makeGetDetailsTipoProcedimentoController()
