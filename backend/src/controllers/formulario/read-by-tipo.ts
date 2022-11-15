@@ -18,8 +18,6 @@ export class ReadFormulariosByTipoController extends Controller<IFormularioServi
 
       const { id } = request.params
 
-      console.log({ id }, 'BATEU AQUI')
-
       const formularios = await this.service.findByTipo(Number(id))
 
       response.json(formularios)

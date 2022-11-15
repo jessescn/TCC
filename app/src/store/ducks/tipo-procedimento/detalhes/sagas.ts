@@ -31,8 +31,6 @@ function* _fetch_publicos() {
 
 function* getInfoSaga(action: PayloadAction<string | null>) {
   try {
-    console.log('CHAMOU')
-
     let tipoProcedimento: TipoProcedimentoModel | undefined
 
     if (action.payload !== null) {

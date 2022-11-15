@@ -1,21 +1,32 @@
-import { ActorModel } from 'domain/models/actor'
 import { ActorHelper } from 'domain/helpers/actor'
-import { IRepository } from 'repositories'
-import { ActorQuery, NewActor } from 'repositories/sequelize/actor'
+import { ActorModel } from 'domain/models/actor'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import {
+  ActorQuery,
+  ActorRepository,
+  NewActor
+} from 'repositories/sequelize/actor'
 import { ProfileRepository } from 'repositories/sequelize/profile'
+import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
+
+export type SidebarInfo = {
+  open: TipoProcedimentoModel[]
+}
 
 export interface IActorService extends IService<ActorModel, ActorQuery> {
   create: (data: NewActor) => Promise<ActorModel>
   update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
   getPublicos: () => Promise<string[]>
+  getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
 }
 
 export class ActorService implements IActorService {
   constructor(
-    private readonly repository: IRepository,
-    private readonly profileRepo: ProfileRepository
+    private readonly repository: ActorRepository,
+    private readonly profileRepo: ProfileRepository,
+    private readonly tipoProcedimentoRepo: TipoProcedimentoRepository
   ) {}
 
   private checkIfUserAlreadyExistsByEmail = async (email: string) => {
@@ -48,7 +59,7 @@ export class ActorService implements IActorService {
       email: data.email,
       nome: data.nome,
       senha: data.senha,
-      permissoes: profile.id
+      profile: profile.id
     })
 
     return actor
@@ -80,5 +91,34 @@ export class ActorService implements IActorService {
     const actors = await this.findAll()
 
     return ActorHelper.getPublicos(actors)
+  }
+
+  async getSidebarInfo(id: number) {
+    const actor = (await this.checkIfUserAlreadyExists(id)) as ActorModel
+    const publicos = actor.publico
+
+    const activeTipos = await this.tipoProcedimentoRepo.findAll({
+      status: 'ativo',
+      deleted: false
+    })
+
+    const openedTipos = activeTipos.filter(tipo => {
+      const startDate = new Date(tipo.dataInicio || '01-01-1999')
+      const endDate = new Date(tipo.dataFim || '01-01-2999')
+      const currentDate = new Date()
+
+      const intersection = tipo.publicos.filter(publico =>
+        publicos.includes(publico)
+      )
+
+      const isInInterval = startDate <= currentDate && endDate >= currentDate
+      const isInPublicos = tipo.publicos.length === 0 || intersection.length > 0
+
+      return isInInterval && isInPublicos
+    })
+
+    return {
+      open: openedTipos
+    }
   }
 }

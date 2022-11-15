@@ -8,8 +8,6 @@ const DetalhesProcedimento = () => {
   const { id } = useParams()
 
   useEffect(() => {
-    console.log('entrou aqui', Number(id))
-
     store.dispatch(actions.procedimentoDetalhes.getInfo(Number(id)))
   }, [])
 

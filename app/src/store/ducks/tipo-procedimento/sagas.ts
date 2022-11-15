@@ -4,6 +4,7 @@ import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { Pagination, PaginationResponse } from 'services/config'
 import { TipoProcedimentoService } from 'services/tipo-procedimentos'
+import { sidebarInfoSaga } from '../session/sagas'
 import { getPagination } from './selectors'
 import { actions, CreatePayload, UpdatePayload } from './slice'
 
@@ -32,6 +33,7 @@ function* createSaga(action: PayloadAction<CreatePayload>) {
     )
 
     yield put(actions.createSuccess(response.data))
+    yield call(sidebarInfoSaga)
   } catch (error) {
     yield put(actions.createFailure())
   }
@@ -44,11 +46,14 @@ function* updateSaga(action: PayloadAction<UpdatePayload>) {
       TipoProcedimentoService.update(action.payload.id, action.payload.data)
     )
 
-    yield put(actions.updateSuccess())
-    yield call(listSaga, {
+    const listPayload = {
       payload: currentPagination,
       type: actions.list.type
-    })
+    }
+
+    yield put(actions.updateSuccess())
+    yield call(listSaga, listPayload)
+    yield call(sidebarInfoSaga)
   } catch (error) {
     yield put(actions.updateFailure())
   }

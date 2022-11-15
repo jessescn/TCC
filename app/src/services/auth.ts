@@ -1,6 +1,7 @@
 import { httpClient } from './config'
 import { AxiosResponse } from 'axios'
 import { UserModel } from '../domain/models/user'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
 export type Credentials = {
   senha: string
@@ -10,6 +11,10 @@ export type Credentials = {
 export type CredentialsResponse = {
   token: string
   expiresIn: string
+}
+
+export type SidebarInfo = {
+  open: TipoProcedimentoModel[]
 }
 
 export const AuthService = {
@@ -24,6 +29,12 @@ export const AuthService = {
     return httpClient.request<AxiosResponse<UserModel>>({
       url: '/me',
       method: 'get'
+    })
+  },
+  sidebarInfo: () => {
+    return httpClient.request<AxiosResponse<SidebarInfo>>({
+      method: 'get',
+      url: '/users/sidebar'
     })
   }
 }

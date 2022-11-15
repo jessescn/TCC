@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { UserModel } from '../../../domain/models/user'
 import { Credentials } from '../../../services/auth'
 
+type Status = 'pristine' | 'loading' | 'success' | 'failure'
+
 export type LoginStatus = {
-  status: 'pristine' | 'loading' | 'success' | 'failure'
+  status: Status
   message?: string
 }
 
@@ -12,12 +15,16 @@ export type State = {
   currentUser: UserModel | null
   isSidebarOpen: boolean
   loginStatus: LoginStatus
+  sidebarStatus: Status
+  openProcedimentos: TipoProcedimentoModel[]
 }
 
 const userLocalStorage = localStorage.getItem('session_user')
 
 export const initialState: State = {
   loginStatus: { status: 'pristine' },
+  openProcedimentos: [],
+  sidebarStatus: 'pristine',
   isSidebarOpen: false,
   currentUser: userLocalStorage ? JSON.parse(userLocalStorage) : null
 }
@@ -38,6 +45,19 @@ const reducers = {
     localStorage.removeItem('access_token')
 
     document.location.reload()
+  },
+  sidebarInfo: (state: State) => {
+    state.sidebarStatus = 'loading'
+  },
+  sidebarInfoSuccess: (
+    state: State,
+    action: PayloadAction<TipoProcedimentoModel[]>
+  ) => {
+    state.sidebarStatus = 'loading'
+    state.openProcedimentos = action.payload
+  },
+  sidebarInfoFailure: (state: State) => {
+    state.sidebarStatus = 'failure'
   },
   toggleSidebar: (state: State) => {
     state.isSidebarOpen = !state.isSidebarOpen

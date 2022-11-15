@@ -16,8 +16,6 @@ const Table = () => {
     selectors.meusProcedimentos.getProcedimentos
   )
 
-  console.log({ procedimentos })
-
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
 

@@ -4,6 +4,7 @@ import Sidebar from 'components/organisms/sidebar'
 import { User } from 'domain/entity/user'
 import { UserModel } from 'domain/models/user'
 import { ProfileType } from 'domain/types/actors'
+import { useEffect } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
@@ -35,6 +36,10 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
   if (!isAllowed) {
     return <Navigate to="/404" state={{ from: location }} replace />
   }
+
+  useEffect(() => {
+    store.dispatch(actions.session.sidebarInfo())
+  }, [])
 
   function closeSidebar() {
     if (isSidebarOpen) {

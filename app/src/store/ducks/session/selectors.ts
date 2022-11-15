@@ -14,6 +14,10 @@ export const getAuthStatus = createSelector([getRoot], state => {
   return state.loginStatus
 })
 
+export const getOpenProcedimentos = createSelector([getRoot], state => {
+  return state.openProcedimentos
+})
+
 export const is = createSelector(
   [getCurrentUser],
   currentUser => (profile: ProfileType) => {

@@ -1,18 +1,22 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
+import { UserModel } from 'domain/models/user'
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { UserModel } from '../../../domain/models/user'
 import {
   AuthService,
   Credentials,
-  CredentialsResponse
-} from '../../../services/auth'
+  CredentialsResponse,
+  SidebarInfo
+} from 'services/auth'
 
 import { actions } from './slice'
 
-export const sagas = [takeLatest(actions.login.type, authUser)]
+export const sagas = [
+  takeLatest(actions.login.type, authUserSaga),
+  takeLatest(actions.sidebarInfo.type, sidebarInfoSaga)
+]
 
-export function* authUser(action: PayloadAction<Credentials>) {
+export function* authUserSaga(action: PayloadAction<Credentials>) {
   try {
     const response: AxiosResponse<CredentialsResponse> = yield call(() =>
       AuthService.token(action.payload)
@@ -31,5 +35,17 @@ export function* authUser(action: PayloadAction<Credentials>) {
     yield put(actions.loginSuccess(data.data))
   } catch (error: any) {
     yield put(actions.loginFailure(error?.response?.data))
+  }
+}
+
+export function* sidebarInfoSaga() {
+  try {
+    const response: AxiosResponse<SidebarInfo> = yield call(() =>
+      AuthService.sidebarInfo()
+    )
+
+    yield put(actions.sidebarInfoSuccess(response.data.open))
+  } catch (error: any) {
+    yield put(actions.sidebarInfoFailure())
   }
 }

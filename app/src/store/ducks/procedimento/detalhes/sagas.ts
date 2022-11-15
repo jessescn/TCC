@@ -15,8 +15,6 @@ function* getInfoSaga(action: PayloadAction<number>) {
       ProcedimentoService.details(action.payload)
     )
 
-    console.log({ response })
-
     yield put(actions.getInfoSuccess(response.data))
   } catch (error) {
     yield put(actions.getInfoFailure())
