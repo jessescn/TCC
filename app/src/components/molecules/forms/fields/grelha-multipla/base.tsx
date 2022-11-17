@@ -22,7 +22,7 @@ export function BaseCampoGrelhaMultipla({
   campo,
   ...props
 }: Props) {
-  const { colunas, linhas } = props.configuracao_campo
+  const { colunas, linhas } = props.configuracao_campo.opcoes
   const currentValue = (campo?.valor || []) as string[]
 
   function getSelectedItemIdxByRow(rowId: number) {

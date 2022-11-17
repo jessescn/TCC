@@ -20,6 +20,12 @@ export const FormularioService = {
       url: `/formularios?${query}`
     })
   },
+  details: (id: number) => {
+    return httpClient.request<AxiosResponse<FormularioModel>>({
+      method: 'get',
+      url: `/formularios/${id}`
+    })
+  },
   listByTipo: (tipoId: number) => {
     return httpClient.request<
       AxiosResponse<PaginationResponse<FormularioModel>>

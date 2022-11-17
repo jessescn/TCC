@@ -18,18 +18,13 @@ export default function GrelhaVerificacaoBuilder({
   campo,
   onUpdate
 }: BaseBuildFieldProps) {
-  const initialLinhas: string[] = campo.configuracao_campo?.linhas || [
-    'Linha 1'
-  ]
-  const [linhas, setLinhas] = useState(initialLinhas)
-
-  const initialColunas: string[] = campo.configuracao_campo?.colunas || [
-    'Coluna 1'
-  ]
-  const [colunas, setColunas] = useState(initialColunas)
+  const [opcoes, setOpcoes] = useState({
+    linhas: campo.configuracao_campo?.opcoes.linhas || ['Linha 1'],
+    colunas: campo.configuracao_campo?.opcoes.colunas || ['Coluna 1']
+  })
 
   const handleUpdateColuna = debounce((idx: number, newValue?: string) => {
-    const colunasCopy = [...colunas]
+    const colunasCopy = JSON.parse(JSON.stringify(opcoes.colunas)) as string[]
 
     if (newValue) {
       colunasCopy.splice(idx, 1, newValue)
@@ -37,11 +32,11 @@ export default function GrelhaVerificacaoBuilder({
       colunasCopy.splice(idx, 1)
     }
 
-    setColunas(colunasCopy)
+    setOpcoes(prev => ({ ...prev, colunas: colunasCopy }))
   }, 400)
 
   const handleUpdateLinha = debounce((idx: number, newValue?: string) => {
-    const linhasCopy = [...linhas]
+    const linhasCopy = JSON.parse(JSON.stringify(opcoes.linhas)) as string[]
 
     if (newValue) {
       linhasCopy.splice(idx, 1, newValue)
@@ -49,25 +44,28 @@ export default function GrelhaVerificacaoBuilder({
       linhasCopy.splice(idx, 1)
     }
 
-    setLinhas(linhasCopy)
+    setOpcoes(prev => ({ ...prev, linhas: linhasCopy }))
   }, 400)
 
   useEffect(() => {
-    onUpdate({ ...campo, configuracao_campo: { linhas, colunas } })
-  }, [linhas, colunas])
+    onUpdate({
+      ...campo,
+      configuracao_campo: { ...campo.configuracao_campo, opcoes }
+    })
+  }, [opcoes])
 
   function handleAddNewElement(where: 'linha' | 'coluna', newElm?: string) {
     const currentIdx =
-      where === 'coluna' ? colunas.length + 1 : linhas.length + 1
+      where === 'coluna' ? opcoes.colunas.length + 1 : opcoes.linhas.length + 1
 
     if (where === 'coluna') {
       const novaColuna = newElm ?? `Coluna ${currentIdx}`
-      setColunas([...colunas, novaColuna])
+      setOpcoes(prev => ({ ...prev, colunas: [...prev.colunas, novaColuna] }))
       return
     }
 
     const novaLinha = newElm ?? `Linha ${currentIdx}`
-    setLinhas([...linhas, novaLinha])
+    setOpcoes(prev => ({ ...prev, linhas: [...prev.linhas, novaLinha] }))
   }
 
   return (
@@ -86,7 +84,7 @@ export default function GrelhaVerificacaoBuilder({
           />
         </Flex>
         <OrderedList pl="16px">
-          {linhas.map((linha: string, idx: number) => (
+          {opcoes.linhas.map((linha: string, idx: number) => (
             <ListItem
               height="40px"
               mb="16px"
@@ -103,7 +101,7 @@ export default function GrelhaVerificacaoBuilder({
                   onChange={ev => handleUpdateLinha(idx, ev.target.value)}
                   value={linha}
                 />
-                {linhas.length > 1 && (
+                {opcoes.linhas.length > 1 && (
                   <IconButton
                     aria-label=""
                     size="sm"
@@ -130,7 +128,7 @@ export default function GrelhaVerificacaoBuilder({
             icon={<Icon as={AiOutlinePlus} />}
           />
         </Flex>
-        {colunas.map((coluna: string, idx: number) => (
+        {opcoes.colunas.map((coluna: string, idx: number) => (
           <Flex mb="16px" height="40px" key={`${coluna}-${idx}`}>
             <Checkbox isDisabled size="lg" />
             <Input
@@ -142,7 +140,7 @@ export default function GrelhaVerificacaoBuilder({
               value={coluna}
               onChange={ev => handleUpdateColuna(idx, ev.target.value)}
             />
-            {colunas.length > 1 && (
+            {opcoes.colunas.length > 1 && (
               <IconButton
                 aria-label=""
                 size="sm"

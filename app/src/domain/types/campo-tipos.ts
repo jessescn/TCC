@@ -27,13 +27,17 @@ export type CampoTipoFicheiro = CampoTipoBase & {
 }
 
 export type CampoTipoGrelhaMultipla = CampoTipoBase & {
-  linhas: string[]
-  colunas: string[]
+  opcoes: {
+    linhas: string[]
+    colunas: string[]
+  }
 }
 
 export type CampoTipoGrelhaVerificacao = CampoTipoBase & {
-  linhas: string[]
-  colunas: string[]
+  opcoes: {
+    linhas: string[]
+    colunas: string[]
+  }
 }
 
 export type CampoTipos = {

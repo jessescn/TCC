@@ -7,6 +7,7 @@ import * as tipoProcedimentoDetalhesSlice from './tipo-procedimento/detalhes'
 import * as procedimentoDetalhesSlice from './procedimento/detalhes'
 
 import * as formularioSlice from './formulario'
+import * as formularioDetalhesSlice from './formulario/detalhes'
 import * as procedimentoSlice from './procedimento'
 import * as colegiadoSlice from './colegiado'
 import * as meusProcedimentosSlice from './meus-procedimentos'
@@ -19,6 +20,7 @@ export type State = {
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.State
   procedimentoDetalhes: procedimentoDetalhesSlice.State
   formulario: formularioSlice.State
+  formularioDetalhes: formularioDetalhesSlice.State
   meusProcedimentos: meusProcedimentosSlice.State
   colegiado: colegiadoSlice.State
 }
@@ -30,6 +32,7 @@ export const reducer = {
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.reducer,
   procedimentoDetalhes: procedimentoDetalhesSlice.reducer,
   formulario: formularioSlice.reducer,
+  formularioDetalhes: formularioDetalhesSlice.reducer,
   procedimento: procedimentoSlice.reducer,
   meusProcedimentos: meusProcedimentosSlice.reducer,
   colegiado: colegiadoSlice.reducer
@@ -42,6 +45,7 @@ export const actions = Object.freeze({
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.actions,
   procedimentoDetalhes: procedimentoDetalhesSlice.actions,
   formulario: formularioSlice.actions,
+  formularioDetalhes: formularioDetalhesSlice.actions,
   procedimento: procedimentoSlice.actions,
   meusProcedimentos: meusProcedimentosSlice.actions,
   colegiado: colegiadoSlice.actions
@@ -55,6 +59,7 @@ export const selectors = Object.freeze({
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.selectors,
   procedimentoDetalhes: procedimentoDetalhesSlice.selectors,
   formulario: formularioSlice.selectors,
+  formularioDetalhes: formularioDetalhesSlice.selectors,
   meusProcedimentos: meusProcedimentosSlice.selectors,
   colegiado: colegiadoSlice.selectors
 })
@@ -69,6 +74,7 @@ export const sagas = function* () {
     ...meusProcedimentosSlice.sagas,
     ...colegiadoSlice.sagas,
     ...tipoProcedimentoDetalhesSlice.sagas,
-    ...procedimentoDetalhesSlice.sagas
+    ...procedimentoDetalhesSlice.sagas,
+    ...formularioDetalhesSlice.sagas
   ])
 }

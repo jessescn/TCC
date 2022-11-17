@@ -53,7 +53,13 @@ export class FormularioRepository implements IRepository {
 
   findOne = async (id: number) => {
     const formulario = await Formulario.findOne({
-      where: { id, deleted: false }
+      where: { id, deleted: false },
+      include: [
+        {
+          model: Actor,
+          attributes: ['nome']
+        }
+      ]
     })
 
     return formulario

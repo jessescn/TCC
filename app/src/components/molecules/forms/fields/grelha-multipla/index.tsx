@@ -30,7 +30,7 @@ export function CampoGrelhaMultipla(props: Props) {
       rules={{
         validate: {
           isRequired: e => {
-            const numberOfRows = props.configuracao_campo.linhas.length
+            const numberOfRows = props.configuracao_campo.opcoes.linhas.length
 
             const isValid =
               !props.obrigatorio || (e?.valor || []).length === numberOfRows

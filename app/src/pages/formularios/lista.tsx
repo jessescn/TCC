@@ -9,6 +9,7 @@ export default function Formularios() {
     store.dispatch(
       actions.formulario.list({ page: 1, per_page: 5, term: null })
     )
+    store.dispatch(actions.formularioDetalhes.resetState())
   }, [])
 
   return (

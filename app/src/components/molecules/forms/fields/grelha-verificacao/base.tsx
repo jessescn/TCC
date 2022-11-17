@@ -24,7 +24,7 @@ export function BaseCampoGrelhaVerificacao({
 }: Props) {
   const currentValue: string[][] = campo?.valor || []
 
-  const { colunas, linhas } = props.configuracao_campo
+  const { colunas, linhas } = props.configuracao_campo.opcoes
 
   function getCurrentValueIdxByRow(row: number) {
     return currentValue.findIndex(v => {

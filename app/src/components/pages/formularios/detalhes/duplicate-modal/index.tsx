@@ -37,7 +37,7 @@ export const DuplicateFormModal = ({
   const [selectedFormOptions, setSelectedFormOptions] = useState<
     Option | undefined
   >()
-  const formularios = useSelector(selectors.formulario.getFormularios)
+  const formularios = useSelector(selectors.formularioDetalhes.getFormularios)
 
   const formOptions = formularios.map(formulario => ({
     value: formulario,
