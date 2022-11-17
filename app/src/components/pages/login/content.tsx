@@ -57,6 +57,7 @@ export const Content = () => {
             onSubmit={handleSubmit(handleLoginSubmit)}
           >
             <FormInput
+              mb="12px"
               id="email"
               placeholder="Ex. email@ccc.ufcg.edu.br"
               isInvalid={Boolean(errors.email)}
@@ -78,7 +79,6 @@ export const Content = () => {
               ]}
             />
             <FormInput
-              mt="12px"
               id="senha"
               placeholder="******"
               type="password"

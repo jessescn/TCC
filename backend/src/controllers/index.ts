@@ -10,6 +10,8 @@ export interface IController {
 }
 
 export const errorResponseHandler = (res: Response, error: any) => {
+  console.error(error)
+
   if (error instanceof RequestError) {
     res.status(error.status).send(error.message)
     return

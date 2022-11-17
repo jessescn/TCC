@@ -39,7 +39,7 @@ export class ActorRepository implements IRepository {
   }
 
   create = async (data: CreateActor) => {
-    const { id } = await Actor.create(data)
+    const { id } = await Actor.create({ ...data, permissoes: data.profile })
 
     return this.findOne(id)
   }

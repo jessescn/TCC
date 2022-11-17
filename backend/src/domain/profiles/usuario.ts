@@ -20,5 +20,6 @@ export default {
   tipo_procedimento_create: 'owned',
   tipo_procedimento_delete: 'owned',
   tipo_procedimento_read: 'all',
-  tipo_procedimento_update: 'owned'
+  tipo_procedimento_update: 'owned',
+  actor_read: 'owned'
 }

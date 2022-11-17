@@ -24,6 +24,9 @@ const reducers = {
   },
   createFailure: (state: State, action: PayloadAction<string | undefined>) => {
     state.createUserStatus = { status: 'failure', message: action.payload }
+  },
+  resetState: (state: State) => {
+    state.createUserStatus = initialState.createUserStatus
   }
 }
 
