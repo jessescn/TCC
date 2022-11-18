@@ -1,4 +1,8 @@
-import { Controller, errorResponseHandler } from 'controllers'
+import {
+  Controller,
+  errorResponseHandler,
+  extractPagination
+} from 'controllers'
 import { ActorModel } from 'domain/models/actor'
 import { PermissionKey } from 'domain/profiles'
 import { IActorService } from 'services/actor'
@@ -21,8 +25,10 @@ export class ReadActorController extends Controller<IActorService> {
     try {
       this.validateRequest(request)
 
+      const pagination = extractPagination(request)
+
       const query = this.getQueryByScope(request.actor)
-      const actors = await this.service.findAll(query)
+      const actors = await this.service.findAll(query, pagination)
 
       response.json(actors)
     } catch (error) {

@@ -6,7 +6,7 @@ import { HTMLInputTypeAttribute, useEffect } from 'react'
 import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 import PasswordStrengthBar from 'react-password-strength-bar'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { CreateUser } from 'services/user'
+import { CreateUser } from 'services/usuarios'
 import { actions, selectors, store, useSelector } from 'store'
 import { validateEmail } from 'utils/validation'
 
@@ -35,7 +35,7 @@ export const Content = () => {
     watch
   } = useForm<RegisterForm>({ mode: 'onSubmit', reValidateMode: 'onChange' })
 
-  const status = useSelector(selectors.user.getCreateUserStatus)
+  const status = useSelector(selectors.user.getStatusCreate)
 
   const handleRegisterSubmit = (form: RegisterForm) => {
     store.dispatch(actions.user.create(form))

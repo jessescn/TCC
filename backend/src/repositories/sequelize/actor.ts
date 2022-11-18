@@ -1,7 +1,8 @@
 import Actor, { ActorAttributes, ActorModel } from 'domain/models/actor'
 import Profile from 'domain/models/profile'
 import { IRepository } from 'repositories'
-import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { InferAttributes, Op, WhereOptions } from 'sequelize'
+import { isNumber } from 'utils/value'
 
 export type ActorQuery = WhereOptions<InferAttributes<ActorAttributes>>
 
@@ -24,9 +25,20 @@ export const InclusivableActorOptions = {
 }
 
 export class ActorRepository implements IRepository {
-  findAll = async (query: ActorQuery = {}) => {
+  findAll = async (query: ActorQuery, term?: string) => {
+    const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
+    const search = term
+      ? {
+          [Op.or]: [
+            { nome: { [Op.substring]: '%' + term + '%' } },
+            { email: { [Op.substring]: '%' + term + '%' } },
+            { ...searchId }
+          ]
+        }
+      : {}
+
     return Actor.findAll({
-      where: { deleted: false, ...query },
+      where: { ...search, ...query },
       ...InclusivableActorOptions
     })
   }

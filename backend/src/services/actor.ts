@@ -1,6 +1,7 @@
 import { ActorHelper } from 'domain/helpers/actor'
 import { ActorModel } from 'domain/models/actor'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { Pagination } from 'repositories'
 import {
   ActorQuery,
   ActorRepository,
@@ -10,6 +11,7 @@ import { ProfileRepository } from 'repositories/sequelize/profile'
 import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
+import { paginateList } from 'utils/value'
 
 export type SidebarInfo = {
   open: TipoProcedimentoModel[]
@@ -77,8 +79,15 @@ export class ActorService implements IActorService {
     return actor
   }
 
-  async findAll(query: ActorQuery = {}) {
-    return this.repository.findAll(query)
+  async findAll(query: ActorQuery, pagination: Pagination) {
+    const usuarios = await this.repository.findAll(query, pagination.term)
+
+    const paginated = paginateList(usuarios, pagination)
+
+    return {
+      total: usuarios.length,
+      data: paginated
+    }
   }
 
   async update(id: number, data: Partial<ActorModel>) {
@@ -88,9 +97,12 @@ export class ActorService implements IActorService {
   }
 
   async getPublicos() {
-    const actors = await this.findAll()
+    const { data } = await this.findAll(
+      {},
+      { page: 1, per_page: 1000, term: null }
+    )
 
-    return ActorHelper.getPublicos(actors)
+    return ActorHelper.getPublicos(data)
   }
 
   async getSidebarInfo(id: number) {

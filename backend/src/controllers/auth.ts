@@ -1,6 +1,7 @@
 import { errorResponseHandler } from 'controllers'
 import { ActorModel } from 'domain/models/actor'
 import jwt from 'jsonwebtoken'
+import { PaginationResponse } from 'repositories'
 import { IActorService } from 'services/actor'
 import { Request, Response } from 'types/express'
 import {
@@ -26,9 +27,14 @@ export class AuthController {
         throw new BadRequestError()
       }
 
-      const [actor] = (await this.service.findAll({
-        email: data.email
-      })) as ActorModel[]
+      const result = (await this.service.findAll(
+        {
+          email: data.email
+        },
+        { page: 1, per_page: 1000, term: null }
+      )) as PaginationResponse<ActorModel>
+
+      const [actor] = result.data
 
       if (!actor) {
         throw new NotFoundError('Usuário não existe')
@@ -53,6 +59,8 @@ export class AuthController {
   me = async (request: Request, response: Response) => {
     try {
       const { actor } = request
+
+      console.log({ request })
 
       if (!actor) {
         throw new UnauthorizedError('token inválido')

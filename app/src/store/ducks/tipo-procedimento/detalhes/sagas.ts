@@ -7,7 +7,7 @@ import { TipoProcedimentoService } from 'services/tipo-procedimentos'
 import { actions } from './slice'
 import { FormularioModel } from 'domain/models/formulario'
 import { PaginationResponse } from 'services/config'
-import { UserService } from 'services/user'
+import { UserService } from 'services/usuarios'
 
 export const sagas = [takeLatest(actions.getInfo.type, getInfoSaga)]
 

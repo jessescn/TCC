@@ -8,6 +8,7 @@ export interface UserModel {
   publico: string[]
   createdAt?: string
   updatedAt?: string
+  deleted: boolean
 }
 
 export interface ProfileModel {

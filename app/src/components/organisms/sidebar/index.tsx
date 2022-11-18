@@ -16,7 +16,7 @@ import { useRef } from 'react'
 
 import { BsCardChecklist, BsClipboardData, BsListCheck } from 'react-icons/bs'
 import { FaVoteYea } from 'react-icons/fa'
-import { FiCornerDownRight, FiHome } from 'react-icons/fi'
+import { FiCornerDownRight, FiHome, FiUsers } from 'react-icons/fi'
 
 import { BiLogOut } from 'react-icons/bi'
 import { actions, selectors, store, useSelector } from 'store'
@@ -137,6 +137,11 @@ const Sidebar = () => {
                     title: 'Todos os procedimentos',
                     url: `/coordenacao/procedimentos`,
                     icon: BsCardChecklist
+                  },
+                  {
+                    title: 'Gerenciamento Usuários',
+                    url: `/coordenacao/usuarios`,
+                    icon: FiUsers
                   },
                   {
                     title: 'Estatísticas Gerais',

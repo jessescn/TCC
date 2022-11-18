@@ -19,6 +19,7 @@ import ProcedimentosCoordenacao from 'pages/coordenacao/procedimentos'
 import EstatisticasProcedimento from 'pages/coordenacao/estatisticas'
 import AnaliseProcedimento from 'pages/coordenacao/analise-procedimento'
 import NotFound from 'pages/404'
+import TodosUsuarios from 'pages/usuarios/lista'
 
 export default function Routes() {
   return (
@@ -116,6 +117,14 @@ export default function Routes() {
         element={
           <PrivateRoute allowedProfiles={['coordenacao']}>
             <ProcedimentosCoordenacao />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/coordenacao/usuarios"
+        element={
+          <PrivateRoute allowedProfiles={['coordenacao']}>
+            <TodosUsuarios />
           </PrivateRoute>
         }
       />

@@ -7,6 +7,7 @@ import { UnauthorizedError } from 'types/express/errors'
 import { errorResponseHandler } from 'utils/response'
 import { IActorService } from 'services/actor'
 import { ActorModel } from 'domain/models/actor'
+import { PaginationResponse } from 'repositories'
 
 export class AuthTokenMiddleware extends Middleware {
   constructor(private actorService: IActorService) {
@@ -47,9 +48,14 @@ export class AuthTokenMiddleware extends Middleware {
   private appendActorToRequest = async (request: Request) => {
     const { payload } = this.verifyAndDecodeToken(request)
 
-    const [actor] = (await this.actorService.findAll({
-      email: payload.data.email
-    })) as ActorModel[]
+    const result = (await this.actorService.findAll(
+      {
+        email: payload.data.email
+      },
+      { page: 1, per_page: 1000, term: null }
+    )) as PaginationResponse<ActorModel>
+
+    const [actor] = result.data
 
     if (!actor) {
       throw new UnauthorizedError('Actor não encontrado')
