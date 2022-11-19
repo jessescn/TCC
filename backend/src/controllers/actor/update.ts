@@ -8,8 +8,8 @@ import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 const notIncludesInvalidUpdateFields: Validation = request => {
   const validFields: (keyof Partial<ActorModel>)[] = [
     'nome',
-    'profile',
-    'publico'
+    'publico',
+    'permissoes'
   ]
   notIncludesInvalidFields(request, validFields)
 }

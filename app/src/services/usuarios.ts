@@ -1,12 +1,18 @@
 import { AxiosResponse } from 'axios'
 import { buildQuery } from 'utils/format'
-import { UserModel } from '../domain/models/user'
+import { UserModel, ProfileModel } from '../domain/models/user'
 import { httpClient, Pagination, PaginationResponse } from './config'
 
 export type CreateUser = {
   nome: string
   email: string
   senha: string
+}
+
+export type UpdateUser = {
+  nome: string
+  permissoes: number
+  publico: string[]
 }
 
 export const UserService = {
@@ -17,10 +23,23 @@ export const UserService = {
       body: data
     })
   },
+  update: (id: number, data: UpdateUser) => {
+    return httpClient.request<AxiosResponse<UserModel>>({
+      method: 'put',
+      url: `/users/${id}`,
+      body: data
+    })
+  },
   publicos: () => {
     return httpClient.request({
       method: 'get',
       url: '/users/publicos'
+    })
+  },
+  profiles: () => {
+    return httpClient.request<AxiosResponse<ProfileModel>>({
+      method: 'get',
+      url: '/profiles'
     })
   },
   list: (pagination: Pagination) => {
@@ -34,6 +53,12 @@ export const UserService = {
   delete: (id: number) => {
     return httpClient.request({
       method: 'delete',
+      url: `/users/${id}`
+    })
+  },
+  details: (id: number) => {
+    return httpClient.request<AxiosResponse<UserModel>>({
+      method: 'get',
       url: `/users/${id}`
     })
   }

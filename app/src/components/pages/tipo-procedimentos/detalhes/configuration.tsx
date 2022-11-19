@@ -29,7 +29,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
     <Stack spacing="24px">
       <Box alignItems="center">
         <Text fontSize="14px" mb="8px" fontWeight="bold">
-          Nome:
+          Nome
         </Text>
         <Input
           isInvalid={errors['nome']}
@@ -43,7 +43,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
       </Box>
       <Box>
         <Text fontSize="14px" mb="8px" fontWeight="bold">
-          Descrição:
+          Descrição
         </Text>
         <Textarea
           defaultValue={tipoProcedimento?.descricao}
@@ -54,7 +54,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
       <Flex justifyContent="space-between">
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
-            Escopo:
+            Escopo
           </Text>
           <Select ml="8px" w="fit-content" size="sm" {...register('escopo')}>
             <option value="publico">Público</option>
@@ -63,7 +63,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
         </Flex>
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
-            Colegiado:
+            Colegiado
           </Text>
           <Select ml="8px" w="fit-content" size="sm" {...register('colegiado')}>
             <option value="true">Sim</option>
@@ -72,7 +72,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
         </Flex>
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
-            Status:
+            Status
           </Text>
           <Select ml="8px" w="fit-content" size="sm" {...register('status')}>
             <option value="ativo">Ativo</option>
@@ -83,7 +83,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
       <Flex>
         <Flex alignItems="center" w="50%">
           <Text fontSize="14px" fontWeight="bold">
-            Data início:
+            Data início
           </Text>
           <Input
             size="sm"
@@ -97,7 +97,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
         </Flex>
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
-            Data Fim:
+            Data Fim
           </Text>
           <Input
             size="sm"

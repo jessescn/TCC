@@ -44,7 +44,9 @@ export const EditMenu = ({ usuario }: Props) => {
         />
         <MenuList>
           <MenuItem
-            onClick={() => navigate(`/coordenacao/usuarios/${usuario.id}`)}
+            onClick={() =>
+              navigate(`/coordenacao/usuarios/edit?id=${usuario.id}`)
+            }
           >
             Visualizar
           </MenuItem>

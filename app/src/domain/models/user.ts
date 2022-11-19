@@ -5,6 +5,7 @@ export interface UserModel {
   nome: string
   email: string
   profile: ProfileModel
+  permissoes?: number
   publico: string[]
   createdAt?: string
   updatedAt?: string

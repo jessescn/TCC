@@ -20,7 +20,7 @@ export type NewActor = {
 }
 
 export const InclusivableActorOptions = {
-  attributes: { exclude: ['profileId', 'permissoes'] },
+  attributes: { exclude: ['profileId'] },
   include: [Profile]
 }
 

@@ -2,6 +2,7 @@ import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
 import { actions, selectors, store, useSelector } from 'store'
 import Table from './table'
+import { UploadUsers } from './upload-users'
 
 export const Content = () => {
   const pagination = useSelector(selectors.user.getPagination)
@@ -46,14 +47,7 @@ export const Content = () => {
             }
           }}
         />
-        {/* <Button
-          fontSize="14px"
-          mb={0}
-          px={6}
-          onClick={() => navigate('/tipo-procedimentos/edit')}
-        >
-          Novo Tipo de Procedimento
-        </Button> */}
+        <UploadUsers />
       </Flex>
       <Table />
     </Box>

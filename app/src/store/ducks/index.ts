@@ -2,6 +2,7 @@ import { all } from 'redux-saga/effects'
 
 import * as sessionSlice from './session'
 import * as userSlice from './user'
+import * as userDetalhesSlice from './user/detalhes'
 import * as tipoProcedimentoSlice from './tipo-procedimento'
 import * as tipoProcedimentoDetalhesSlice from './tipo-procedimento/detalhes'
 import * as procedimentoDetalhesSlice from './procedimento/detalhes'
@@ -15,6 +16,7 @@ import * as meusProcedimentosSlice from './meus-procedimentos'
 export type State = {
   session: sessionSlice.State
   user: userSlice.State
+  userDetalhes: userDetalhesSlice.State
   procedimento: procedimentoSlice.State
   tipoProcedimento: tipoProcedimentoSlice.State
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.State
@@ -28,6 +30,7 @@ export type State = {
 export const reducer = {
   session: sessionSlice.reducer,
   user: userSlice.reducer,
+  userDetalhes: userDetalhesSlice.reducer,
   tipoProcedimento: tipoProcedimentoSlice.reducer,
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.reducer,
   procedimentoDetalhes: procedimentoDetalhesSlice.reducer,
@@ -41,6 +44,7 @@ export const reducer = {
 export const actions = Object.freeze({
   session: sessionSlice.actions,
   user: userSlice.actions,
+  userDetalhes: userDetalhesSlice.actions,
   tipoProcedimento: tipoProcedimentoSlice.actions,
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.actions,
   procedimentoDetalhes: procedimentoDetalhesSlice.actions,
@@ -55,6 +59,7 @@ export const selectors = Object.freeze({
   session: sessionSlice.selectors,
   procedimento: procedimentoSlice.selectors,
   user: userSlice.selectors,
+  userDetalhes: userDetalhesSlice.selectors,
   tipoProcedimento: tipoProcedimentoSlice.selectors,
   tipoProcedimentoDetalhes: tipoProcedimentoDetalhesSlice.selectors,
   procedimentoDetalhes: procedimentoDetalhesSlice.selectors,
@@ -68,6 +73,7 @@ export const sagas = function* () {
   yield all([
     ...sessionSlice.sagas,
     ...userSlice.sagas,
+    ...userDetalhesSlice.sagas,
     ...tipoProcedimentoSlice.sagas,
     ...formularioSlice.sagas,
     ...procedimentoSlice.sagas,

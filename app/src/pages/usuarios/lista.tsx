@@ -5,6 +5,7 @@ import { actions, store } from 'store'
 
 export default function TodosUsuarios() {
   useEffect(() => {
+    store.dispatch(actions.userDetalhes.reset())
     store.dispatch(actions.user.list({ page: 1, per_page: 5, term: null }))
   }, [])
 

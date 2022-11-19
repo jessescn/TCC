@@ -1,9 +1,9 @@
-import { Flex, Spinner } from '@chakra-ui/react'
+import { Center, Spinner } from '@chakra-ui/react'
 
 export const LoadingPage = () => {
   return (
-    <Flex w="100%" h="100%" maxW="900px" flexDir="column">
+    <Center w="100%" h="100%">
       <Spinner />
-    </Flex>
+    </Center>
   )
 }

@@ -17,6 +17,7 @@ export interface ActorModel {
   senha: string
   deleted: boolean
   profile?: ProfileModel
+  permissoes?: number
   publico: string[]
   procedimentos?: ProcedimentoModel[]
   createdAt?: Date
