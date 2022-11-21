@@ -35,6 +35,7 @@ export default function Content() {
   function handleCreate(data: any) {
     const novoTipoProcedimento: NovoTipoProcedimento = {
       ...data,
+      publicos: data.publicos || [],
       colegiado: data.colegiado === 'true' ? true : false,
       dataFim: data.dataFim
         ? new Date(data.dataFim).toISOString()

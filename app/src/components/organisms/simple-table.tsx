@@ -45,7 +45,7 @@ const SimpleTable = ({
               <Th
                 color="initial.dark"
                 textTransform="initial"
-                fontSize="14px"
+                fontSize="12px"
                 key={`header-${index}`}
                 {...column.props}
               >

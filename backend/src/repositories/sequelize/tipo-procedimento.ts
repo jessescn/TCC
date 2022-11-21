@@ -1,6 +1,7 @@
 import TipoProcedimento, {
   TipoProcedimentoAttributes,
-  TipoProcedimentoModel
+  TipoProcedimentoModel,
+  TipoProcedimentoStatus
 } from 'domain/models/tipo-procedimento'
 import { IRepository } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
@@ -19,6 +20,7 @@ export type NewTipoProcedimento = {
   publicos: string[]
   colegiado: boolean
   formularios: number[]
+  status?: TipoProcedimentoStatus
 }
 
 export type CreateTipoProcedimento = {
@@ -31,6 +33,7 @@ export type CreateTipoProcedimento = {
   colegiado: boolean
   createdBy: number
   formularios: number[]
+  status: TipoProcedimentoStatus
 }
 
 export class TipoProcedimentoRepository implements IRepository {

@@ -80,6 +80,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
       publicos: data.publicos,
       dataFim: data.dataFim,
       dataInicio: data.dataInicio,
+      status: data.status || 'inativo',
       descricao: data.descricao,
       createdBy: actor.id
     })

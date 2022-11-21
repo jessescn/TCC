@@ -33,33 +33,29 @@ const Table = () => {
           onChangePage={handleUpdateCurrentPage}
           columns={[
             { content: 'ID', props: { width: '5%' } },
-            { content: 'Nome', props: { width: '40%' } },
+            { content: 'Nome', props: { width: '50%' } },
+            { content: 'Deletado', props: { width: '10%' } },
             { content: 'Status', props: { width: '5%' } },
             { content: 'Colegiado', props: { width: '10%' } },
-            { content: 'Prazo Início', props: { width: '10%' } },
-            { content: 'Prazo Fim', props: { width: '10%' } },
-            { content: 'Última atualizacão', props: { width: '10%' } },
+            { content: 'Início', props: { width: '5%' } },
+            { content: 'Fim', props: { width: '5%' } },
             { content: '', props: { width: '5%' } }
           ]}
           rows={tipoProcedimentos.map(tipo => [
             { content: tipo.id },
             { content: tipo.nome },
+            { content: tipo.deleted ? 'Sim' : 'Não' },
             { content: tipo.status },
             { content: tipo.colegiado ? 'Sim' : 'Não' },
             {
               content: !tipo.dataInicio
                 ? '-'
-                : format(new Date(tipo.dataInicio), 'dd/MM/yyyy')
+                : format(new Date(tipo.dataInicio), 'dd/MM/yyyy hh:mm a')
             },
             {
               content: !tipo.dataFim
                 ? '-'
-                : format(new Date(tipo.dataFim), 'dd/MM/yyyy')
-            },
-            {
-              content: !tipo.updatedAt
-                ? '-'
-                : format(new Date(tipo.updatedAt), 'dd/MM/yyyy')
+                : format(new Date(tipo.dataFim), 'dd/MM/yyyy hh:mm a')
             },
             { content: <EditMenu tipo={tipo} /> }
           ])}

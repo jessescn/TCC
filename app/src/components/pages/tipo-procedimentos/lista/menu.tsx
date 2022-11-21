@@ -102,6 +102,7 @@ export const EditMenu = ({ tipo }: Props) => {
         {...confirmUpdateControls}
         onConfirm={handleUpdate}
         title="Alterar Status"
+        onConfirmButtonText="Confirmar"
         content={`Tem certeza que deseja alterar os status do tipo de procedimento?
         Ele ficará ${pendingUpdate?.data.status?.toUpperCase()} para os usuários`}
       />
@@ -109,6 +110,7 @@ export const EditMenu = ({ tipo }: Props) => {
         {...confirmDeleteControls}
         onConfirm={handleDelete}
         title="Confirmar Deleção"
+        onConfirmButtonText="Confirmar"
         content={`Tem certeza que deseja excluir esse tipo de procedimento? ele ficará indisponível
         para os usuários`}
       />

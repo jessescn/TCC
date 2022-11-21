@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, addHours } from 'date-fns'
 
 export const formatDate = (date: string) => {
   return format(new Date(date), 'dd/MM/yyyy hh:mm a')
@@ -9,7 +9,11 @@ export const formatISODate = (date?: string) => {
 }
 
 export const formatISODateToLocalTime = (date?: string) => {
-  return date ? new Date(date).toISOString().slice(0, 16) : ''
+  const timezone = format(new Date(), 'x')
+
+  return date
+    ? addHours(new Date(date), Number(timezone)).toISOString().slice(0, 16)
+    : ''
 }
 
 export const removeAccents = (value: string) => {

@@ -26,8 +26,6 @@ const Footer = ({ tipoProcedimento }: Props) => {
 
   useEffect(() => {
     if (statusUpdate === 'success' || statusCreate === 'success') {
-      store.dispatch(actions.tipoProcedimento.resetStatus())
-
       navigate('/tipo-procedimentos')
     }
   }, [statusUpdate, statusCreate])

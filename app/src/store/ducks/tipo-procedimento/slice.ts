@@ -44,6 +44,7 @@ const reducers = {
     state: State,
     action: PayloadAction<PaginationResponse<TipoProcedimentoModel>>
   ) => {
+    reducers.resetStatus(state)
     state.status = 'success'
     state.tipoProcedimentos = action.payload.data
     state.total = action.payload.total
