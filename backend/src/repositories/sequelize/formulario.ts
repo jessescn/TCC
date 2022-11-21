@@ -30,10 +30,7 @@ export class FormularioRepository implements IRepository {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term
       ? {
-          [Op.or]: [
-            { nome: { [Op.substring]: '%' + term + '%' } },
-            { ...searchId }
-          ]
+          [Op.or]: [{ nome: { [Op.iLike]: '%' + term + '%' } }, { ...searchId }]
         }
       : {}
 

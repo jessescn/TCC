@@ -39,7 +39,7 @@ export class TipoProcedimentoRepository implements IRepository {
     const search = term
       ? {
           [Op.or]: [
-            { nome: { [Op.substring]: '%' + term + '%' } },
+            { nome: { [Op.iLike]: '%' + term + '%' } },
             { status: { [Op.eq]: term } },
             { ...searchId }
           ]

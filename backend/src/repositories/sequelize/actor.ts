@@ -30,8 +30,8 @@ export class ActorRepository implements IRepository {
     const search = term
       ? {
           [Op.or]: [
-            { nome: { [Op.substring]: '%' + term + '%' } },
-            { email: { [Op.substring]: '%' + term + '%' } },
+            { nome: { [Op.iLike]: '%' + term + '%' } },
+            { email: { [Op.iLike]: '%' + term + '%' } },
             { ...searchId }
           ]
         }
@@ -39,6 +39,7 @@ export class ActorRepository implements IRepository {
 
     return Actor.findAll({
       where: { ...search, ...query },
+      order: [['updatedAt', 'DESC']],
       ...InclusivableActorOptions
     })
   }

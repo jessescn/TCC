@@ -65,7 +65,7 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
 
     const whereTipo = term
       ? {
-          [Op.or]: [{ nome: { [Op.substring]: '%' + term + '%' } }]
+          [Op.or]: [{ nome: { [Op.iLike]: '%' + term + '%' } }]
         }
       : {}
 
