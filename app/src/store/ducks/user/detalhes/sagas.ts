@@ -2,7 +2,8 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
 import { ProfileModel, UserModel } from 'domain/models/user'
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { UpdateUser, UserService } from 'services/usuarios'
+import { UserService } from 'services/usuarios'
+import { sidebarInfoSaga } from 'store/ducks/session/sagas'
 import { actions, UpdatePayload } from './slice'
 
 export const sagas = [
@@ -42,6 +43,7 @@ function* updateSaga(action: PayloadAction<UpdatePayload>) {
     yield call(() => UserService.update(id, data))
 
     yield put(actions.updateSuccess())
+    yield call(sidebarInfoSaga)
   } catch (error: any) {
     yield put(actions.updateFailure())
   }

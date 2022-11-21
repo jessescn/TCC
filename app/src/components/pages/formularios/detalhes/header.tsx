@@ -16,7 +16,9 @@ export default function Header({ formulario }: Props) {
         <Text>
           Ultima edição:{' '}
           <Text as="span" fontWeight="bold" fontSize="20px">
-            {format(new Date(formulario.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
+            {formulario.updatedAt
+              ? format(new Date(formulario.updatedAt), 'dd/MM/yyyy hh:mm')
+              : '-'}
           </Text>
         </Text>
       )}

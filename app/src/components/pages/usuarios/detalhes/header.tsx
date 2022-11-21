@@ -19,7 +19,9 @@ export default function Header({ usuario }: Props) {
         <Text>
           Ultima edição:{' '}
           <Text as="span" fontWeight="bold" fontSize="20px">
-            {format(new Date(usuario.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
+            {usuario.updatedAt
+              ? format(new Date(usuario.updatedAt), 'dd/MM/yyyy hh:mm a')
+              : '-'}
           </Text>
         </Text>
       )}

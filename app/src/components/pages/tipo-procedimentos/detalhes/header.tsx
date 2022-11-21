@@ -16,7 +16,9 @@ export default function Header({ tipo }: Props) {
         <Text>
           Ultima edição:{' '}
           <Text as="span" fontWeight="bold" fontSize="20px">
-            {format(new Date(tipo.updatedAt || ''), 'dd/MM/yyyy hh:mm')}
+            {tipo.updatedAt
+              ? format(new Date(tipo.updatedAt), 'dd/MM/yyyy hh:mm a')
+              : '-'}
           </Text>
         </Text>
       )}

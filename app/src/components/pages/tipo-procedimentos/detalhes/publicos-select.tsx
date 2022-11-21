@@ -12,7 +12,7 @@ type Option = {
 export default function PublicosSelect() {
   const { setValue, watch } = useFormContext()
 
-  const publicos = watch('publicos', []) as string[]
+  const publicos: string[] = watch('publicos', []) || []
   const availablePublicos = useSelector(
     selectors.tipoProcedimentoDetalhes.getPublicos
   )
@@ -22,7 +22,7 @@ export default function PublicosSelect() {
       value: publico,
       label: publico
     }))
-  }, [publicos])
+  }, [publicos, availablePublicos])
 
   const getSelectedOptions = () => {
     return publicoOptions.filter(option => publicos.includes(option.value))
