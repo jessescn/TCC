@@ -6,15 +6,11 @@ import {
   Text,
   useDisclosure
 } from '@chakra-ui/react'
-import InvalidFieldsModal from 'components/pages/coordenacao/analise-procedimento/modals/invalid-fields'
 import Procedimento from 'components/organisms/procedimento'
 import Header from 'components/organisms/procedimento/header'
-import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import {
-  CampoInvalido,
-  ProcedimentoModel,
-  ProcedimentoStatus
-} from 'domain/models/procedimento'
+import InvalidFieldsModal from 'components/pages/coordenacao/analise-procedimento/modals/invalid-fields'
+import { CampoFormulario } from 'domain/models/formulario'
+import { CampoInvalido, ProcedimentoStatus } from 'domain/models/procedimento'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'

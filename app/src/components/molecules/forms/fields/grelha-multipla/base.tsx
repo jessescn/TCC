@@ -89,6 +89,7 @@ export function BaseCampoGrelhaMultipla({
             <RadioGroup
               as="tr"
               onChange={handleChange}
+              isDisabled={!props.editable}
               value={getSelectedItemByRow(idx)}
               key={`linha-${idx}`}
             >

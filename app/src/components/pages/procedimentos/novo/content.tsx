@@ -2,7 +2,7 @@ import { Center, Flex } from '@chakra-ui/react'
 import { LoadingPage } from 'components/molecules/loading'
 import Header from 'components/pages/procedimentos/novo/header'
 import { Resposta } from 'domain/models/procedimento'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { NovoProcedimento } from 'services/procedimentos'
 import { actions, selectors, store, useSelector } from 'store'
@@ -24,21 +24,30 @@ export default function Content() {
     selectors.tipoProcedimentoDetalhes.getFormulariosFromTipo
   )
 
-  const methods = useForm<Procedimento>({
-    defaultValues: {
+  const methods = useForm<Procedimento>()
+
+  const initialSet = useRef(false)
+
+  useEffect(() => {
+    if (initialSet.current || !tipoProcedimento) return
+
+    methods.reset({
       tipo: tipoProcedimento?.id,
       respostas: formularios.map(formulario => ({
         campos: [],
         formulario: formulario.id
       }))
-    }
-  })
+    })
+    initialSet.current = true
+  }, [tipoProcedimento])
 
   const { getValues, setValue } = methods
 
   function onSubmit(data: Procedimento) {
     const novoProcedimento: NovoProcedimento = {
-      ...data
+      respostas: data.respostas,
+      tipo: data.tipo,
+      votos: []
     }
 
     store.dispatch(actions.procedimento.create(novoProcedimento))

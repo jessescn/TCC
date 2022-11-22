@@ -93,6 +93,7 @@ export function BaseCampoGrelhaVerificacao({
               key={`${campo?.ordem}-linha-${idx}`}
               onChange={(value: string[]) => handleChange(value, idx)}
               value={getCurrentValuesByRow(idx)}
+              isDisabled={!props.editable}
             >
               <Tr>
                 <Td>{linha}</Td>

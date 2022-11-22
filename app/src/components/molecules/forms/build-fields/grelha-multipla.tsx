@@ -19,8 +19,8 @@ export default function GrelhaMultiplaBuilder({
   onUpdate
 }: BaseBuildFieldProps) {
   const [opcoes, setOpcoes] = useState({
-    linhas: campo.configuracao_campo?.opcoes.linhas || ['Linha 1'],
-    colunas: campo.configuracao_campo?.opcoes.colunas || ['Coluna 1']
+    linhas: campo.configuracao_campo?.opcoes?.linhas || ['Linha 1'],
+    colunas: campo.configuracao_campo?.opcoes?.colunas || ['Coluna 1']
   })
 
   const handleUpdateColuna = debounce((idx: number, newValue?: string) => {

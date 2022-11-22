@@ -61,6 +61,7 @@ export function BaseCampoFicheiro({
                 size="sm"
                 aria-label=""
                 icon={<Icon as={AiOutlineClose} color="info.error" />}
+                isDisabled={!props.editable}
               />
             </Flex>
           ))}

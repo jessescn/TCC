@@ -60,8 +60,6 @@ export class AuthController {
     try {
       const { actor } = request
 
-      console.log({ request })
-
       if (!actor) {
         throw new UnauthorizedError('token inválido')
       }
