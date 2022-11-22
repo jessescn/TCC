@@ -25,5 +25,6 @@ export default {
   actor_create: 'all',
   actor_delete: 'all',
   actor_read: 'all',
-  actor_update: 'all'
+  actor_update: 'all',
+  profile_read: 'all'
 }

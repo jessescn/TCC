@@ -9,25 +9,9 @@ import { NovoProcedimento, RevisaoPayload } from 'services/procedimentos'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
-export type State = {
-  procedimentos: ProcedimentoModel[]
-  status: Status
-  statusSubmit: Status
-  statusVote: Status
-  statusRevisao: Status
-  statusUpdateStatus: Status
-  pagination: Pagination
-  total: number
-}
-
 export type UpdatePayload = {
   data: Partial<ProcedimentoModel>
   id: number
-}
-
-export type VotePayload = {
-  aprovado: boolean
-  procedimentoId: number
 }
 
 export type UpdateStatusPayload = {
@@ -40,11 +24,20 @@ export type NovaRevisaoPayload = {
   id: number
 }
 
+export type State = {
+  procedimentos: ProcedimentoModel[]
+  status: Status
+  statusSubmit: Status
+  statusRevisao: Status
+  statusUpdateStatus: Status
+  pagination: Pagination
+  total: number
+}
+
 export type CreatePayload = NovoProcedimento
 
 export const initialState: State = {
   procedimentos: [],
-  statusVote: 'pristine',
   statusSubmit: 'pristine',
   status: 'pristine',
   statusUpdateStatus: 'pristine',
@@ -95,7 +88,6 @@ const reducers = {
   resetStatus: (state: State) => {
     state.status = 'pristine'
     state.statusSubmit = 'pristine'
-    state.statusVote = 'pristine'
     state.statusRevisao = 'pristine'
     state.statusUpdateStatus = 'pristine'
   },
@@ -107,19 +99,6 @@ const reducers = {
   },
   deleteFailure: (state: State) => {
     state.status = 'failure'
-  },
-  vote: (state: State, action: PayloadAction<VotePayload>) => {
-    state.statusVote = 'loading'
-  },
-  voteSuccess: (state: State, action: PayloadAction<ProcedimentoModel>) => {
-    state.statusVote = 'success'
-    const indexof = state.procedimentos
-      .map(elm => elm.id)
-      .indexOf(action.payload.id)
-    state.procedimentos.splice(indexof, 1, action.payload)
-  },
-  voteFailure: (state: State) => {
-    state.statusVote = 'failure'
   },
   updateStatus: (state: State, action: PayloadAction<UpdateStatusPayload>) => {
     state.statusUpdateStatus = 'loading'

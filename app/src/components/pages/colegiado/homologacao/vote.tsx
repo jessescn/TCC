@@ -26,7 +26,7 @@ const Votes = ({ procedimento }: Props) => {
   const currentStatus = getCurrentStatus(procedimento)
 
   const currentUser = useSelector(selectors.session.getCurrentUser)
-  const statusVote = useSelector(state => state.procedimento.statusVote)
+  const statusVote = useSelector(state => state.procedimentoDetalhes.statusVote)
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -40,7 +40,7 @@ const Votes = ({ procedimento }: Props) => {
     if (vote === undefined || !isColegiado) return
 
     store.dispatch(
-      actions.procedimento.vote({
+      actions.procedimentoDetalhes.vote({
         procedimentoId: procedimento.id,
         aprovado: vote
       })
@@ -97,7 +97,7 @@ const Votes = ({ procedimento }: Props) => {
             borderRadius="0"
             borderColor="#000"
             aria-label="vote no"
-            isDisabled={statusVote === 'loading'}
+            isDisabled={statusVote === 'loading' || !isColegiado}
             isLoading={isPositiveVote && statusVote === 'loading'}
             _hover={{ bgColor: 'info.success' }}
             icon={
@@ -120,7 +120,7 @@ const Votes = ({ procedimento }: Props) => {
             borderColor="#000"
             _hover={{ bgColor: 'info.error' }}
             aria-label="vote yes"
-            isDisabled={statusVote === 'loading'}
+            isDisabled={statusVote === 'loading' || !isColegiado}
             isLoading={isPositiveVote && statusVote === 'loading'}
             icon={
               <Icon
@@ -133,11 +133,11 @@ const Votes = ({ procedimento }: Props) => {
         </Flex>
       </Flex>
       <Flex mt="8px" justifyContent="space-between" alignItems="center">
-        {vote !== undefined && isColegiado && (
+        {currentVote !== undefined && (
           <Text fontSize="12px">
             Você votou em{' '}
-            <Text color={vote ? 'info.success' : 'info.error'} as="span">
-              {vote ? 'Sim' : 'Não'}
+            <Text color={currentVote ? 'info.success' : 'info.error'} as="span">
+              {currentVote ? 'Sim' : 'Não'}
             </Text>
           </Text>
         )}
@@ -159,7 +159,7 @@ const Votes = ({ procedimento }: Props) => {
         </Text>
       )}
       {!isColegiado && (
-        <Text fontSize="10px" color="info.error">
+        <Text mt="8px" fontSize="10px" color="info.error">
           Apenas membros do colegiado podem votar
         </Text>
       )}

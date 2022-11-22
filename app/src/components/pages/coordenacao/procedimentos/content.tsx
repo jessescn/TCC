@@ -37,7 +37,7 @@ export const Content = () => {
           maxW="365px"
           height="35px"
           fontSize="14px"
-          placeholder="Ex.Busca por ID, nome e status"
+          placeholder="Ex.Busca por ID ou nome"
           onChange={e => handleSearch(e.target.value)}
           label={{
             text: 'Buscar procedimentos',

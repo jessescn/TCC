@@ -1,19 +1,16 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
 import { ProcedimentoModel } from 'domain/models/procedimento'
-import { UserModel } from 'domain/models/user'
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { Pagination, PaginationResponse } from 'services/config'
 import { ProcedimentoService } from 'services/procedimentos'
-import { selectors } from '..'
 import { getPagination } from './selectors'
 import {
   actions,
   CreatePayload,
   NovaRevisaoPayload,
   UpdatePayload,
-  UpdateStatusPayload,
-  VotePayload
+  UpdateStatusPayload
 } from './slice'
 
 export const sagas = [
@@ -21,7 +18,6 @@ export const sagas = [
   takeLatest(actions.create.type, createSaga),
   takeLatest(actions.update.type, updateSaga),
   takeLatest(actions.delete.type, deleteSaga),
-  takeLatest(actions.vote.type, voteSaga),
   takeLatest(actions.updateStatus.type, updateStatusSaga),
   takeLatest(actions.novaRevisao.type, novaRevisaoSaga)
 ]
@@ -79,29 +75,6 @@ function* deleteSaga(action: PayloadAction<number>) {
     })
   } catch (error) {
     yield put(actions.deleteFailure())
-  }
-}
-
-function* voteSaga(action: PayloadAction<VotePayload>) {
-  try {
-    const currentUser: UserModel = yield select(
-      selectors.session.getCurrentUser
-    )
-
-    if (!currentUser) {
-      yield put(actions.voteFailure())
-    }
-
-    const response: AxiosResponse<ProcedimentoModel> = yield call(() =>
-      ProcedimentoService.vote(action.payload.procedimentoId, {
-        aprovado: action.payload.aprovado,
-        autor: currentUser.id
-      })
-    )
-
-    yield put(actions.voteSuccess(response.data))
-  } catch (error) {
-    yield put(actions.voteFailure())
   }
 }
 

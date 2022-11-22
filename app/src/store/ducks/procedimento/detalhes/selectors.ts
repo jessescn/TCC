@@ -12,3 +12,7 @@ export const getProcedimento = createSelector([getRoot], state => {
 export const getFormularios = createSelector([getRoot], state => {
   return state.formularios
 })
+
+export const getComentarios = createSelector([getRoot], state => {
+  return state.comentarios
+})

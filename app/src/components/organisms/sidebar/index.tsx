@@ -154,19 +154,19 @@ const Sidebar = () => {
                 icon={FaVoteYea}
                 title="Homologação"
                 url="/colegiado/procedimentos"
-                profiles={['admin', 'colegiado']}
+                profiles={['admin', 'coordenacao', 'colegiado']}
               />
               <NavItem
                 icon={AiOutlineFileAdd}
                 title="Tipo de Procedimentos"
                 url="/tipo-procedimentos"
-                profiles={['admin']}
+                profiles={['admin', 'coordenacao']}
               />
               <NavItem
                 icon={AiOutlineForm}
                 title="Formulários"
                 url="/formularios"
-                profiles={['admin']}
+                profiles={['admin', 'coordenacao']}
               />
             </Box>
           </Flex>

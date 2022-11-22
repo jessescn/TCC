@@ -8,12 +8,10 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react'
-import { ComentarioModel } from 'domain/models/comentario'
 import { ProcedimentoModel } from 'domain/models/procedimento'
-import { KeyboardEvent, useEffect, useState } from 'react'
+import { KeyboardEvent, useState } from 'react'
 import { FiSend } from 'react-icons/fi'
-import { ComentarioService } from 'services/comentario'
-import { ProcedimentoService } from 'services/procedimentos'
+import { actions, selectors, store, useSelector } from 'store'
 import Comment from './comment'
 
 type Props = {
@@ -21,21 +19,21 @@ type Props = {
 }
 
 const Comments = ({ procedimento }: Props) => {
-  const [comentarios, setComentarios] = useState<ComentarioModel[]>([])
-  const [isLoading, setIsLoading] = useState(false)
   const [value, setValue] = useState('')
 
-  const handleComment = async () => {
-    setIsLoading(true)
-    const response = await ComentarioService.create({
-      conteudo: value,
-      procedimento: procedimento.id
-    })
+  const comentarios = useSelector(selectors.procedimentoDetalhes.getComentarios)
+  const status = useSelector(
+    state => state.procedimentoDetalhes.statusNewComentario
+  )
+  const isLoading = status === 'loading'
 
-    const novoComentario = response.data as any
-
-    setComentarios(prev => [...prev, novoComentario])
-    setIsLoading(false)
+  const handleComment = () => {
+    store.dispatch(
+      actions.procedimentoDetalhes.comment({
+        conteudo: value,
+        procedimento: procedimento.id
+      })
+    )
     setValue('')
   }
 
@@ -44,22 +42,6 @@ const Comments = ({ procedimento }: Props) => {
       handleComment()
     }
   }
-
-  useEffect(() => {
-    const getCommentsByprocedimento = async () => {
-      try {
-        const response = await ProcedimentoService.comments(procedimento.id)
-
-        const comentarios = response.data as any
-
-        return comentarios
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    getCommentsByprocedimento().then(data => setComentarios(data))
-  }, [])
 
   return (
     <Box py="8px" height="100%">
@@ -77,7 +59,7 @@ const Comments = ({ procedimento }: Props) => {
       <InputGroup mt="8px">
         <Input
           w="100%"
-          size="xs"
+          size="sm"
           disabled={isLoading}
           _focus={{ boxShadow: 'none' }}
           value={value}
@@ -85,13 +67,14 @@ const Comments = ({ procedimento }: Props) => {
           onChange={e => setValue(e.target.value)}
           borderColor="#000"
           borderWidth="1px"
+          borderRadius="4px"
           placeholder="Digite um comentário"
           bgColor="initial.white"
         />
-        <InputRightElement h={6}>
+        <InputRightElement h={8}>
           <IconButton
             onClick={handleComment}
-            size="xs"
+            size="md"
             _focus={{ boxShadow: 'none' }}
             _active={{ bgColor: 'transparent' }}
             bgColor="transparent"

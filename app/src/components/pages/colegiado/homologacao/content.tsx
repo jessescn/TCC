@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import Formulario from 'components/organisms/procedimento/formulario'
 import Header from 'components/organisms/procedimento/header'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'
 import { selectors, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
@@ -19,11 +19,13 @@ import { getCurrentStatus } from 'utils/procedimento'
 import { motion } from 'framer-motion'
 import Votes from './vote'
 import Comments from './comments'
+import { FormularioModel } from 'domain/models/formulario'
 
 const Content = () => {
   const procedimento = useSelector(
     selectors.procedimentoDetalhes.getProcedimento
   )
+  const firstLoad = useRef(false)
   const formularios = useSelector(selectors.procedimentoDetalhes.getFormularios)
 
   const [showComments, setShowComments] = useState(false)
@@ -33,9 +35,16 @@ const Content = () => {
     setShowComments(prev => !prev)
   }
 
-  const [formularioSelecionado, setFormularioSelecionado] = useState(
-    formularios[0]
-  )
+  const [formularioSelecionado, setFormularioSelecionado] = useState<
+    FormularioModel | undefined
+  >()
+
+  useEffect(() => {
+    if (formularios.length === 0 || firstLoad.current) return
+
+    setFormularioSelecionado(formularios[0])
+    firstLoad.current = true
+  }, [formularios])
 
   function handleSelectFormulario(option: string) {
     const novoFormularioSelecionado = formularios.find(

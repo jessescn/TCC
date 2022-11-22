@@ -181,7 +181,7 @@ export default function Content() {
           isLoading={isLoading}
           onClick={confirmApproveControls.onOpen}
           disabled={camposInvalidos.length > 0 || !canAnalyze}
-          loadingText="Salvando"
+          loadingText="Processando"
         >
           Aprovar
         </Button>

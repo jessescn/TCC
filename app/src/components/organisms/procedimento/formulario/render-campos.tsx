@@ -40,13 +40,7 @@ export default function RenderContent({
   )
 
   return (
-    <Stack
-      height="100%"
-      spacing="8px"
-      bgColor="secondary.default"
-      p="8px"
-      opacity={editable ? 1 : 0.5}
-    >
+    <Stack height="100%" spacing="8px" bgColor="secondary.default" p="8px">
       {formulario.campos.map(campo => {
         const Componente = campoComponente[campo.tipo]
         const isInvalido = !!camposInvalidosMap.get(campo.ordem)
