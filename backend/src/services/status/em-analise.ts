@@ -1,4 +1,4 @@
-import { Status } from 'domain/models/procedimento'
+import { ProcedimentoModel, Status } from 'domain/models/procedimento'
 import { ActorHelper } from 'domain/helpers/actor'
 import { IRepository } from 'repositories'
 import { MailSender } from 'repositories/nodemailer/mail'
@@ -12,24 +12,24 @@ export class EmAnaliseStatusHandler implements StatusHandler {
     this.actorRepo = actorRepo
   }
 
+  private sendEmailCoordenacao = async (procedimento: ProcedimentoModel) => {
+    // Envia email a coordenacão avisando de um novo procedimento está pronto para ser analisado
+    const actors = await this.actorRepo.findAll({})
+    const coordenacaoUsers = ActorHelper.filterByRole(actors, 'coordenacao')
+
+    if (coordenacaoUsers.length === 0) return
+
+    const mailList = coordenacaoUsers.map(user => user.email).toString()
+
+    const email = templates['analise-procedimento-coordenacao'](mailList, {
+      procedimento
+    })
+
+    await MailSender.send(email)
+  }
+
   execute = async ({ procedimento }: HandlerProps) => {
-    const sendEmailCoordenacao = async () => {
-      // Envia email a coordenacão avisando de um novo procedimento está pronto para ser analisado
-      const actors = await this.actorRepo.findAll({})
-      const coordenacaoUsers = ActorHelper.filterByRole(actors, 'coordenacao')
-
-      if (coordenacaoUsers.length === 0) return
-
-      const mailList = coordenacaoUsers.map(user => user.email).toString()
-
-      const email = templates['analise-procedimento-coordenacao'](mailList, {
-        procedimento
-      })
-
-      await MailSender.send(email)
-    }
-
-    await sendEmailCoordenacao()
+    await this.sendEmailCoordenacao(procedimento)
 
     const statusAnalise: Status = {
       status: 'em_analise',

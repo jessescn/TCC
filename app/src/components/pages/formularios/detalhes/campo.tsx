@@ -54,7 +54,10 @@ export default function Campo({
 
   return (
     <Box borderColor="secondary.dark" borderWidth="1px" borderRadius="4px">
-      <Flex justifyContent="flex-end" py="8px" px="16px">
+      <Flex justifyContent="space-between" py="8px" px="16px">
+        <Text mr="8px" fontSize="12px" color="initial.black">
+          Campo ID: {campo.ordem}
+        </Text>
         <Flex alignItems="center">
           <Text mr="8px" fontSize="14px" color="initial.black">
             obrigatório

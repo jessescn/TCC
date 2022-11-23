@@ -1,4 +1,3 @@
-import { ComentarioModel } from './comentario'
 import { TipoProcedimentoModel } from './tipo-procedimento'
 import { UserModel } from './user'
 
