@@ -23,6 +23,17 @@ export const UserService = {
       body: data
     })
   },
+  createBulk: (data: File) => {
+    const bodyFormData = new FormData()
+    bodyFormData.set('file', data)
+
+    return httpClient.request<AxiosResponse<UserModel[]>>({
+      method: 'post',
+      url: `/users/bulk-create`,
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: bodyFormData
+    })
+  },
   update: (id: number, data: UpdateUser) => {
     return httpClient.request<AxiosResponse<UserModel>>({
       method: 'put',

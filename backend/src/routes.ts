@@ -19,7 +19,8 @@ import {
   readOneActorController,
   readActorController,
   updateActorController,
-  sidebarInfoController
+  sidebarInfoController,
+  bulkCreateActorsController
 } from 'factories/controllers/actor'
 
 import { readProfileController } from 'factories/controllers/profile'
@@ -54,6 +55,9 @@ import {
 } from 'factories/controllers/formulario'
 import { makeAuthTokenMiddleware } from 'factories/middlewares/authorization-factory'
 
+import multer from 'multer'
+const upload = multer({ dest: 'uploads/' })
+
 const routes = Router()
 const authTokenMiddleware = makeAuthTokenMiddleware()
 
@@ -72,6 +76,11 @@ routes.get('/users/publicos', publicosController.exec)
 routes.get('/users/sidebar', sidebarInfoController.exec)
 routes.get('/users', readActorController.exec)
 routes.get('/users/:id', readOneActorController.exec)
+routes.post(
+  '/users/bulk-create',
+  upload.single('file'),
+  bulkCreateActorsController.exec
+)
 routes.put('/users/:id', updateActorController.exec)
 routes.delete('/users/:id', deleteActorController.exec)
 

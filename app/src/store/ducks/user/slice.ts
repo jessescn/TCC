@@ -11,11 +11,16 @@ type CreateUserStatus = {
   message?: string
 }
 
+export type CreateBulk = {
+  file: File
+}
+
 export type State = {
   usuarios: UserModel[]
   total: number
   pagination: Pagination
   statusCreate: CreateUserStatus
+  statusCreateBulk: CreateUserStatus
   statusFetch: Status
   statusDelete: Status
 }
@@ -30,6 +35,7 @@ export const initialState: State = {
   },
   statusFetch: 'pristine',
   statusCreate: { status: 'pristine' },
+  statusCreateBulk: { status: 'pristine' },
   statusDelete: 'pristine'
 }
 
@@ -58,6 +64,18 @@ const reducers = {
   createFailure: (state: State, action: PayloadAction<string | undefined>) => {
     state.statusCreate = { status: 'failure', message: action.payload }
   },
+  createBulk: (state: State, action: PayloadAction<CreateBulk>) => {
+    state.statusCreateBulk = { status: 'loading' }
+  },
+  createBulkSuccess: (state: State) => {
+    state.statusCreateBulk = { status: 'success' }
+  },
+  createBulkFailure: (
+    state: State,
+    action: PayloadAction<string | undefined>
+  ) => {
+    state.statusCreateBulk = { status: 'failure', message: action.payload }
+  },
   delete: (state: State, action: PayloadAction<number>) => {
     state.statusDelete = 'loading'
   },
@@ -67,10 +85,14 @@ const reducers = {
   deleteFailure: (state: State) => {
     state.statusDelete = 'failure'
   },
-  resetState: (state: State) => {
+  resetStatus: (state: State) => {
     state.statusCreate = initialState.statusCreate
     state.statusFetch = initialState.statusFetch
     state.statusDelete = initialState.statusDelete
+    state.statusCreateBulk = initialState.statusCreateBulk
+  },
+  resetState: (state: State) => {
+    reducers.resetStatus(state)
     state.total = initialState.total
     state.usuarios = initialState.usuarios
   }

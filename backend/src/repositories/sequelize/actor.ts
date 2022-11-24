@@ -11,6 +11,7 @@ export type CreateActor = {
   email: string
   senha: string
   profile: number
+  publico?: string[]
 }
 
 export type NewActor = {

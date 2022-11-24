@@ -4,11 +4,12 @@ import { UserModel } from 'domain/models/user'
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { Pagination, PaginationResponse } from 'services/config'
 import { CreateUser, UserService } from 'services/usuarios'
-import { actions } from './slice'
+import { actions, CreateBulk } from './slice'
 import { getPagination } from './selectors'
 
 export const sagas = [
   takeLatest(actions.create.type, createUserSaga),
+  takeLatest(actions.createBulk.type, createBulkSaga),
   takeLatest(actions.list.type, listSaga),
   takeLatest(actions.delete.type, deleteSaga)
 ]
@@ -20,6 +21,25 @@ function* createUserSaga(action: PayloadAction<CreateUser>) {
     yield put(actions.createSuccess())
   } catch (error: any) {
     yield put(actions.createFailure(error?.response?.data))
+  }
+}
+
+function* createBulkSaga(action: PayloadAction<CreateBulk>) {
+  try {
+    yield call(() => UserService.createBulk(action.payload.file))
+
+    const currentPagination: Pagination = yield select(getPagination)
+
+    const listPayload = {
+      payload: currentPagination,
+      type: actions.list.type
+    }
+
+    yield call(listSaga, listPayload)
+
+    yield put(actions.createBulkSuccess())
+  } catch (error: any) {
+    yield put(actions.createBulkFailure(error?.response?.data))
   }
 }
 

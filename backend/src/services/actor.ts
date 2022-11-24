@@ -19,6 +19,7 @@ export type SidebarInfo = {
 
 export interface IActorService extends IService<ActorModel, ActorQuery> {
   create: (data: NewActor) => Promise<ActorModel>
+  bulkCreate: (filepath: string) => Promise<ActorModel[]>
   update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
   getPublicos: () => Promise<string[]>
   getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
@@ -65,6 +66,51 @@ export class ActorService implements IActorService {
     })
 
     return actor
+  }
+
+  async bulkCreate(filename: string) {
+    const [baseProfile] = await this.getBaseProfile()
+    const profiles = await this.profileRepo.findAll()
+
+    const data = await ActorHelper.parserCSV(filename, profiles, baseProfile)
+    const emails = data.map(value => value.email)
+
+    const actorsAlreadyExisted = await this.repository.findAll({
+      email: emails
+    })
+
+    if (actorsAlreadyExisted.length > 0) {
+      const existentEmails = actorsAlreadyExisted.map(actor => actor.email)
+
+      throw new ConflictError(
+        `Os seguintes emails já existem: ${existentEmails}`
+      )
+    }
+
+    const createPromises = []
+
+    data.forEach(newActor => {
+      const promise = new Promise((resolve, reject) => {
+        try {
+          this.repository
+            .create({
+              email: newActor.email,
+              nome: newActor.nome,
+              senha: 'default123',
+              profile: newActor.profile,
+              publico: newActor.publico
+            })
+            .then(actor => resolve(actor))
+        } catch (error) {
+          reject(error)
+        }
+      })
+      createPromises.push(promise)
+    })
+
+    const result = await Promise.all(createPromises)
+
+    return result
   }
 
   async delete(id: number) {
