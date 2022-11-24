@@ -10,7 +10,8 @@
     "test": "NODE_PATH=src jest",
     "tw": "NODE_PATH=src jest --watch --coverage",
     "lint": "eslint --ext .js,.ts .",
-    "coverage": "NODE_PATH=src jest --coverage"
+    "coverage": "NODE_PATH=src jest --coverage",
+    "clear": "rm -rf ./db-data"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",

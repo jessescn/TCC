@@ -50,7 +50,12 @@ export class AuthController {
         expiresIn: process.env.JWT_TOKEN_EXPIRATION
       })
 
-      res.json({ token, expiresIn: process.env.JWT_TOKEN_EXPIRATION })
+      res.json({
+        token,
+        verificado: actor.verificado,
+        email: actor.email,
+        expiresIn: process.env.JWT_TOKEN_EXPIRATION
+      })
     } catch (error) {
       errorResponseHandler(res, error)
     }
@@ -65,6 +70,38 @@ export class AuthController {
       }
 
       response.json(request.actor)
+    } catch (error) {
+      errorResponseHandler(response, error)
+    }
+  }
+
+  sendConfirmationCode = async (request: Request, response: Response) => {
+    try {
+      const { actor } = request
+
+      if (!actor) {
+        throw new UnauthorizedError('token inválido')
+      }
+
+      await this.service.sendConfirmationCode(actor)
+
+      response.json(true)
+    } catch (error) {
+      errorResponseHandler(response, error)
+    }
+  }
+
+  confirmActorEmail = async (request: Request, response: Response) => {
+    try {
+      const { code } = request.body
+
+      if (!code || typeof code !== 'string') {
+        throw new BadRequestError('Código não enviado')
+      }
+
+      const actor = await this.service.confirmEmailByCode(code)
+
+      response.json(actor)
     } catch (error) {
       errorResponseHandler(response, error)
     }

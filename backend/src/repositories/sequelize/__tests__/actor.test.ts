@@ -24,7 +24,7 @@ describe('Actor Repository', () => {
     })
 
     it('should return all actors', async () => {
-      const result = await sut.findAll()
+      const result = await sut.findAll({})
 
       expect(result).toEqual(actors)
       expect(Actor.findAll).toBeCalledWith({

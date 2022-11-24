@@ -3,7 +3,7 @@ import { ProcedimentoModel } from 'domain/models/procedimento'
 export type EmailTemplate = {
   to: string
   subject: string
-  text: string
+  html: string
 }
 
 type Template<T> = (to: string, data?: T) => EmailTemplate
@@ -11,17 +11,27 @@ type Template<T> = (to: string, data?: T) => EmailTemplate
 const passwordRecovery: Template<any> = (to, data) => ({
   to,
   subject: '[PPGCC/UFCG] Recuperação de senha',
-  text: `Aqui está sua nova senha: ${data.newPassword}`
+  html: `Aqui está sua nova senha: ${data.newPassword}`
 })
 
 type ApproveProcedimentoData = {
   procedimento: ProcedimentoModel
 }
 
+type EmailVerificationData = {
+  link: string
+}
+
+const emailVerification: Template<EmailVerificationData> = (to, data) => ({
+  to,
+  subject: '[PPGCC/UFCG] Confirmação de email',
+  html: `Para confirmar o seu email <a href="${data.link}">acesse este link</a>. O link se expira em 5 minutos.`
+})
+
 const approveProcedimento: Template<ApproveProcedimentoData> = (to, data) => ({
   to,
   subject: `[PPGCC/UFCG] Procedimento #${data.procedimento.id} aprovado!`,
-  text: `O procedimento #${data.procedimento.id} foi aprovado pelo colegiado e foi encaminhado a secretaria para as próximas etapas`
+  html: `O procedimento #${data.procedimento.id} foi aprovado pelo colegiado e foi encaminhado a secretaria para as próximas etapas`
 })
 
 type UpdateProcedimentoData = {
@@ -35,7 +45,7 @@ const updateProcedimentoStatus: Template<UpdateProcedimentoData> = (
 ) => ({
   to,
   subject: `[PPGCC/UFCG] Atualizacão Procedimento #${data.procedimento.id}`,
-  text: `O procedimento de número ${data.procedimento.id} teve status para ${data.novoStatus}. Para mais detalhes, acesse o sistema pelo link:`
+  html: `O procedimento de número ${data.procedimento.id} teve status para ${data.novoStatus}. Para mais detalhes, acesse o sistema pelo link:`
 })
 
 type AnaliseProcedimentoCoordenacaoData = {
@@ -47,7 +57,7 @@ const analiseProcedimentoCoordenacao: Template<
 > = (to, data) => ({
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento em análise`,
-  text: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM ANÁLISE. Acesse o sistema para oter mais detalhes.`
+  html: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM ANÁLISE. Acesse o sistema para oter mais detalhes.`
 })
 
 type HomologacaoColegiadoData = {
@@ -60,7 +70,7 @@ const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
 ) => ({
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento a ser homologado`,
-  text: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM HOMOLOGAÇÃO. Para acompanhar a votação e definir seu deferimento, acesse o sistema.`
+  html: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM HOMOLOGAÇÃO. Para acompanhar a votação e definir seu deferimento, acesse o sistema.`
 })
 
 export default {
@@ -68,5 +78,6 @@ export default {
   'approve-procedimento': approveProcedimento,
   'update-procedimento-status': updateProcedimentoStatus,
   'analise-procedimento-coordenacao': analiseProcedimentoCoordenacao,
-  'homologacao-colegiado': homologacaoColegiado
+  'homologacao-colegiado': homologacaoColegiado,
+  'verificacao-email': emailVerification
 }

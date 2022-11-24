@@ -71,6 +71,8 @@ routes.post('/users', createActorController.exec)
 routes.use(authTokenMiddleware.exec)
 
 routes.get('/me', authController.me)
+routes.post('/email-verification', authController.sendConfirmationCode)
+routes.post('/email-verification/code', authController.confirmActorEmail)
 
 routes.get('/users/publicos', publicosController.exec)
 routes.get('/users/sidebar', sidebarInfoController.exec)

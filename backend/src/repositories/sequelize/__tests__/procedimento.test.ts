@@ -48,7 +48,7 @@ describe('Procedimento Repository', () => {
     })
 
     it('should return all procedimentos', async () => {
-      const result = await sut.findAll()
+      const result = await sut.findAll({})
 
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({

@@ -30,9 +30,9 @@ describe('Formulario Repository', () => {
     })
 
     it('should return all formularios', async () => {
-      const result = await sut.findAll({}, pagination)
+      const result = await sut.findAll({}, pagination.term)
 
-      expect(result.data).toEqual(formularios)
+      expect(result).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
         where: {},
         order: [['updatedAt', 'DESC']],
@@ -48,7 +48,7 @@ describe('Formulario Repository', () => {
     it('should pass the query to model method', async () => {
       const query = { nome: 'test' }
 
-      await sut.findAll(query, pagination)
+      await sut.findAll(query, pagination.term)
 
       expect(Formulario.findAll).toBeCalledWith({
         where: { ...query },

@@ -19,6 +19,7 @@ export interface ActorModel {
   profile?: ProfileModel
   permissoes?: number
   publico: string[]
+  verificado: boolean
   procedimentos?: ProcedimentoModel[]
   createdAt?: Date
   updatedAt?: Date
@@ -36,6 +37,7 @@ export interface ActorAttributes
   deleted: CreationOptional<boolean>
   permissoes?: number
   publico: string[]
+  verificado: boolean
   procedimentos?: ProcedimentoModel[]
   createdAt?: Date
   updatedAt?: Date
@@ -70,6 +72,11 @@ const Actor = sequelize.define<ActorAttributes>('actor', {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
     defaultValue: []
+  },
+  verificado: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE

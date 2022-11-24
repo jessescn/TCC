@@ -10,8 +10,15 @@ import {
 import { ProfileRepository } from 'repositories/sequelize/profile'
 import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
-import { ConflictError, NotFoundError } from 'types/express/errors'
+import templates from 'templates'
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError
+} from 'types/express/errors'
 import { paginateList } from 'utils/value'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import { MailSender } from 'repositories/nodemailer/mail'
 
 export type SidebarInfo = {
   open: TipoProcedimentoModel[]
@@ -23,6 +30,8 @@ export interface IActorService extends IService<ActorModel, ActorQuery> {
   update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
   getPublicos: () => Promise<string[]>
   getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
+  sendConfirmationCode: (data: ActorModel) => Promise<void>
+  confirmEmailByCode: (code: string) => Promise<ActorModel>
 }
 
 export class ActorService implements IActorService {
@@ -178,5 +187,42 @@ export class ActorService implements IActorService {
     return {
       open: openedTipos
     }
+  }
+
+  async sendConfirmationCode(data: ActorModel) {
+    if (data.verificado) {
+      throw new BadRequestError('Usuário com email já verificado')
+    }
+
+    const token = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+      expiresIn: '5m'
+    })
+    const baseUrl = 'http://localhost:3000'
+    const link = `${baseUrl}/confirmacao-email?code=${token}`
+
+    const template = templates['verificacao-email']
+    const email = template(data.email, { link })
+
+    await MailSender.send(email)
+  }
+
+  async confirmEmailByCode(code: string) {
+    const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
+      complete: true
+    }) as JwtPayload
+
+    const email = payload?.data?.email
+
+    if (!email) {
+      throw new BadRequestError('Codigo inválido')
+    }
+
+    const [actor] = await this.repository.findAll({ email })
+
+    if (!actor) {
+      throw new NotFoundError('Usuário não encontrado')
+    }
+
+    return this.update(actor.id, { verificado: true })
   }
 }
