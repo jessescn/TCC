@@ -6,16 +6,22 @@ import { Credentials } from '../../../services/auth'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
-export type LoginStatus = {
+export type StatusWithMessage = {
   status: Status
   message?: string
+}
+
+type LogoutOptions = {
+  reload: boolean
 }
 
 export type State = {
   currentUser: UserModel | null
   isSidebarOpen: boolean
-  loginStatus: LoginStatus
+  loginStatus: StatusWithMessage
+  exchangeCodeStatus: StatusWithMessage
   sidebarStatus: Status
+  sendEmailStatus: Status
   openProcedimentos: TipoProcedimentoModel[]
 }
 
@@ -23,13 +29,22 @@ const userLocalStorage = localStorage.getItem('session_user')
 
 export const initialState: State = {
   loginStatus: { status: 'pristine' },
+  exchangeCodeStatus: { status: 'pristine' },
   openProcedimentos: [],
   sidebarStatus: 'pristine',
+  sendEmailStatus: 'pristine',
   isSidebarOpen: false,
   currentUser: userLocalStorage ? JSON.parse(userLocalStorage) : null
 }
 
 const reducers = {
+  resetState: (state: State) => {
+    state.currentUser = initialState.currentUser
+    state.openProcedimentos = initialState.openProcedimentos
+    state.isSidebarOpen = initialState.isSidebarOpen
+    state.sidebarStatus = initialState.sidebarStatus
+    state.loginStatus = initialState.loginStatus
+  },
   login: (state: State, action: PayloadAction<Credentials>) => {
     state.loginStatus = { status: 'loading' }
   },
@@ -40,11 +55,13 @@ const reducers = {
   loginFailure: (state: State, action: PayloadAction<string | undefined>) => {
     state.loginStatus = { status: 'failure', message: action.payload }
   },
-  logout: () => {
+  logout: (state: State, action: PayloadAction<LogoutOptions>) => {
+    reducers.resetState(state)
+
     localStorage.removeItem('session_user')
     localStorage.removeItem('access_token')
 
-    document.location.reload()
+    if (action.payload.reload) document.location.reload()
   },
   sidebarInfo: (state: State) => {
     state.sidebarStatus = 'loading'
@@ -64,6 +81,34 @@ const reducers = {
   },
   closeSidebar: (state: State) => {
     state.isSidebarOpen = false
+  },
+  sendEmailConfirmation: (state: State) => {
+    state.sendEmailStatus = 'loading'
+  },
+  sendEmailConfirmationSuccess: (state: State) => {
+    state.sendEmailStatus = 'success'
+  },
+  sendEmailConfirmationFailure: (state: State) => {
+    state.sendEmailStatus = 'failure'
+  },
+  exchangeEmailConfirmationCode: (
+    state: State,
+    action: PayloadAction<string>
+  ) => {
+    state.exchangeCodeStatus = { status: 'loading' }
+  },
+  exchangeEmailConfirmationCodeSuccess: (
+    state: State,
+    action: PayloadAction<UserModel>
+  ) => {
+    state.exchangeCodeStatus = { status: 'success' }
+    state.currentUser = action.payload
+  },
+  exchangeEmailConfirmationCodeFailure: (
+    state: State,
+    action: PayloadAction<string | undefined>
+  ) => {
+    state.exchangeCodeStatus = { status: 'failure', message: action.payload }
   }
 }
 

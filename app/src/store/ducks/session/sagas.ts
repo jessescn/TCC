@@ -13,7 +13,12 @@ import { actions } from './slice'
 
 export const sagas = [
   takeLatest(actions.login.type, authUserSaga),
-  takeLatest(actions.sidebarInfo.type, sidebarInfoSaga)
+  takeLatest(actions.sidebarInfo.type, sidebarInfoSaga),
+  takeLatest(actions.sendEmailConfirmation.type, sendEmailConfirmationSaga),
+  takeLatest(
+    actions.exchangeEmailConfirmationCode.type,
+    exchangeEmailConfirmationCodeSaga
+  )
 ]
 
 export function* authUserSaga(action: PayloadAction<Credentials>) {
@@ -47,5 +52,33 @@ export function* sidebarInfoSaga() {
     yield put(actions.sidebarInfoSuccess(response.data.open))
   } catch (error: any) {
     yield put(actions.sidebarInfoFailure())
+  }
+}
+
+export function* sendEmailConfirmationSaga() {
+  try {
+    yield call(() => AuthService.emailConfirmation())
+
+    yield put(actions.sendEmailConfirmationSuccess())
+  } catch (error: any) {
+    yield put(actions.sendEmailConfirmationFailure())
+  }
+}
+
+export function* exchangeEmailConfirmationCodeSaga(
+  action: PayloadAction<string>
+) {
+  try {
+    const response: AxiosResponse<UserModel> = yield call(() =>
+      AuthService.exchangeEmailConfirmationCode(action.payload)
+    )
+
+    localStorage.setItem('session_user', JSON.stringify(response.data))
+
+    yield put(actions.exchangeEmailConfirmationCodeSuccess(response.data))
+  } catch (error: any) {
+    yield put(
+      actions.exchangeEmailConfirmationCodeFailure(error?.response?.data)
+    )
   }
 }

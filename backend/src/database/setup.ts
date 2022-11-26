@@ -35,7 +35,8 @@ export const createInitialUser = async ({
       senha,
       email,
       nome,
-      permissoes: profile
+      permissoes: profile,
+      verificado: true
     }
   })
 }

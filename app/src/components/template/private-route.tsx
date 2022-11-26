@@ -27,11 +27,14 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
   const userModel: UserModel = JSON.parse(user)
   const isAdmin = userModel.profile.nome === 'admin'
 
-  const isAllowed =
-    isAdmin ||
-    (allowedProfiles.length > 0
+  const hasProfiles =
+    allowedProfiles.length > 0
       ? User.includesInProfiles(userModel, allowedProfiles)
-      : true)
+      : true
+
+  const isVerified = userModel.verificado
+
+  const isAllowed = (isAdmin || hasProfiles) && isVerified
 
   if (!isAllowed) {
     return <Navigate to="/404" state={{ from: location }} replace />

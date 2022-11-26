@@ -24,10 +24,13 @@ export const Content = () => {
   } = useForm<LoginForm>()
 
   const status = useSelector(selectors.session.getAuthStatus)
+  const currentUser = useSelector(selectors.session.getCurrentUser)
 
   useEffect(() => {
     if (status.status === 'success') {
-      navigate('/')
+      const redirectTo = currentUser?.verificado ? '/' : '/confirmacao-email'
+
+      navigate(redirectTo)
     }
   }, [status])
 

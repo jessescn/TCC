@@ -48,7 +48,7 @@ const Sidebar = () => {
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
 
   const handleLogout = () => {
-    store.dispatch(actions.session.logout())
+    store.dispatch(actions.session.logout({ reload: true }))
   }
 
   const closeSidebar = () => {

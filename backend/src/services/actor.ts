@@ -14,7 +14,8 @@ import templates from 'templates'
 import {
   BadRequestError,
   ConflictError,
-  NotFoundError
+  NotFoundError,
+  UnauthorizedError
 } from 'types/express/errors'
 import { paginateList } from 'utils/value'
 import jwt, { JwtPayload } from 'jsonwebtoken'
@@ -198,7 +199,7 @@ export class ActorService implements IActorService {
       expiresIn: '5m'
     })
     const baseUrl = 'http://localhost:3000'
-    const link = `${baseUrl}/confirmacao-email?code=${token}`
+    const link = `${baseUrl}/confirmacao-email/${token}`
 
     const template = templates['verificacao-email']
     const email = template(data.email, { link })
@@ -207,11 +208,16 @@ export class ActorService implements IActorService {
   }
 
   async confirmEmailByCode(code: string) {
-    const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
-      complete: true
-    }) as JwtPayload
+    let email
+    try {
+      const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
+        complete: true
+      }) as JwtPayload
 
-    const email = payload?.data?.email
+      email = payload?.data?.email
+    } catch (error) {
+      throw new UnauthorizedError('Código inválido ou expirado!')
+    }
 
     if (!email) {
       throw new BadRequestError('Codigo inválido')

@@ -7,7 +7,7 @@ import {
   waitFor
 } from 'jest/utils/test-utils'
 import * as store from 'store'
-import Login from '../login'
+import Login from '../session/login'
 
 const mockNavigate = jest.fn()
 

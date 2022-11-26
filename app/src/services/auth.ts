@@ -36,5 +36,20 @@ export const AuthService = {
       method: 'get',
       url: '/users/sidebar'
     })
+  },
+  emailConfirmation: () => {
+    return httpClient.request({
+      method: 'post',
+      url: '/email-verification'
+    })
+  },
+  exchangeEmailConfirmationCode: (code: string) => {
+    const payload = { code }
+
+    return httpClient.request<AxiosResponse<UserModel>>({
+      method: 'post',
+      url: '/email-verification/code',
+      body: payload
+    })
   }
 }

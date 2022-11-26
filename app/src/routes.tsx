@@ -6,8 +6,8 @@ import DetalhesProcedimento from 'pages/procedimentos/detalhes'
 import MeusProcedimentos from 'pages/procedimentos/lista'
 import ListaTipoProcedimentos from 'pages/tipo-procedimentos/lista'
 import Home from './pages/home'
-import Login from './pages/login'
-import Register from './pages/register'
+import Login from './pages/session/login'
+import Register from './pages/session/register'
 import ListaFormularios from './pages/formularios/lista'
 import DetalhesFormulario from './pages/formularios/detalhes'
 
@@ -21,6 +21,8 @@ import AnaliseProcedimento from 'pages/coordenacao/analise-procedimento'
 import NotFound from 'pages/404'
 import TodosUsuarios from 'pages/usuarios/lista'
 import DetalhesUsuario from 'pages/usuarios/detalhes'
+import ConfirmacaoEmail from 'pages/session/confirmacao-email'
+import ConfirmacaoEmailCodigo from 'pages/session/confirmacao-email-code'
 
 export default function Routes() {
   return (
@@ -40,6 +42,18 @@ export default function Routes() {
             <Register />
           </AuthRedirect>
         }
+      />
+      <Route
+        path="/confirmacao-email"
+        element={
+          <AuthRedirect redirectTo="/home">
+            <ConfirmacaoEmail />
+          </AuthRedirect>
+        }
+      />
+      <Route
+        path="/confirmacao-email/:code"
+        element={<ConfirmacaoEmailCodigo />}
       />
       <Route
         path="/"

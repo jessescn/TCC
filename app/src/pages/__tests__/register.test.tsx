@@ -8,7 +8,7 @@ import {
 } from 'jest/utils/test-utils'
 import * as store from 'store'
 
-import Register, { RegisterForm } from '../register'
+import Register, { RegisterForm } from '../session/register'
 
 const mockNavigate = jest.fn()
 

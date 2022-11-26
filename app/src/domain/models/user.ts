@@ -10,6 +10,7 @@ export interface UserModel {
   createdAt?: string
   updatedAt?: string
   deleted: boolean
+  verificado: boolean
 }
 
 export interface ProfileModel {
