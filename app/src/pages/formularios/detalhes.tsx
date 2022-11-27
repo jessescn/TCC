@@ -14,7 +14,7 @@ export default function Form() {
   }, [])
 
   return (
-    <Screen py="24px">
+    <Screen py="24px" pos="relative">
       <FormularioDetails />
     </Screen>
   )

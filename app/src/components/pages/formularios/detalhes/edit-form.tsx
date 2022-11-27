@@ -1,13 +1,26 @@
-import { Box, Button, Flex, Icon, Stack } from '@chakra-ui/react'
-import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
+import {
+  Box,
+  Icon,
+  IconButton,
+  Stack,
+  Tooltip,
+  useDisclosure
+} from '@chakra-ui/react'
+import ConfirmModal from 'components/organisms/confirm-modal'
 import lodash from 'lodash'
 import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { AiOutlineClear, AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlineClear, AiOutlineImport } from 'react-icons/ai'
+import { BiLayerPlus } from 'react-icons/bi'
 import Campo, { CampoFormulario } from './campo'
 
-export default function EditForm() {
+type Props = {
+  onDuplicate: () => void
+}
+
+export default function EditForm({ onDuplicate }: Props) {
   const { setValue, watch } = useFormContext()
+  const controls = useDisclosure()
 
   const campos: CampoFormulario[] = watch('campos') || []
 
@@ -25,6 +38,7 @@ export default function EditForm() {
 
   const handleClearAll = useCallback(() => {
     setValue('campos', [])
+    controls.onClose()
   }, [campos, setValue])
 
   const handleDuplicate = useCallback(
@@ -74,39 +88,7 @@ export default function EditForm() {
 
   return (
     <>
-      <Box>
-        <Flex justifyContent="space-between" my="8px">
-          <SimpleConfirmationButton
-            onCancelButtonText="cancelar"
-            onConfirmButtonText="Apagar"
-            onConfirm={handleClearAll}
-            title="Apagar Todos"
-            content="Deseja apagar todos os campos?"
-            style={{
-              bgColor: 'primary.dark',
-              _hover: { bgColor: 'primary.default' },
-              color: 'initial.white',
-              'aria-label': '',
-              size: 'xs',
-              leftIcon: <Icon as={AiOutlineClear} />,
-              disabled: campos.length === 0
-            }}
-          >
-            Limpar tudo
-          </SimpleConfirmationButton>
-          <Button
-            bgColor="primary.dark"
-            _hover={{ bgColor: 'primary.default' }}
-            color="initial.white"
-            aria-label=""
-            size="xs"
-            leftIcon={<Icon as={AiOutlinePlus} />}
-            onClick={handleAddCampo}
-            ml="8px"
-          >
-            Adicionar Campo
-          </Button>
-        </Flex>
+      <Box my="32px">
         <Stack spacing="24px">
           {campos.map(campo => (
             <Campo
@@ -119,6 +101,64 @@ export default function EditForm() {
           ))}
         </Stack>
       </Box>
+      <Stack
+        pos="fixed"
+        w="50px"
+        top="40%"
+        right={16}
+        border="2px solid"
+        borderColor="primary.dark"
+        borderRadius="8px"
+        alignItems="center"
+        p="2px"
+        spacing="2px"
+      >
+        <Box border="1px" borderColor="primary.dark" borderRadius="8px">
+          <Tooltip label="Adicionar Campo">
+            <IconButton
+              aria-label=""
+              onClick={handleAddCampo}
+              bgColor="primary.dark"
+              color="initial.white"
+              _hover={{ color: 'primary.dark', bgColor: 'initial.white' }}
+              icon={<Icon as={BiLayerPlus} />}
+            />
+          </Tooltip>
+        </Box>
+        <Box border="1px" borderColor="primary.dark" borderRadius="8px">
+          <Tooltip label="Duplicar Formulário">
+            <IconButton
+              aria-label=""
+              onClick={onDuplicate}
+              bgColor="primary.dark"
+              color="initial.white"
+              _hover={{ color: 'primary.dark', bgColor: 'initial.white' }}
+              icon={<Icon as={AiOutlineImport} />}
+            />
+          </Tooltip>
+        </Box>
+        <Box border="1px" borderColor="primary.dark" borderRadius="8px">
+          <Tooltip label="Limpar Tudo" aria-label="">
+            <IconButton
+              aria-label=""
+              onClick={controls.onOpen}
+              bgColor="primary.dark"
+              color="initial.white"
+              _hover={{ color: 'primary.dark', bgColor: 'initial.white' }}
+              icon={<Icon as={AiOutlineClear} />}
+              isDisabled={campos.length === 0}
+            />
+          </Tooltip>
+        </Box>
+      </Stack>
+      <ConfirmModal
+        {...controls}
+        onCancelButtonText="cancelar"
+        onConfirmButtonText="Apagar"
+        onConfirm={handleClearAll}
+        title="Apagar Todos"
+        content="Deseja apagar todos os campos?"
+      />
     </>
   )
 }
