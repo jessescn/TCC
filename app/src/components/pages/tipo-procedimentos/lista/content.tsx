@@ -63,15 +63,6 @@ export function Content() {
           Novo Tipo de Procedimento
         </Button>
       </Flex>
-      {/* <Box mt="10px">
-        <Checkbox
-          size="sm"
-          checked={includeDeleted}
-          onChange={e => setIncludeDeleted(e.target.checked)}
-        >
-          Incluir deletados
-        </Checkbox>
-      </Box> */}
       <Table />
     </Box>
   )

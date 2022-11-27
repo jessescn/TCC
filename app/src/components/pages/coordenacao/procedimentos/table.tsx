@@ -1,4 +1,5 @@
 import { Box, Center, Icon, Text } from '@chakra-ui/react'
+import { LoadingPage } from 'components/molecules/loading'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
 import { statusList } from 'domain/models/procedimento'
 import { MdSearchOff } from 'react-icons/md'
@@ -11,6 +12,7 @@ const Table = () => {
   const navigate = useNavigate()
 
   const pagination = useSelector(selectors.procedimento.getPagination)
+  const status = useSelector(state => state.procedimento.status)
   const total = useSelector(state => state.procedimento.total)
   const procedimentos = useSelector(selectors.procedimento.getProcedimentos)
 
@@ -23,6 +25,10 @@ const Table = () => {
 
   const handleUpdateCurrentPage = (nextPage: number) => {
     store.dispatch(actions.procedimento.list({ ...pagination, page: nextPage }))
+  }
+
+  if (status === 'loading') {
+    return <LoadingPage />
   }
 
   return procedimentos.length > 0 ? (

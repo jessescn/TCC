@@ -18,12 +18,14 @@ import { AiFillEdit } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
+import { LoadingPage } from 'components/molecules/loading'
 
 export default function FormulariosTable() {
   const navigate = useNavigate()
   const confirmModalControls = useDisclosure()
 
   const formularios = useSelector(selectors.formulario.getFormularios)
+  const status = useSelector(state => state.formulario.status)
   const pagination = useSelector(state => state.formulario.pagination)
   const total = useSelector(state => state.formulario.total)
 
@@ -50,6 +52,10 @@ export default function FormulariosTable() {
 
   const handleUpdatePage = (newPage: number) => {
     store.dispatch(actions.formulario.list({ ...pagination, page: newPage }))
+  }
+
+  if (status === 'loading') {
+    return <LoadingPage />
   }
 
   const getEditMenu = (form: FormularioModel) => {
