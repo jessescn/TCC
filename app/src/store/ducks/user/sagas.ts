@@ -3,7 +3,7 @@ import { PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from 'domain/models/user'
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { Pagination, PaginationResponse } from 'services/config'
-import { CreateUser, UserService } from 'services/usuarios'
+import { CreateUser, UpdatePassword, UserService } from 'services/usuarios'
 import { actions, CreateBulk } from './slice'
 import { getPagination } from './selectors'
 
@@ -11,7 +11,9 @@ export const sagas = [
   takeLatest(actions.create.type, createUserSaga),
   takeLatest(actions.createBulk.type, createBulkSaga),
   takeLatest(actions.list.type, listSaga),
-  takeLatest(actions.delete.type, deleteSaga)
+  takeLatest(actions.delete.type, deleteSaga),
+  takeLatest(actions.changePasswordEmail.type, changePasswordEmailSaga),
+  takeLatest(actions.updatePassword.type, updatePasswordSaga)
 ]
 
 function* createUserSaga(action: PayloadAction<CreateUser>) {
@@ -71,5 +73,25 @@ function* deleteSaga(action: PayloadAction<number>) {
     yield put(actions.deleteSuccess())
   } catch (error: any) {
     yield put(actions.deleteFailure())
+  }
+}
+
+export function* changePasswordEmailSaga(action: PayloadAction<string>) {
+  try {
+    yield call(() => UserService.changePasswordEmail(action.payload))
+
+    yield put(actions.changePasswordEmailSuccess())
+  } catch (error: any) {
+    yield put(actions.changePasswordEmailFailure(error?.response?.data))
+  }
+}
+
+export function* updatePasswordSaga(action: PayloadAction<UpdatePassword>) {
+  try {
+    yield call(() => UserService.updatePassword(action.payload))
+
+    yield put(actions.updatePasswordSuccess())
+  } catch (error: any) {
+    yield put(actions.updatePasswordFailure(error?.response?.data))
   }
 }

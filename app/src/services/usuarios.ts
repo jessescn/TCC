@@ -15,6 +15,11 @@ export type UpdateUser = {
   publico: string[]
 }
 
+export type UpdatePassword = {
+  code: string
+  password: string
+}
+
 export const UserService = {
   create: (data: CreateUser) => {
     return httpClient.request<AxiosResponse<UserModel>>({
@@ -71,6 +76,22 @@ export const UserService = {
     return httpClient.request<AxiosResponse<UserModel>>({
       method: 'get',
       url: `/users/${id}`
+    })
+  },
+  changePasswordEmail: (email: string) => {
+    const payload = { email }
+
+    return httpClient.request({
+      method: 'post',
+      url: `/change-password`,
+      body: payload
+    })
+  },
+  updatePassword: (data: UpdatePassword) => {
+    return httpClient.request({
+      method: 'post',
+      url: `/update-password`,
+      body: data
     })
   }
 }

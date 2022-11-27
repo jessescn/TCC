@@ -20,6 +20,7 @@ import {
 import { paginateList } from 'utils/value'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { MailSender } from 'repositories/nodemailer/mail'
+import { encryptPassword } from 'utils/password'
 
 export type SidebarInfo = {
   open: TipoProcedimentoModel[]
@@ -33,6 +34,8 @@ export interface IActorService extends IService<ActorModel, ActorQuery> {
   getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
   sendConfirmationCode: (data: ActorModel) => Promise<void>
   confirmEmailByCode: (code: string) => Promise<ActorModel>
+  sendEmailPassword: (email: string) => Promise<void>
+  changePassword: (code: string, password: string) => Promise<void>
 }
 
 export class ActorService implements IActorService {
@@ -208,7 +211,8 @@ export class ActorService implements IActorService {
   }
 
   async confirmEmailByCode(code: string) {
-    let email
+    let email: string | undefined
+
     try {
       const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
         complete: true
@@ -230,5 +234,56 @@ export class ActorService implements IActorService {
     }
 
     return this.update(actor.id, { verificado: true })
+  }
+
+  async sendEmailPassword(email: string) {
+    const [actor] = await this.repository.findAll({ email })
+
+    if (!actor) {
+      throw new NotFoundError('Não existe usuário com esse email')
+    }
+
+    const code = jwt.sign({ actor }, process.env.JWT_SECRET_KEY, {
+      expiresIn: '5m'
+    })
+    const baseUrl = 'http://localhost:3000'
+    const link = `${baseUrl}/alteracao-senha/${code}?email=${actor.email}`
+
+    const emailTemplate = templates['change-password'](email, {
+      link,
+      name: actor.nome
+    })
+
+    await MailSender.send(emailTemplate)
+  }
+
+  async changePassword(code: string, newPassword: string) {
+    let email: string | undefined
+
+    try {
+      const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
+        complete: true
+      }) as JwtPayload
+
+      console.log({ payload })
+
+      email = payload?.actor?.email
+    } catch (error) {
+      throw new UnauthorizedError('Código inválido ou expirado!')
+    }
+
+    if (!email) {
+      throw new BadRequestError('Codigo inválido')
+    }
+
+    const [actor] = await this.repository.findAll({ email })
+
+    if (!actor) {
+      throw new NotFoundError('Usuário não encontrado')
+    }
+
+    const encrypted = await encryptPassword(newPassword)
+
+    await this.repository.update(actor.id, { senha: encrypted })
   }
 }

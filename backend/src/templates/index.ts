@@ -8,10 +8,15 @@ export type EmailTemplate = {
 
 type Template<T> = (to: string, data?: T) => EmailTemplate
 
-const passwordRecovery: Template<any> = (to, data) => ({
+type ChangePasswordData = {
+  link: string
+  name: string
+}
+
+const changePassword: Template<ChangePasswordData> = (to, data) => ({
   to,
-  subject: '[PPGCC/UFCG] Recuperação de senha',
-  html: `Aqui está sua nova senha: ${data.newPassword}`
+  subject: '[PPGCC/UFCG] Alteração de senha',
+  html: `Olá ${data.name}. Foi requisitado uma alteração de senha. Para alterar a senha, acesse <a href="${data.link}">esse link</a>. Caso não tenha requisitado essa alteração, por favor ignore esse email.`
 })
 
 type ApproveProcedimentoData = {
@@ -74,7 +79,7 @@ const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
 })
 
 export default {
-  'password-recovery': passwordRecovery,
+  'change-password': changePassword,
   'approve-procedimento': approveProcedimento,
   'update-procedimento-status': updateProcedimentoStatus,
   'analise-procedimento-coordenacao': analiseProcedimentoCoordenacao,

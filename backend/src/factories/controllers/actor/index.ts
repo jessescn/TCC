@@ -1,4 +1,5 @@
 import { makeBulkCreateActorsController } from './bulk-create-factory'
+import { makeChangePasswordController } from './change-password-factory'
 import { makeCreateActorController } from './create-factory'
 import { makeDeleteActorController } from './delete-factory'
 import { makePublicosController } from './publicos-factory'
@@ -15,3 +16,4 @@ export const deleteActorController = makeDeleteActorController()
 export const publicosController = makePublicosController()
 export const sidebarInfoController = makeSidebarInfoController()
 export const bulkCreateActorsController = makeBulkCreateActorsController()
+export const changePasswordController = makeChangePasswordController()

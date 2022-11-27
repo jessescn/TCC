@@ -85,7 +85,7 @@ export class AuthController {
 
       await this.service.sendConfirmationCode(actor)
 
-      response.json(true)
+      response.status(200).send()
     } catch (error) {
       errorResponseHandler(response, error)
     }
@@ -102,6 +102,22 @@ export class AuthController {
       const actor = await this.service.confirmEmailByCode(code)
 
       response.json(actor)
+    } catch (error) {
+      errorResponseHandler(response, error)
+    }
+  }
+
+  forgotPassword = async (request: Request, response: Response) => {
+    try {
+      const { email } = request.body
+
+      if (!email) {
+        throw new BadRequestError('Email obrigatório')
+      }
+
+      await this.service.sendEmailPassword(email)
+
+      response.status(200).send()
     } catch (error) {
       errorResponseHandler(response, error)
     }

@@ -112,6 +112,7 @@ export const Content = () => {
                   {status.message || 'credenciais inválidas!'}
                 </Text>
               )}
+              <Link redirectTo="/alteracao-senha">Esqueci a senha</Link>
               <Link redirectTo="/cadastro">
                 Não possui acesso? clique aqui!
               </Link>

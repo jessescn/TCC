@@ -23,6 +23,8 @@ import TodosUsuarios from 'pages/usuarios/lista'
 import DetalhesUsuario from 'pages/usuarios/detalhes'
 import ConfirmacaoEmail from 'pages/session/confirmacao-email'
 import ConfirmacaoEmailCodigo from 'pages/session/confirmacao-email-code'
+import AlteracaoSenha from 'pages/session/alteracao-senha'
+import AlteracaoSenhaCodigo from 'pages/session/alteracao-senha-code'
 
 export default function Routes() {
   return (
@@ -55,6 +57,8 @@ export default function Routes() {
         path="/confirmacao-email/:code"
         element={<ConfirmacaoEmailCodigo />}
       />
+      <Route path="/alteracao-senha" element={<AlteracaoSenha />} />
+      <Route path="/alteracao-senha/:code" element={<AlteracaoSenhaCodigo />} />
       <Route
         path="/"
         element={

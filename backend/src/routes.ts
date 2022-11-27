@@ -20,7 +20,8 @@ import {
   readActorController,
   updateActorController,
   sidebarInfoController,
-  bulkCreateActorsController
+  bulkCreateActorsController,
+  changePasswordController
 } from 'factories/controllers/actor'
 
 import { readProfileController } from 'factories/controllers/profile'
@@ -61,11 +62,13 @@ const upload = multer({ dest: 'uploads/' })
 const routes = Router()
 const authTokenMiddleware = makeAuthTokenMiddleware()
 
-routes.get('/', (req, res) => {
+routes.get('/', (_, res) => {
   res.send('api is running!')
 })
 
 routes.post('/token', authController.token)
+routes.post('/change-password', authController.forgotPassword)
+routes.post('/update-password', changePasswordController.exec)
 routes.post('/users', createActorController.exec)
 
 routes.use(authTokenMiddleware.exec)

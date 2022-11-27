@@ -2,11 +2,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserModel } from 'domain/models/user'
 import { Pagination, PaginationResponse } from 'services/config'
-import { CreateUser } from 'services/usuarios'
+import { CreateUser, UpdatePassword } from 'services/usuarios'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
-type CreateUserStatus = {
+type StatusWithMessage = {
   status: Status
   message?: string
 }
@@ -19,8 +19,10 @@ export type State = {
   usuarios: UserModel[]
   total: number
   pagination: Pagination
-  statusCreate: CreateUserStatus
-  statusCreateBulk: CreateUserStatus
+  statusCreate: StatusWithMessage
+  statusCreateBulk: StatusWithMessage
+  changePasswordEmailStatus: StatusWithMessage
+  updatePasswordStatus: StatusWithMessage
   statusFetch: Status
   statusDelete: Status
 }
@@ -34,6 +36,8 @@ export const initialState: State = {
     term: null
   },
   statusFetch: 'pristine',
+  changePasswordEmailStatus: { status: 'pristine' },
+  updatePasswordStatus: { status: 'pristine' },
   statusCreate: { status: 'pristine' },
   statusCreateBulk: { status: 'pristine' },
   statusDelete: 'pristine'
@@ -95,6 +99,33 @@ const reducers = {
     reducers.resetStatus(state)
     state.total = initialState.total
     state.usuarios = initialState.usuarios
+  },
+  changePasswordEmail: (state: State, action: PayloadAction<string>) => {
+    state.changePasswordEmailStatus = { status: 'loading' }
+  },
+  changePasswordEmailSuccess: (state: State) => {
+    state.changePasswordEmailStatus = { status: 'success' }
+  },
+  changePasswordEmailFailure: (
+    state: State,
+    action: PayloadAction<string | undefined>
+  ) => {
+    state.changePasswordEmailStatus = {
+      status: 'failure',
+      message: action.payload
+    }
+  },
+  updatePassword: (state: State, action: PayloadAction<UpdatePassword>) => {
+    state.updatePasswordStatus = { status: 'loading' }
+  },
+  updatePasswordSuccess: (state: State) => {
+    state.updatePasswordStatus = { status: 'success' }
+  },
+  updatePasswordFailure: (
+    state: State,
+    action: PayloadAction<string | undefined>
+  ) => {
+    state.updatePasswordStatus = { status: 'failure', message: action.payload }
   }
 }
 
