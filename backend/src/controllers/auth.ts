@@ -91,23 +91,7 @@ export class AuthController {
     }
   }
 
-  confirmActorEmail = async (request: Request, response: Response) => {
-    try {
-      const { code } = request.body
-
-      if (!code || typeof code !== 'string') {
-        throw new BadRequestError('Código não enviado')
-      }
-
-      const actor = await this.service.confirmEmailByCode(code)
-
-      response.json(actor)
-    } catch (error) {
-      errorResponseHandler(response, error)
-    }
-  }
-
-  forgotPassword = async (request: Request, response: Response) => {
+  sendChangePasswordCode = async (request: Request, response: Response) => {
     try {
       const { email } = request.body
 
@@ -115,7 +99,7 @@ export class AuthController {
         throw new BadRequestError('Email obrigatório')
       }
 
-      await this.service.sendEmailPassword(email)
+      await this.service.sendChangePasswordEmail(email)
 
       response.status(200).send()
     } catch (error) {

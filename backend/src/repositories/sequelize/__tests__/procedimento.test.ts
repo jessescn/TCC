@@ -11,9 +11,12 @@ import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { ProcedimentoRepository } from '../procedimento'
 import Actor from 'domain/models/actor'
+import { Op } from 'sequelize'
 
 describe('Procedimento Repository', () => {
-  const procedimento = createMock<ProcedimentoModel>()
+  const procedimento = createMock<ProcedimentoModel>({
+    status: [{ data: new Date().toISOString(), status: 'correcoes_pendentes' }]
+  })
   const procedimentos = createMockList<ProcedimentoModel>(2)
 
   const sut = new ProcedimentoRepository()
@@ -34,7 +37,7 @@ describe('Procedimento Repository', () => {
 
       expect(result).toEqual(procedimento)
       expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false },
+        where: { id: 1 },
         include: [TipoProcedimento, Comentario]
       })
     })
@@ -44,51 +47,76 @@ describe('Procedimento Repository', () => {
     beforeEach(() => {
       jest
         .spyOn(Procedimento, 'findAll')
-        .mockResolvedValueOnce(procedimentos as ProcedimentoAttributes[])
+        .mockResolvedValue(procedimentos as ProcedimentoAttributes[])
     })
 
     it('should return all procedimentos', async () => {
-      const result = await sut.findAll({})
+      const result = await sut.findAll()
 
       expect(result).toEqual(procedimentos)
       expect(Procedimento.findAll).toBeCalledWith({
         include: [
-          TipoProcedimento,
-          Comentario,
           {
             model: Actor,
             attributes: ['nome']
+          },
+          {
+            model: TipoProcedimento,
+            where: {}
           }
         ],
         where: { deleted: false },
-        order: [
-          ['id', 'ASC'],
-          ['updatedAt', 'DESC']
-        ]
+        order: [['updatedAt', 'DESC']]
       })
     })
 
     it('should return all procedimentos which query applies on', async () => {
       const query = { tipo: 2 }
+      const term = '1'
 
-      const result = await sut.findAll(query)
+      const result = await sut.findAll(query, term)
 
       expect(result).toEqual(procedimentos)
-      expect(Procedimento.findAll).toBeCalledWith({
+      expect(Procedimento.findAll).toHaveBeenNthCalledWith(1, {
         include: [
           TipoProcedimento,
-          Comentario,
           {
             model: Actor,
             attributes: ['nome']
           }
         ],
-        where: { deleted: false, ...query },
-        order: [
-          ['id', 'ASC'],
-          ['updatedAt', 'DESC']
-        ]
+        where: { deleted: false, ...query, id: { [Op.eq]: term } },
+        order: [['updatedAt', 'DESC']]
       })
+      expect(Procedimento.findAll).toHaveBeenNthCalledWith(2, {
+        include: [
+          {
+            model: Actor,
+            attributes: ['nome']
+          },
+          {
+            model: TipoProcedimento,
+            where: { [Op.or]: [{ nome: { [Op.iLike]: '%' + term + '%' } }] }
+          }
+        ],
+        where: { deleted: false, ...query },
+        order: [['updatedAt', 'DESC']]
+      })
+    })
+  })
+
+  describe('findAllByStatus', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(Procedimento, 'findAll')
+        .mockResolvedValue([procedimento] as ProcedimentoAttributes[])
+    })
+
+    it('should return all procedimentos with specific status', async () => {
+      const result = await sut.findAllByStatus('correcoes_pendentes')
+
+      expect(result).toEqual([procedimento])
+      expect(Procedimento.findAll).toBeCalled()
     })
   })
 
@@ -140,10 +168,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.update(1, data)
 
       expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.save).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith(data)
     })
@@ -166,10 +191,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.destroy(1)
 
       expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.save).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({ deleted: true })
     })
@@ -194,10 +216,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.updateVote(1, vote)
 
       expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({ votos: [vote] })
       expect(procedimentoWithSpies.save).toBeCalled()
     })
@@ -223,10 +242,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.removeVote(1, 1)
 
       expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({ votos: [] })
       expect(procedimentoWithSpies.save).toBeCalled()
     })
@@ -254,10 +270,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.updateStatus(10, status)
 
       expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 10, deleted: false },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({
         status: [...procedimentoWithSpies.status, status]
       })
@@ -284,10 +297,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.newRevisao(1, revisao)
 
       expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({ revisoes: [revisao] })
       expect(procedimentoWithSpies.save).toBeCalled()
     })

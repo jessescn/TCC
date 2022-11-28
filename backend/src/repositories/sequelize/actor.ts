@@ -26,7 +26,7 @@ export const InclusivableActorOptions = {
 }
 
 export class ActorRepository implements IRepository {
-  findAll = async (query: ActorQuery, term?: string) => {
+  findAll = async (query: ActorQuery = {}, term?: string) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term
       ? {

@@ -64,7 +64,7 @@ export interface IProcedimentoService
 }
 
 export class ProcedimentoService implements IProcedimentoService {
-  private procedimentoRepo: ProcedimentoRepository
+  private procedimentoRepo: IProcedimentoRepo
   private tipoProcedimentoRepo: TipoProcedimentoRepository
   private formularioRepo: FormularioRepository
   private statusService: IProcedimentoStatusService

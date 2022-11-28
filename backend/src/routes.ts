@@ -21,7 +21,8 @@ import {
   updateActorController,
   sidebarInfoController,
   bulkCreateActorsController,
-  changePasswordController
+  changePasswordController,
+  confirmEmailController
 } from 'factories/controllers/actor'
 
 import { readProfileController } from 'factories/controllers/profile'
@@ -55,7 +56,6 @@ import {
   updateFormularioController
 } from 'factories/controllers/formulario'
 import { makeAuthTokenMiddleware } from 'factories/middlewares/authorization-factory'
-
 import multer from 'multer'
 const upload = multer({ dest: 'uploads/' })
 
@@ -67,15 +67,15 @@ routes.get('/', (_, res) => {
 })
 
 routes.post('/token', authController.token)
-routes.post('/change-password', authController.forgotPassword)
+routes.post('/change-password', authController.sendChangePasswordCode)
 routes.post('/update-password', changePasswordController.exec)
 routes.post('/users', createActorController.exec)
+routes.post('/email-verification/code', confirmEmailController.exec)
 
 routes.use(authTokenMiddleware.exec)
 
 routes.get('/me', authController.me)
 routes.post('/email-verification', authController.sendConfirmationCode)
-routes.post('/email-verification/code', authController.confirmActorEmail)
 
 routes.get('/users/publicos', publicosController.exec)
 routes.get('/users/sidebar', sidebarInfoController.exec)

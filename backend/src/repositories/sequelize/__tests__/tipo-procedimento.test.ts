@@ -1,24 +1,19 @@
-import { TipoProcedimentoAttributes } from '../../../domain/models/tipo-procedimento'
 import TipoProcedimento, {
+  TipoProcedimentoAttributes,
   TipoProcedimentoModel
 } from 'domain/models/tipo-procedimento'
+import { Op } from 'sequelize'
 import { createMock, createMockList } from 'ts-auto-mock'
 import {
   CreateTipoProcedimento,
   TipoProcedimentoRepository
 } from '../tipo-procedimento'
-import { Pagination } from 'repositories'
 
 describe('Tipo Procedimento Repository', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
   const tipoProcedimentos = createMockList<TipoProcedimentoModel>(2)
 
   const sut = new TipoProcedimentoRepository()
-  const pagination: Pagination = {
-    per_page: 1000,
-    page: 1,
-    term: null
-  }
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -34,9 +29,9 @@ describe('Tipo Procedimento Repository', () => {
     })
 
     it('should return all tipoProcedimentos', async () => {
-      const result = await sut.findAll({}, pagination)
+      const result = await sut.findAll({})
 
-      expect(result.data).toEqual(tipoProcedimentos)
+      expect(result).toEqual(tipoProcedimentos)
       expect(TipoProcedimento.findAll).toBeCalledWith({
         where: {},
         order: [['updatedAt', 'DESC']]
@@ -46,11 +41,20 @@ describe('Tipo Procedimento Repository', () => {
     it('should return only the tipoProcedimento which the query applies on', async () => {
       const query = { status: 'ativo' }
 
-      const result = await sut.findAll(query, pagination)
+      const term = '1'
+      const result = await sut.findAll(query, term)
 
-      expect(result.data).toEqual(tipoProcedimentos)
+      const searchQuery = {
+        [Op.or]: [
+          { nome: { [Op.iLike]: '%' + term + '%' } },
+          { status: { [Op.eq]: term } },
+          { id: { [Op.eq]: term } }
+        ]
+      }
+
+      expect(result).toEqual(tipoProcedimentos)
       expect(TipoProcedimento.findAll).toBeCalledWith({
-        where: { ...query },
+        where: { ...query, ...searchQuery },
         order: [['updatedAt', 'DESC']]
       })
     })
@@ -66,7 +70,7 @@ describe('Tipo Procedimento Repository', () => {
 
       expect(result).toEqual(tipoProcedimento)
       expect(TipoProcedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false }
+        where: { id: 1 }
       })
     })
   })
@@ -101,9 +105,7 @@ describe('Tipo Procedimento Repository', () => {
       const result = await sut.update(1, { colegiado: true })
 
       expect(result).toEqual(tipoProcedimentoWithSpies)
-      expect(TipoProcedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false }
-      })
+      expect(TipoProcedimento.findOne).toBeCalled()
       expect(tipoProcedimentoWithSpies.set).toBeCalledWith({ colegiado: true })
       expect(tipoProcedimentoWithSpies.save).toBeCalled()
     })
@@ -124,9 +126,7 @@ describe('Tipo Procedimento Repository', () => {
       const result = await sut.destroy(1)
 
       expect(result).toEqual(tipoProcedimentoWithSpies)
-      expect(TipoProcedimento.findOne).toBeCalledWith({
-        where: { id: 1, deleted: false }
-      })
+      expect(TipoProcedimento.findOne).toBeCalled()
       expect(tipoProcedimentoWithSpies.set).toBeCalledWith({ deleted: true })
       expect(tipoProcedimentoWithSpies.save).toBeCalled()
     })

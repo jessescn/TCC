@@ -3,7 +3,7 @@ import Formulario, {
   FormularioAttributes,
   FormularioModel
 } from 'domain/models/formulario'
-import { Pagination } from 'repositories'
+import { Op } from 'sequelize'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateFormulario, FormularioRepository } from '../formulario'
 
@@ -12,11 +12,6 @@ describe('Formulario Repository', () => {
   const formularios = createMockList<FormularioModel>(2)
 
   const sut = new FormularioRepository()
-  const pagination: Pagination = {
-    per_page: 1000,
-    page: 1,
-    term: null
-  }
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -30,7 +25,7 @@ describe('Formulario Repository', () => {
     })
 
     it('should return all formularios', async () => {
-      const result = await sut.findAll({}, pagination.term)
+      const result = await sut.findAll()
 
       expect(result).toEqual(formularios)
       expect(Formulario.findAll).toBeCalledWith({
@@ -47,11 +42,19 @@ describe('Formulario Repository', () => {
 
     it('should pass the query to model method', async () => {
       const query = { nome: 'test' }
+      const term = '1'
 
-      await sut.findAll(query, pagination.term)
+      await sut.findAll(query, term)
+
+      const searchQuery = {
+        [Op.or]: [
+          { nome: { [Op.iLike]: '%' + term + '%' } },
+          { id: { [Op.eq]: term } }
+        ]
+      }
 
       expect(Formulario.findAll).toBeCalledWith({
-        where: { ...query },
+        where: { ...query, ...searchQuery },
         order: [['updatedAt', 'DESC']],
         include: [
           {
@@ -75,7 +78,13 @@ describe('Formulario Repository', () => {
 
       expect(result).toEqual(formulario)
       expect(Formulario.findOne).toBeCalledWith({
-        where: { id: 2, deleted: false }
+        where: { id: 2, deleted: false },
+        include: [
+          {
+            model: Actor,
+            attributes: ['nome']
+          }
+        ]
       })
     })
   })

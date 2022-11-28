@@ -1,4 +1,5 @@
 import Actor, { ActorAttributes, ActorModel } from 'domain/models/actor'
+import { Op } from 'sequelize'
 import { createMock, createMockList } from 'ts-auto-mock'
 import {
   CreateActor,
@@ -24,23 +25,34 @@ describe('Actor Repository', () => {
     })
 
     it('should return all actors', async () => {
-      const result = await sut.findAll({})
+      const result = await sut.findAll()
 
       expect(result).toEqual(actors)
       expect(Actor.findAll).toBeCalledWith({
-        where: { deleted: false },
+        where: {},
+        order: [['updatedAt', 'DESC']],
         ...InclusivableActorOptions
       })
     })
 
     it('should return only actors which query applies on', async () => {
       const query = { nome: 'test' }
+      const term = '1'
 
-      const result = await sut.findAll(query)
+      const result = await sut.findAll(query, term)
+
+      const searchQuery = {
+        [Op.or]: [
+          { nome: { [Op.iLike]: '%' + term + '%' } },
+          { email: { [Op.iLike]: '%' + term + '%' } },
+          { id: { [Op.eq]: term } }
+        ]
+      }
 
       expect(result).toEqual(actors)
       expect(Actor.findAll).toBeCalledWith({
-        where: { deleted: false, ...query },
+        where: { ...query, ...searchQuery },
+        order: [['updatedAt', 'DESC']],
         ...InclusivableActorOptions
       })
     })
@@ -81,7 +93,10 @@ describe('Actor Repository', () => {
       const result = await sut.create(createActor)
 
       expect(result).toEqual(actor)
-      expect(Actor.create).toBeCalledWith(createActor)
+      expect(Actor.create).toBeCalledWith({
+        ...createActor,
+        permissoes: createActor.profile
+      })
     })
   })
 

@@ -26,7 +26,7 @@ export type NewFormulario = {
 }
 
 export class FormularioRepository implements IRepository {
-  findAll = async (query: FormularioQuery, term?: string) => {
+  findAll = async (query: FormularioQuery = {}, term?: string) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term
       ? {

@@ -34,7 +34,7 @@ export interface IActorService extends IService<ActorModel, ActorQuery> {
   getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
   sendConfirmationCode: (data: ActorModel) => Promise<void>
   confirmEmailByCode: (code: string) => Promise<ActorModel>
-  sendEmailPassword: (email: string) => Promise<void>
+  sendChangePasswordEmail: (email: string) => Promise<void>
   changePassword: (code: string, password: string) => Promise<void>
 }
 
@@ -236,7 +236,7 @@ export class ActorService implements IActorService {
     return this.update(actor.id, { verificado: true })
   }
 
-  async sendEmailPassword(email: string) {
+  async sendChangePasswordEmail(email: string) {
     const [actor] = await this.repository.findAll({ email })
 
     if (!actor) {

@@ -48,10 +48,10 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     return procedimento
   }
 
-  findAll = async (query: ProcedimentoQuery, term?: string | null) => {
+  _findAllById = async (query: ProcedimentoQuery, term?: string | null) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
 
-    const procedimentosById = await Procedimento.findAll({
+    const procedimentos = await Procedimento.findAll({
       include: [
         TipoProcedimento,
         {
@@ -63,13 +63,20 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
       order: [['updatedAt', 'DESC']]
     })
 
-    const whereTipo = term
+    return procedimentos
+  }
+
+  _findAllBySearchTerm = async (
+    query: ProcedimentoQuery,
+    term?: string | null
+  ) => {
+    const whereClause = term
       ? {
           [Op.or]: [{ nome: { [Op.iLike]: '%' + term + '%' } }]
         }
       : {}
 
-    const procedimentosByName = await Procedimento.findAll({
+    const procedimentos = await Procedimento.findAll({
       include: [
         {
           model: Actor,
@@ -77,12 +84,19 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
         },
         {
           model: TipoProcedimento,
-          where: { ...whereTipo }
+          where: { ...whereClause }
         }
       ],
       where: { deleted: false, ...query },
       order: [['updatedAt', 'DESC']]
     })
+
+    return procedimentos
+  }
+
+  findAll = async (query: ProcedimentoQuery = {}, term?: string | null) => {
+    const procedimentosById = await this._findAllById(query, term)
+    const procedimentosByName = await this._findAllBySearchTerm(query, term)
 
     const procedimentos =
       isNumber(term) && procedimentosById.length > 0
