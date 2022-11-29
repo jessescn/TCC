@@ -8,7 +8,6 @@ import { NotFoundError } from 'types/express/errors'
 import { ComentarioModel } from 'domain/models/comentario'
 import { IProcedimentoRepo, IRepository } from 'repositories'
 import { IService } from 'services'
-import { ProcedimentoRepository } from 'repositories/sequelize/procedimento'
 
 export interface IComentarioService
   extends IService<ComentarioModel, ComentarioQuery> {
@@ -21,7 +20,7 @@ export interface IComentarioService
 
 export class ComentarioService implements IComentarioService {
   private repository: ComentarioRepository
-  private procedimentoRepo: ProcedimentoRepository
+  private procedimentoRepo: IProcedimentoRepo
 
   constructor(repository: IRepository, procedimentoRepo: IProcedimentoRepo) {
     this.repository = repository

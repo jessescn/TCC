@@ -67,9 +67,7 @@ describe('Formulario Service', () => {
 
   describe('findAll', () => {
     const repo = createMock<IRepository>({
-      findAll: jest
-        .fn()
-        .mockResolvedValue({ data: formularios, total: formularios.length })
+      findAll: jest.fn().mockResolvedValue(formularios)
     })
     const pagination: Pagination = {
       per_page: 1000,
@@ -82,7 +80,7 @@ describe('Formulario Service', () => {
       const result = await sut.findAll({}, pagination)
 
       expect(result.data).toEqual(formularios)
-      expect(repo.findAll).toBeCalledWith({}, pagination)
+      expect(repo.findAll).toBeCalledWith({}, null)
     })
 
     it('should find formularios which matches the provided query', async () => {
@@ -92,7 +90,7 @@ describe('Formulario Service', () => {
       const result = await sut.findAll(query, pagination)
 
       expect(result.data).toEqual(formularios)
-      expect(repo.findAll).toBeCalledWith(query, pagination)
+      expect(repo.findAll).toBeCalledWith(query, null)
     })
   })
 
@@ -106,9 +104,7 @@ describe('Formulario Service', () => {
       save: jest.fn()
     }
     const tipoRepo = createMock<IRepository>({
-      findAll: jest
-        .fn()
-        .mockResolvedValue({ data: [tipoProcedimentoWithSpies], total: 1 })
+      findAll: jest.fn().mockResolvedValue([tipoProcedimentoWithSpies])
     })
 
     const repo = createMock<IRepository>({
@@ -159,6 +155,56 @@ describe('Formulario Service', () => {
       expect(result).toEqual(formulario)
       expect(repo.findOne).toBeCalledWith(1)
       expect(repo.update).toBeCalledWith(1, data)
+    })
+  })
+
+  describe('findByTipo', () => {
+    const repo = createMock<IRepository>({
+      findAll: jest.fn().mockResolvedValue(formularios)
+    })
+
+    const tipoProcedimentos = [
+      createMock<TipoProcedimentoModel>({ formularios: [1] })
+    ]
+
+    const tipoRepo = createMock<IRepository>({
+      findAll: jest.fn().mockResolvedValue(tipoProcedimentos)
+    })
+
+    it('should return formularios filtered by tipo', async () => {
+      const sut = new FormularioService(repo, tipoRepo)
+
+      const result = await sut.findByTipo(1)
+
+      expect(result).toEqual(formularios)
+    })
+
+    it('should throw error if tipoProcedimento does not exists', async () => {
+      const tipoRepo = createMock<IRepository>({
+        findAll: jest.fn().mockResolvedValue([])
+      })
+      const sut = new FormularioService(repo, tipoRepo)
+
+      const shouldThrow = async () => {
+        await sut.findByTipo(1)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
+    })
+
+    it('should return an empty list if tipoProcedimento does not have formularios related', async () => {
+      const tipoProcedimentos = [
+        createMock<TipoProcedimentoModel>({ formularios: [] })
+      ]
+
+      const tipoRepo = createMock<IRepository>({
+        findAll: jest.fn().mockResolvedValue(tipoProcedimentos)
+      })
+      const sut = new FormularioService(repo, tipoRepo)
+
+      const result = await sut.findByTipo(1)
+
+      expect(result).toEqual([])
     })
   })
 })

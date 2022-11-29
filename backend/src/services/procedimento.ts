@@ -16,8 +16,7 @@ import {
 import {
   NewProcedimento,
   NewRevisao,
-  ProcedimentoQuery,
-  ProcedimentoRepository
+  ProcedimentoQuery
 } from 'repositories/sequelize/procedimento'
 import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
@@ -190,10 +189,8 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   async findAll(query: ProcedimentoQuery, pagination: Pagination) {
-    const procedimentos = await this.procedimentoRepo.findAll(
-      query,
-      pagination.term
-    )
+    const procedimentos: ProcedimentoModel[] =
+      await this.procedimentoRepo.findAll(query, pagination.term)
 
     const paginated = paginateList(procedimentos, pagination)
 
@@ -204,10 +201,8 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   async findAllByStatus(status: TStatus, pagination: Pagination) {
-    const procedimentos = await this.procedimentoRepo.findAllByStatus(
-      status,
-      pagination.term
-    )
+    const procedimentos: ProcedimentoModel[] =
+      await this.procedimentoRepo.findAllByStatus(status, pagination.term)
 
     const paginated = paginateList(procedimentos, pagination)
 

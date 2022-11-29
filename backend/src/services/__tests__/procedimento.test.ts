@@ -1,7 +1,7 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ProcedimentoModel, Resposta, Status } from 'domain/models/procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { IProcedimentoRepo, IRepository } from 'repositories'
+import { IProcedimentoRepo, IRepository, Pagination } from 'repositories'
 import {
   NewProcedimento,
   NewRevisao,
@@ -15,10 +15,13 @@ import {
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
+import { FormularioModel } from 'domain/models/formulario'
+import { ComentarioModel } from 'domain/models/comentario'
 
 describe('Procedimento Service', () => {
-  const procedimento = createMock<ProcedimentoModel>()
+  const procedimento = createMock<ProcedimentoModel>({ tipo: 1 })
   const procedimentos = createMockList<ProcedimentoModel>(2)
+  const tipoProcedimento = createMock<TipoProcedimentoModel>()
 
   const status = createMock<Status>()
   const baseRepo = createMock<IRepository>()
@@ -26,6 +29,12 @@ describe('Procedimento Service', () => {
   const statusService = createMock<IProcedimentoStatusService>({
     execute: jest.fn().mockResolvedValue(status)
   })
+
+  const pagination: Pagination = {
+    page: 1,
+    per_page: 1000,
+    term: null
+  }
 
   describe('create', () => {
     const tipoProcedimento = createMock<TipoProcedimentoModel>()
@@ -46,7 +55,13 @@ describe('Procedimento Service', () => {
     })
 
     it('should create a new procedimento', async () => {
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const result = await sut.create(usuario, data)
 
       expect(tipoRepo.findOne).toBeCalledWith(data.tipo)
@@ -66,7 +81,13 @@ describe('Procedimento Service', () => {
         findOne: jest.fn()
       })
 
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
 
       const shouldThrow = async () => {
         await sut.create(usuario, data)
@@ -83,7 +104,13 @@ describe('Procedimento Service', () => {
         findOne: jest.fn().mockResolvedValue(tipoWithPublico)
       })
 
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
 
       const shouldThrow = async () => {
         await sut.create(usuario, data)
@@ -100,7 +127,13 @@ describe('Procedimento Service', () => {
     })
 
     it('should delete an existing procedimento by id', async () => {
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const result = await sut.delete(1)
 
       expect(result).toEqual(procedimento)
@@ -113,7 +146,13 @@ describe('Procedimento Service', () => {
         findOne: jest.fn(),
         destroy: jest.fn().mockResolvedValue(procedimento)
       })
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
 
       const shouldThrow = async () => {
         await sut.delete(1)
@@ -129,7 +168,13 @@ describe('Procedimento Service', () => {
     })
 
     it('should find an existing procedimento by id', async () => {
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const result = await sut.findOne(1)
 
       expect(result).toEqual(procedimento)
@@ -143,20 +188,115 @@ describe('Procedimento Service', () => {
     })
 
     it('should return all procedimentos', async () => {
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
-      const result = await sut.findAll()
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
+      const result = await sut.findAll({}, pagination)
 
-      expect(result).toEqual(procedimentos)
-      expect(repo.findAll).toBeCalledWith({})
+      expect(result.data).toEqual(procedimentos)
+      expect(result.total).toEqual(procedimentos.length)
+      expect(repo.findAll).toBeCalledWith({}, null)
     })
 
     it('should return procedimentos which matches the query', async () => {
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const query: ProcedimentoQuery = { deleted: true }
 
-      await sut.findAll(query)
+      await sut.findAll(query, pagination)
 
-      expect(repo.findAll).toBeCalledWith(query)
+      expect(repo.findAll).toHaveBeenCalledWith(query, null)
+    })
+  })
+
+  describe('details', () => {
+    const repo = createMock<IProcedimentoRepo>({
+      findOne: jest.fn().mockResolvedValue(procedimento)
+    })
+
+    const tipoRepo = createMock<IRepository>({
+      findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+    })
+
+    const comentarios = createMockList<ComentarioModel>(2)
+
+    const comentarioRepo = createMock<IRepository>({
+      findAll: jest.fn().mockResolvedValue(comentarios)
+    })
+
+    const formularios = createMockList<FormularioModel>(2)
+
+    const formularioRepo = createMock<IRepository>({
+      findAll: jest.fn().mockResolvedValue(formularios)
+    })
+
+    it('should return details about an specific procedimento and related entities', async () => {
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        comentarioRepo,
+        formularioRepo,
+        statusService
+      )
+
+      const result = await sut.details(1)
+
+      expect(result.comentarios).toEqual(comentarios)
+      expect(result.formularios).toEqual(formularios)
+      expect(result.procedimento).toEqual(procedimento)
+      expect(result.tipoProcedimento).toEqual(tipoProcedimento)
+    })
+
+    it('should throw error if procedimento does not have related tipoProcedimentoId', async () => {
+      const procedimentoWithoutTipo = createMock<ProcedimentoModel>()
+
+      const repo = createMock<IProcedimentoRepo>({
+        findOne: jest.fn().mockResolvedValue(procedimentoWithoutTipo)
+      })
+
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        comentarioRepo,
+        formularioRepo,
+        statusService
+      )
+
+      const shouldThrow = async () => {
+        await sut.details(1)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
+    })
+  })
+
+  describe('findAllByStatus', () => {
+    const repo = createMock<IProcedimentoRepo>({
+      findAllByStatus: jest.fn().mockResolvedValue(procedimentos)
+    })
+
+    it('should procedimentos filtered by status paginated', async () => {
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
+
+      const result = await sut.findAllByStatus('criado', pagination)
+
+      expect(result.total).toEqual(procedimentos.length)
+      expect(result.data).toEqual(procedimentos)
     })
   })
 
@@ -167,7 +307,13 @@ describe('Procedimento Service', () => {
     })
 
     it('should update the status of an existing procedimento', async () => {
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const result = await sut.updateStatus(1, 'deferido')
 
       expect(result).toEqual(procedimento)
@@ -193,7 +339,13 @@ describe('Procedimento Service', () => {
     }
 
     it('should update an existing procedimento', async () => {
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const result = await sut.update(1, data)
 
       expect(result).toEqual(procedimento)
@@ -213,7 +365,13 @@ describe('Procedimento Service', () => {
         updateStatus: jest.fn().mockResolvedValue(procedimento)
       })
 
-      const sut = new ProcedimentoService(repo, baseRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
 
       const shouldThrow = async () => {
         await sut.update(1, data)
@@ -253,7 +411,13 @@ describe('Procedimento Service', () => {
     })
 
     it('should add a newRevisao to an existing procedimento', async () => {
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const result = await sut.newReview(1, usuario, data)
 
       const revisao = {
@@ -284,7 +448,13 @@ describe('Procedimento Service', () => {
         findOne: jest.fn().mockResolvedValue(tipoProcedimento)
       })
 
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
 
       await sut.newReview(1, usuario, data)
 
@@ -296,7 +466,13 @@ describe('Procedimento Service', () => {
         execute: jest.fn().mockResolvedValue(status)
       })
 
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
       const data = createMock<NewRevisao>({ aprovado: false })
 
       await sut.newReview(1, usuario, data)
@@ -318,7 +494,13 @@ describe('Procedimento Service', () => {
         updateStatus: jest.fn().mockResolvedValue(procedimento)
       })
 
-      const sut = new ProcedimentoService(repo, tipoRepo, statusService)
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
 
       const shouldThrow = async () => {
         await sut.newReview(1, usuario, data)

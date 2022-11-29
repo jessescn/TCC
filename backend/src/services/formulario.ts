@@ -58,7 +58,7 @@ export class FormularioService implements IFormularioService {
     return formulario
   }
 
-  async findAll(query: FormularioQuery = {}, pagination: Pagination) {
+  async findAll(query: FormularioQuery, pagination: Pagination) {
     const formularios = await this.repository.findAll(query, pagination.term)
 
     const paginated = paginateList(formularios, pagination)

@@ -104,19 +104,16 @@ export class ActorService implements IActorService {
 
     data.forEach(newActor => {
       const promise = new Promise((resolve, reject) => {
-        try {
-          this.repository
-            .create({
-              email: newActor.email,
-              nome: newActor.nome,
-              senha: 'default123',
-              profile: newActor.profile,
-              publico: newActor.publico
-            })
-            .then(actor => resolve(actor))
-        } catch (error) {
-          reject(error)
-        }
+        this.repository
+          .create({
+            email: newActor.email,
+            nome: newActor.nome,
+            senha: 'default123',
+            profile: newActor.profile,
+            publico: newActor.publico
+          })
+          .then(actor => resolve(actor))
+          .catch(error => reject(error))
       })
       createPromises.push(promise)
     })
