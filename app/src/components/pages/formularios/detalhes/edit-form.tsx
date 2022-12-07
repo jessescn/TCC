@@ -105,7 +105,7 @@ export default function EditForm({ onDuplicate }: Props) {
         pos="fixed"
         w="50px"
         top="40%"
-        right={16}
+        right="calc(50vw - 650px)"
         border="2px solid"
         borderColor="primary.dark"
         borderRadius="8px"

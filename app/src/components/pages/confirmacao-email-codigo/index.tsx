@@ -37,9 +37,10 @@ export const Content = () => {
               fontWeight="bold"
               color="info.success"
             >
-              Email verificado com sucesso! Clique abaixo para realizar o login.
+              Email verificado com sucesso! Você já pode fechar essa aba e
+              realizar login normalmente.
             </Text>
-            <Center mt="16px" fontSize="14px">
+            <Center mt="16px" fontSize="12px">
               <Link onClick={handleRedirect}>Voltar para o login</Link>
             </Center>
           </Center>

@@ -13,16 +13,19 @@ export default function PublicosSelect() {
   const { setValue, watch } = useFormContext()
 
   const publicos: string[] = watch('publicos', []) || []
-  const availablePublicos = useSelector(
+  const existentPublicos = useSelector(
     selectors.tipoProcedimentoDetalhes.getPublicos
   )
 
   const publicoOptions = useMemo(() => {
+    const composedList = new Set([...existentPublicos, ...publicos])
+    const availablePublicos = [...new Set(composedList)]
+
     return availablePublicos.map(publico => ({
       value: publico,
       label: publico
     }))
-  }, [publicos, availablePublicos])
+  }, [publicos, existentPublicos])
 
   const getSelectedOptions = () => {
     return publicoOptions.filter(option => publicos.includes(option.value))

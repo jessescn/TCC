@@ -30,7 +30,8 @@ describe('ProcedimentoStatus Service', () => {
 
     const email = templates['update-procedimento-status'](actor.email, {
       procedimento,
-      novoStatus: statusList.criado.label
+      novoStatus: statusList.criado.label,
+      dataAtualizacao: new Date().toISOString()
     })
 
     expect(repo.findOne).toBeCalledWith(procedimento.createdBy)

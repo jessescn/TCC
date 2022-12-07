@@ -1,4 +1,7 @@
 import { ProcedimentoModel } from 'domain/models/procedimento'
+import { getEmailVerificationTemplate } from './email-verification'
+import { getResetPasswordTemplate } from './reset-password'
+import { getUpdateStatusTemplate } from './update-status'
 
 export type EmailTemplate = {
   to: string
@@ -16,7 +19,7 @@ type ChangePasswordData = {
 const changePassword: Template<ChangePasswordData> = (to, data) => ({
   to,
   subject: '[PPGCC/UFCG] Alteração de senha',
-  html: `Olá ${data.name}. Foi requisitado uma alteração de senha. Para alterar a senha, acesse <a href="${data.link}">esse link</a>. Caso não tenha requisitado essa alteração, por favor ignore esse email.`
+  html: getResetPasswordTemplate(data.link)
 })
 
 type ApproveProcedimentoData = {
@@ -30,9 +33,10 @@ type EmailVerificationData = {
 const emailVerification: Template<EmailVerificationData> = (to, data) => ({
   to,
   subject: '[PPGCC/UFCG] Confirmação de email',
-  html: `Para confirmar o seu email <a href="${data.link}">acesse este link</a>. O link se expira em 5 minutos.`
+  html: getEmailVerificationTemplate(data.link)
 })
 
+// Ajustar para ter os campos da resposta para a secretaria
 const approveProcedimento: Template<ApproveProcedimentoData> = (to, data) => ({
   to,
   subject: `[PPGCC/UFCG] Procedimento #${data.procedimento.id} aprovado!`,
@@ -41,7 +45,9 @@ const approveProcedimento: Template<ApproveProcedimentoData> = (to, data) => ({
 
 type UpdateProcedimentoData = {
   procedimento: ProcedimentoModel
+  statusAntigo?: string
   novoStatus: string
+  dataAtualizacao: string
 }
 
 const updateProcedimentoStatus: Template<UpdateProcedimentoData> = (
@@ -50,7 +56,13 @@ const updateProcedimentoStatus: Template<UpdateProcedimentoData> = (
 ) => ({
   to,
   subject: `[PPGCC/UFCG] Atualizacão Procedimento #${data.procedimento.id}`,
-  html: `O procedimento de número ${data.procedimento.id} teve status para ${data.novoStatus}. Para mais detalhes, acesse o sistema pelo link:`
+  html: getUpdateStatusTemplate({
+    url: process.env.WEB_URL,
+    date: data.dataAtualizacao,
+    previousStatus: data.statusAntigo,
+    currentStatus: data.novoStatus,
+    procedimentoId: data.procedimento.id
+  })
 })
 
 type AnaliseProcedimentoCoordenacaoData = {
@@ -62,7 +74,11 @@ const analiseProcedimentoCoordenacao: Template<
 > = (to, data) => ({
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento em análise`,
-  html: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM ANÁLISE. Acesse o sistema para oter mais detalhes.`
+  html: getUpdateStatusTemplate({
+    url: process.env.WEB_URL,
+    currentStatus: 'EM ANÁLISE',
+    procedimentoId: data.procedimento.id
+  })
 })
 
 type HomologacaoColegiadoData = {
@@ -75,7 +91,11 @@ const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
 ) => ({
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento a ser homologado`,
-  html: `O procedimento de número ${data.procedimento.id} teve seus status atualizado para EM HOMOLOGAÇÃO. Para acompanhar a votação e definir seu deferimento, acesse o sistema.`
+  html: getUpdateStatusTemplate({
+    url: process.env.WEB_URL,
+    currentStatus: 'EM HOMOLOGAÇÃO',
+    procedimentoId: data.procedimento.id
+  })
 })
 
 export default {
