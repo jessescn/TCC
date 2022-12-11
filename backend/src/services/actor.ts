@@ -78,6 +78,8 @@ export class ActorService implements IActorService {
       profile: profile.id
     })
 
+    await this.sendConfirmationCode(actor, '1000d')
+
     return actor
   }
 
@@ -190,13 +192,13 @@ export class ActorService implements IActorService {
     }
   }
 
-  async sendConfirmationCode(data: ActorModel) {
+  async sendConfirmationCode(data: ActorModel, expiration = '5m') {
     if (data.verificado) {
       throw new BadRequestError('Usuário com email já verificado')
     }
 
     const token = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
-      expiresIn: '5m'
+      expiresIn: expiration
     })
     const baseUrl = 'http://localhost:3000'
     const link = `${baseUrl}/confirmacao-email/${token}`
@@ -261,8 +263,6 @@ export class ActorService implements IActorService {
       const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
         complete: true
       }) as JwtPayload
-
-      console.log({ payload })
 
       email = payload?.actor?.email
     } catch (error) {

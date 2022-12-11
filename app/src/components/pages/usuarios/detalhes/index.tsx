@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { LoadingPage } from 'components/molecules/loading'
+import { ErrorPage } from 'components/pages/error-page'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { UpdateUser } from 'services/usuarios'
@@ -10,6 +11,7 @@ import Header from './header'
 
 export default function Content() {
   const usuario = useSelector(selectors.userDetalhes.getUsuario)
+  const statusFetch = useSelector(state => state.userDetalhes.statusFetch)
 
   const loadForm = useRef(false)
   const formControls = useForm()
@@ -37,6 +39,8 @@ export default function Content() {
       actions.userDetalhes.update({ data: payload, id: usuario.id })
     )
   }
+
+  if (statusFetch === 'failure') return <ErrorPage />
 
   return !usuario ? (
     <LoadingPage />

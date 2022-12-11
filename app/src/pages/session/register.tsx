@@ -1,5 +1,5 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/register/content'
+import { Content } from 'components/pages/register'
 
 export default function Register() {
   return (

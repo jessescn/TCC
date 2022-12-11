@@ -24,9 +24,7 @@ export type RegisterForm = CreateUser & {
   confirmPassword: string
 }
 
-export const Content = () => {
-  const navigate = useNavigate()
-
+export const RegisterFormContent = () => {
   const {
     register,
     handleSubmit,
@@ -40,12 +38,6 @@ export const Content = () => {
   const handleRegisterSubmit = (form: RegisterForm) => {
     store.dispatch(actions.user.create(form))
   }
-
-  useEffect(() => {
-    if (status.status === 'success') {
-      navigate('/login')
-    }
-  }, [status])
 
   const nameProps: fieldProps = {
     invalid: Boolean(errors.nome),

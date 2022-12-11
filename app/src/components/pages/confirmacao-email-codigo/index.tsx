@@ -41,7 +41,9 @@ export const Content = () => {
               realizar login normalmente.
             </Text>
             <Center mt="16px" fontSize="12px">
-              <Link onClick={handleRedirect}>Voltar para o login</Link>
+              <Link onClick={handleRedirect} textDecor="underline">
+                Voltar para o login
+              </Link>
             </Center>
           </Center>
         )}

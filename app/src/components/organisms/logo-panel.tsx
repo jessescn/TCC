@@ -18,7 +18,7 @@ const LogoPanel = ({ side, ...styleProps }: Props) => {
       {...styleProps}
     >
       <Image
-        alt="ufcg logo image"
+        alt="ufcg logo"
         src="./logo_ufcg.png"
         maxW={{ base: '100px', md: '150px' }}
       />

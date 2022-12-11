@@ -46,16 +46,16 @@ export default function Routes() {
         }
       />
       <Route
+        path="/confirmacao-email/:code"
+        element={<ConfirmacaoEmailCodigo />}
+      />
+      <Route
         path="/confirmacao-email"
         element={
           <AuthRedirect redirectTo="/home">
             <ConfirmacaoEmail />
           </AuthRedirect>
         }
-      />
-      <Route
-        path="/confirmacao-email/:code"
-        element={<ConfirmacaoEmailCodigo />}
       />
       <Route path="/alteracao-senha" element={<AlteracaoSenha />} />
       <Route path="/alteracao-senha/:code" element={<AlteracaoSenhaCodigo />} />
