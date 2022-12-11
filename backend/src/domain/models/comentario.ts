@@ -47,7 +47,7 @@ const Comentario = sequelize.define<ComentarioAttributes>('comentario', {
     type: DataTypes.INTEGER
   },
   conteudo: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   deleted: {

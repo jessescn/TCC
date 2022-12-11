@@ -30,10 +30,10 @@ const Table = () => {
           columns={[
             { content: 'ID', props: { width: '5%' } },
             { content: 'Nome', props: { width: '40%' } },
-            { content: 'Email', props: { width: '20%' } },
+            { content: 'Email', props: { width: '25%' } },
             { content: 'Profile', props: { width: '10%' } },
-            { content: 'Publicos', props: { width: '15%' } },
-            { content: 'Atualizado em', props: { width: '10%' } },
+            { content: 'Publicos', props: { width: '5%' } },
+            { content: 'Atualizado em', props: { width: '15%' } },
             { content: '', props: { width: '5%' } }
           ]}
           rows={usuarios.map(usuario => [
@@ -41,7 +41,7 @@ const Table = () => {
             { content: usuario.nome },
             { content: usuario.email },
             { content: usuario.profile.nome },
-            { content: `[${usuario.publico}]` },
+            { content: usuario.publico.length },
             {
               content: !usuario.updatedAt
                 ? '-'

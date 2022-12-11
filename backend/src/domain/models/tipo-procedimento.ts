@@ -59,19 +59,19 @@ const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
       primaryKey: true
     },
     nome: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     descricao: {
-      type: DataTypes.STRING(1000)
+      type: DataTypes.TEXT
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       defaultValue: 'inativo'
     },
     escopo: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       defaultValue: 'privado'
     },

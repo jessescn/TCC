@@ -61,11 +61,11 @@ const Formulario = sequelize.define<FormularioAttributes>('formulario', {
     primaryKey: true
   },
   nome: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   descricao: {
-    type: DataTypes.STRING
+    type: DataTypes.TEXT
   },
   campos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
