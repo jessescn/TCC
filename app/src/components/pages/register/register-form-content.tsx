@@ -125,88 +125,75 @@ export const RegisterFormContent = () => {
   ]
 
   return (
-    <Flex
-      w="100%"
-      maxW="800px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      flexDirection={{ base: 'column-reverse', md: 'row' }}
+    <Box
+      mt="16px"
+      w={{ base: '100%', md: '470px' }}
+      px={{ base: '8px', md: '32px' }}
     >
-      <Box
-        mt="16px"
-        w={{ base: '100%', md: '470px' }}
-        px={{ base: '8px', md: '32px' }}
+      <Text fontWeight="bold" fontSize={{ base: '16px', md: '20px' }} mb="16px">
+        Cadastro
+      </Text>
+      <form
+        onSubmit={handleSubmit(handleRegisterSubmit)}
+        data-testid="register-form"
       >
-        <Text
-          fontWeight="bold"
-          fontSize={{ base: '16px', md: '20px' }}
-          mb="16px"
-        >
-          Cadastro
-        </Text>
-        <form
-          onSubmit={handleSubmit(handleRegisterSubmit)}
-          data-testid="register-form"
-        >
-          {formFields.map(field => (
-            <>
-              <FormInput
-                key={field.id}
-                id={field.id}
-                type={field.type}
-                isInvalid={field.invalid}
-                placeholder={field.placeholder}
-                label={{
-                  text: field.label,
-                  props: {
-                    fontSize: { base: '14px', md: '16px' },
-                    htmlFor: field.id
-                  }
-                }}
-                register={field.register}
-                errors={field.errors}
+        {formFields.map(field => (
+          <>
+            <FormInput
+              key={field.id}
+              id={field.id}
+              type={field.type}
+              isInvalid={field.invalid}
+              placeholder={field.placeholder}
+              label={{
+                text: field.label,
+                props: {
+                  fontSize: { base: '14px', md: '16px' },
+                  htmlFor: field.id
+                }
+              }}
+              register={field.register}
+              errors={field.errors}
+            />
+            {field.id === 'senha' && (
+              <PasswordStrengthBar
+                key="password-strenght"
+                style={{ marginTop: '10px' }}
+                password={watch('senha')}
+                scoreWords={[
+                  'muito fraco',
+                  'fraco',
+                  'mediano',
+                  'forte',
+                  'muito forte'
+                ]}
+                shortScoreWord="senha muito curta"
+                minLength={8}
               />
-              {field.id === 'senha' && (
-                <PasswordStrengthBar
-                  key="password-strenght"
-                  style={{ marginTop: '10px' }}
-                  password={watch('senha')}
-                  scoreWords={[
-                    'muito fraco',
-                    'fraco',
-                    'mediano',
-                    'forte',
-                    'muito forte'
-                  ]}
-                  shortScoreWord="senha muito curta"
-                  minLength={8}
-                />
-              )}
-            </>
-          ))}
-          <Center mt="32px" flexDir="column" mb="16px">
-            <Button type="submit" isLoading={status.status === 'loading'}>
-              Cadastrar
-            </Button>
-            {status.status === 'failure' && (
-              <Text mt="8px" color="info.error" fontSize="12px">
-                {status.message || 'erro ao criar novo usuário'}
-              </Text>
             )}
-            <RouterLink to="/login">
-              <Link
-                as="p"
-                fontSize="12px"
-                textDecoration="underline"
-                color="primary.default"
-              >
-                já possuo conta!
-              </Link>
-            </RouterLink>
-          </Center>
-        </form>
-      </Box>
-      <LogoPanel side="right" />
-    </Flex>
+          </>
+        ))}
+        <Center mt="32px" flexDir="column" mb="16px">
+          <Button type="submit" isLoading={status.status === 'loading'}>
+            Cadastrar
+          </Button>
+          {status.status === 'failure' && (
+            <Text mt="8px" color="info.error" fontSize="12px">
+              {status.message || 'erro ao criar novo usuário'}
+            </Text>
+          )}
+          <RouterLink to="/login">
+            <Link
+              as="p"
+              fontSize="12px"
+              textDecoration="underline"
+              color="primary.default"
+            >
+              já possuo conta!
+            </Link>
+          </RouterLink>
+        </Center>
+      </form>
+    </Box>
   )
 }

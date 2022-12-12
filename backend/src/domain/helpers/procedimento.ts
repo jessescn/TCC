@@ -25,7 +25,7 @@ export class ProcedimentoHelper {
 
     const numberOfVotes = votes.length
 
-    return numberOfVotes >= Math.floor(numberOfColegiados / 2) // TODO; O que acontece quando a quantidade for par?
+    return numberOfVotes >= Math.ceil(numberOfColegiados / 2)
   }
 
   static getCurrentStatus = (procedimento: ProcedimentoModel) => {
