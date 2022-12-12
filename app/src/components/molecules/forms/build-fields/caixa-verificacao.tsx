@@ -11,6 +11,39 @@ import React, { useEffect, useState } from 'react'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
 import { BaseBuildFieldProps } from '.'
 
+type CaixaProps = {
+  onUpdate: (value: any, idx: number) => void
+  onDelete: (idx: number) => void
+  valor: string
+  index: number
+}
+
+const Caixa = ({ onDelete, onUpdate, valor, index }: CaixaProps) => {
+  return (
+    <>
+      <Checkbox isDisabled size="lg" />
+      <Input
+        ml="8px"
+        border="none"
+        borderBottom="1px solid #BCBCBC"
+        _focus={{ boxShadow: 'none' }}
+        size="sm"
+        onChange={ev => {
+          onUpdate(ev, index)
+        }}
+        defaultValue={valor}
+      />
+      <IconButton
+        aria-label=""
+        size="sm"
+        onClick={() => onDelete(index)}
+        bgColor="transparent"
+        icon={<Icon as={AiOutlineClose} />}
+      />
+    </>
+  )
+}
+
 export default function CaixaVerificacaoBuilder({
   onUpdate,
   campo
@@ -34,7 +67,7 @@ export default function CaixaVerificacaoBuilder({
       filtered.splice(idx, 1, ev.target.value)
       setCaixas(filtered)
     },
-    400
+    2000
   )
 
   useEffect(() => {
@@ -48,22 +81,11 @@ export default function CaixaVerificacaoBuilder({
     <CheckboxGroup>
       {caixas.map((campo, idx) => (
         <Flex my="8px" key={`${campo}-${idx}`}>
-          <Checkbox isDisabled size="lg" key={`${campo}-${idx}`} />
-          <Input
-            ml="8px"
-            border="none"
-            borderBottom="1px solid #BCBCBC"
-            _focus={{ boxShadow: 'none' }}
-            size="sm"
-            onChange={ev => handleUpdateCaixa(ev, idx)}
-            defaultValue={campo}
-          />
-          <IconButton
-            aria-label=""
-            size="sm"
-            onClick={() => handleDeleteCaixa(idx)}
-            bgColor="transparent"
-            icon={<Icon as={AiOutlineClose} />}
+          <Caixa
+            onDelete={handleDeleteCaixa}
+            onUpdate={handleUpdateCaixa}
+            valor={campo}
+            index={idx}
           />
         </Flex>
       ))}

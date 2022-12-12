@@ -33,7 +33,7 @@ export default function GrelhaMultiplaBuilder({
     }
 
     setOpcoes(prev => ({ ...prev, colunas: colunasCopy }))
-  }, 400)
+  }, 2000)
 
   const handleUpdateLinha = debounce((idx: number, newValue?: string) => {
     const linhasCopy = JSON.parse(JSON.stringify(opcoes.linhas)) as string[]
@@ -45,7 +45,7 @@ export default function GrelhaMultiplaBuilder({
     }
 
     setOpcoes(prev => ({ ...prev, linhas: linhasCopy }))
-  }, 400)
+  }, 2000)
 
   useEffect(() => {
     onUpdate({

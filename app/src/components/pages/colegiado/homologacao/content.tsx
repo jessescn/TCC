@@ -6,8 +6,7 @@ import {
   Icon,
   Select,
   Stack,
-  Text,
-  Tooltip
+  Text
 } from '@chakra-ui/react'
 import Formulario from 'components/organisms/procedimento/formulario'
 import Header from 'components/organisms/procedimento/header'
@@ -16,10 +15,10 @@ import { BiCommentDetail } from 'react-icons/bi'
 import { selectors, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
 
-import { motion } from 'framer-motion'
-import Votes from './vote'
-import Comments from './comments'
 import { FormularioModel } from 'domain/models/formulario'
+import { motion } from 'framer-motion'
+import Comments from './comments'
+import Votes from './vote'
 
 const Content = () => {
   const procedimento = useSelector(
@@ -119,19 +118,17 @@ const Content = () => {
         </Box>
       </Box>
       <Flex mt="8px">
-        <Tooltip label="Comentários">
-          <Button
-            size="sm"
-            bgColor="primary.dark"
-            aria-label=""
-            color="initial.white"
-            onClick={handleToggleComments}
-            _hover={{ bgColor: 'primary.default' }}
-            leftIcon={<Icon color="#fff" as={BiCommentDetail} />}
-          >
-            Comentários
-          </Button>
-        </Tooltip>
+        <Button
+          size="sm"
+          bgColor="primary.dark"
+          aria-label=""
+          color="initial.white"
+          onClick={handleToggleComments}
+          _hover={{ bgColor: 'primary.default' }}
+          leftIcon={<Icon color="#fff" as={BiCommentDetail} />}
+        >
+          Comentários
+        </Button>
         <motion.div
           hidden={hidden}
           initial={false}

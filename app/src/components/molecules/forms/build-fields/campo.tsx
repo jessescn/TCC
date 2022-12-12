@@ -10,12 +10,13 @@ import {
   Text,
   Tooltip
 } from '@chakra-ui/react'
-import { debounce } from 'lodash'
+import { opcoesCampos } from 'components/molecules/forms/build-fields'
 import { TipoCampoFormulario } from 'domain/models/formulario'
 import { CampoTipoBase } from 'domain/types/campo-tipos'
+import { debounce } from 'lodash'
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi'
 import { RiDeleteBinLine } from 'react-icons/ri'
-import { opcoesCampos } from 'components/molecules/forms/build-fields'
+import Descricao from './campo-descricao'
 
 export type CampoFormulario = {
   ordem: number
@@ -55,8 +56,11 @@ export default function Campo({
   return (
     <Box borderColor="secondary.dark" borderWidth="1px" borderRadius="4px">
       <Flex justifyContent="space-between" py="8px" px="16px">
-        <Text mr="8px" fontSize="12px" color="initial.black">
-          Campo ID: {campo.ordem}
+        <Text mr="8px" fontSize="14px" color="initial.black">
+          Campo ID:{' '}
+          <Text as="span" fontWeight="bold">
+            {campo.ordem}
+          </Text>
         </Text>
         <Flex alignItems="center">
           <Text mr="8px" fontSize="14px" color="initial.black">
@@ -70,38 +74,49 @@ export default function Campo({
           />
         </Flex>
       </Flex>
-      <Stack direction="row" spacing="16px" my="8px" px="16px">
-        {campo.tipo !== 'paragrafo' && (
-          <Input
-            placeholder="Digite a pergunta do campo"
-            size="sm"
-            defaultValue={
-              campo.configuracao_campo.titulo || 'Texto nova pergunta'
-            }
-            onChange={handleUpdateTitle}
-          />
-        )}
-        <Select
-          size="sm"
-          ml="8px"
-          defaultValue={campo.tipo}
-          onChange={e =>
-            onUpdate({
-              ...campo,
-              tipo: e.target.value as any,
-              configuracao_campo: {}
-            })
-          }
-        >
-          {Array.from(opcoesCampos.keys()).map(opcaoKey => (
-            <option key={opcaoKey} value={opcaoKey}>
-              {opcoesCampos.get(opcaoKey)?.label}
-            </option>
-          ))}
-        </Select>
-      </Stack>
-      {Componente && (
+      <Box p="16px">
+        <Stack direction="row" spacing="16px" my="8px">
+          <Box w="60%">
+            <Text fontSize="12px" mb="8px" color="secondary.dark">
+              Título
+            </Text>
+            <Input
+              placeholder="Título do Campo"
+              size="sm"
+              defaultValue={campo.configuracao_campo.titulo || 'Título'}
+              onChange={handleUpdateTitle}
+            />
+          </Box>
+          <Box w="40%">
+            <Text fontSize="12px" mb="8px" color="secondary.dark">
+              Tipo Campo
+            </Text>
+            <Select
+              size="sm"
+              defaultValue={campo.tipo}
+              onChange={e =>
+                onUpdate({
+                  ...campo,
+                  tipo: e.target.value as any,
+                  configuracao_campo: {}
+                })
+              }
+            >
+              {Array.from(opcoesCampos.keys()).map(opcaoKey => (
+                <option key={opcaoKey} value={opcaoKey}>
+                  {opcoesCampos.get(opcaoKey)?.label}
+                </option>
+              ))}
+            </Select>
+          </Box>
+        </Stack>
+        <Descricao campo={campo} onUpdate={onUpdate} />
+      </Box>
+      {Componente && campo.tipo !== 'paragrafo' && (
         <Box px="16px" my="16px">
+          <Text fontSize="12px" mb="8px" color="secondary.dark">
+            Informações Campo
+          </Text>
           <Componente onUpdate={onUpdate} campo={campo} />
         </Box>
       )}

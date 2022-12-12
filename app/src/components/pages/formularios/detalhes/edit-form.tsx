@@ -6,13 +6,15 @@ import {
   Tooltip,
   useDisclosure
 } from '@chakra-ui/react'
+import Campo, {
+  CampoFormulario
+} from 'components/molecules/forms/build-fields/campo'
 import ConfirmModal from 'components/organisms/confirm-modal'
 import lodash from 'lodash'
 import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { AiOutlineClear, AiOutlineImport } from 'react-icons/ai'
 import { BiLayerPlus } from 'react-icons/bi'
-import Campo, { CampoFormulario } from './campo'
 
 type Props = {
   onDuplicate: () => void

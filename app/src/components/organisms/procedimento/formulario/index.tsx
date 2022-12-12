@@ -1,8 +1,16 @@
-import { Button, Collapse, Flex, Icon, useDisclosure } from '@chakra-ui/react'
+import {
+  Button,
+  Center,
+  Collapse,
+  Flex,
+  Icon,
+  Text,
+  useDisclosure
+} from '@chakra-ui/react'
 import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento/content'
 import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel, Resposta } from 'domain/models/procedimento'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { BsChevronBarExpand, BsChevronExpand } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
@@ -77,6 +85,14 @@ export default function Formulario({
           {isOpen ? 'Ocultar formulário' : 'Expandir formulário'}
         </Button>
       </Flex>
+      {!isOpen && (
+        <Center h="100%">
+          <Text fontSize="14px">
+            Formulário(s) ocultado(s). Para visualizar, clique em 'Expandir
+            formulário'
+          </Text>
+        </Center>
+      )}
       <Collapse in={isOpen} animateOpacity>
         <FormProvider {...methods}>
           <form

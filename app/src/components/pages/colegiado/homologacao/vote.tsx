@@ -98,7 +98,6 @@ const Votes = ({ procedimento }: Props) => {
             borderColor="#000"
             aria-label="vote no"
             isDisabled={statusVote === 'loading' || !isColegiado}
-            isLoading={isPositiveVote && statusVote === 'loading'}
             _hover={{ bgColor: 'info.success' }}
             icon={
               <Icon
@@ -121,7 +120,6 @@ const Votes = ({ procedimento }: Props) => {
             _hover={{ bgColor: 'info.error' }}
             aria-label="vote yes"
             isDisabled={statusVote === 'loading' || !isColegiado}
-            isLoading={isPositiveVote && statusVote === 'loading'}
             icon={
               <Icon
                 _hover={{ color: 'initial.white' }}
@@ -149,6 +147,7 @@ const Votes = ({ procedimento }: Props) => {
           size="xs"
           onClick={onOpen}
           disabled={isSaveDisabled}
+          isLoading={statusVote === 'loading'}
         >
           Salvar voto
         </Button>

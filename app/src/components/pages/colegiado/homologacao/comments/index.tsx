@@ -53,7 +53,7 @@ const Comments = ({ procedimento }: Props) => {
           <Text fontSize="12px">Nenhum comentário</Text>
         )}
         {comentarios.map(comentario => (
-          <Comment comentario={comentario} />
+          <Comment key={`${comentario.id}`} comentario={comentario} />
         ))}
       </Stack>
       <InputGroup mt="8px">

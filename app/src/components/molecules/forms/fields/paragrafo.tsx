@@ -22,7 +22,12 @@ export function CampoParagrafo({
       <Flex w="100%" justifyContent="space-between">
         <Text fontWeight="bold" mb="8px" fontSize="14px">
           {titulo || ''}
-          <Text ml="4px" as="span" color="info.error" hidden={!obrigatorio}>
+          <Text
+            ml="4px"
+            as="span"
+            color="info.error"
+            hidden={!obrigatorio || !titulo}
+          >
             *
           </Text>
         </Text>
@@ -55,7 +60,21 @@ export function CampoParagrafo({
           )}
         </Flex>
       </Flex>
-      {descricao && <Text fontSize="12px">{descricao}</Text>}
+      {descricao && (
+        <>
+          <Text fontSize="14px">
+            {descricao}
+            <Text
+              ml="4px"
+              as="span"
+              color="info.error"
+              hidden={!obrigatorio || !!titulo}
+            >
+              *
+            </Text>
+          </Text>
+        </>
+      )}
     </Box>
   )
 }

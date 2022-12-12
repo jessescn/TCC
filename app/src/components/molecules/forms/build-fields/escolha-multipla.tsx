@@ -34,7 +34,7 @@ export default function EscolhaMultiplaBuilder({
       filtered.splice(idx, 1, ev.target.value)
       setOpcoes(filtered)
     },
-    400
+    2000
   )
 
   useEffect(() => {
