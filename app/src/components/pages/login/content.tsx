@@ -17,6 +17,8 @@ type LoginForm = {
 export const Content = () => {
   const navigate = useNavigate()
 
+  console.log({ apiURL: process.env.REACT_APP_API_BASE_URL })
+
   const {
     register,
     handleSubmit,

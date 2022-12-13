@@ -2,12 +2,8 @@
 import { Dialect, Sequelize } from 'sequelize'
 import config from 'database/config'
 
-const environment =
-  (process.env.NODE_ENV as keyof typeof config) || 'development'
-
 const createSequelizeInstance = () => {
-  const { username, database, host, password, dialect, port } =
-    config[environment]
+  const { username, database, host, password, dialect, port } = config
 
   const uri = `postgresql://${username}:${password}@${host}:${port}/${database}`
 

@@ -1,17 +1,19 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_PATH=src NODE_ENV=development nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
-    "prod": "NODE_PATH=src NODE_ENV=production nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
-    "build": "tsc",
+    "dev": "NODE_PATH=src NODE_ENV=dev nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
+    "start": "yarn build && cd dist/ && NODE_PATH=dist/src NODE_ENV=prod node index.js",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "test": "NODE_PATH=src jest",
     "tw": "NODE_PATH=src jest --watch --coverage",
     "lint": "eslint --ext .js,.ts .",
     "coverage": "NODE_PATH=src jest --coverage",
-    "clear": "rm -rf ./db-data"
+    "clear": "rm -rf ./db-data",
+    "deploy": "gcloud run deploy --env-vars-file=.env.service.yaml",
+    "local-deploy": "gcloud beta code dev --dockerfile=Dockerfile --local-port=8080"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",
@@ -36,9 +38,13 @@
     "jest-ts-auto-mock": "^2.1.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
     "ts-auto-mock": "^3.6.2",
     "ts-jest": "^28.0.1",
     "ts-node": "^10.7.0",
+    "tsc-alias": "^1.8.2",
+    "tsconfig-paths": "^4.1.1",
+    "tscpaths": "^0.0.9",
     "ttypescript": "^1.5.13",
     "typescript": "^4.6.3"
   },

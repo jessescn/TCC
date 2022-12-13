@@ -1,24 +1,32 @@
 {
   "include": [
-    "./src/**/*",
+    "src/**/*"
   ],
   "exclude": [
     ".sequelizerc",
     "node_modules"
   ],
   "compilerOptions": {
-    "baseUrl": "src",
-    "target": "es2017",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "src/*"
+      ]
+    },
     "types": [
       "node",
       "jest"
     ],
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "es6"
+    ],
     "allowJs": true,
-    "moduleResolution": "node",
+    "outDir": "dist",
+    "rootDir": "src",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
+    "resolveJsonModule": true,
     "plugins": [
       {
         "transform": "ts-auto-mock/transformer",

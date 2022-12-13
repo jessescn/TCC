@@ -4,20 +4,20 @@ services:
     build: .
     command: npm run dev
     volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+      - .:/app/
+      - /app/node_modules
     ports:
       - '8000:8000'
     depends_on:
       - postgres
     env_file:
-      - .env
+      - .env.dev
   postgres:
     image: 'postgres:latest'
     ports:
       - 5432:5432
     env_file:
-      - .env
+      - .env.dev
     volumes:
       - ./db-data/:/var/lib/postgresql/data/
 volumes:
