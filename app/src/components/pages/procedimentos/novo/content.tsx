@@ -80,11 +80,16 @@ export default function Content() {
     <LoadingPage />
   ) : (
     <Flex w="100%" h="100%" maxW="900px" flexDir="column">
-      <Header tipoProcedimento={tipoProcedimento} />
       <FormProvider {...methods}>
         <form id="novo-procedimento" onSubmit={methods.handleSubmit(onSubmit)}>
           {formularios[currentIdx] && (
-            <RenderFormulario formulario={formularios[currentIdx]} />
+            <>
+              <Header
+                titulo={formularios?.[currentIdx].nome}
+                descricao={formularios?.[currentIdx].descricao}
+              />
+              <RenderFormulario formulario={formularios[currentIdx]} />
+            </>
           )}
           <Footer
             currentIdx={currentIdx}

@@ -1,11 +1,11 @@
 import { Box, Text } from '@chakra-ui/react'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
 type Props = {
-  tipoProcedimento: TipoProcedimentoModel
+  titulo?: string
+  descricao?: string
 }
 
-export default function Header({ tipoProcedimento }: Props) {
+export default function Header({ titulo, descricao }: Props) {
   return (
     <Box
       bgColor="initial.white"
@@ -14,10 +14,12 @@ export default function Header({ tipoProcedimento }: Props) {
       borderRadius="8px"
       mb="16px"
     >
-      <Text as="h1" fontSize="24px" fontWeight="bold" mb="16px">
-        {tipoProcedimento.nome}
-      </Text>
-      <Text as="h2">{tipoProcedimento.descricao}</Text>
+      {titulo && (
+        <Text as="h1" fontSize="24px" fontWeight="bold" mb="16px">
+          {titulo}
+        </Text>
+      )}
+      {descricao && <Text as="h2">{descricao}</Text>}
     </Box>
   )
 }

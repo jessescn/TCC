@@ -98,7 +98,10 @@ export default function Campo({
                 onUpdate({
                   ...campo,
                   tipo: e.target.value as any,
-                  configuracao_campo: {}
+                  configuracao_campo: {
+                    titulo: campo.configuracao_campo.titulo,
+                    descricao: campo.configuracao_campo.descricao
+                  }
                 })
               }
             >
