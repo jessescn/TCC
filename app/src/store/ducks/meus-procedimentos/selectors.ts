@@ -5,6 +5,10 @@ export const getRoot = (state: State) => {
   return state.meusProcedimentos
 }
 
+export const isLoadingContent = createSelector([getRoot], state => {
+  return state.status === 'loading'
+})
+
 export const getProcedimentos = createSelector([getRoot], state => {
   return state.procedimentos
 })

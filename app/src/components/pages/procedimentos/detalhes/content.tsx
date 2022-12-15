@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Spinner } from '@chakra-ui/react'
+import { Box, Divider } from '@chakra-ui/react'
 import RenderProcedimento from 'components/organisms/procedimento'
 import Header from 'components/organisms/procedimento/header'
 import { Procedimento } from 'domain/entity/procedimento'
@@ -17,11 +17,7 @@ const Content = () => {
     ? Procedimento.getCamposInvalidos(procedimento, formularios)
     : []
 
-  return !procedimento?.id ? (
-    <Flex justifyContent="center">
-      <Spinner />
-    </Flex>
-  ) : (
+  return !procedimento ? null : (
     <Box
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.2)"
       w="100%"

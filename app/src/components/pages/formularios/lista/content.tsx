@@ -4,12 +4,14 @@ import FormInput from 'components/molecules/forms/input'
 import { Button } from 'components/atoms/button'
 import FormulariosTable from 'components/pages/formularios/lista/table'
 import { useNavigate } from 'react-router-dom'
-import { actions, store, useSelector } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
+import { LoadingPage } from 'components/molecules/loading'
 
 export function Content() {
   const navigate = useNavigate()
 
-  const pagination = useSelector(state => state.formulario.pagination)
+  const pagination = useSelector(selectors.formulario.getPagination)
+  const isLoading = useSelector(selectors.formulario.isLoadingContent)
 
   const handleSearch = (termo: string) => {
     store.dispatch(
@@ -61,15 +63,7 @@ export function Content() {
           Novo Formulário
         </Button>
       </Flex>
-      <Box
-        mt="24px"
-        borderColor="secondary.dark"
-        borderWidth="1px"
-        borderRadius="8px"
-        p="16px"
-      >
-        <FormulariosTable />
-      </Box>
+      {isLoading ? <LoadingPage /> : <FormulariosTable />}
     </Box>
   )
 }

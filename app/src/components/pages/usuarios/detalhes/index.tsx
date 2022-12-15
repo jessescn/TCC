@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react'
-import { LoadingPage } from 'components/molecules/loading'
 import { ErrorPage } from 'components/pages/error-page'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -42,9 +41,7 @@ export default function Content() {
 
   if (statusFetch === 'failure') return <ErrorPage />
 
-  return !usuario ? (
-    <LoadingPage />
-  ) : (
+  return (
     <Box
       w="100%"
       h="100%"

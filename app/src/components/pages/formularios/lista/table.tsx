@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   Icon,
   IconButton,
@@ -9,23 +10,21 @@ import {
   Text,
   useDisclosure
 } from '@chakra-ui/react'
-import { MdSearchOff } from 'react-icons/md'
 import ConfirmModal from 'components/organisms/confirm-modal'
 import SimpleTable from 'components/organisms/simple-table'
 import { FormularioModel } from 'domain/models/formulario'
 import { useState } from 'react'
 import { AiFillEdit } from 'react-icons/ai'
+import { MdSearchOff } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
-import { LoadingPage } from 'components/molecules/loading'
 
 export default function FormulariosTable() {
   const navigate = useNavigate()
   const confirmModalControls = useDisclosure()
 
   const formularios = useSelector(selectors.formulario.getFormularios)
-  const status = useSelector(state => state.formulario.status)
   const pagination = useSelector(state => state.formulario.pagination)
   const total = useSelector(state => state.formulario.total)
 
@@ -54,10 +53,6 @@ export default function FormulariosTable() {
     store.dispatch(actions.formulario.list({ ...pagination, page: newPage }))
   }
 
-  if (status === 'loading') {
-    return <LoadingPage />
-  }
-
   const getEditMenu = (form: FormularioModel) => {
     return (
       <Menu>
@@ -79,7 +74,13 @@ export default function FormulariosTable() {
   }
 
   return formularios.length > 0 ? (
-    <>
+    <Box
+      mt="24px"
+      borderColor="secondary.dark"
+      borderWidth="1px"
+      borderRadius="8px"
+      p="16px"
+    >
       <SimpleTable
         currentPage={pagination.page}
         onChangePage={handleUpdatePage}
@@ -109,7 +110,7 @@ export default function FormulariosTable() {
         {...confirmModalControls}
         onConfirm={handleConfirmDeletion}
       />
-    </>
+    </Box>
   ) : (
     <Center flexDir="column" h="40vh">
       <Icon fontSize="45px" as={MdSearchOff} />

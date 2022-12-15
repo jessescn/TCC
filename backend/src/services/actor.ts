@@ -200,7 +200,7 @@ export class ActorService implements IActorService {
     const token = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
       expiresIn: expiration
     })
-    const baseUrl = 'http://localhost:3000'
+    const baseUrl = process.env.WEB_URL || 'http://localhost:8000'
     const link = `${baseUrl}/confirmacao-email/${token}`
 
     const template = templates['verificacao-email']

@@ -68,6 +68,14 @@ export default function Routes() {
         }
       />
       <Route
+        path="/home"
+        element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/formularios"
         element={
           <PrivateRoute allowedProfiles={['coordenacao']}>

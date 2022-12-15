@@ -74,6 +74,7 @@ const Comments = ({ procedimento }: Props) => {
         <InputRightElement h={8}>
           <IconButton
             onClick={handleComment}
+            isDisabled={value.trim() === ''}
             size="md"
             _focus={{ boxShadow: 'none' }}
             _active={{ bgColor: 'transparent' }}

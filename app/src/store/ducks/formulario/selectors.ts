@@ -9,6 +9,10 @@ export const getRoot = (state: State) => {
   return state.formulario
 }
 
+export const isLoadingContent = createSelector([getRoot], state => {
+  return state.status === 'loading' || state.statusUpdate === 'loading'
+})
+
 export const getPagination = createSelector([getRoot], state => {
   return state.pagination
 })

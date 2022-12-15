@@ -1,5 +1,4 @@
-import { Center, Flex } from '@chakra-ui/react'
-import { LoadingPage } from 'components/molecules/loading'
+import { Flex } from '@chakra-ui/react'
 import Header from 'components/pages/procedimentos/novo/header'
 import { Resposta } from 'domain/models/procedimento'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -76,9 +75,7 @@ export default function Content() {
 
   const isLastForm = currentIdx === formularios.length - 1
 
-  return !tipoProcedimento ? (
-    <LoadingPage />
-  ) : (
+  return (
     <Flex w="100%" h="100%" maxW="900px" flexDir="column">
       <FormProvider {...methods}>
         <form id="novo-procedimento" onSubmit={methods.handleSubmit(onSubmit)}>

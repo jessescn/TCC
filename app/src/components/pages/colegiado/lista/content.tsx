@@ -1,10 +1,12 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
+import { LoadingPage } from 'components/molecules/loading'
 import Table from 'components/pages/colegiado/lista/table'
 import { actions, selectors, store, useSelector } from 'store'
 
 export function Content() {
   const pagination = useSelector(selectors.colegiado.getPagination)
+  const isLoading = useSelector(selectors.colegiado.isLoadingContent)
 
   const handleSearch = (termo: string) => {
     store.dispatch(
@@ -46,7 +48,7 @@ export function Content() {
           }}
         />
       </Flex>
-      <Table />
+      {isLoading ? <LoadingPage /> : <Table />}
     </Box>
   )
 }

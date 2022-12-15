@@ -1,6 +1,7 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
 import FormInput from 'components/molecules/forms/input'
+import { LoadingPage } from 'components/molecules/loading'
 
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
@@ -10,6 +11,7 @@ export function Content() {
   const navigate = useNavigate()
 
   const pagination = useSelector(selectors.tipoProcedimento.getPagination)
+  const isLoading = useSelector(selectors.tipoProcedimento.isLoadingContent)
 
   const handleSearch = (termo: string) => {
     store.dispatch(
@@ -63,7 +65,7 @@ export function Content() {
           Novo Tipo de Procedimento
         </Button>
       </Flex>
-      <Table />
+      {isLoading ? <LoadingPage /> : <Table />}
     </Box>
   )
 }
