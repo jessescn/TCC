@@ -1,14 +1,9 @@
 /* istanbul ignore file */
-import { Dialect, Sequelize } from 'sequelize'
-import config from 'database/config'
+import { Sequelize } from 'sequelize'
 
 const createSequelizeInstance = () => {
-  const { username, database, host, password, dialect, port } = config
-
-  const uri = `postgresql://${username}:${password}@${host}:${port}/${database}`
-
-  return new Sequelize(uri, {
-    dialect: dialect as Dialect
+  return new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres'
   })
 }
 

@@ -18,6 +18,7 @@ export interface IColegiadoService {
 export class ColegiadoService implements IColegiadoService {
   private repository: IProcedimentoRepo
   private statusService: IProcedimentoStatusService
+  private numberOfColegiados: number
 
   constructor(
     repository: IProcedimentoRepo,
@@ -25,6 +26,7 @@ export class ColegiadoService implements IColegiadoService {
   ) {
     this.repository = repository
     this.statusService = statusService
+    this.numberOfColegiados = parseInt(process.env.COLEGIADO_QUANTITY || '0')
   }
 
   private async handleMajorityVotes(procedimento: ProcedimentoAttributes) {
@@ -80,7 +82,10 @@ export class ColegiadoService implements IColegiadoService {
 
     const procedimento = await this.repository.updateVote(id, data)
 
-    const isMaioriaVotos = ProcedimentoHelper.isMaioria(procedimento.votos)
+    const isMaioriaVotos = ProcedimentoHelper.isMaioria(
+      procedimento.votos,
+      this.numberOfColegiados
+    )
 
     if (isMaioriaVotos) {
       return this.handleMajorityVotes(procedimento)

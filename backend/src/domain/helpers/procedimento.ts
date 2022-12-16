@@ -20,9 +20,10 @@ export class ProcedimentoHelper {
     }, [])
   }
 
-  static isMaioria = (votes: VotoProcedimento[]) => {
-    const numberOfColegiados = Number(process.env.COLEGIADO_QUANTITY) || 0
-
+  static isMaioria = (
+    votes: VotoProcedimento[],
+    numberOfColegiados: number
+  ) => {
     const numberOfVotes = votes.length
 
     return numberOfVotes >= Math.ceil(numberOfColegiados / 2)

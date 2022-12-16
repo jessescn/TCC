@@ -57,7 +57,7 @@ const updateProcedimentoStatus: Template<UpdateProcedimentoData> = (
   to,
   subject: `[PPGCC/UFCG] Atualizacão Procedimento #${data.procedimento.id}`,
   html: getUpdateStatusTemplate({
-    url: process.env.WEB_URL,
+    url: `${process.env.WEB_URL}/meus-procedimentos/${data.procedimento.id}`,
     date: data.dataAtualizacao,
     previousStatus: data.statusAntigo,
     currentStatus: data.novoStatus,
@@ -75,7 +75,7 @@ const analiseProcedimentoCoordenacao: Template<
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento em análise`,
   html: getUpdateStatusTemplate({
-    url: process.env.WEB_URL,
+    url: `${process.env.WEB_URL}/coordenacao/procedimentos/${data.procedimento.id}`,
     currentStatus: 'EM ANÁLISE',
     procedimentoId: data.procedimento.id
   })
@@ -92,7 +92,7 @@ const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
   to,
   subject: `[PPGCC/UFCG] Novo Procedimento a ser homologado`,
   html: getUpdateStatusTemplate({
-    url: process.env.WEB_URL,
+    url: `${process.env.WEB_URL}/colegiado/procedimentos/${data.procedimento.id}`,
     currentStatus: 'EM HOMOLOGAÇÃO',
     procedimentoId: data.procedimento.id
   })
