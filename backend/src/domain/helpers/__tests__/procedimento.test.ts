@@ -35,8 +35,8 @@ describe('Procedimento Helper', () => {
 
   describe('isMaioria', () => {
     it('should return if a list of votes is majority to make a verdict', () => {
-      const result1 = sut.isMaioria([])
-      const result2 = sut.isMaioria(votes)
+      const result1 = sut.isMaioria([], 4)
+      const result2 = sut.isMaioria(votes, 4)
 
       expect(result1).toBeFalsy()
       expect(result2).toBeTruthy()
@@ -49,9 +49,10 @@ describe('Procedimento Helper', () => {
 
       process.env = {}
 
-      const result = sut.isMaioria([
-        createMock<VotoProcedimento>({ autor: 1, aprovado: true })
-      ])
+      const result = sut.isMaioria(
+        [createMock<VotoProcedimento>({ autor: 1, aprovado: true })],
+        4
+      )
 
       expect(result).toBeTruthy()
       expect(process.env.COLEGIADO_QUANTITY).toBeUndefined()
