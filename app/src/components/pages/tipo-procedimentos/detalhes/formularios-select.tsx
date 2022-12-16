@@ -1,5 +1,6 @@
 import { Box, Text } from '@chakra-ui/react'
 import MultipleSelect from 'components/atoms/multiple-select'
+import { InfoIcon } from 'components/molecules/info'
 import { useFormContext } from 'react-hook-form'
 import { selectors, useSelector } from 'store'
 
@@ -37,6 +38,7 @@ export default function FormularioSelect() {
     <Box>
       <Text fontSize="14px" fontWeight="bold" mb="8px">
         Formulários
+        <InfoIcon label="Selecione um ou mais formulários que serão preenchidos pelo usuário" />
       </Text>
       <MultipleSelect
         isMulti

@@ -30,7 +30,8 @@ export function Content() {
           Meus Procedimentos
         </Text>
         <Text my="16px" fontSize="14px">
-          Acompanhe os seus procedimentos dentro do sistema
+          Acompanhe os seus procedimentos dentro do sistema. Para mais detalhes,
+          clique em um dos elementos listados
         </Text>
       </Box>
       <Divider my="24px" borderColor="secondary.dark" />

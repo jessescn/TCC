@@ -43,9 +43,9 @@ const Table = () => {
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
-          { content: 'Nome', props: { width: '40%' } },
+          { content: 'Nome', props: { width: '35%' } },
           { content: 'Status', props: { width: '15%' } },
-          { content: 'Formulários', props: { width: '15%' } },
+          { content: 'Formulários', props: { width: '10%' } },
           { content: 'Última atualizacão', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '15%' } }
         ]}

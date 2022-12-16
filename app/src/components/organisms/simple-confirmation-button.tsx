@@ -7,6 +7,7 @@ type Props = {
   content: string
   style?: ButtonProps
   onConfirm: any
+  isDisabled?: boolean
   onCancelButtonText?: string
   onConfirmButtonText?: string
   children: ReactNode

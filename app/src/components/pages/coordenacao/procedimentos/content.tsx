@@ -29,7 +29,8 @@ export const Content = () => {
           Procedimentos
         </Text>
         <Text my="16px" fontSize="14px">
-          Acompanhe todos os procedimentos do sistema
+          Acompanhe todos os procedimentos do sistema. Para mais detalhes,
+          clique em um dos elementos listados.
         </Text>
       </Box>
       <Divider my="24px" borderColor="secondary.dark" />

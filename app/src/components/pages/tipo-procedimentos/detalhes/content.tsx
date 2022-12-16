@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { actions, selectors, store, useSelector } from 'store'
 
+import PageHeader from 'components/molecules/page-header'
 import Configuration from 'components/pages/tipo-procedimentos/detalhes/configuration'
-import Header from 'components/pages/tipo-procedimentos/detalhes/header'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { NovoTipoProcedimento } from 'services/tipo-procedimentos'
 import { formatISODateToLocalTime } from 'utils/format'
@@ -37,6 +37,7 @@ export default function Content() {
       ...data,
       publicos: data.publicos || [],
       colegiado: data.colegiado === 'true' ? true : false,
+      escopo: 'publico',
       dataFim: data.dataFim
         ? new Date(data.dataFim).toISOString()
         : data.dataFim,
@@ -57,7 +58,7 @@ export default function Content() {
       nome: data.nome,
       descricao: data.descricao,
       status: data.status,
-      escopo: data.escopo,
+      escopo: 'publico',
       formularios: data.formularios,
       colegiado: data.colegiado === 'true' ? true : false,
       publicos: data.publicos,
@@ -98,7 +99,15 @@ export default function Content() {
     >
       <FormProvider {...formControls}>
         <form onSubmit={formControls.handleSubmit(onSubmit)}>
-          <Header tipo={tipoProcedimento} />
+          <PageHeader
+            title={
+              tipoProcedimento
+                ? 'Editar Tipo Procedimento'
+                : 'Novo Tipo Procedimento'
+            }
+            identifier={tipoProcedimento?.id}
+            updatedAt={tipoProcedimento?.updatedAt}
+          />
           <Divider my="24px" borderColor="secondary.dark" />
           <Configuration tipoProcedimento={tipoProcedimento} />
           <Footer tipoProcedimento={tipoProcedimento} />

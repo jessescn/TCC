@@ -31,11 +31,12 @@ export function Content() {
     >
       <Box>
         <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-          Tipos de Procedimentos Cadastrados
+          Tipos de Procedimentos
         </Text>
         <Text my="16px" fontSize="14px">
-          Lista dos procedimentos cadastrados no sistema. Edite um procedimento
-          aberto ou crie um novo para ser acessado pelos usuários
+          Um tipo de procedimento é um processo que será preenchido pelo
+          usuário. Vincule um ou mais formulários que deverão ser preenchidos
+          pelo usuário ao submeter o procedimento.
         </Text>
       </Box>
       <Divider my="24px" borderColor="secondary.dark" />

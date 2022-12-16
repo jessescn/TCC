@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react'
+import PageHeader from 'components/molecules/page-header'
 import { ErrorPage } from 'components/pages/error-page'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -6,7 +7,6 @@ import { UpdateUser } from 'services/usuarios'
 import { actions, selectors, store, useSelector } from 'store'
 import { UserConfiguration } from './configuration'
 import Footer from './footer'
-import Header from './header'
 
 export default function Content() {
   const usuario = useSelector(selectors.userDetalhes.getUsuario)
@@ -53,7 +53,11 @@ export default function Content() {
     >
       <FormProvider {...formControls}>
         <form onSubmit={formControls.handleSubmit(onSubmit)}>
-          <Header usuario={usuario} />
+          <PageHeader
+            title="Editar Usuário"
+            identifier={usuario?.id}
+            updatedAt={usuario?.updatedAt}
+          />
           <UserConfiguration usuario={usuario} />
           <Footer />
         </form>

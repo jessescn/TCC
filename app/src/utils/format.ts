@@ -1,7 +1,7 @@
 import { format, addHours } from 'date-fns'
 
 export const formatDate = (date: string) => {
-  return format(new Date(date), 'dd/MM/yyyy hh:mm a')
+  return format(new Date(date), 'dd/MM/yyyy HH:mm')
 }
 
 export const formatISODate = (date?: string) => {

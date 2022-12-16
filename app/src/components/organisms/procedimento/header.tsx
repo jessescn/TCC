@@ -12,6 +12,7 @@ import {
   Portal,
   Text
 } from '@chakra-ui/react'
+import { NavigationBackButton } from 'components/molecules/nav-back-button'
 import { Procedimento } from 'domain/entity/procedimento'
 import {
   ProcedimentoModel,
@@ -19,6 +20,7 @@ import {
   statusList
 } from 'domain/models/procedimento'
 import { BiCommentDetail } from 'react-icons/bi'
+import { formatDate } from 'utils/format'
 
 type Props = {
   procedimento: ProcedimentoModel
@@ -67,27 +69,39 @@ const Header = ({ procedimento, status }: Props) => {
 
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Text fontSize="24px" fontWeight="bold">
-        Procedimento{' '}
-        <Text as="span" fontSize="20px" color="secondary.dark">
-          #{procedimento.id}
+      <Flex>
+        <NavigationBackButton />
+        <Text fontSize="24px" fontWeight="bold">
+          Procedimento{' '}
+          <Text as="span" fontSize="20px" color="secondary.dark">
+            ID: {procedimento.id}
+          </Text>
         </Text>
-      </Text>
+      </Flex>
       <Flex>
         {revisaoPopover}
-        {currentStatus && (
-          <Text fontSize="20px" fontWeight="bold">
-            Status:{' '}
-            <Text
-              ml="8px"
-              as="span"
-              textTransform="uppercase"
-              color={currentStatus.color}
-            >
-              {currentStatus.label}
+        <Box>
+          {currentStatus && (
+            <Text fontSize="20px" fontWeight="bold">
+              Status:{' '}
+              <Text
+                as="span"
+                textTransform="uppercase"
+                color={currentStatus.color}
+              >
+                {currentStatus.label}
+              </Text>
             </Text>
-          </Text>
-        )}
+          )}
+          {procedimento.updatedAt && (
+            <Text fontSize="12px">
+              Última atualização:{' '}
+              <Text fontWeight="bold" as="span">
+                {formatDate(procedimento.updatedAt)}
+              </Text>
+            </Text>
+          )}
+        </Box>
       </Flex>
     </Flex>
   )

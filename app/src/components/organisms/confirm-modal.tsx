@@ -1,7 +1,7 @@
 import ConfirmDialog from 'components/molecules/confirm-dialog'
 import { FocusableElement } from '@chakra-ui/utils'
 import { useRef } from 'react'
-import { Button } from '@chakra-ui/react'
+import { Button, StyleProps } from '@chakra-ui/react'
 
 type Props = {
   isOpen: boolean
@@ -10,6 +10,7 @@ type Props = {
   onClose: () => void
   onConfirm: () => void
   onConfirmButtonText?: string
+  onConfirmButtonStyle?: StyleProps
   onCancelButtonText?: string
 }
 
@@ -20,7 +21,8 @@ export default function ConfirmModal({
   title,
   onConfirm,
   onConfirmButtonText,
-  onCancelButtonText
+  onCancelButtonText,
+  onConfirmButtonStyle
 }: Props) {
   const cancelRef = useRef<HTMLButtonElement | FocusableElement>(null)
 
@@ -38,11 +40,11 @@ export default function ConfirmModal({
         size="sm"
         color="initial.white"
         bgColor="primary.dark"
-        _hover={{ bgColor: 'primary.default' }}
         ml={3}
         type="submit"
         form="novo-procedimento"
         onClick={onConfirm}
+        {...onConfirmButtonStyle}
       >
         {onConfirmButtonText || 'Submeter'}
       </Button>

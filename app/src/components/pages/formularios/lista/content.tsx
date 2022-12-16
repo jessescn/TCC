@@ -34,7 +34,9 @@ export function Content() {
           Formulários
         </Text>
         <Text my="16px" fontSize="14px">
-          Crie um modelo de formulário para utilizar em procedimentos
+          Crie ou edite formulários para vincular a tipos de procedimentos e que
+          serão preenchidos pelos usuários ao criar um novo procedimento. Um
+          formulário pode ser reutilizado em mais de um tipo de procedimento.
         </Text>
       </Box>
       <Divider my="24px" borderColor="secondary.dark" />

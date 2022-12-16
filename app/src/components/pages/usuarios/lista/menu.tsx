@@ -64,6 +64,8 @@ export const EditMenu = ({ usuario }: Props) => {
         {...confirmDeleteControls}
         onConfirm={handleDelete}
         title="Confirmar Deleção"
+        onConfirmButtonText="Excluir"
+        onConfirmButtonStyle={{ bgColor: 'info.error' }}
         content={`Tem certeza que deseja excluir esse usuário?`}
       />
     </>

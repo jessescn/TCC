@@ -1,5 +1,6 @@
 import { Box, Text } from '@chakra-ui/react'
 import MultipleSelect from 'components/atoms/multiple-select'
+import { InfoIcon } from 'components/molecules/info'
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { selectors, useSelector } from 'store'
@@ -42,10 +43,10 @@ export default function PublicosSelect() {
     <Box>
       <Text fontSize="14px" fontWeight="bold" mb="8px">
         Públicos
-        <Text as="span" fontWeight="normal" fontSize="10px" ml="8px">
-          selecione os públicos que vão poder visualizar e preencher esse
-          procedimento
-        </Text>
+        <InfoIcon
+          label="Apenas os usuários que possuirem ao menos um dos públicos listados
+          terão acesso ao procedimento."
+        />
       </Text>
       <MultipleSelect
         isMulti

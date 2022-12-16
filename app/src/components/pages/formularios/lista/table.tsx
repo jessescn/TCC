@@ -109,6 +109,8 @@ export default function FormulariosTable() {
         content="Tem certeza que quer excluir o formulário? todos os tipos de procedimentos relacionados serão inativados."
         {...confirmModalControls}
         onConfirm={handleConfirmDeletion}
+        onConfirmButtonText="Excluir"
+        onConfirmButtonStyle={{ backgroundColor: 'info.error' }}
       />
     </Box>
   ) : (

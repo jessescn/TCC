@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
 import Content from 'components/pages/formularios/detalhes/content'
-import Header from 'components/pages/formularios/detalhes/header'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
+import PageHeader from 'components/molecules/page-header'
 
 type FormularioForm = {
   nome: string
@@ -76,7 +76,11 @@ export default function FormularioDetails() {
     >
       <FormProvider {...formControls}>
         <form onSubmit={formControls.handleSubmit(onSubmit)}>
-          <Header formulario={formulario} />
+          <PageHeader
+            title={formulario ? 'Editar Formulário' : 'Novo Formulário'}
+            identifier={formulario?.id}
+            updatedAt={formulario?.updatedAt}
+          />
           <Divider my="24px" borderColor="secondary.dark" />
           <Content formulario={formulario} />
         </form>

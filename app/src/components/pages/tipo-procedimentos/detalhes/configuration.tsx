@@ -8,6 +8,7 @@ import {
   Textarea
 } from '@chakra-ui/react'
 import { ErrorMessage } from 'components/molecules/forms/error-message'
+import { InfoIcon } from 'components/molecules/info'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { useFormContext } from 'react-hook-form'
 import { formatISODateToLocalTime } from 'utils/format'
@@ -54,16 +55,8 @@ const Configuration = ({ tipoProcedimento }: Props) => {
       <Flex justifyContent="space-between">
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
-            Escopo
-          </Text>
-          <Select ml="8px" w="fit-content" size="sm" {...register('escopo')}>
-            <option value="publico">Público</option>
-            <option value="privado">Privado</option>
-          </Select>
-        </Flex>
-        <Flex alignItems="center">
-          <Text fontSize="14px" fontWeight="bold">
             Colegiado
+            <InfoIcon label="Marque sim caso necessite que o procedimento seja aprovado pelo colegiado" />
           </Text>
           <Select ml="8px" w="fit-content" size="sm" {...register('colegiado')}>
             <option value="true">Sim</option>
@@ -73,6 +66,7 @@ const Configuration = ({ tipoProcedimento }: Props) => {
         <Flex alignItems="center">
           <Text fontSize="14px" fontWeight="bold">
             Status
+            <InfoIcon label="Somente tipos de procedimento com status 'ativo' são listados para os usuários." />
           </Text>
           <Select ml="8px" w="fit-content" size="sm" {...register('status')}>
             <option value="ativo">Ativo</option>

@@ -20,7 +20,8 @@ const colors = {
     success: '#44CF6C',
     warning: '#FFC914',
     'warning-light': '#FBE28D',
-    error: '#FE5F55'
+    error: '#FE5F55',
+    errorDark: '#cb4c44'
   }
 }
 

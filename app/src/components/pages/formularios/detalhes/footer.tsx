@@ -13,14 +13,17 @@ type Props = {
 
 export const Footer = ({ formulario }: Props) => {
   const navigate = useNavigate()
-  const refSubmitButtom = useRef<HTMLButtonElement>(null)
   const { watch } = useFormContext()
 
-  const campos = watch('campos', []) as any[]
+  const refSubmitButtom = useRef<HTMLButtonElement>(null)
+
+  const campos: any[] = watch('campos') || []
   const statusCreate = useSelector(state => state.formulario.statusCreate)
   const statusUpdate = useSelector(state => state.formulario.statusUpdate)
 
   const isLoading = statusCreate === 'loading' || statusUpdate === 'loading'
+
+  const isFormularioEmpty = campos.length === 0
 
   const triggerSubmit = () => {
     refSubmitButtom?.current?.click()
@@ -32,7 +35,7 @@ export const Footer = ({ formulario }: Props) => {
       size="sm"
       type="submit"
       isLoading={isLoading}
-      isDisabled={(campos || []).length === 0}
+      isDisabled={isFormularioEmpty}
     >
       Criar
     </Button>
@@ -46,7 +49,8 @@ export const Footer = ({ formulario }: Props) => {
         bgColor: 'primary.dark',
         color: 'initial.white',
         _hover: { bgColor: 'primary.default' },
-        isLoading: isLoading
+        isLoading: isLoading,
+        isDisabled: isFormularioEmpty
       }}
       content="Deseja mesmo salvar as alterações? Os procedimentos já respondidos podem ficar com respostas desatualizadas"
       onCancelButtonText="Cancelar"
