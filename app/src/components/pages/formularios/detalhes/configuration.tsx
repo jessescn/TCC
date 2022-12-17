@@ -6,6 +6,11 @@ import {
   Icon,
   Input,
   Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   Textarea,
   useDisclosure
@@ -20,6 +25,7 @@ import { MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
 import { selectors, useSelector } from 'store'
 import DuplicateFormularioModal from './duplicate-modal'
 import RenderFormBuilder from './form-builder'
+import Preview from './preview'
 
 export default function Configuration() {
   const {
@@ -120,7 +126,22 @@ export default function Configuration() {
           </Text>
         </Button>
         <Collapse in={showForm} animateOpacity>
-          <RenderFormBuilder onDuplicate={duplicateModalControls.onOpen} />
+          <Tabs isLazy>
+            <TabList>
+              <Tab>Campos</Tab>
+              <Tab>Preview</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <RenderFormBuilder
+                  onDuplicate={duplicateModalControls.onOpen}
+                />
+              </TabPanel>
+              <TabPanel>
+                <Preview />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Collapse>
       </Box>
       {duplicateModalControls.isOpen && (

@@ -1,11 +1,11 @@
 import { Flex } from '@chakra-ui/react'
+import RenderFormulario from 'components/organisms/render-formulario'
 import { Resposta } from 'domain/models/procedimento'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { NovoProcedimento as NovoProcedimentoModel } from 'services/procedimentos'
 import { actions, selectors, store, useSelector } from 'store'
 import Footer from './footer'
-import RenderFormulario from './render-formulario'
 
 export type NovoProcedimentoForm = {
   tipo: number
