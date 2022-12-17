@@ -14,9 +14,12 @@ import { opcoesCampos } from 'components/molecules/forms/build-fields'
 import { TipoCampoFormulario } from 'domain/models/formulario'
 import { CampoTipoBase } from 'domain/types/campo-tipos'
 import { debounce } from 'lodash'
+import { useRef } from 'react'
+import type { XYCoord, Identifier } from 'dnd-core'
 import { HiOutlineDocumentDuplicate } from 'react-icons/hi'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import Descricao from './campo-descricao'
+import { useDrag, useDrop } from 'react-dnd'
 
 export type CampoFormulario = {
   ordem: number
@@ -27,17 +30,94 @@ export type CampoFormulario = {
 
 type Props = {
   campo: CampoFormulario
+  index: number
   onDelete: (ordem: number) => void
   onUpdate: (campo: CampoFormulario) => void
   onDuplicate: (ordem: number) => void
+  onMove: (dragIndex: number, hoverIndex: number) => void
+}
+
+const ItemTypes = {
+  CAMPO: 'campo'
+}
+
+interface DragItem {
+  index: number
+  id: string
+  type: string
 }
 
 export default function Campo({
   campo,
   onDelete,
   onUpdate,
-  onDuplicate
+  onDuplicate,
+  onMove,
+  index
 }: Props) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: Identifier | null }
+  >({
+    accept: ItemTypes.CAMPO,
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId()
+      }
+    },
+    hover(item: DragItem, monitor) {
+      if (!ref.current) {
+        return
+      }
+      const dragIndex = item.index
+      const hoverIndex = index
+
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return
+      }
+
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect()
+
+      // Get vertical middle
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset()
+
+      // Get pixels to the top
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
+
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return
+      }
+
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return
+      }
+
+      // Time to actually perform the action
+      onMove(dragIndex, hoverIndex)
+
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex
+    }
+  })
+
   const handleUpdateTitle = debounce(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
       onUpdate({
@@ -53,15 +133,37 @@ export default function Campo({
 
   const Componente = opcoesCampos.get(campo.tipo)?.render
 
+  const [{ isDragging }, drag] = useDrag({
+    type: ItemTypes.CAMPO,
+    item: () => {
+      return { index }
+    },
+    collect: (monitor: any) => ({
+      isDragging: monitor.isDragging()
+    })
+  })
+
+  const opacity = isDragging ? 0 : 1
+  drag(drop(ref))
+
   return (
-    <Box borderColor="secondary.dark" borderWidth="1px" borderRadius="4px">
+    <Box
+      ref={ref}
+      borderColor="secondary.dark"
+      borderWidth="1px"
+      borderRadius="4px"
+      opacity={opacity}
+      data-handler-id={handlerId}
+    >
       <Flex justifyContent="space-between" py="8px" px="16px">
-        <Text mr="8px" fontSize="14px" color="initial.black">
-          Campo ID:{' '}
-          <Text as="span" fontWeight="bold">
-            {campo.ordem}
+        <Flex>
+          <Text mr="8px" fontSize="14px" color="initial.black">
+            Campo ID:{' '}
+            <Text as="span" fontWeight="bold">
+              {campo.ordem}
+            </Text>
           </Text>
-        </Text>
+        </Flex>
         <Flex alignItems="center">
           <Text mr="8px" fontSize="14px" color="initial.black">
             obrigatório
@@ -127,8 +229,9 @@ export default function Campo({
         bgColor="secondary.default"
         justifyContent="flex-end"
         alignItems="center"
+        p={2}
       >
-        <Flex p={2}>
+        <Flex>
           <Tooltip label="Remover campo">
             <IconButton
               mr="8px"

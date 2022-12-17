@@ -3,6 +3,8 @@ import { LoadingPage } from 'components/molecules/loading'
 
 import FormularioDetails from 'components/pages/formularios/detalhes'
 import { useEffect } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
@@ -22,7 +24,9 @@ export default function FormularioDetailsPage() {
       pos="relative"
       alignItems={isLoading ? 'center' : 'flex-start'}
     >
-      {isLoading ? <LoadingPage /> : <FormularioDetails />}
+      <DndProvider backend={HTML5Backend}>
+        {isLoading ? <LoadingPage /> : <FormularioDetails />}
+      </DndProvider>
     </Screen>
   )
 }

@@ -1,8 +1,10 @@
 import {
   Box,
+  Flex,
   Icon,
   IconButton,
   Stack,
+  Text,
   Tooltip,
   useDisclosure
 } from '@chakra-ui/react'
@@ -15,6 +17,7 @@ import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { AiOutlineClear, AiOutlineImport } from 'react-icons/ai'
 import { BiLayerPlus } from 'react-icons/bi'
+import { RiErrorWarningLine } from 'react-icons/ri'
 
 type Props = {
   onDuplicate: () => void
@@ -88,17 +91,35 @@ export default function FormBuilder({ onDuplicate }: Props) {
     setValue('campos', camposCopy)
   }
 
+  const handleMove = (dragIndex: number, hoverIndex: number) => {
+    const camposCopy: CampoFormulario[] = JSON.parse(JSON.stringify(campos))
+
+    const campo = camposCopy[dragIndex]
+    camposCopy.splice(dragIndex, 1)
+    camposCopy.splice(hoverIndex, 0, campo)
+
+    setValue('campos', camposCopy)
+  }
+
   return (
     <>
       <Box my="32px">
+        <Flex alignItems="center" mb="8px">
+          <Icon as={RiErrorWarningLine} mr="8px" />
+          <Text fontSize="14px" fontWeight="bold">
+            Segure e arraste os campos para alterar a ordem de exibição
+          </Text>
+        </Flex>
         <Stack spacing="24px">
-          {campos.map(campo => (
+          {campos.map((campo, idx) => (
             <Campo
               key={campo.ordem}
               campo={campo}
               onDelete={handleDelete}
               onDuplicate={handleDuplicate}
               onUpdate={handleUpdate}
+              onMove={handleMove}
+              index={idx}
             />
           ))}
         </Stack>

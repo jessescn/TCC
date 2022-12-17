@@ -99,7 +99,7 @@ export default function GrelhaMultiplaBuilder({
                   _focus={{ boxShadow: 'none' }}
                   size="sm"
                   onChange={ev => handleUpdateLinha(idx, ev.target.value)}
-                  value={linha}
+                  defaultValue={linha}
                 />
                 {opcoes.linhas.length > 1 && (
                   <IconButton
@@ -137,7 +137,7 @@ export default function GrelhaMultiplaBuilder({
               borderBottom="1px solid #BCBCBC"
               _focus={{ boxShadow: 'none' }}
               size="sm"
-              value={coluna}
+              defaultValue={coluna}
               onChange={ev => handleUpdateColuna(idx, ev.target.value)}
             />
             {opcoes.colunas.length > 1 && (
