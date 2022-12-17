@@ -1,10 +1,10 @@
 import Screen from 'components/atoms/screen'
 
-import { Content } from 'components/pages/formularios/lista/content'
+import FormulariosList from 'components/pages/formularios/lista'
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 
-export default function Formularios() {
+export default function FormulariosListPage() {
   useEffect(() => {
     store.dispatch(
       actions.formulario.list({ page: 1, per_page: 5, term: null })
@@ -14,7 +14,7 @@ export default function Formularios() {
 
   return (
     <Screen py="24px">
-      <Content />
+      <FormulariosList />
     </Screen>
   )
 }

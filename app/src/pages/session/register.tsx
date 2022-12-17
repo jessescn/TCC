@@ -1,10 +1,10 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/register'
+import Register from 'components/pages/register'
 
-export default function Register() {
+export default function RegisterPage() {
   return (
     <Screen noHeader alignItems="center">
-      <Content />
+      <Register />
     </Screen>
   )
 }

@@ -2,10 +2,10 @@ import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
 import { LoadingPage } from 'components/molecules/loading'
 import { actions, selectors, store, useSelector } from 'store'
-import Table from './table'
-import { UploadUsers } from './upload-users'
+import UsuariosTable from './table'
+import UploadUsuariosButton from './upload-usuarios'
 
-export const Content = () => {
+export default function UsuariosList() {
   const pagination = useSelector(selectors.user.getPagination)
   const isLoading = useSelector(selectors.user.isLoadingContent)
 
@@ -49,9 +49,9 @@ export const Content = () => {
             }
           }}
         />
-        <UploadUsers />
+        <UploadUsuariosButton />
       </Flex>
-      {isLoading ? <LoadingPage /> : <Table />}
+      {isLoading ? <LoadingPage /> : <UsuariosTable />}
     </Box>
   )
 }

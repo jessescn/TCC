@@ -1,5 +1,10 @@
 import ReactSelect, { GroupBase, Props } from 'react-select'
 
+export type SelectOption = {
+  value: any
+  label: string
+}
+
 const customStyles = {
   control: (styles: any) => ({
     ...styles,

@@ -7,7 +7,7 @@ import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
 import { getCurrentStatus } from 'utils/procedimento'
 
-const Table = () => {
+export default function TodosProcedimentosTable() {
   const navigate = useNavigate()
 
   const pagination = useSelector(selectors.procedimento.getPagination)
@@ -16,8 +16,8 @@ const Table = () => {
 
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
-    store.dispatch(actions.procedimento.resetStatus())
 
+    store.dispatch(actions.procedimento.resetStatus())
     navigate(`/coordenacao/procedimentos/${id}`)
   }
 
@@ -40,8 +40,8 @@ const Table = () => {
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
-          { content: 'Nome', props: { width: '40%' } },
-          { content: 'Autor', props: { width: '10%' } },
+          { content: 'Nome', props: { width: '35%' } },
+          { content: 'Autor', props: { width: '15%' } },
           { content: 'Status', props: { width: '10%' } },
           { content: 'Formulários', props: { width: '10%' } },
           { content: 'Última atualizacão', props: { width: '15%' } },
@@ -81,5 +81,3 @@ const Table = () => {
     </Center>
   )
 }
-
-export default Table

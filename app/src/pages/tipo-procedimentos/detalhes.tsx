@@ -1,18 +1,18 @@
 import Screen from 'components/atoms/screen'
 import { LoadingPage } from 'components/molecules/loading'
 
-import Content from 'components/pages/tipo-procedimentos/detalhes/content'
+import TipoProcedimentoDetails from 'components/pages/tipo-procedimentos/detalhes'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-export default function DetalhesTipoProcedimento() {
+export default function TipoProcedimentoDetailsPage() {
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id')
+
   const isLoading = useSelector(
     selectors.tipoProcedimentoDetalhes.isLoadingContent
   )
-
-  const [searchParams] = useSearchParams()
-  const id = searchParams.get('id')
 
   useEffect(() => {
     store.dispatch(actions.tipoProcedimentoDetalhes.getInfo(id))
@@ -20,7 +20,7 @@ export default function DetalhesTipoProcedimento() {
 
   return (
     <Screen py="24px" alignItems={isLoading ? 'center' : 'flex-start'}>
-      {isLoading ? <LoadingPage /> : <Content />}
+      {isLoading ? <LoadingPage /> : <TipoProcedimentoDetails />}
     </Screen>
   )
 }

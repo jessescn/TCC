@@ -1,22 +1,20 @@
 import { Button, Flex } from '@chakra-ui/react'
 import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { useEffect, useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { actions, store, useSelector } from 'store'
+import { selectors, useSelector } from 'store'
 
-type Props = {
-  tipoProcedimento?: TipoProcedimentoModel
-}
-
-const Footer = ({ tipoProcedimento }: Props) => {
+const Footer = () => {
   const navigate = useNavigate()
   const refSubmitButtom = useRef<HTMLButtonElement>(null)
   const { watch } = useFormContext()
 
-  const formularios = watch('formularios', []) as number[]
+  const formularios: number[] = watch('formularios') || []
 
+  const tipoProcedimento = useSelector(
+    selectors.tipoProcedimentoDetalhes.getTipoProcedimento
+  )
   const statusUpdate = useSelector(state => state.tipoProcedimento.statusUpdate)
   const statusCreate = useSelector(state => state.tipoProcedimento.statusCreate)
   const isLoading = statusCreate === 'loading' || statusUpdate === 'loading'
@@ -30,7 +28,7 @@ const Footer = ({ tipoProcedimento }: Props) => {
     }
   }, [statusUpdate, statusCreate])
 
-  const triggerSubmit = () => {
+  const handleSaveChanges = () => {
     refSubmitButtom?.current?.click()
   }
 
@@ -62,7 +60,7 @@ const Footer = ({ tipoProcedimento }: Props) => {
       content="Deseja mesmo salvar as alterações? Os procedimentos já respondidos podem ser afetados"
       onCancelButtonText="Cancelar"
       onConfirmButtonText="Confirmar"
-      onConfirm={triggerSubmit}
+      onConfirm={handleSaveChanges}
       title="Salvar Alterações"
     >
       Salvar

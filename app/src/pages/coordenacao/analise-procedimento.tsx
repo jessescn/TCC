@@ -1,11 +1,11 @@
 import Screen from 'components/atoms/screen'
 import { LoadingPage } from 'components/molecules/loading'
-import Content from 'components/pages/coordenacao/analise-procedimento/content'
+import AnaliseProcedimento from 'components/pages/coordenacao/analise-procedimento'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-export default function AnaliseProcedimento() {
+export default function AnaliseProcedimentoPage() {
   const { id } = useParams()
 
   const isLoading = useSelector(selectors.procedimentoDetalhes.isLoadingContent)
@@ -16,7 +16,7 @@ export default function AnaliseProcedimento() {
 
   return (
     <Screen py="24px" alignItems={isLoading ? 'center' : 'flex-start'}>
-      {isLoading ? <LoadingPage /> : <Content />}
+      {isLoading ? <LoadingPage /> : <AnaliseProcedimento />}
     </Screen>
   )
 }

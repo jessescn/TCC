@@ -1,7 +1,6 @@
-import { Box, Center, Flex, Link, Text } from '@chakra-ui/react'
+import { Box, Center, Link, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
 import FormInput, { ErrorText } from 'components/molecules/forms/input'
-import LogoPanel from 'components/organisms/logo-panel'
 import { HTMLInputTypeAttribute } from 'react'
 import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 import PasswordStrengthBar from 'react-password-strength-bar'
@@ -24,7 +23,7 @@ export type RegisterForm = CreateUser & {
   confirmPassword: string
 }
 
-export const RegisterFormContent = () => {
+export default function RegisterFormContent() {
   const {
     register,
     handleSubmit,

@@ -5,15 +5,15 @@ import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { UpdateUser } from 'services/usuarios'
 import { actions, selectors, store, useSelector } from 'store'
-import { UserConfiguration } from './configuration'
+import UsuarioConfiguration from './configuration'
 import Footer from './footer'
 
-export default function Content() {
-  const usuario = useSelector(selectors.userDetalhes.getUsuario)
-  const statusFetch = useSelector(state => state.userDetalhes.statusFetch)
-
+export default function UsuarioDetails() {
   const loadForm = useRef(false)
   const formControls = useForm()
+
+  const usuario = useSelector(selectors.userDetalhes.getUsuario)
+  const statusFetch = useSelector(state => state.userDetalhes.statusFetch)
 
   useEffect(() => {
     if (loadForm.current || !usuario) return
@@ -58,7 +58,7 @@ export default function Content() {
             identifier={usuario?.id}
             updatedAt={usuario?.updatedAt}
           />
-          <UserConfiguration usuario={usuario} />
+          <UsuarioConfiguration usuario={usuario} />
           <Footer />
         </form>
       </FormProvider>

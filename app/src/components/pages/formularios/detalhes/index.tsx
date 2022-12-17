@@ -4,9 +4,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-import Content from 'components/pages/formularios/detalhes/content'
+import Configuration from 'components/pages/formularios/detalhes/configuration'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import PageHeader from 'components/molecules/page-header'
+import { Footer } from './footer'
 
 type FormularioForm = {
   nome: string
@@ -19,7 +20,6 @@ export default function FormularioDetails() {
 
   const statusCreate = useSelector(state => state.formulario.statusCreate)
   const statusUpdate = useSelector(state => state.formulario.statusUpdate)
-
   const formulario = useSelector(selectors.formularioDetalhes.getFormulario)
 
   const alreadyInitializeForm = useRef(false)
@@ -82,7 +82,8 @@ export default function FormularioDetails() {
             updatedAt={formulario?.updatedAt}
           />
           <Divider my="24px" borderColor="secondary.dark" />
-          <Content formulario={formulario} />
+          <Configuration />
+          <Footer />
         </form>
       </FormProvider>
     </Box>

@@ -1,9 +1,9 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/usuarios/lista'
+import UsuariosList from 'components/pages/usuarios/lista'
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 
-export default function TodosUsuarios() {
+export default function UsuariosListPage() {
   useEffect(() => {
     store.dispatch(actions.userDetalhes.reset())
     store.dispatch(actions.user.list({ page: 1, per_page: 5, term: null }))
@@ -11,7 +11,7 @@ export default function TodosUsuarios() {
 
   return (
     <Screen py="24px">
-      <Content />
+      <UsuariosList />
     </Screen>
   )
 }

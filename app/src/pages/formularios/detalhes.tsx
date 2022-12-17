@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-export default function Form() {
+export default function FormularioDetailsPage() {
   const isLoading = useSelector(selectors.formularioDetalhes.isLoadingContent)
 
   const [searchParams] = useSearchParams()

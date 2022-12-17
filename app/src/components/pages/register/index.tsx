@@ -1,10 +1,10 @@
 import { Flex } from '@chakra-ui/react'
 import LogoPanel from 'components/organisms/logo-panel'
 import { selectors, useSelector } from 'store'
-import { ConfirmEmailContent } from './confirm-email-content'
-import { RegisterFormContent } from './register-form-content'
+import ConfirmEmailContent from './confirm-email-content'
+import RegisterFormContent from './register-form-content'
 
-export const Content = () => {
+export default function Register() {
   const createStatus = useSelector(selectors.user.getStatusCreate)
 
   const content =

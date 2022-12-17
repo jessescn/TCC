@@ -1,10 +1,10 @@
 import Screen from 'components/atoms/screen'
 
-import { Content } from 'components/pages/tipo-procedimentos/lista/content'
+import TipoProcedimentosList from 'components/pages/tipo-procedimentos/lista'
 import { useEffect } from 'react'
 import { actions, store } from 'store'
 
-export default function TipoProcedimentos() {
+export default function TipoProcedimentosListPage() {
   useEffect(() => {
     store.dispatch(actions.tipoProcedimentoDetalhes.resetStatus())
     store.dispatch(actions.tipoProcedimento.resetStatus())
@@ -15,7 +15,7 @@ export default function TipoProcedimentos() {
 
   return (
     <Screen py="24px">
-      <Content />
+      <TipoProcedimentosList />
     </Screen>
   )
 }

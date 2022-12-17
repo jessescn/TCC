@@ -28,12 +28,12 @@ type Props = {
   footer?: ReactNode
 }
 
-export const DuplicateFormModal = ({
+export default function DuplicateFormularioModal({
   isOpen,
   onClose,
   cancelRef,
   onConfirm
-}: Props) => {
+}: Props) {
   const [selectedFormOptions, setSelectedFormOptions] = useState<
     Option | undefined
   >()
