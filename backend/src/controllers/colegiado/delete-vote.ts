@@ -2,29 +2,27 @@ import { Controller, errorResponseHandler } from 'controllers'
 import { PermissionKey } from 'domain/profiles'
 import { IColegiadoService } from 'services/colegiado'
 import { Request, Response } from 'types/express'
-import { hasNumericId } from 'utils/request'
 
 export type RemoteDeleteVote = {
   autor: number
+  procedimentoId: number
 }
 
 export class DeleteVoteController extends Controller<IColegiadoService> {
   constructor(service: IColegiadoService) {
-    const validations = [hasNumericId]
     const permission: PermissionKey = 'colegiado_delete_vote'
-    const mandatoryFields = ['autor']
+    const mandatoryFields = ['autor', 'procedimentoId']
 
-    super({ validations, mandatoryFields, permission, service })
+    super({ mandatoryFields, permission, service })
   }
 
   exec = async (request: Request, response: Response) => {
     try {
       this.validateRequest(request)
 
-      const { id } = request.params
-      const { autor } = request.body as RemoteDeleteVote
+      const { autor, procedimentoId } = request.body as RemoteDeleteVote
 
-      const procedimento = await this.service.deleteVote(Number(id), autor)
+      const procedimento = await this.service.deleteVote(procedimentoId, autor)
 
       response.json(procedimento)
     } catch (error) {

@@ -5,6 +5,7 @@ export interface ComentarioModel {
   conteudo: string
   actor?: UserModel
   createdAt: string
+  createdBy: number
 }
 
 export interface NewComentario {

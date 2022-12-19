@@ -20,69 +20,71 @@ const BotoesVotacao = ({ votos, currentVote, setCurrentVote }: Props) => {
   const negativeCount = votos.filter(voto => !voto.aprovado).length
 
   return (
-    <Flex alignItems="center" justifyContent="space-between">
-      <Flex alignItems="flex-end">
-        <Text fontSize="12px" mr="8px">
-          Votos:
-        </Text>
-        <Flex alignItems="center" mr="8px">
-          <Text fontWeight="bold" mr="4px">
-            {positiveCount}
+    <>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Flex alignItems="flex-end">
+          <Text fontSize="12px" mr="8px">
+            Votos:
           </Text>
-          <Icon as={AiOutlineCheck} color="info.success" />
+          <Flex alignItems="center" mr="8px">
+            <Text fontWeight="bold" mr="4px">
+              {positiveCount}
+            </Text>
+            <Icon as={AiOutlineCheck} color="info.success" />
+          </Flex>
+          <Flex alignItems={'center'}>
+            <Text fontWeight="bold" mr="4px">
+              {negativeCount}
+            </Text>
+            <Icon as={AiOutlineClose} color="info.error" />
+          </Flex>
         </Flex>
-        <Flex alignItems={'center'}>
-          <Text fontWeight="bold" mr="4px">
-            {negativeCount}
-          </Text>
-          <Icon as={AiOutlineClose} color="info.error" />
+        <Flex ml="16px">
+          <IconButton
+            onClick={() => setCurrentVote(true)}
+            bgColor={isPositiveVote ? 'info.success' : 'transparent'}
+            _focus={{ boxShadow: 'none' }}
+            height="fit-content"
+            px="12px"
+            py="6px"
+            borderWidth="2px"
+            borderRadius="0"
+            borderColor="#000"
+            aria-label="vote no"
+            isDisabled={statusVote === 'loading' || !isColegiado}
+            _hover={{ bgColor: 'info.success' }}
+            icon={
+              <Icon
+                _hover={{ color: 'initial.white' }}
+                as={AiOutlineCheck}
+                color={isPositiveVote ? 'initial.white' : 'secondary.dark'}
+              />
+            }
+          />
+          <IconButton
+            onClick={() => setCurrentVote(false)}
+            bgColor={isNegativeVote ? 'info.error' : 'transparent'}
+            _focus={{ boxShadow: 'none' }}
+            height="fit-content"
+            px="12px"
+            py="6px"
+            borderWidth="2px"
+            borderRadius="0"
+            borderColor="#000"
+            _hover={{ bgColor: 'info.error' }}
+            aria-label="vote yes"
+            isDisabled={statusVote === 'loading' || !isColegiado}
+            icon={
+              <Icon
+                _hover={{ color: 'initial.white' }}
+                as={AiOutlineClose}
+                color={isNegativeVote ? 'initial.white' : 'secondary.dark'}
+              />
+            }
+          />
         </Flex>
       </Flex>
-      <Flex ml="16px">
-        <IconButton
-          onClick={() => setCurrentVote(true)}
-          bgColor={isPositiveVote ? 'info.success' : 'transparent'}
-          _focus={{ boxShadow: 'none' }}
-          height="fit-content"
-          px="12px"
-          py="6px"
-          borderWidth="2px"
-          borderRadius="0"
-          borderColor="#000"
-          aria-label="vote no"
-          isDisabled={statusVote === 'loading' || !isColegiado}
-          _hover={{ bgColor: 'info.success' }}
-          icon={
-            <Icon
-              _hover={{ color: 'initial.white' }}
-              as={AiOutlineCheck}
-              color={isPositiveVote ? 'initial.white' : 'secondary.dark'}
-            />
-          }
-        />
-        <IconButton
-          onClick={() => setCurrentVote(false)}
-          bgColor={isNegativeVote ? 'info.error' : 'transparent'}
-          _focus={{ boxShadow: 'none' }}
-          height="fit-content"
-          px="12px"
-          py="6px"
-          borderWidth="2px"
-          borderRadius="0"
-          borderColor="#000"
-          _hover={{ bgColor: 'info.error' }}
-          aria-label="vote yes"
-          isDisabled={statusVote === 'loading' || !isColegiado}
-          icon={
-            <Icon
-              _hover={{ color: 'initial.white' }}
-              as={AiOutlineClose}
-              color={isNegativeVote ? 'initial.white' : 'secondary.dark'}
-            />
-          }
-        />
-      </Flex>
-    </Flex>
+    </>
   )
 }
 

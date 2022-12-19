@@ -9,7 +9,7 @@ import { Request, Response } from 'types/express'
 
 export class ReadActorProcedimentoController extends Controller<IProcedimentoService> {
   constructor(service: IProcedimentoService) {
-    const permission: PermissionKey = 'procedimento_actor_read'
+    const permission: PermissionKey = 'procedimento_read'
 
     super({ permission, service })
   }

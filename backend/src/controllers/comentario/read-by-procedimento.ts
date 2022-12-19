@@ -10,7 +10,7 @@ import { ComentarioController } from '.'
 export class ReadCommentsByProcedimentoController extends ComentarioController {
   constructor(service: IComentarioService) {
     const validations = [hasNumericId]
-    const permission: PermissionKey = 'colegiado_comments_read'
+    const permission: PermissionKey = 'comentario_read'
 
     super({ permission, validations, service })
   }

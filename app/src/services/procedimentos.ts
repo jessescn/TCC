@@ -27,6 +27,7 @@ export type ProcedimentoDetails = {
 export type Vote = {
   autor: number
   aprovado: boolean
+  procedimentoId: number
 }
 
 export type DeleteVote = {
@@ -77,18 +78,18 @@ export const ProcedimentoService = {
       url: `/procedimentos/${procedimentoId}`
     })
   },
-  vote: (procedimentoId: number, payload: Vote) => {
+  vote: (payload: Vote) => {
     return httpClient.request<AxiosResponse<ProcedimentoModel>>({
       method: 'post',
-      url: `/colegiado/${procedimentoId}/vote`,
+      url: `/colegiado/vote`,
       body: payload
     })
   },
-  deleteVote: (procedimentoId: number, payload: DeleteVote) => {
+  deleteVote: (procedimentoId: number, autor: number) => {
     return httpClient.request<AxiosResponse<ProcedimentoModel>>({
       method: 'delete',
-      url: `/colegiado/${procedimentoId}/vote`,
-      body: payload
+      url: `/colegiado/vote`,
+      body: { autor, procedimentoId }
     })
   },
   comments: (procedimentoId: number) => {

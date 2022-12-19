@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Icon,
   IconButton,
   Input,
@@ -10,15 +11,17 @@ import {
 } from '@chakra-ui/react'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { KeyboardEvent, useState } from 'react'
+import { AiOutlineClose } from 'react-icons/ai'
 import { FiSend } from 'react-icons/fi'
 import { actions, selectors, store, useSelector } from 'store'
 import Comentario from './comentario'
 
 type Props = {
   procedimento: ProcedimentoModel
+  onClose: () => void
 }
 
-export default function ListaComentarios({ procedimento }: Props) {
+export default function ListaComentarios({ procedimento, onClose }: Props) {
   const [conteudo, setConteudo] = useState('')
 
   const status = useSelector(
@@ -44,11 +47,20 @@ export default function ListaComentarios({ procedimento }: Props) {
   }
 
   return (
-    <Box p="0.5rem" height="100%">
-      <Text fontWeight="bold" mb="1.5rem">
-        Comentários
-      </Text>
-      <Stack spacing="1rem" overflowY="auto" height="88%" w="100%">
+    <Box py="0.5rem" height="100%">
+      <Flex alignItems="center" mb="1.25rem">
+        <IconButton
+          aria-label="close comentarios"
+          _focus={{ boxShadow: 'none' }}
+          bgColor="transparent"
+          _hover={{ bgColor: 'transparent' }}
+          _active={{ bgColor: 'transparent' }}
+          icon={<Icon as={AiOutlineClose} />}
+          onClick={onClose}
+        />
+        <Text fontWeight="bold">Comentários</Text>
+      </Flex>
+      <Stack spacing="1rem" overflowY="auto" height="85%" w="100%" pr="0.5rem">
         {comentarios.length === 0 && (
           <Text fontSize="sm">Nenhum comentário</Text>
         )}

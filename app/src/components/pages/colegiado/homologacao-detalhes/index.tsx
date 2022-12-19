@@ -127,7 +127,10 @@ export default function HomologarProcedimentoDetails() {
           }}
         >
           <Box width="400px" py="0.5rem" px="1rem" height="100%">
-            <ListaComentarios procedimento={procedimento} />
+            <ListaComentarios
+              procedimento={procedimento}
+              onClose={handleToggleComments}
+            />
           </Box>
         </motion.div>
       </Flex>

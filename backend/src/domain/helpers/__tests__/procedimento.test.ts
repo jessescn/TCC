@@ -1,37 +1,14 @@
-import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
+import { VotoModel } from 'domain/models/voto'
 import { createMock } from 'ts-auto-mock'
 import { ProcedimentoHelper } from '../procedimento'
 
 describe('Procedimento Helper', () => {
   const sut = ProcedimentoHelper
   const votes = [
-    createMock<VotoProcedimento>({ autor: 1, aprovado: true }),
-    createMock<VotoProcedimento>({ autor: 2, aprovado: true })
+    createMock<VotoModel>({ autorId: 1, aprovado: true }),
+    createMock<VotoModel>({ autorId: 2, aprovado: true })
   ]
-
-  describe('insertOrUpdateVote', () => {
-    it("should insert into vote list if vote isn't in the list by autor", () => {
-      const newVote = createMock<VotoProcedimento>({
-        autor: 3,
-        aprovado: false
-      })
-
-      const result = sut.insertOrUpdateVote(votes, newVote)
-
-      expect(result).toEqual([...votes, newVote])
-    })
-
-    it('should update an existing vote if the vote already in the list', () => {
-      const updatedVote = createMock<VotoProcedimento>({
-        autor: 1,
-        aprovado: false
-      })
-
-      const result = sut.insertOrUpdateVote(votes, updatedVote)
-
-      expect(result).toEqual([updatedVote, votes[1]])
-    })
-  })
 
   describe('isMaioria', () => {
     it('should return if a list of votes is majority to make a verdict', () => {
@@ -67,31 +44,20 @@ describe('Procedimento Helper', () => {
   })
 
   describe('isProcedimentoAprovado', () => {
-    const procedimento1 = createMock<ProcedimentoModel>({
-      votos: [
-        createMock<VotoProcedimento>({ autor: 1, aprovado: true }),
-        createMock<VotoProcedimento>({ autor: 2, aprovado: true })
-      ]
-    })
-    const procedimento2 = createMock<ProcedimentoModel>({
-      votos: [
-        createMock<VotoProcedimento>({ autor: 1, aprovado: true }),
-        createMock<VotoProcedimento>({ autor: 2, aprovado: false })
-      ]
-    })
-
-    const procedimento3 = createMock<ProcedimentoModel>({
-      votos: [
-        createMock<VotoProcedimento>({ autor: 1, aprovado: false }),
-        createMock<VotoProcedimento>({ autor: 2, aprovado: false }),
-        createMock<VotoProcedimento>({ autor: 3, aprovado: true })
-      ]
-    })
-
     it('should return if procedimento have approve from majority of votes', () => {
-      const result1 = sut.isProcedimentoAprovado(procedimento1)
-      const result2 = sut.isProcedimentoAprovado(procedimento2)
-      const result3 = sut.isProcedimentoAprovado(procedimento3)
+      const result1 = sut.isProcedimentoAprovado([
+        createMock<VotoModel>({ autorId: 1, aprovado: true }),
+        createMock<VotoModel>({ autorId: 2, aprovado: true })
+      ])
+      const result2 = sut.isProcedimentoAprovado([
+        createMock<VotoModel>({ autorId: 1, aprovado: true }),
+        createMock<VotoModel>({ autorId: 2, aprovado: false })
+      ])
+      const result3 = sut.isProcedimentoAprovado([
+        createMock<VotoModel>({ autorId: 1, aprovado: false }),
+        createMock<VotoModel>({ autorId: 2, aprovado: false }),
+        createMock<VotoModel>({ autorId: 3, aprovado: true })
+      ])
 
       expect(result1).toBeTruthy()
       expect(result2).toBeFalsy()

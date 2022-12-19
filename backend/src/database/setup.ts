@@ -8,7 +8,6 @@ import { CreateActor } from 'repositories/sequelize/actor'
 import { NewFormulario } from 'repositories/sequelize/formulario'
 import { CreateProfile } from 'repositories/sequelize/profile'
 import { NewTipoProcedimento } from 'repositories/sequelize/tipo-procedimento'
-import mock from 'types/campos-formulario/modelo-mockado'
 
 export const createInitialProfile = async ({
   nome,
@@ -69,6 +68,10 @@ export const populateInitialData = async () => {
 
   await createInitialProfile({ nome: 'usuario', permissoes: actors.usuario })
   await createInitialProfile({
+    nome: 'secretaria',
+    permissoes: actors.secretaria
+  })
+  await createInitialProfile({
     nome: 'coordenacao',
     permissoes: actors.coordenacao
   })
@@ -83,7 +86,4 @@ export const populateInitialData = async () => {
     senha: process.env.ADMIN_PASSWORD,
     profile: profile.id
   })
-
-  await createInitialFormulario(mock.formulario)
-  await createInitialTipoProcedimento(mock.tipoProcedimento)
 }
