@@ -185,7 +185,7 @@ export default function Campo({
             <Input
               placeholder="Título do Campo"
               size="sm"
-              defaultValue={campo.configuracao_campo.titulo || 'Título'}
+              defaultValue={campo.configuracao_campo.titulo}
               onChange={handleUpdateTitle}
             />
           </Box>
