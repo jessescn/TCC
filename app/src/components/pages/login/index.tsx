@@ -1,18 +1,17 @@
 import { Box, Center, Flex, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
-import Link from 'components/atoms/link'
-import Alert from 'components/molecules/alert'
+import { CustomLink } from 'components/atoms/custom-link'
+import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
+import { Alert } from 'components/molecules/alert'
 import FormInput from 'components/molecules/forms/input'
 import LogoPanel from 'components/organisms/logo-panel'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { AuthCredentials } from 'services/auth'
 import { actions, selectors, store, useSelector } from 'store'
 
-type LoginForm = {
-  email: string
-  senha: string
-}
+type LoginForm = AuthCredentials
 
 export default function Login() {
   const navigate = useNavigate()
@@ -27,8 +26,8 @@ export default function Login() {
   const currentUser = useSelector(selectors.session.getCurrentUser)
 
   useEffect(() => {
-    if (status.status === 'success') {
-      const redirectTo = currentUser?.verificado ? '/' : '/confirmacao-email'
+    if (status.status === 'success' && currentUser) {
+      const redirectTo = currentUser.verificado ? '/' : '/confirmacao-email'
 
       navigate(redirectTo)
     }
@@ -48,26 +47,26 @@ export default function Login() {
     >
       <LogoPanel side="left" />
       <Box>
-        <Alert borderRadius={{ base: '0', md: '0 8px 0 0' }} title="Aviso">
+        <Alert borderRadius={{ base: '0', md: '0 0.5rem 0 0' }} title="Aviso">
           <Text>
             Você não está conectado ao sistema. Utilize o formulário abaixo para
             se autenticar
           </Text>
         </Alert>
-        <Box mt="16px" px={{ base: '8px', md: '32px' }}>
+        <Box p={{ base: '0.5rem', md: '1rem' }}>
           <form
             data-testid="login-form"
             onSubmit={handleSubmit(handleLoginSubmit)}
           >
             <FormInput
-              mb="12px"
+              mb="1rem"
               id="email"
               placeholder="Ex. email@ccc.ufcg.edu.br"
               isInvalid={Boolean(errors.email)}
               label={{
                 text: 'Email',
                 props: {
-                  fontSize: { base: '14px', md: '16px' },
+                  fontSize: { base: 'sm', md: 'md' },
                   htmlFor: 'email'
                 }
               }}
@@ -89,7 +88,7 @@ export default function Login() {
               label={{
                 text: 'Senha',
                 props: {
-                  fontSize: { base: '14px', md: '16px' },
+                  fontSize: { base: 'sm', md: 'md' },
                   htmlFor: 'senha'
                 }
               }}
@@ -103,19 +102,23 @@ export default function Login() {
                 }
               ]}
             />
-            <Center mt="32px" flexDir="column" mb="16px">
+            <Center mt="1rem" flexDir="column">
               <Button isLoading={status.status === 'loading'} type="submit">
                 Acessar
               </Button>
               {status.status === 'failure' && (
-                <Text mt="8px" color="info.error" fontSize="12px">
-                  {status.message || 'credenciais inválidas!'}
-                </Text>
+                <SimpleErrorMessage
+                  message={status.message || 'credenciais inválidas!'}
+                />
               )}
-              <Link redirectTo="/alteracao-senha">Esqueci a senha</Link>
-              <Link redirectTo="/cadastro">
-                Não possui acesso? clique aqui!
-              </Link>
+              <Flex justifyContent="center">
+                <CustomLink redirectTo="/cadastro" mr="0.5rem">
+                  Criar Conta
+                </CustomLink>
+                <CustomLink redirectTo="/alteracao-senha">
+                  Esqueci a Senha
+                </CustomLink>
+              </Flex>
             </Center>
           </form>
         </Box>

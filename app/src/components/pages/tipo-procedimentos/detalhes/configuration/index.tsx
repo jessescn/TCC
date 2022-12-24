@@ -27,9 +27,9 @@ export default function TipoProcedimentoConfiguration() {
   )
 
   return (
-    <Stack spacing="24px">
+    <Stack spacing="1rem">
       <Box alignItems="center">
-        <Text fontSize="14px" mb="8px" fontWeight="bold">
+        <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
           Nome
         </Text>
         <Input
@@ -43,7 +43,7 @@ export default function TipoProcedimentoConfiguration() {
         <ErrorMessage errors={errors} fieldName="nome" />
       </Box>
       <Box>
-        <Text fontSize="14px" mb="8px" fontWeight="bold">
+        <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
           Descrição
         </Text>
         <Textarea

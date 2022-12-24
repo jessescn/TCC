@@ -7,7 +7,6 @@ import {
   StyleProps,
   Text
 } from '@chakra-ui/react'
-import { User } from 'domain/entity/user'
 import { ProfileType } from 'domain/types/actors'
 import { IconType } from 'react-icons'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -31,12 +30,14 @@ export default function NavItem({
   style,
   isSubitem = false
 }: NavItemProps) {
-  const currentUser = useSelector(selectors.session.getCurrentUser)
   const navigate = useNavigate()
   const location = useLocation()
 
+  const havePermission = useSelector(selectors.session.hasRoutePermission)(
+    profiles
+  )
+
   const isCurrentRoute = location.pathname === url
-  const isAdmin = currentUser?.profile.nome === 'admin'
 
   const handleNavigate = () => {
     navigate(url)
@@ -51,19 +52,9 @@ export default function NavItem({
 
   const linkStyle = isCurrentRoute ? selectedStyle : {}
 
-  const validation = User.includesInProfiles
-
-  const havePermission =
-    isAdmin ||
-    (profiles.length > 0
-      ? currentUser
-        ? validation(currentUser, profiles)
-        : false
-      : true)
-
   return !havePermission ? null : (
     <Flex
-      mt={30}
+      mt="1.5rem"
       flexDir="column"
       w="100%"
       alignItems={'flex-start'}
@@ -73,9 +64,9 @@ export default function NavItem({
       <Menu placement="right">
         <Link
           p={3}
+          w={'100%'}
           borderRadius={8}
           _hover={selectedStyle}
-          w={'100%'}
           {...linkStyle}
         >
           <MenuButton
@@ -89,7 +80,7 @@ export default function NavItem({
                 <Text
                   ml={icon ? 2 : 0}
                   display={'flex'}
-                  fontSize={isSubitem ? '12px' : '14px'}
+                  fontSize={isSubitem ? 'xs' : 'sm'}
                 >
                   {title}
                 </Text>

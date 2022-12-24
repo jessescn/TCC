@@ -1,13 +1,14 @@
-import { Box, Divider } from '@chakra-ui/react'
+import { Divider } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
+import { Container } from 'components/atoms/container'
+import { ContentHeader } from 'components/molecules/content-header'
 import Configuration from 'components/pages/formularios/detalhes/configuration'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
-import PageHeader from 'components/molecules/page-header'
-import { Footer } from './footer'
+import Footer from './footer'
 
 type FormularioForm = {
   nome: string
@@ -65,27 +66,19 @@ export default function FormularioDetails() {
   }, [statusCreate, statusUpdate])
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-    >
+    <Container>
       <FormProvider {...formControls}>
         <form onSubmit={formControls.handleSubmit(onSubmit)}>
-          <PageHeader
+          <ContentHeader
             title={formulario ? 'Editar Formulário' : 'Novo Formulário'}
             identifier={formulario?.id}
             updatedAt={formulario?.updatedAt}
           />
-          <Divider my="24px" borderColor="secondary.dark" />
+          <Divider my="1.5rem" borderColor="secondary.dark" />
           <Configuration />
           <Footer />
         </form>
       </FormProvider>
-    </Box>
+    </Container>
   )
 }

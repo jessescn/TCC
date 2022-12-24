@@ -1,4 +1,5 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -22,21 +23,18 @@ const Footer = () => {
   }
 
   return (
-    <Flex justifyContent="flex-end" mt="32px">
+    <Flex justifyContent="flex-end" mt="2rem">
       <Button
-        bgColor="initial.white"
-        borderColor="primary.dark"
-        borderWidth={1}
-        color="primary.dark"
         size="sm"
-        mr="8px"
+        customVariant="ghost"
+        mr="0.5rem"
         onClick={() => navigate('/coordenacao/usuarios')}
       >
         Voltar
       </Button>
       <SimpleConfirmationButton
         style={{
-          fontSize: '12px',
+          fontSize: 'sm',
           size: 'sm',
           bgColor: 'primary.dark',
           color: 'initial.white',

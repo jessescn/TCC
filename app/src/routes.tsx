@@ -45,6 +45,8 @@ export default function Routes() {
           </AuthRedirect>
         }
       />
+      <Route path="/alteracao-senha" element={<AlteracaoSenha />} />
+      <Route path="/alteracao-senha/:code" element={<AlteracaoSenhaCodigo />} />
       <Route
         path="/confirmacao-email/:code"
         element={<ConfirmacaoEmailCodigo />}
@@ -57,8 +59,6 @@ export default function Routes() {
           </AuthRedirect>
         }
       />
-      <Route path="/alteracao-senha" element={<AlteracaoSenha />} />
-      <Route path="/alteracao-senha/:code" element={<AlteracaoSenhaCodigo />} />
       <Route
         path="/"
         element={

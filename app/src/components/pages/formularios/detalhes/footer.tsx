@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
 
-export const Footer = () => {
+export default function Footer() {
   const navigate = useNavigate()
   const { watch } = useFormContext()
 
@@ -14,10 +14,7 @@ export const Footer = () => {
 
   const campos: any[] = watch('campos') || []
   const formulario = useSelector(selectors.formularioDetalhes.getFormulario)
-  const statusCreate = useSelector(state => state.formulario.statusCreate)
-  const statusUpdate = useSelector(state => state.formulario.statusUpdate)
-
-  const isLoading = statusCreate === 'loading' || statusUpdate === 'loading'
+  const isLoading = useSelector(selectors.formulario.isUpdatingData)
 
   const isFormularioEmpty = campos.length === 0
 
@@ -27,7 +24,7 @@ export const Footer = () => {
 
   const createButton = (
     <Button
-      fontSize="12px"
+      fontSize="sm"
       size="sm"
       type="submit"
       isLoading={isLoading}
@@ -40,7 +37,7 @@ export const Footer = () => {
   const updateButton = (
     <SimpleConfirmationButton
       style={{
-        fontSize: '12px',
+        fontSize: 'sm',
         size: 'sm',
         bgColor: 'primary.dark',
         color: 'initial.white',
@@ -63,16 +60,16 @@ export const Footer = () => {
   }
 
   return (
-    <Flex justifyContent="flex-end" mt="24px">
+    <Flex justifyContent="flex-end" mt="1.5rem">
       <Button
-        fontSize="12px"
+        fontSize="sm"
         bgColor="initial.white"
         borderColor="primary.dark"
         _hover={{ bgColor: 'initial.white' }}
         borderWidth={1}
         color="primary.dark"
         size="sm"
-        mr="8px"
+        mr="0.5rem"
         disabled={isLoading}
         onClick={() => navigate('/formularios')}
       >

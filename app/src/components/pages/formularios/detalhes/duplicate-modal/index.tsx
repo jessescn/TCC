@@ -9,16 +9,11 @@ import {
   Text
 } from '@chakra-ui/react'
 import { FocusableElement } from '@chakra-ui/utils'
-import MultipleSelect from 'components/atoms/multiple-select'
+import { SelectOption, MultipleSelect } from 'components/atoms/multiple-select'
 import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
 import { FormularioModel } from 'domain/models/formulario'
 import { ReactNode, RefObject, useState } from 'react'
 import { selectors, useSelector } from 'store'
-
-type Option = {
-  value: any
-  label: string
-}
 
 type Props = {
   isOpen: boolean
@@ -35,7 +30,7 @@ export default function DuplicateFormularioModal({
   onConfirm
 }: Props) {
   const [selectedFormOptions, setSelectedFormOptions] = useState<
-    Option | undefined
+    SelectOption | undefined
   >()
   const formularios = useSelector(selectors.formularioDetalhes.getFormularios)
 
@@ -95,9 +90,9 @@ export default function DuplicateFormularioModal({
     >
       <AlertOverlay>
         <AlertContent>
-          `<AlertHeader>Duplicar Formulário</AlertHeader>
-          <AlertBody fontSize="14px">
-            <Text mb="10px">Selecione um formulário que deseja duplicar</Text>
+          <AlertHeader>Duplicar Formulário</AlertHeader>
+          <AlertBody fontSize="sm">
+            <Text mb="0.5rem">Selecione um formulário que deseja duplicar</Text>
             <MultipleSelect
               options={formOptions}
               value={selectedFormOptions}

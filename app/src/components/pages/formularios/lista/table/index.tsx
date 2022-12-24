@@ -1,31 +1,17 @@
-import {
-  Box,
-  Center,
-  Icon,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-  useDisclosure
-} from '@chakra-ui/react'
+import { Box, Center, Icon, Text, useDisclosure } from '@chakra-ui/react'
 import ConfirmModal from 'components/organisms/confirm-modal'
 import SimpleTable from 'components/organisms/simple-table'
-import { FormularioModel } from 'domain/models/formulario'
 import { useState } from 'react'
-import { AiFillEdit } from 'react-icons/ai'
 import { MdSearchOff } from 'react-icons/md'
-import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 import { formatDate } from 'utils/format'
+import EditMenu from './edit-menu'
 
 export default function FormulariosTable() {
-  const navigate = useNavigate()
   const confirmModalControls = useDisclosure()
 
   const formularios = useSelector(selectors.formulario.getFormularios)
-  const pagination = useSelector(state => state.formulario.pagination)
+  const pagination = useSelector(selectors.formulario.getPagination)
   const total = useSelector(state => state.formulario.total)
 
   const [pendingDeleted, setPendingDeleted] = useState<number | null>()
@@ -39,11 +25,6 @@ export default function FormulariosTable() {
     confirmModalControls.onClose()
   }
 
-  const handleRedirect = (formularioId: number) => {
-    store.dispatch(actions.formulario.resetStatus())
-    navigate(`/formularios/edit?id=${formularioId}`)
-  }
-
   const handleOpenConfirmModal = (id: number) => {
     setPendingDeleted(id)
     confirmModalControls.onOpen()
@@ -53,33 +34,13 @@ export default function FormulariosTable() {
     store.dispatch(actions.formulario.list({ ...pagination, page: newPage }))
   }
 
-  const getEditMenu = (form: FormularioModel) => {
-    return (
-      <Menu>
-        <MenuButton
-          disabled={form.deleted}
-          as={IconButton}
-          variant="unstyled"
-          size="sm"
-          icon={<Icon as={AiFillEdit} />}
-        />
-        <MenuList>
-          <MenuItem onClick={() => handleRedirect(form.id)}>Editar</MenuItem>
-          <MenuItem onClick={() => handleOpenConfirmModal(form.id)}>
-            Excluir
-          </MenuItem>
-        </MenuList>
-      </Menu>
-    )
-  }
-
   return formularios.length > 0 ? (
     <Box
-      mt="24px"
+      mt="1.5rem"
       borderColor="secondary.dark"
       borderWidth="1px"
-      borderRadius="8px"
-      p="16px"
+      borderRadius="lg"
+      p="1rem"
     >
       <SimpleTable
         currentPage={pagination.page}
@@ -101,7 +62,11 @@ export default function FormulariosTable() {
           {
             content: !form.updatedAt ? '-' : formatDate(form.updatedAt)
           },
-          { content: getEditMenu(form) }
+          {
+            content: (
+              <EditMenu formulario={form} onConfirm={handleOpenConfirmModal} />
+            )
+          }
         ])}
       />
       <ConfirmModal
@@ -115,8 +80,8 @@ export default function FormulariosTable() {
     </Box>
   ) : (
     <Center flexDir="column" h="40vh">
-      <Icon fontSize="45px" as={MdSearchOff} />
-      <Text textAlign="center" maxW="300px" fontSize="14px">
+      <Icon fontSize="6xl" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="sm">
         Nenhum formulário encontrado. Clique em 'Novo Formulário' para construir
         um novo modelo
       </Text>

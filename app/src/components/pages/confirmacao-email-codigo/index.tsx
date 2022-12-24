@@ -4,7 +4,7 @@ import LogoPanel from 'components/organisms/logo-panel'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
-export const Content = () => {
+export default function ConfirmacaoEmailCodigo() {
   const navigate = useNavigate()
   const status = useSelector(state => state.session.exchangeCodeStatus)
   const isExchangeSuccess = status.status === 'success'
@@ -24,7 +24,7 @@ export const Content = () => {
       w="100%"
       maxW="800px"
       bgColor="initial.white"
-      borderRadius="8px"
+      borderRadius="lg"
       flexDirection={{ base: 'column', md: 'row' }}
     >
       <LogoPanel side="left" />
@@ -33,7 +33,7 @@ export const Content = () => {
           <Center flexDirection="column" h="100%">
             <Text
               textAlign="center"
-              fontSize="20px"
+              fontSize="xl"
               fontWeight="bold"
               color="info.success"
             >
@@ -51,7 +51,7 @@ export const Content = () => {
           <Center flexDirection="column" h="100%">
             <Text
               textAlign="center"
-              fontSize="20px"
+              fontSize="xl"
               fontWeight="bold"
               color="info.error"
             >

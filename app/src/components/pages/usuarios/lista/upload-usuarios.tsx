@@ -7,7 +7,6 @@ import {
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -90,33 +89,26 @@ export default function UploadUsuariosButton() {
     <Modal {...modalControls} isCentered onCloseComplete={resetStatus}>
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
         <ModalHeader>
-          <Text fontSize="20px">Atualizar Usuários</Text>
+          <Text fontSize="xl">Atualizar Usuários</Text>
         </ModalHeader>
-        <ModalBody py={0}>
-          <Text fontSize="14px" fontWeight="normal">
+        <ModalBody p="1rem">
+          <Text fontSize="sm" fontWeight="normal">
             Adicione um csv com as informações para criação de um novo usuário
             ou edição de um existente caso ele já exista
           </Text>
-          <Center my="32px">
+          <Center my="1.5rem">
             <Button
-              bgColor="initial.white"
-              color="primary.dark"
-              borderWidth="2px"
-              borderColor="primary.dark"
               size="sm"
-              fontSize="14px"
+              customVariant="outline"
               leftIcon={<Icon as={AiOutlineCloudDownload} />}
-              _hover={{ bgColor: 'initial.white' }}
               onClick={handleDownloadModel}
             >
               Baixar Modelo
             </Button>
             <Button
-              ml="8px"
               size="sm"
-              fontSize="14px"
+              ml="8px"
               leftIcon={<Icon as={AiOutlineCloudUpload} />}
               onClick={() => inputRef.current.click()}
             >
@@ -168,9 +160,15 @@ export default function UploadUsuariosButton() {
         <ModalFooter pt={0}>
           <Flex>
             <Button
+              customVariant="ghost"
+              size="sm"
+              onClick={modalControls.onClose}
+            >
+              Cancelar
+            </Button>
+            <Button
               ml="8px"
               size="sm"
-              fontSize="14px"
               onClick={handleSendFile}
               isLoading={status.status === 'loading'}
               disabled={!file}
@@ -186,10 +184,8 @@ export default function UploadUsuariosButton() {
   return (
     <>
       <Button
+        size="sm"
         leftIcon={<Icon as={AiOutlineUpload} />}
-        fontSize="14px"
-        mb={0}
-        px={6}
         onClick={modalControls.onOpen}
       >
         Importar Usuários

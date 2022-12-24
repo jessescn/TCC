@@ -8,7 +8,7 @@ import {
   Thead,
   Tr
 } from '@chakra-ui/react'
-import Paginator from 'components/molecules/paginator'
+import { Paginator } from 'components/molecules/paginator'
 import { ReactNode } from 'react'
 
 export type Cell = {
@@ -45,7 +45,7 @@ const SimpleTable = ({
               <Th
                 color="initial.dark"
                 textTransform="initial"
-                fontSize="12px"
+                fontSize="xs"
                 key={`header-${index}`}
                 {...column.props}
               >
@@ -67,8 +67,8 @@ const SimpleTable = ({
             >
               {row.map((cell, cellIdx) => (
                 <Td
-                  py="12px"
-                  fontSize="12px"
+                  py="0.75rem"
+                  fontSize="xs"
                   key={`row-${rowIdx}-cell-${cellIdx}`}
                   {...cell.props}
                 >
@@ -80,7 +80,7 @@ const SimpleTable = ({
         </Tbody>
       </Table>
       {totalPages > 1 && (
-        <Flex mt="16px" justifyContent="flex-end">
+        <Flex mt="1rem" justifyContent="flex-end">
           <Paginator
             currentPage={currentPage}
             onChangePage={onChangePage}

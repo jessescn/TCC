@@ -7,21 +7,53 @@ import React, { ReactNode } from 'react'
 
 type Props = ButtonProps & {
   children: ReactNode
+  customVariant?: 'default' | 'ghost' | 'outline'
   ref?: React.RefObject<HTMLButtonElement>
 }
 
-export const Button = ({ children, ref, ...props }: Props) => {
+export const Button = ({ children, ref, customVariant, ...props }: Props) => {
   const internalRef = React.useRef<HTMLButtonElement>()
   const refs = useMergeRefs(internalRef, ref) as any
 
+  const ghostStyle: ButtonProps = {
+    bgColor: 'transparent',
+    border: 'none',
+    color: 'initial.black',
+    _focus: { boxShadow: 'none' },
+    _hover: { bgColor: 'transparent', color: 'initial.back' }
+  }
+
+  const outlineStyle: ButtonProps = {
+    bgColor: 'transparent',
+    borderWidth: '2px',
+    borderColor: 'primary.dark',
+    color: 'primary.dark',
+    _hover: { bgColor: 'primary.dark', color: 'initial.white' }
+  }
+
+  const defaultStyle: ButtonProps = {
+    bgColor: 'primary.dark',
+    border: 'none',
+    color: 'initial.white',
+    _hover: { bgColor: 'primary.default', color: 'initial.white' }
+  }
+
+  const stylesMap = {
+    default: defaultStyle,
+    outline: outlineStyle,
+    ghost: ghostStyle
+  }
+
+  const buttonStyle = customVariant ? stylesMap[customVariant] : defaultStyle
+
   return (
     <ChakraButton
+      ref={refs}
+      minW="fit-content"
       color="initial.white"
       bgColor="primary.dark"
-      mb="8px"
       _hover={{ bgColor: 'primary.default' }}
-      fontSize={{ base: '14px', md: '16px' }}
-      ref={refs}
+      {...buttonStyle}
       {...props}
     >
       {children}

@@ -42,8 +42,8 @@ export default function Configuration() {
 
   const duplicateModalControls = useDisclosure()
 
-  const handleToggleGeneral = () => setShowGeneral(!showGeneral)
-  const handleToggleForm = () => setShowForm(!showForm)
+  const handleToggleGeneral = () => setShowGeneral(prev => !prev)
+  const handleToggleForm = () => setShowForm(prev => !prev)
 
   const handleDuplicateModal = (formulario: FormularioModel) => {
     reset({
@@ -59,10 +59,10 @@ export default function Configuration() {
       <Box>
         <Flex justifyContent="space-between">
           <Button
+            px={0}
+            mb="0.5rem"
             display="block"
             variant="unstyled"
-            px={0}
-            mb="8px"
             onClick={handleToggleGeneral}
             _focus={{ boxShadow: 'none' }}
             leftIcon={
@@ -75,17 +75,17 @@ export default function Configuration() {
           </Button>
           <CustomButton
             size="sm"
-            fontSize="14px"
+            fontSize="sm"
             onClick={duplicateModalControls.onOpen}
           >
             Duplicar formulário
           </CustomButton>
         </Flex>
         <Collapse in={showGeneral} animateOpacity>
-          <Stack spacing="16px">
+          <Stack spacing="1rem">
             <Box alignItems="center">
-              <Text fontSize="14px" mb="8px" fontWeight="bold">
-                Nome:
+              <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
+                Nome
               </Text>
               <Input
                 size="sm"
@@ -98,8 +98,8 @@ export default function Configuration() {
               <ErrorMessage errors={errors} fieldName="nome" />
             </Box>
             <Box>
-              <Text fontSize="14px" mb="8px" fontWeight="bold">
-                Descrição:
+              <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
+                Descrição
               </Text>
               <Textarea
                 size="sm"
@@ -112,8 +112,8 @@ export default function Configuration() {
         <Button
           variant="unstyled"
           px={0}
-          mb="8px"
-          mt="24px"
+          mb="0.5rem"
+          mt="1.5rem"
           onClick={handleToggleForm}
           _focus={{ boxShadow: 'none' }}
           leftIcon={
@@ -121,7 +121,7 @@ export default function Configuration() {
           }
         >
           Configuração dos Campos
-          <Text fontSize="12px" fontWeight="normal">
+          <Text fontSize="xs" fontWeight="normal">
             (Ao menos um campo é obrigatório)
           </Text>
         </Button>

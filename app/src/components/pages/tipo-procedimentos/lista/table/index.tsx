@@ -21,11 +21,11 @@ export default function TipoProcedimentosTable() {
   return tipoProcedimentos.length > 0 ? (
     <>
       <Box
-        mt="24px"
+        mt="1.5rem"
         borderColor="secondary.dark"
         borderWidth="1px"
-        borderRadius="8px"
-        p="16px"
+        borderRadius="lg"
+        p="1rem"
       >
         <SimpleTable
           currentPage={pagination.page}
@@ -60,10 +60,10 @@ export default function TipoProcedimentosTable() {
     </>
   ) : (
     <Center flexDir="column" h="40vh">
-      <Icon fontSize="45px" as={MdSearchOff} />
-      <Text textAlign="center" maxW="300px" fontSize="14px">
-        Nenhum formulário encontrado. Clique em 'Novo Formulário' para construir
-        um novo modelo
+      <Icon fontSize="6xl" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="sm">
+        Nenhum tipo de procedimento encontrado. Clique em 'Novo Tipo
+        Procedimento' para criar um novo
       </Text>
     </Center>
   )

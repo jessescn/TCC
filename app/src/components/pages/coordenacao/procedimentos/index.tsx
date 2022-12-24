@@ -1,4 +1,6 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react'
+import { Container } from 'components/atoms/container'
+import { Title } from 'components/atoms/title'
 import FormInput from 'components/molecules/forms/input'
 import { LoadingPage } from 'components/molecules/loading'
 import { actions, selectors, store, useSelector } from 'store'
@@ -15,44 +17,34 @@ export default function TodosProcedimentosList() {
   }
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-    >
+    <Container>
       <Box>
-        <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-          Procedimentos
-        </Text>
-        <Text my="16px" fontSize="14px">
+        <Title>Procedimentos</Title>
+        <Text my="1rem" fontSize="sm">
           Acompanhe todos os procedimentos do sistema. Para mais detalhes,
           clique em um dos elementos listados.
         </Text>
       </Box>
-      <Divider my="24px" borderColor="secondary.dark" />
+      <Divider my="1.5rem" borderColor="secondary.dark" />
       <Flex justifyContent="space-between" alignItems="flex-end">
         <FormInput
           id="search"
-          maxW="365px"
-          height="35px"
-          fontSize="14px"
+          maxW="400px"
+          height="2rem"
+          fontSize="sm"
           placeholder="Ex.Busca por ID ou nome"
           onChange={e => handleSearch(e.target.value)}
           label={{
             text: 'Buscar procedimentos',
             props: {
               htmlFor: 'search',
-              fontSize: '14px',
+              fontSize: 'sm',
               fontWeight: 'bold'
             }
           }}
         />
       </Flex>
       {isLoading ? <LoadingPage /> : <TodosProcedimentosTable />}
-    </Box>
+    </Container>
   )
 }

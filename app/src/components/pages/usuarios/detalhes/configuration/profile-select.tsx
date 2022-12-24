@@ -1,12 +1,12 @@
 import { Box, Text } from '@chakra-ui/react'
-import MultipleSelect, { SelectOption } from 'components/atoms/multiple-select'
+import { SelectOption, MultipleSelect } from 'components/atoms/multiple-select'
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { selectors, useSelector } from 'store'
 
 export default function ProfileSelect() {
   const { watch, setValue } = useFormContext()
-  const profileId = watch('permissoes')
+  const profile = watch('permissoes')
 
   const existentProfiles = useSelector(selectors.userDetalhes.getProfiles)
 
@@ -18,7 +18,7 @@ export default function ProfileSelect() {
   }, [existentProfiles])
 
   const getSelectedOption = () => {
-    return profileOptions.find(option => option.value === profileId)
+    return profileOptions.find(option => option.value === profile)
   }
 
   const handleOnChangeProfile = (newValue: any) => {
@@ -27,10 +27,10 @@ export default function ProfileSelect() {
 
   return (
     <Box>
-      <Text fontSize="14px" fontWeight="bold" mb="8px">
+      <Text fontSize="sm" fontWeight="bold">
         Profile
       </Text>
-      <Text fontSize="10px" my="8px">
+      <Text fontSize="xs" my="0.5rem">
         Selecione o profile do usuário. Alterações do profile resultam em
         mudanças nas permissões do usuário na plataforma.
       </Text>

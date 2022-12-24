@@ -1,6 +1,6 @@
 import { Text } from '@chakra-ui/react'
 import { render, screen } from 'jest/utils/test-utils'
-import Alert from '../alert'
+import { Alert } from '../alert'
 
 describe('Componente Alert', () => {
   test('deve renderizar corretamente', () => {

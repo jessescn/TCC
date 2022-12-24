@@ -1,8 +1,9 @@
-import { Box, Divider, Flex, Select, Stack, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Stack, Text } from '@chakra-ui/react'
 import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento'
 import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { useState } from 'react'
+import { MultipleSelect } from 'components/atoms/multiple-select'
 import Formulario from './formulario'
 
 type Props = {
@@ -24,45 +25,44 @@ export default function Procedimento({
     formularios[0]
   )
 
-  function handleSelectFormulario(option: string) {
-    const novoFormularioSelecionado = formularios.find(
-      formulario => formulario.id === Number(option)
+  function handleSelectFormulario(formularioId: number) {
+    const novoFormulario = formularios.find(
+      formulario => formulario.id === formularioId
     )
 
-    if (!novoFormularioSelecionado) {
+    if (!novoFormulario || novoFormulario.id === formularioSelecionado.id) {
       return
     }
 
-    setFormularioSelecionado(novoFormularioSelecionado)
+    setFormularioSelecionado(novoFormulario)
   }
+
+  const formularioOptions = formularios.map(formulario => ({
+    label: formulario.nome,
+    value: formulario.id
+  }))
 
   return (
     <>
-      <Stack spacing="16px">
+      <Stack spacing="1rem" fontSize="sm">
         <Flex alignItems="center">
-          <Text fontSize="14px" mr="8px" fontWeight="bold">
+          <Text mr="0.5rem" fontWeight="bold">
             Nome:
           </Text>
-          <Text fontSize="12px">{procedimento.tipo_procedimento?.nome}</Text>
+          <Text>{procedimento.tipo_procedimento?.nome}</Text>
         </Flex>
         <Flex alignItems="center">
-          <Text fontSize="14px" fontWeight="bold" mr="8px">
+          <Text fontWeight="bold" mr="0.5rem">
             Formulário:
           </Text>
-          <Select
-            size="xs"
-            maxW="600px"
-            onChange={e => handleSelectFormulario(e.target.value)}
-          >
-            {formularios.map(formulario => (
-              <option value={`${formulario.id}`} key={formulario.id}>
-                {formulario.nome}
-              </option>
-            ))}
-          </Select>
+          <MultipleSelect
+            defaultValue={formularioOptions[0]}
+            onChange={e => handleSelectFormulario(Number(e?.value))}
+            options={formularioOptions}
+          />
         </Flex>
       </Stack>
-      <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
+      <Divider borderWidth="1px" borderColor="#EEE" my="1rem" />
       <Box height="100%" overflowY="auto">
         {formularioSelecionado && (
           <Formulario

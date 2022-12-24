@@ -1,10 +1,10 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/alteracao-senha'
+import AlteracaoSenha from 'components/pages/alteracao-senha'
 
-export default function AlteracaoSenha() {
+export default function AlteracaoSenhaPage() {
   return (
     <Screen noHeader alignItems="center">
-      <Content />
+      <AlteracaoSenha />
     </Screen>
   )
 }

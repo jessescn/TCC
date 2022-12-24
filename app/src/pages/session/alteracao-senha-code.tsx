@@ -1,10 +1,10 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/atualiza-senha'
+import AlteracaoSenhaCodigo from 'components/pages/atualiza-senha'
 
-export default function AlteracaoSenhaCodigo() {
+export default function AlteracaoSenhaCodigoPage() {
   return (
     <Screen noHeader alignItems="center">
-      <Content />
+      <AlteracaoSenhaCodigo />
     </Screen>
   )
 }

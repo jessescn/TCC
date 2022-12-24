@@ -1,8 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { FocusableElement } from '@chakra-ui/utils'
+import { ConfirmDialog } from 'components/molecules/confirm-dialog'
 import { useRef } from 'react'
-
-import ConfirmDialog from '../confirm-dialog'
 
 type Props = {
   onConfirm: () => void

@@ -1,9 +1,10 @@
-import { Box, Divider } from '@chakra-ui/react'
+import { Divider } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { actions, selectors, store, useSelector } from 'store'
 
-import PageHeader from 'components/molecules/page-header'
+import { Container } from 'components/atoms/container'
+import { ContentHeader } from 'components/molecules/content-header'
 import Configuration from 'components/pages/tipo-procedimentos/detalhes/configuration'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { NovoTipoProcedimento } from 'services/tipo-procedimentos'
@@ -88,18 +89,10 @@ export default function TipoProcedimentoDetails() {
   }
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-    >
+    <Container>
       <FormProvider {...formControls}>
         <form onSubmit={formControls.handleSubmit(onSubmit)}>
-          <PageHeader
+          <ContentHeader
             title={
               tipoProcedimento
                 ? 'Editar Tipo Procedimento'
@@ -108,11 +101,11 @@ export default function TipoProcedimentoDetails() {
             identifier={tipoProcedimento?.id}
             updatedAt={tipoProcedimento?.updatedAt}
           />
-          <Divider my="24px" borderColor="secondary.dark" />
+          <Divider my="1.5rem" borderColor="secondary.dark" />
           <Configuration />
           <Footer />
         </form>
       </FormProvider>
-    </Box>
+    </Container>
   )
 }

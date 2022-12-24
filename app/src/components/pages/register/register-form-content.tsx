@@ -1,10 +1,12 @@
-import { Box, Center, Link, Text } from '@chakra-ui/react'
+import { Box, Center, Stack, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
+import { CustomLink } from 'components/atoms/custom-link'
+import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
 import FormInput, { ErrorText } from 'components/molecules/forms/input'
+
 import { HTMLInputTypeAttribute } from 'react'
 import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 import PasswordStrengthBar from 'react-password-strength-bar'
-import { Link as RouterLink } from 'react-router-dom'
 import { CreateUser } from 'services/usuarios'
 import { actions, selectors, store, useSelector } from 'store'
 import { validateEmail } from 'utils/validation'
@@ -20,7 +22,7 @@ type fieldProps = {
 }
 
 export type RegisterForm = CreateUser & {
-  confirmPassword: string
+  confirmaSenha: string
 }
 
 export default function RegisterFormContent() {
@@ -39,10 +41,10 @@ export default function RegisterFormContent() {
   }
 
   const nameProps: fieldProps = {
-    invalid: Boolean(errors.nome),
     id: 'nome',
-    placeholder: 'Ex. João da Silva',
     label: 'Nome Completo',
+    placeholder: 'Ex. João da Silva',
+    invalid: Boolean(errors.nome),
     register: register('nome', {
       required: { value: true, message: '*campo obrigatório' }
     }),
@@ -50,10 +52,10 @@ export default function RegisterFormContent() {
   }
 
   const emailProps: fieldProps = {
-    invalid: Boolean(errors.email),
     id: 'email',
-    placeholder: 'Ex. email@ccc.ufcg.edu.br',
     label: 'Email',
+    placeholder: 'Ex. email@ccc.ufcg.edu.br',
+    invalid: Boolean(errors.email),
     register: register('email', {
       required: { value: true, message: '*campo obrigatório' },
       validate: (value: string) => {
@@ -73,11 +75,11 @@ export default function RegisterFormContent() {
   }
 
   const passwordProps: fieldProps = {
-    invalid: Boolean(errors.senha),
     id: 'senha',
+    label: 'Senha',
     placeholder: '******',
     type: 'password',
-    label: 'Senha',
+    invalid: Boolean(errors.senha),
     register: register('senha', {
       required: { value: true, message: '*campo obrigatório' },
       minLength: {
@@ -88,13 +90,13 @@ export default function RegisterFormContent() {
     errors: [{ text: errors.senha?.message, condition: Boolean(errors.senha) }]
   }
 
-  const confirmPasswordProps: fieldProps = {
-    invalid: Boolean(errors.confirmPassword),
-    id: 'confirmPassword',
-    placeholder: '******',
-    type: 'password',
+  const confirmaSenhaProps: fieldProps = {
+    id: 'confirmaSenha',
     label: 'Confirmar Senha',
-    register: register('confirmPassword', {
+    type: 'password',
+    placeholder: '******',
+    invalid: Boolean(errors.confirmaSenha),
+    register: register('confirmaSenha', {
       required: { value: true, message: '*campo obrigatório' },
       validate: (value: string) => {
         const password = getValues('senha')
@@ -104,93 +106,77 @@ export default function RegisterFormContent() {
     }),
     errors: [
       {
-        text: errors.confirmPassword?.message,
-        condition: Boolean(errors.confirmPassword)
+        text: errors.confirmaSenha?.message,
+        condition: Boolean(errors.confirmaSenha)
       },
       {
         text: 'as senhas não correspondem',
         condition: Boolean(
-          errors.confirmPassword && errors.confirmPassword.type === 'validate'
+          errors.confirmaSenha && errors.confirmaSenha.type === 'validate'
         )
       }
     ]
   }
 
-  const formFields = [
-    nameProps,
-    emailProps,
-    passwordProps,
-    confirmPasswordProps
-  ]
+  const formFields = [nameProps, emailProps, passwordProps, confirmaSenhaProps]
 
   return (
-    <Box
-      mt="16px"
-      w={{ base: '100%', md: '470px' }}
-      px={{ base: '8px', md: '32px' }}
-    >
-      <Text fontWeight="bold" fontSize={{ base: '16px', md: '20px' }} mb="16px">
+    <Box w={{ base: '100%', md: '470px' }} p={{ base: '0.5rem', md: '1.5rem' }}>
+      <Text fontWeight="bold" fontSize={{ base: 'md', md: 'xl' }}>
         Cadastro
       </Text>
       <form
         onSubmit={handleSubmit(handleRegisterSubmit)}
         data-testid="register-form"
       >
-        {formFields.map(field => (
-          <>
-            <FormInput
-              key={field.id}
-              id={field.id}
-              type={field.type}
-              isInvalid={field.invalid}
-              placeholder={field.placeholder}
-              label={{
-                text: field.label,
-                props: {
-                  fontSize: { base: '14px', md: '16px' },
-                  htmlFor: field.id
-                }
-              }}
-              register={field.register}
-              errors={field.errors}
-            />
-            {field.id === 'senha' && (
-              <PasswordStrengthBar
-                key="password-strenght"
-                style={{ marginTop: '10px' }}
-                password={watch('senha')}
-                scoreWords={[
-                  'muito fraco',
-                  'fraco',
-                  'mediano',
-                  'forte',
-                  'muito forte'
-                ]}
-                shortScoreWord="senha muito curta"
-                minLength={8}
+        <Stack my="1rem" spacing="0.5rem">
+          {formFields.map(field => (
+            <>
+              <FormInput
+                key={field.id}
+                id={field.id}
+                type={field.type}
+                isInvalid={field.invalid}
+                placeholder={field.placeholder}
+                label={{
+                  text: field.label,
+                  props: {
+                    fontSize: { base: 'sm', md: 'md' },
+                    htmlFor: field.id
+                  }
+                }}
+                register={field.register}
+                errors={field.errors}
               />
-            )}
-          </>
-        ))}
-        <Center mt="32px" flexDir="column" mb="16px">
+              {field.id === 'senha' && (
+                <PasswordStrengthBar
+                  key="password-strenght"
+                  style={{ marginTop: '0.5rem' }}
+                  password={watch('senha')}
+                  scoreWords={[
+                    'muito fraco',
+                    'fraco',
+                    'mediano',
+                    'forte',
+                    'muito forte'
+                  ]}
+                  shortScoreWord="senha muito curta"
+                  minLength={8}
+                />
+              )}
+            </>
+          ))}
+        </Stack>
+        <Center flexDir="column">
           <Button type="submit" isLoading={status.status === 'loading'}>
             Cadastrar
           </Button>
           {status.status === 'failure' && (
-            <Text mt="8px" color="info.error" fontSize="12px">
-              {status.message || 'erro ao criar novo usuário'}
-            </Text>
+            <SimpleErrorMessage
+              message={status.message || 'erro ao criar novo usuário'}
+            />
           )}
-          <RouterLink to="/login">
-            <Link
-              as="p"
-              fontSize="12px"
-              textDecoration="underline"
-              color="primary.default"
-            >
-              já possuo conta!
-            </Link>
-          </RouterLink>
+          <CustomLink redirectTo="/login">já possuo conta!</CustomLink>
         </Center>
       </form>
     </Box>

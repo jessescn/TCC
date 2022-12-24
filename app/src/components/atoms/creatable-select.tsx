@@ -5,14 +5,14 @@ const customStyles = {
   control: (styles: any) => ({
     ...styles,
     width: '100%',
-    fontSize: '14px',
+    fontSize: '0.875rem',
     backgroundColor: 'white'
   }),
   option: (styles: any) => {
     return {
       ...styles,
       width: '100%',
-      fontSize: '12px'
+      fontSize: '0.75rem'
     }
   }
 }

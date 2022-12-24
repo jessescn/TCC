@@ -1,12 +1,10 @@
 import {
-  Avatar,
   Box,
-  Divider,
+  Button,
   Drawer,
   DrawerContent,
   DrawerOverlay,
   Flex,
-  Heading,
   Icon,
   IconButton,
   Text,
@@ -24,21 +22,9 @@ import NavItem from './nav-item'
 import NavSubItems from './nav-subitems'
 
 import { AiOutlineClose, AiOutlineFileAdd, AiOutlineForm } from 'react-icons/ai'
-
-export const invisibleStyle = {
-  '&::-webkit-scrollbar': {
-    width: '0px'
-  },
-  '&::-webkit-scrollbar-track': {
-    width: '0px'
-  },
-  '&::-webkit-scrollbar-thumb': {
-    background: 'transparent'
-  }
-}
+import { invisibleStyle } from 'style/scroll'
 
 const Sidebar = () => {
-  const currentUser = useSelector(selectors.session.getCurrentUser)
   const btnRef = useRef(null)
 
   const procedimentosAbertos = useSelector(
@@ -73,15 +59,15 @@ const Sidebar = () => {
           justifyContent="space-between"
         >
           <Flex
-            p="16px"
-            flexDir="column"
-            w="100%"
-            alignItems={'flex-start'}
             as="nav"
+            w="100%"
+            p="0.75rem 1rem"
+            flexDir="column"
+            alignItems={'flex-start'}
           >
-            <Flex alignItems="center" mb="24px">
+            <Flex alignItems="center">
               <IconButton
-                aria-label=""
+                aria-label="botão fechar sidebar"
                 _focus={{ boxShadow: 'none' }}
                 bgColor="transparent"
                 _hover={{ bgColor: 'transparent' }}
@@ -90,7 +76,7 @@ const Sidebar = () => {
                 ref={btnRef}
                 icon={
                   <Icon
-                    fontSize="24px"
+                    fontSize="2xl"
                     as={AiOutlineClose}
                     color="primary.dark"
                   />
@@ -99,16 +85,16 @@ const Sidebar = () => {
               <Text
                 color="primary.dark"
                 fontWeight="bold"
-                fontSize={{ base: '16px', md: '24px' }}
-                ml="8px"
+                fontSize={{ base: 'md', md: '2xl' }}
+                ml="0.5rem"
               >
                 Computação UFCG
               </Text>
             </Flex>
             <Box
-              overflowY="scroll"
-              h="calc(100vh - 220px)"
               w="100%"
+              overflowY="scroll"
+              h="calc(100vh - 110px)"
               css={invisibleStyle}
             >
               <NavItem icon={FiHome} title="Página inicial" url="/" />
@@ -171,34 +157,25 @@ const Sidebar = () => {
             </Box>
           </Flex>
           <Flex
-            p="5%"
+            px="1rem"
+            mb="1rem"
             flexDir="column"
             w="100%"
             alignItems={'flex-start'}
-            mb={4}
           >
-            <Divider display={'flex'} />
-            <Flex mt={4} align="center" w="100%">
-              <Avatar size="sm" name={currentUser?.nome || ''} />
-              <Flex justifyContent="space-between" w="100%">
-                <Flex flexDir="column" ml={4} display={'flex'}>
-                  <Heading as="h3" size="sm">
-                    {currentUser?.nome}
-                  </Heading>
-                  <Text color="gray" fontSize="14px">
-                    {currentUser?.email}
-                  </Text>
-                </Flex>
-                <Tooltip label="Sair">
-                  <IconButton
-                    onClick={handleLogout}
-                    bgColor="#fff"
-                    aria-label=""
-                    icon={<Icon as={BiLogOut} />}
-                  />
-                </Tooltip>
-              </Flex>
-            </Flex>
+            <Tooltip label="Sair">
+              <Button
+                px="0.5rem"
+                w="100%"
+                onClick={handleLogout}
+                bgColor="#fff"
+                aria-label=""
+                leftIcon={<Icon fontSize="lg" as={BiLogOut} />}
+                justifyContent="flex-start"
+              >
+                Deslogar
+              </Button>
+            </Tooltip>
           </Flex>
         </Flex>
       </DrawerContent>

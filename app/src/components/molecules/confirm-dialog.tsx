@@ -18,21 +18,21 @@ type Props = {
   footer?: ReactNode
 }
 
-export default function ConfirmDialog({
+export const ConfirmDialog = ({
   isOpen,
   onClose,
   cancelRef,
   title,
   content,
   footer
-}: Props) {
+}: Props) => {
   return (
     <AlertDialog
-      closeOnOverlayClick={false}
-      closeOnEsc={false}
       isCentered
       isOpen={isOpen}
       onClose={onClose}
+      closeOnEsc={false}
+      closeOnOverlayClick={false}
       leastDestructiveRef={cancelRef}
     >
       <AlertOverlay>

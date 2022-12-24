@@ -6,7 +6,7 @@ type Props = {
 
 export const SimpleErrorMessage = ({ message }: Props) => {
   return (
-    <Text mt="6px" fontSize="10px" color="#E53E3E">
+    <Text fontSize="xs" color="info.error" mt="0.25rem">
       {message}
     </Text>
   )

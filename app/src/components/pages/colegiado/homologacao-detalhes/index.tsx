@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Icon,
-  Select,
-  Stack,
-  Text
-} from '@chakra-ui/react'
+import { Box, Divider, Flex, Icon, Stack, Text } from '@chakra-ui/react'
 import Formulario from 'components/organisms/procedimento-render/formulario'
 import Header from 'components/organisms/procedimento-render/header'
 import { useEffect, useRef, useState } from 'react'
@@ -15,10 +6,13 @@ import { BiCommentDetail } from 'react-icons/bi'
 import { selectors, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
 
+import { Container } from 'components/atoms/container'
+import { MultipleSelect } from 'components/atoms/multiple-select'
 import { FormularioModel } from 'domain/models/formulario'
 import { motion } from 'framer-motion'
 import ListaComentarios from './comentarios'
 import Votacao from './votacao'
+import { Button } from 'components/atoms/button'
 
 export default function HomologarProcedimentoDetails() {
   const procedimento = useSelector(
@@ -45,9 +39,9 @@ export default function HomologarProcedimentoDetails() {
     firstLoad.current = true
   }, [formularios])
 
-  function handleSelectFormulario(option: string) {
+  function handleSelectFormulario(formularioId?: number) {
     const novoFormularioSelecionado = formularios.find(
-      formulario => formulario.id === Number(option)
+      formulario => formulario.id === formularioId
     )
 
     if (!novoFormularioSelecionado) {
@@ -59,22 +53,17 @@ export default function HomologarProcedimentoDetails() {
 
   const status = procedimento ? getCurrentStatus(procedimento) : undefined
 
+  const formularioOptions = formularios.map(formulario => ({
+    label: formulario.nome,
+    value: formulario.id
+  }))
+
   return !procedimento ? null : (
-    <Box
-      boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.2)"
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-      position="relative"
-    >
+    <Container pos="relative">
       <Box height="50px">
         <Header procedimento={procedimento} status={status} />
       </Box>
-      <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
+      <Divider borderWidth="1px" borderColor="#EEE" my="1.5rem" />
       <Box minH="80%">
         <Box>
           <Flex justifyContent="space-between">
@@ -91,17 +80,11 @@ export default function HomologarProcedimentoDetails() {
                 <Text fontSize="14px" fontWeight="bold" mr="8px">
                   Formulário:
                 </Text>
-                <Select
-                  size="xs"
-                  maxW="600px"
-                  onChange={e => handleSelectFormulario(e.target.value)}
-                >
-                  {formularios.map(formulario => (
-                    <option value={`${formulario.id}`} key={formulario.id}>
-                      {formulario.nome}
-                    </option>
-                  ))}
-                </Select>
+                <MultipleSelect
+                  defaultValue={formularioOptions[0]}
+                  onChange={e => handleSelectFormulario(e?.value)}
+                  options={formularioOptions}
+                />
               </Flex>
             </Stack>
             <Votacao procedimento={procedimento} />
@@ -117,14 +100,10 @@ export default function HomologarProcedimentoDetails() {
           </Box>
         </Box>
       </Box>
-      <Flex mt="8px">
+      <Flex mt="1rem">
         <Button
           size="sm"
-          bgColor="primary.dark"
-          aria-label=""
-          color="initial.white"
           onClick={handleToggleComments}
-          _hover={{ bgColor: 'primary.default' }}
           leftIcon={<Icon color="#fff" as={BiCommentDetail} />}
         >
           Comentários
@@ -147,11 +126,11 @@ export default function HomologarProcedimentoDetails() {
             boxShadow: '0 4px 12px 0 rgba(0, 0, 0, 0.2)'
           }}
         >
-          <Box width="400px" py="8px" px="16px" height="100%">
+          <Box width="400px" py="0.5rem" px="1rem" height="100%">
             <ListaComentarios procedimento={procedimento} />
           </Box>
         </motion.div>
       </Flex>
-    </Box>
+    </Container>
   )
 }
