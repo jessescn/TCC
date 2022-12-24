@@ -1,12 +1,13 @@
-import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
-import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { BadRequestError, NotFoundError } from 'types/express/errors'
-import { IProcedimentoStatusService } from './procedimento-status'
-import { CreateVoto, votoRepository } from 'repositories/sequelize/voto'
-import { VotoModel } from 'domain/models/voto'
-import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
-import { IActorRepository } from 'repositories/sequelize/actor'
 import { ActorHelper } from 'domain/helpers/actor'
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
+import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
+import { VotoModel } from 'domain/models/voto'
+import { IActorRepository } from 'repositories/sequelize/actor'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
+import { CreateVoto } from 'repositories/sequelize/voto'
+import { BadRequestError, NotFoundError } from 'types/express/errors'
+import { IVotoRepository } from './../repositories/sequelize/voto'
+import { IProcedimentoStatusService } from './procedimento-status'
 
 export interface IColegiadoService {
   vote: (vote: CreateVoto) => Promise<ProcedimentoModel>
@@ -21,7 +22,8 @@ export class ColegiadoService implements IColegiadoService {
   constructor(
     private repository: IProcedimentoRepo,
     private statusService: IProcedimentoStatusService,
-    private actorRepository: IActorRepository
+    private actorRepository: IActorRepository,
+    private votoRepository: IVotoRepository
   ) {}
 
   private async handleMajorityVotes(
@@ -86,9 +88,9 @@ export class ColegiadoService implements IColegiadoService {
   async vote(data: CreateVoto) {
     await this.checkIfProcedimentoCanUpdateVote(data.procedimentoId)
 
-    await votoRepository.createOrUpdate(data)
+    await this.votoRepository.createOrUpdate(data)
 
-    const votos: VotoModel[] = await votoRepository.findAll({
+    const votos: VotoModel[] = await this.votoRepository.findAll({
       procedimentoId: data.procedimentoId
     })
 
@@ -111,7 +113,7 @@ export class ColegiadoService implements IColegiadoService {
   async deleteVote(procedimentoId: number, autor: number) {
     await this.checkIfProcedimentoCanUpdateVote(procedimentoId)
 
-    const [currentVoto] = await votoRepository.findAll({
+    const [currentVoto] = await this.votoRepository.findAll({
       autorId: autor,
       procedimentoId
     })
@@ -120,7 +122,7 @@ export class ColegiadoService implements IColegiadoService {
       throw new NotFoundError('Voto não encontrado')
     }
 
-    await votoRepository.destroy(currentVoto.id)
+    await this.votoRepository.destroy(currentVoto.id)
 
     const procedimento = await this.repository.findOne(procedimentoId)
 

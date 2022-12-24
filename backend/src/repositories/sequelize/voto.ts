@@ -21,6 +21,7 @@ export interface IVotoRepository extends IRepository {
   create: (data: CreateVoto) => Promise<VotoModel>
   update: (id: number, data: Partial<VotoModel>) => Promise<VotoModel>
   destroy: (id: number) => Promise<VotoModel>
+  createOrUpdate: (data: CreateVoto) => Promise<VotoModel>
 }
 
 export class VotoRepository implements IVotoRepository {
@@ -81,5 +82,3 @@ export class VotoRepository implements IVotoRepository {
     return voto
   }
 }
-
-export const votoRepository = new VotoRepository()

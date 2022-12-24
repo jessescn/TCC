@@ -15,6 +15,7 @@ const notIncludesInvalidUpdateFields = (req: Request) => {
     'escopo',
     'formularios',
     'publicos',
+    'revisao_coordenacao',
     'colegiado'
   ]
   notIncludesInvalidFields(req, validFields)

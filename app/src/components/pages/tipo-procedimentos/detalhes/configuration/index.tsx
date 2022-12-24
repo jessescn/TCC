@@ -54,20 +54,41 @@ export default function TipoProcedimentoConfiguration() {
       </Box>
       <Flex justifyContent="space-between">
         <Flex alignItems="center">
-          <Text fontSize="14px" fontWeight="bold">
-            Colegiado
-            <InfoIcon label="Marque sim caso necessite que o procedimento seja aprovado pelo colegiado" />
-          </Text>
+          <Flex alignItems="center">
+            <Text fontSize="14px" fontWeight="bold">
+              Colegiado
+            </Text>
+            <InfoIcon label="Marque sim caso necessite que o procedimento seja aprovado pelo colegiado." />
+          </Flex>
           <Select ml="8px" w="fit-content" size="sm" {...register('colegiado')}>
             <option value="true">Sim</option>
             <option value="false">Não</option>
           </Select>
         </Flex>
         <Flex alignItems="center">
-          <Text fontSize="14px" fontWeight="bold">
-            Status
+          <Flex alignItems="center">
+            <Text fontSize="14px" fontWeight="bold">
+              Revisão Coordenação
+            </Text>
+            <InfoIcon label="Marque sim caso necessite que o procedimento seja revisado pela coordenação após ser criado." />
+          </Flex>
+          <Select
+            ml="8px"
+            w="fit-content"
+            size="sm"
+            {...register('revisao_coordenacao')}
+          >
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </Select>
+        </Flex>
+        <Flex alignItems="center">
+          <Flex alignItems="center">
+            <Text fontSize="14px" fontWeight="bold">
+              Status
+            </Text>
             <InfoIcon label="Somente tipos de procedimento com status 'ativo' são listados para os usuários." />
-          </Text>
+          </Flex>
           <Select ml="8px" w="fit-content" size="sm" {...register('status')}>
             <option value="ativo">Ativo</option>
             <option value="inativo">Inativo</option>

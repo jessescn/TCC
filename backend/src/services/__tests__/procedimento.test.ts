@@ -38,7 +38,10 @@ describe('Procedimento Service', () => {
   }
 
   describe('create', () => {
-    const tipoProcedimento = createMock<TipoProcedimentoModel>()
+    const tipoProcedimento = createMock<TipoProcedimentoModel>({
+      colegiado: true,
+      revisao_coordenacao: true
+    })
     const usuario = createMock<ActorModel>({ id: 1 })
     const data = createMock<NewProcedimento>({ tipo: 1 })
 
@@ -69,8 +72,7 @@ describe('Procedimento Service', () => {
       expect(repo.create).toBeCalledWith({
         respostas: data.respostas,
         tipo: data.tipo,
-        createdBy: usuario.id,
-        votos: []
+        createdBy: usuario.id
       })
       expect(statusService.execute).toBeCalledWith(procedimento, 'em_analise')
       expect(repo.updateStatus).toBeCalledWith(procedimento.id, status)

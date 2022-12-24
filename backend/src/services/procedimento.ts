@@ -83,6 +83,8 @@ export class ProcedimentoService implements IProcedimentoService {
         'Does not have permission to this procedimento'
       )
     }
+
+    return tipoProcedimento
   }
 
   private async checkIfProcedimentoExists(id: number) {
@@ -107,11 +109,27 @@ export class ProcedimentoService implements IProcedimentoService {
     }
   }
 
-  private async updateCreatedProcedimentoStatus(created: ProcedimentoModel) {
-    const status = await this.statusService.execute(created, 'em_analise')
+  private async updateCreatedProcedimentoStatus(
+    procedimentoCreated: ProcedimentoModel
+  ) {
+    const tipoProcedimento = await this.tipoProcedimentoRepo.findOne(
+      procedimentoCreated.tipo
+    )
+
+    const novoStatusIfSemRevisao: TStatus = tipoProcedimento.colegiado
+      ? 'em_homologacao'
+      : 'deferido'
+    const novoStatus: TStatus = tipoProcedimento.revisao_coordenacao
+      ? 'em_analise'
+      : novoStatusIfSemRevisao
+
+    const status = await this.statusService.execute(
+      procedimentoCreated,
+      novoStatus
+    )
 
     const procedimento = await this.procedimentoRepo.updateStatus(
-      created.id,
+      procedimentoCreated.id,
       status
     )
 
@@ -124,8 +142,7 @@ export class ProcedimentoService implements IProcedimentoService {
     const created = await this.procedimentoRepo.create({
       respostas: data.respostas,
       tipo: data.tipo,
-      createdBy: actor.id,
-      votos: []
+      createdBy: actor.id
     })
 
     return this.updateCreatedProcedimentoStatus(created)

@@ -62,6 +62,7 @@ export default function TipoProcedimentoDetails() {
       escopo: 'publico',
       formularios: data.formularios,
       colegiado: data.colegiado === 'true' ? true : false,
+      revisao_coordenacao: data.revisao_coordenacao === 'true' ? true : false,
       publicos: data.publicos,
       dataFim: data.dataFim
         ? new Date(data.dataFim).toISOString()

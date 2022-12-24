@@ -19,6 +19,7 @@ export type NewTipoProcedimento = {
   escopo: string
   publicos: string[]
   colegiado: boolean
+  revisao_coordenacao: boolean
   formularios: number[]
   status?: TipoProcedimentoStatus
 }
@@ -31,6 +32,7 @@ export type CreateTipoProcedimento = {
   escopo: string
   publicos: string[]
   colegiado: boolean
+  revisao_coordenacao: boolean
   createdBy: number
   formularios: number[]
   status: TipoProcedimentoStatus

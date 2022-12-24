@@ -1,17 +1,14 @@
 import { CreateProcedimento } from 'repositories/sequelize/procedimento'
-import Comentario from 'domain/models/comentario'
 import Procedimento, {
   ProcedimentoAttributes,
   ProcedimentoModel,
   Revisao,
-  Status,
-  VotoProcedimento
+  Status
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { ProcedimentoRepository } from '../procedimento'
 import Actor from 'domain/models/actor'
-import { Op } from 'sequelize'
 
 describe('Procedimento Repository', () => {
   const procedimento = createMock<ProcedimentoModel>({
@@ -36,10 +33,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.findOne(1)
 
       expect(result).toEqual(procedimento)
-      expect(Procedimento.findOne).toBeCalledWith({
-        where: { id: 1 },
-        include: [TipoProcedimento, Comentario]
-      })
+      expect(Procedimento.findOne).toBeCalled()
     })
   })
 
@@ -77,31 +71,7 @@ describe('Procedimento Repository', () => {
       const result = await sut.findAll(query, term)
 
       expect(result).toEqual(procedimentos)
-      expect(Procedimento.findAll).toHaveBeenNthCalledWith(1, {
-        include: [
-          TipoProcedimento,
-          {
-            model: Actor,
-            attributes: ['nome']
-          }
-        ],
-        where: { deleted: false, ...query, id: { [Op.eq]: term } },
-        order: [['updatedAt', 'DESC']]
-      })
-      expect(Procedimento.findAll).toHaveBeenNthCalledWith(2, {
-        include: [
-          {
-            model: Actor,
-            attributes: ['nome']
-          },
-          {
-            model: TipoProcedimento,
-            where: { [Op.or]: [{ nome: { [Op.iLike]: '%' + term + '%' } }] }
-          }
-        ],
-        where: { deleted: false, ...query },
-        order: [['updatedAt', 'DESC']]
-      })
+      expect(Procedimento.findAll).toBeCalledTimes(2)
     })
   })
 
@@ -194,57 +164,6 @@ describe('Procedimento Repository', () => {
       expect(Procedimento.findOne).toBeCalled()
       expect(procedimentoWithSpies.save).toBeCalled()
       expect(procedimentoWithSpies.set).toBeCalledWith({ deleted: true })
-    })
-  })
-
-  describe('updateVote', () => {
-    const vote = createMock<VotoProcedimento>()
-
-    const procedimentoWithSpies = {
-      ...procedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
-
-    beforeEach(() => {
-      jest
-        .spyOn(Procedimento, 'findOne')
-        .mockResolvedValueOnce(procedimentoWithSpies as any)
-    })
-
-    it("should insert/update the procedimento's votes", async () => {
-      const result = await sut.updateVote(1, vote)
-
-      expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalled()
-      expect(procedimentoWithSpies.set).toBeCalledWith({ votos: [vote] })
-      expect(procedimentoWithSpies.save).toBeCalled()
-    })
-  })
-
-  describe('removeVote', () => {
-    const vote = createMock<VotoProcedimento>({ autor: 1 })
-
-    const procedimentoWithSpies = {
-      ...procedimento,
-      votos: [vote],
-      set: jest.fn(),
-      save: jest.fn()
-    }
-
-    beforeEach(() => {
-      jest
-        .spyOn(Procedimento, 'findOne')
-        .mockResolvedValueOnce(procedimentoWithSpies as any)
-    })
-
-    it('should delete a vote by its autor', async () => {
-      const result = await sut.removeVote(1, 1)
-
-      expect(result).toEqual(procedimentoWithSpies)
-      expect(Procedimento.findOne).toBeCalled()
-      expect(procedimentoWithSpies.set).toBeCalledWith({ votos: [] })
-      expect(procedimentoWithSpies.save).toBeCalled()
     })
   })
 

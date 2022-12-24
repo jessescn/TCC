@@ -38,8 +38,7 @@ describe('UpdateProcedimento Controller', () => {
 
     expect(service.update).toBeCalledWith(Number(request.params.id), {
       revisoes: data.revisoes,
-      respostas: data.respostas,
-      votos: data.votos
+      respostas: data.respostas
     })
     expect(response.json).toBeCalledWith(procedimento)
   })

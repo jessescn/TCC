@@ -1,11 +1,11 @@
-import { ComentarioRepository, CreateComentario } from '../comentario'
+import Actor from 'domain/models/actor'
 import Comentario, {
   ComentarioAttributes,
   ComentarioModel
 } from 'domain/models/comentario'
+import Profile from 'domain/models/profile'
 import { createMock, createMockList } from 'ts-auto-mock'
-import Procedimento from 'domain/models/procedimento'
-import Actor from 'domain/models/actor'
+import { ComentarioRepository, CreateComentario } from '../comentario'
 
 describe('Comentario Repository', () => {
   const sut = new ComentarioRepository()
@@ -30,13 +30,14 @@ describe('Comentario Repository', () => {
       expect(result).toEqual(comentarios)
       expect(Comentario.findAll).toBeCalledWith({
         include: [
-          Procedimento,
           {
             model: Actor,
-            attributes: ['nome', 'email']
+            attributes: ['nome', 'email'],
+            include: [Profile]
           }
         ],
-        where: { deleted: false }
+        where: { deleted: false },
+        order: [['createdAt', 'ASC']]
       })
     })
 
@@ -45,13 +46,14 @@ describe('Comentario Repository', () => {
 
       expect(Comentario.findAll).toBeCalledWith({
         include: [
-          Procedimento,
           {
             model: Actor,
-            attributes: ['nome', 'email']
+            attributes: ['nome', 'email'],
+            include: [Profile]
           }
         ],
-        where: { deleted: false, id: 2 }
+        where: { deleted: false, id: 2 },
+        order: [['createdAt', 'ASC']]
       })
     })
   })
@@ -67,10 +69,7 @@ describe('Comentario Repository', () => {
       const result = await sut.findOne(2)
 
       expect(result).toEqual(comentario)
-      expect(Comentario.findOne).toBeCalledWith({
-        where: { id: 2, deleted: false },
-        include: [Procedimento]
-      })
+      expect(Comentario.findOne).toBeCalled()
     })
   })
 
@@ -87,15 +86,7 @@ describe('Comentario Repository', () => {
       const result = await sut.create(createComentario)
 
       expect(result).toEqual(comentario)
-      expect(Comentario.create).toBeCalledWith(createComentario, {
-        include: [
-          Procedimento,
-          {
-            model: Actor,
-            attributes: ['nome', 'email']
-          }
-        ]
-      })
+      expect(Comentario.create).toBeCalled()
     })
   })
 
