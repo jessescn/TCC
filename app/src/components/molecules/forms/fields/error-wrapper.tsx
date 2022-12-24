@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { SimpleErrorMessage } from '../simple-error-message'
+import { SimpleErrorMessage } from '../../../atoms/simple-error-message'
 
 type Props = {
   children: ReactNode

@@ -1,5 +1,7 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
+import { Container } from 'components/atoms/container'
+import { Title } from 'components/atoms/title'
 import FormInput from 'components/molecules/forms/input'
 import { LoadingPage } from 'components/molecules/loading'
 
@@ -20,53 +22,38 @@ export default function TipoProcedimentosList() {
   }
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-    >
+    <Container>
       <Box>
-        <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-          Tipos de Procedimentos
-        </Text>
-        <Text my="16px" fontSize="14px">
+        <Title>Tipos de Procedimentos</Title>
+        <Text my="1rem" fontSize="sm">
           Um tipo de procedimento é um processo que será preenchido pelo
           usuário. Vincule um ou mais formulários que deverão ser preenchidos
           pelo usuário ao submeter o procedimento.
         </Text>
       </Box>
-      <Divider my="24px" borderColor="secondary.dark" />
+      <Divider my="1.5rem" borderColor="secondary.dark" />
       <Flex justifyContent="space-between" alignItems="flex-end">
         <FormInput
           id="search"
-          maxW="365px"
-          height="35px"
-          fontSize="14px"
+          maxW="400px"
+          height="2rem"
+          fontSize="sm"
           placeholder="Ex.Busca por ID, nome e status"
           onChange={e => handleSearch(e.target.value)}
           label={{
             text: 'Buscar procedimentos cadastrados',
             props: {
               htmlFor: 'search',
-              fontSize: '14px',
+              fontSize: 'sm',
               fontWeight: 'bold'
             }
           }}
         />
-        <Button
-          fontSize="14px"
-          mb={0}
-          px={6}
-          onClick={() => navigate('/tipo-procedimentos/edit')}
-        >
+        <Button size="sm" onClick={() => navigate('/tipo-procedimentos/edit')}>
           Novo Tipo de Procedimento
         </Button>
       </Flex>
       {isLoading ? <LoadingPage /> : <TipoProcedimentosTable />}
-    </Box>
+    </Container>
   )
 }

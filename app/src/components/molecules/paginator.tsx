@@ -8,12 +8,12 @@ type Props = {
   onChangePage: (page: number) => void
 }
 
-export default function Paginator({
+export const Paginator = ({
   currentPage,
   onChangePage,
   totalPages,
   offset = 3
-}: Props) {
+}: Props) => {
   const selectedStyle: StyleProps = {
     color: 'initial.white',
     bgColor: 'primary.dark'
@@ -74,7 +74,7 @@ export default function Paginator({
   toRender.push(goForward)
 
   return (
-    <Stack direction="row" spacing="4px">
+    <Stack direction="row" spacing="0.25rem">
       {toRender}
     </Stack>
   )

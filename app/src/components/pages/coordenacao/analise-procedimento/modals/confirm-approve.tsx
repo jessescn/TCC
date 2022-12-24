@@ -1,7 +1,7 @@
-import ConfirmDialog from 'components/molecules/confirm-dialog'
+import { ConfirmDialog } from 'components/molecules/confirm-dialog'
 import { FocusableElement } from '@chakra-ui/utils'
 import { useRef } from 'react'
-import { Button } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 
 type Props = {
   onConfirm: () => void
@@ -22,20 +22,13 @@ export default function ConfirmApproveModal({
     <>
       <Button
         size="sm"
-        variant="ghost"
         ref={cancelRef as any}
+        customVariant="ghost"
         onClick={onClose}
       >
         Cancelar
       </Button>
-      <Button
-        size="sm"
-        color="initial.white"
-        bgColor="primary.dark"
-        _hover={{ bgColor: 'primary.default' }}
-        ml={3}
-        onClick={onConfirm}
-      >
+      <Button size="sm" ml={3} onClick={onConfirm}>
         Confirmar
       </Button>
     </>
@@ -47,7 +40,7 @@ export default function ConfirmApproveModal({
 
   return (
     <ConfirmDialog
-      title="Confirmar voto"
+      title="Confirmar análise"
       cancelRef={cancelRef}
       isOpen={isOpen}
       onClose={onClose}

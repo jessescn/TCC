@@ -16,16 +16,16 @@ export default function UsuarioConfiguration({ usuario }: Props) {
   } = useFormContext()
 
   return (
-    <Stack spacing="24px" my="24px">
-      <Stack direction="row" w="100%">
+    <Stack spacing="1.5rem" my="1.5rem">
+      <Stack direction="row" spacing="1.5rem">
         <Box alignItems="center" w="50%">
-          <Text fontSize="14px" mb="8px" fontWeight="bold">
+          <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
             Nome
           </Text>
           <Input
+            size="sm"
             isInvalid={errors['nome']}
             defaultValue={usuario?.nome}
-            size="sm"
             {...register('nome', {
               required: { value: true, message: 'Nome obrigatório' }
             })}
@@ -33,25 +33,19 @@ export default function UsuarioConfiguration({ usuario }: Props) {
           <ErrorMessage errors={errors} fieldName="nome" />
         </Box>
         <Box alignItems="center" w="50%">
-          <Text fontSize="14px" mb="8px" fontWeight="bold">
+          <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
             Email
           </Text>
           <Input
-            defaultValue={usuario?.email}
             size="sm"
+            defaultValue={usuario?.email}
             disabled
             _disabled={{ bgColor: 'secondary.light', color: 'secondary.dark' }}
           />
         </Box>
       </Stack>
-      <Stack spacing="30px" direction="row">
-        <Box alignItems="center">
-          <ProfileSelect />
-        </Box>
-      </Stack>
-      <Box alignItems="center" w="100%">
-        <PublicosSelect />
-      </Box>
+      <ProfileSelect />
+      <PublicosSelect />
     </Stack>
   )
 }

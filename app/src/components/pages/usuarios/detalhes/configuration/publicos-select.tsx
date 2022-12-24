@@ -32,10 +32,10 @@ export default function PublicosSelect() {
 
   return (
     <Box>
-      <Text fontSize="14px" fontWeight="bold">
+      <Text fontSize="sm" fontWeight="bold">
         Públicos
       </Text>
-      <Text fontSize="10px" my="8px">
+      <Text fontSize="xs" my="0.5rem">
         Selecione um público existente ou crie um novo público. Alterar os
         públicos pode afetar o acesso do usuário a procedimentos.
       </Text>

@@ -17,11 +17,11 @@ export default function UsuariosTable() {
   return usuarios.length > 0 ? (
     <>
       <Box
-        mt="24px"
+        mt="1.5rem"
         borderColor="secondary.dark"
         borderWidth="1px"
-        borderRadius="8px"
-        p="16px"
+        borderRadius="lg"
+        p="1rem"
       >
         <SimpleTable
           currentPage={pagination.page}
@@ -52,8 +52,8 @@ export default function UsuariosTable() {
     </>
   ) : (
     <Center flexDir="column" h="40vh">
-      <Icon fontSize="45px" as={MdSearchOff} />
-      <Text textAlign="center" maxW="300px" fontSize="14px">
+      <Icon fontSize="6xl" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="sm">
         Nenhum usuário encontrado.
       </Text>
     </Center>

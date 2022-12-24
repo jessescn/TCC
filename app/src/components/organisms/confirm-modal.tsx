@@ -1,4 +1,4 @@
-import ConfirmDialog from 'components/molecules/confirm-dialog'
+import { ConfirmDialog } from 'components/molecules/confirm-dialog'
 import { FocusableElement } from '@chakra-ui/utils'
 import { useRef } from 'react'
 import { Button, StyleProps } from '@chakra-ui/react'

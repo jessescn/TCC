@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react'
-import PageHeader from 'components/molecules/page-header'
+import { Container } from 'components/atoms/container'
+import { ContentHeader } from 'components/molecules/content-header'
 import { ErrorPage } from 'components/pages/error-page'
 import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -42,18 +42,10 @@ export default function UsuarioDetails() {
   if (statusFetch === 'failure') return <ErrorPage />
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-    >
+    <Container>
       <FormProvider {...formControls}>
         <form onSubmit={formControls.handleSubmit(onSubmit)}>
-          <PageHeader
+          <ContentHeader
             title="Editar Usuário"
             identifier={usuario?.id}
             updatedAt={usuario?.updatedAt}
@@ -62,6 +54,6 @@ export default function UsuarioDetails() {
           <Footer />
         </form>
       </FormProvider>
-    </Box>
+    </Container>
   )
 }

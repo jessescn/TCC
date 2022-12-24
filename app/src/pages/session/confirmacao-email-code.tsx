@@ -1,10 +1,10 @@
 import Screen from 'components/atoms/screen'
-import { Content } from 'components/pages/confirmacao-email-codigo'
+import ConfirmacaoEmailCodigo from 'components/pages/confirmacao-email-codigo'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { actions, store } from 'store'
 
-export default function ConfirmacaoEmailCodigo() {
+export default function ConfirmacaoEmailCodigoPage() {
   const { code } = useParams()
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function ConfirmacaoEmailCodigo() {
 
   return (
     <Screen noHeader alignItems="center">
-      <Content />
+      <ConfirmacaoEmailCodigo />
     </Screen>
   )
 }

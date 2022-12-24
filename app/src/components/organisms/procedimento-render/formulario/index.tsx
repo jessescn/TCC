@@ -73,10 +73,11 @@ export default function Formulario({
 
   return (
     <>
-      <Flex justifyContent="flex-end" mb="8px">
+      <Flex justifyContent="flex-end" mb="1rem">
         <Button
           size="xs"
           onClick={onToggle}
+          bgColor="secondary.default"
           _focus={{ boxShadow: 'none' }}
           rightIcon={
             <Icon as={isOpen ? BsChevronBarExpand : BsChevronExpand} />
@@ -87,7 +88,7 @@ export default function Formulario({
       </Flex>
       {!isOpen && (
         <Center h="100%">
-          <Text fontSize="14px">
+          <Text fontSize="sm">
             Formulário(s) ocultado(s). Para visualizar, clique em 'Expandir
             formulário'
           </Text>
@@ -109,11 +110,11 @@ export default function Formulario({
         </FormProvider>
       </Collapse>
       {editable && !handleInvalidate && (
-        <Flex justifyContent="flex-end" mt="16px">
+        <Flex justifyContent="flex-end" mt="1rem">
           <Button
+            size="sm"
             bgColor="primary.dark"
             color="initial.white"
-            size="sm"
             onClick={saveChangesModalControls.onOpen}
             isLoading={isLoading}
             loadingText="Salvando"

@@ -5,27 +5,27 @@ type Props = StyleProps & {
 }
 
 const LogoPanel = ({ side, ...styleProps }: Props) => {
-  const radius = side === 'left' ? '8px 0 0 8px' : '0 8px 8px 0'
+  const radius = side === 'left' ? '0.5rem 0 0 0.5rem' : '0 0.5rem 0.5rem 0'
 
   return (
     <Center
       flexDir={{ base: 'row', md: 'column' }}
       bgColor="primary.dark"
-      borderRadius={{ base: '8px 8px 0 0', md: radius }}
+      borderRadius={{ base: '0.5rem 0.5rem 0 0', md: radius }}
       textAlign="center"
       w={{ base: '100%', md: '350px' }}
-      p="32px"
+      p="2rem"
       {...styleProps}
     >
       <Image
         alt="ufcg logo"
-        src="./logo_ufcg.png"
+        src="/logo_ufcg.png"
         maxW={{ base: '100px', md: '150px' }}
       />
       <Text
-        mt={{ base: '16px' }}
+        mt={{ base: '1rem' }}
         fontWeight="bold"
-        fontSize={{ base: '20px' }}
+        fontSize={{ base: 'lg' }}
         color="initial.white"
         maxW="200px"
       >

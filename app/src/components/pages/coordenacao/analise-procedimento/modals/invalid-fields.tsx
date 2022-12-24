@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   ListItem,
   Modal,
   ModalBody,
@@ -12,6 +11,7 @@ import {
   Textarea,
   UnorderedList
 } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 import { CampoFormulario } from 'domain/models/formulario'
 
 type Props = {
@@ -34,28 +34,28 @@ export default function InvalidFieldsModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Text fontSize="20px">Campos Inválidos</Text>
+          <Text fontSize="xl">Campos Inválidos</Text>
         </ModalHeader>
         <ModalBody height="fit-content">
-          <Text fontSize="14px">
+          <Text fontSize="sm">
             Os seguintes campos estão com dados inválidos e precisarão ser
             revisados pelo autor:
           </Text>
-          <UnorderedList p="16px" maxH="300px" overflowY="auto">
+          <UnorderedList p="1rem" maxH="300px" overflowY="auto">
             {invalidFields.map(field => (
-              <ListItem key={field.ordem} fontSize="12px">
+              <ListItem key={field.ordem} fontSize="xs">
                 {field.configuracao_campo?.titulo}
               </ListItem>
             ))}
           </UnorderedList>
 
-          <Box mt="36px">
-            <Text mb="8px" fontWeight="bold" fontSize="14px">
+          <Box mt="1.5rem">
+            <Text mb="0.5rem" fontWeight="bold" fontSize="sm">
               Feedback
             </Text>
             <Textarea
-              _placeholder={{ fontSize: '12px' }}
-              fontSize="12px"
+              _placeholder={{ fontSize: 'sm' }}
+              fontSize="sm"
               onChange={e => setFeedback(e.target.value)}
               placeholder="Adicione um comentário detalhando o que deve ser corrigido"
             />
@@ -63,21 +63,10 @@ export default function InvalidFieldsModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={onClose} size="sm" variant="ghost" mr="8px">
+          <Button onClick={onClose} size="sm" customVariant="ghost" mr="0.5rem">
             Cancelar
           </Button>
-          <Button
-            onClick={() => onSendFeedback()}
-            bgColor="transparent"
-            color="primary.dark"
-            borderWidth="1px"
-            size="sm"
-            borderColor="primary.dark"
-            _hover={{
-              color: 'initial.white',
-              bgColor: 'primary.dark'
-            }}
-          >
+          <Button customVariant="default" size="sm" onClick={onSendFeedback}>
             Enviar análise
           </Button>
         </ModalFooter>

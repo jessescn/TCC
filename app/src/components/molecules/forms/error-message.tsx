@@ -1,4 +1,4 @@
-import { SimpleErrorMessage } from './simple-error-message'
+import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
 
 type Props = {
   fieldName: string

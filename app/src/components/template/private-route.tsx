@@ -57,11 +57,11 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
       </Box>
       <Box
         position="absolute"
-        top="72px"
+        top="56px"
         left="0"
         right="0"
         overflowY="scroll"
-        height="calc(100vh - 72px)"
+        height="calc(100vh - 56px)"
       >
         <Sidebar />
         <Flex onClick={closeSidebar}>{children}</Flex>

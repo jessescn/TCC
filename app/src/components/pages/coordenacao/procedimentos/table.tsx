@@ -11,8 +11,8 @@ export default function TodosProcedimentosTable() {
   const navigate = useNavigate()
 
   const pagination = useSelector(selectors.procedimento.getPagination)
-  const total = useSelector(state => state.procedimento.total)
   const procedimentos = useSelector(selectors.procedimento.getProcedimentos)
+  const total = useSelector(state => state.procedimento.total)
 
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
@@ -27,11 +27,11 @@ export default function TodosProcedimentosTable() {
 
   return procedimentos.length > 0 ? (
     <Box
-      mt="24px"
+      mt="1.5rem"
       borderColor="secondary.dark"
       borderWidth="1px"
-      borderRadius="8px"
-      p="16px"
+      borderRadius="lg"
+      p="1rem"
     >
       <SimpleTable
         currentPage={pagination.page}
@@ -74,8 +74,8 @@ export default function TodosProcedimentosTable() {
     </Box>
   ) : (
     <Center flexDir="column" h="40vh">
-      <Icon fontSize="45px" as={MdSearchOff} />
-      <Text textAlign="center" maxW="300px" fontSize="14px">
+      <Icon fontSize="6xl" as={MdSearchOff} />
+      <Text textAlign="center" maxW="300px" fontSize="sm">
         Nenhum procedimento encontrado.
       </Text>
     </Center>

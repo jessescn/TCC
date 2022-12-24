@@ -1,5 +1,5 @@
 import { Box, Stack } from '@chakra-ui/react'
-import { campoComponente } from 'components/molecules/forms/fields'
+import { camposComponente } from 'components/molecules/forms/fields'
 import { CustomCampoInvalido } from 'components/pages/coordenacao/analise-procedimento'
 import { Procedimento } from 'domain/entity/procedimento'
 import { FormularioModel } from 'domain/models/formulario'
@@ -21,6 +21,7 @@ export default function RenderContent({
   handleInvalidate
 }: Props) {
   const { getValues, setValue } = useFormContext()
+
   const camposInvalidosMap = new Map(
     camposInvalidos.map(campo => [campo.ordem, campo])
   )
@@ -40,9 +41,9 @@ export default function RenderContent({
   )
 
   return (
-    <Stack height="100%" spacing="8px" bgColor="secondary.default" p="8px">
+    <Stack height="100%" spacing="1rem" bgColor="secondary.default" p="1rem">
       {formulario.campos.map(campo => {
-        const Componente = campoComponente[campo.tipo]
+        const Componente = camposComponente[campo.tipo]
         const isInvalido = !!camposInvalidosMap.get(campo.ordem)
 
         const isParagrafo = campo.tipo === 'paragrafo'
@@ -67,8 +68,8 @@ export default function RenderContent({
             }
             bgColor="initial.white"
             borderWidth="1px"
-            borderRadius="4px"
-            p="16px"
+            borderRadius="md"
+            p="1.5rem"
           >
             {isParagrafo ? (
               <Componente {...campo} formulario={formulario} />

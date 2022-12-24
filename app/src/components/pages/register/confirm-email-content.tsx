@@ -6,16 +6,12 @@ export default function ConfirmEmailContent() {
   const navigate = useNavigate()
 
   return (
-    <Box
-      mt="16px"
-      w={{ base: '100%', md: '470px' }}
-      px={{ base: '8px', md: '32px' }}
-    >
+    <Box w={{ base: '100%', md: '470px' }} p={{ base: '0.5rem', md: '1.5rem' }}>
       <Center height="100%" flexDir="column" textAlign="center">
-        <Text color="info.success" fontWeight="bold" fontSize="24px" mb="16px">
+        <Text color="info.success" fontWeight="bold" fontSize="2xl">
           Usuário criado com sucesso!
         </Text>
-        <Text fontSize="14px">
+        <Text fontSize="sm" my="1rem">
           Antes de poder acessar a plataforma, é necessário confirmar o email
           cadastrado.
           <Text as="span" fontWeight="bold">
@@ -23,9 +19,7 @@ export default function ConfirmEmailContent() {
             conta.
           </Text>
         </Text>
-        <Box mt="16px">
-          <Button onClick={() => navigate('/login')}>Voltar ao login</Button>
-        </Box>
+        <Button onClick={() => navigate('/login')}>Voltar ao login</Button>
       </Center>
     </Box>
   )

@@ -18,68 +18,68 @@ type Props = {
   procedimento: ProcedimentoModel
 }
 
-const ListaComentarios = ({ procedimento }: Props) => {
-  const [value, setValue] = useState('')
+export default function ListaComentarios({ procedimento }: Props) {
+  const [conteudo, setConteudo] = useState('')
 
-  const comentarios = useSelector(selectors.procedimentoDetalhes.getComentarios)
   const status = useSelector(
     state => state.procedimentoDetalhes.statusNewComentario
   )
+  const comentarios = useSelector(selectors.procedimentoDetalhes.getComentarios)
   const isLoading = status === 'loading'
 
   const handleComment = () => {
     store.dispatch(
       actions.procedimentoDetalhes.comment({
-        conteudo: value,
+        conteudo,
         procedimento: procedimento.id
       })
     )
-    setValue('')
+    setConteudo('')
   }
 
-  const handleEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeydown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleComment()
     }
   }
 
   return (
-    <Box py="8px" height="100%">
-      <Text fontWeight="bold" mb="20px">
+    <Box p="0.5rem" height="100%">
+      <Text fontWeight="bold" mb="1.5rem">
         Comentários
       </Text>
-      <Stack spacing="16px" overflowY="auto" height="85%" w="100%" pr="8px">
+      <Stack spacing="1rem" overflowY="auto" height="88%" w="100%">
         {comentarios.length === 0 && (
-          <Text fontSize="12px">Nenhum comentário</Text>
+          <Text fontSize="sm">Nenhum comentário</Text>
         )}
         {comentarios.map(comentario => (
           <Comentario key={`${comentario.id}`} comentario={comentario} />
         ))}
       </Stack>
-      <InputGroup mt="8px">
+      <InputGroup mt="0.5rem">
         <Input
           w="100%"
           size="sm"
-          disabled={isLoading}
-          _focus={{ boxShadow: 'none' }}
-          value={value}
-          onKeyDown={handleEnter}
-          onChange={e => setValue(e.target.value)}
-          borderColor="#000"
           borderWidth="1px"
-          borderRadius="4px"
-          placeholder="Digite um comentário"
-          bgColor="initial.white"
+          borderRadius="sm"
+          disabled={isLoading}
+          _focus={{ boxShadow: 'none', borderColor: 'initial.black' }}
+          _hover={{ borderColor: 'initial.black' }}
+          value={conteudo}
+          onKeyDown={handleKeydown}
+          onChange={e => setConteudo(e.target.value)}
+          borderColor="secondary.default"
+          placeholder="Digite um novo comentário"
         />
-        <InputRightElement h={8}>
+        <InputRightElement h={9}>
           <IconButton
-            onClick={handleComment}
-            isDisabled={value.trim() === ''}
             size="md"
+            onClick={handleComment}
+            isDisabled={conteudo.trim() === ''}
             _focus={{ boxShadow: 'none' }}
             _active={{ bgColor: 'transparent' }}
             bgColor="transparent"
-            _hover={{ bgColor: 'transparent', fontSize: '14px' }}
+            _hover={{ bgColor: 'transparent', fontSize: 'sm' }}
             aria-label="send message"
             icon={<Icon as={FiSend} color="primary.dark" />}
           />
@@ -88,5 +88,3 @@ const ListaComentarios = ({ procedimento }: Props) => {
     </Box>
   )
 }
-
-export default ListaComentarios

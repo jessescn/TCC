@@ -1,5 +1,6 @@
 import { Box, Text } from '@chakra-ui/react'
-import MultipleSelect, { SelectOption } from 'components/atoms/multiple-select'
+import { SelectOption, MultipleSelect } from 'components/atoms/multiple-select'
+import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
 import { InfoIcon } from 'components/molecules/info'
 import { useFormContext } from 'react-hook-form'
 import { selectors, useSelector } from 'store'
@@ -31,7 +32,7 @@ export default function FormularioSelect() {
 
   return (
     <Box>
-      <Text fontSize="14px" fontWeight="bold" mb="8px">
+      <Text fontSize="sm" fontWeight="bold" mb="0.5rem">
         Formulários
         <InfoIcon label="Selecione um ou mais formulários que serão preenchidos pelo usuário" />
       </Text>
@@ -42,9 +43,7 @@ export default function FormularioSelect() {
         onChange={handleOnChangeSelecionados}
       />
       {getSelectedOptions().length === 0 && (
-        <Text mt="6px" fontSize="10px" color="#E53E3E">
-          Selecione ao menos um formulário
-        </Text>
+        <SimpleErrorMessage message="Selecione ao menos um formulário" />
       )}
     </Box>
   )

@@ -3,8 +3,8 @@ import { AxiosResponse } from 'axios'
 import { UserModel } from 'domain/models/user'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import {
+  AuthCredentials,
   AuthService,
-  Credentials,
   CredentialsResponse,
   SidebarInfo
 } from 'services/auth'
@@ -21,7 +21,7 @@ export const sagas = [
   )
 ]
 
-export function* authUserSaga(action: PayloadAction<Credentials>) {
+export function* authUserSaga(action: PayloadAction<AuthCredentials>) {
   try {
     const response: AxiosResponse<CredentialsResponse> = yield call(() =>
       AuthService.token(action.payload)

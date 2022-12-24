@@ -19,7 +19,7 @@ export default function Register() {
       w="100%"
       maxW="800px"
       bgColor="initial.white"
-      borderRadius="8px"
+      borderRadius="0.5rem"
       flexDirection={{ base: 'column-reverse', md: 'row' }}
     >
       {content}

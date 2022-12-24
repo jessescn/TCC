@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import RenderFormulario from 'components/organisms/render-formulario'
+import { FormularioRender } from 'components/organisms/formulario-render'
 import { FormularioModel } from 'domain/models/formulario'
 import { useFormContext } from 'react-hook-form'
 
@@ -24,7 +24,7 @@ export default function Preview() {
 
   return (
     <Box bgColor="secondary.default" p={4}>
-      <RenderFormulario formulario={buildFakeFormulario()} />
+      <FormularioRender formulario={buildFakeFormulario()} />
     </Box>
   )
 }

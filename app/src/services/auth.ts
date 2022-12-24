@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios'
 import { UserModel } from '../domain/models/user'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 
-export type Credentials = {
+export type AuthCredentials = {
   senha: string
   email: string
 }
@@ -18,7 +18,7 @@ export type SidebarInfo = {
 }
 
 export const AuthService = {
-  token: (data: Credentials) => {
+  token: (data: AuthCredentials) => {
     return httpClient.request<AxiosResponse<CredentialsResponse>>({
       url: '/token',
       method: 'post',

@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { selectors, useSelector } from 'store'
 
-const Footer = () => {
+export default function Footer() {
   const navigate = useNavigate()
   const refSubmitButtom = useRef<HTMLButtonElement>(null)
   const { watch } = useFormContext()
@@ -15,9 +15,10 @@ const Footer = () => {
   const tipoProcedimento = useSelector(
     selectors.tipoProcedimentoDetalhes.getTipoProcedimento
   )
+  const isLoading = useSelector(selectors.tipoProcedimento.isUpdatingData)
+
   const statusUpdate = useSelector(state => state.tipoProcedimento.statusUpdate)
   const statusCreate = useSelector(state => state.tipoProcedimento.statusCreate)
-  const isLoading = statusCreate === 'loading' || statusUpdate === 'loading'
 
   const isTipoProcedimentoInvalido =
     (formularios || []).length === 0 || tipoProcedimento?.deleted
@@ -49,7 +50,7 @@ const Footer = () => {
   const updateButton = (
     <SimpleConfirmationButton
       style={{
-        fontSize: '12px',
+        fontSize: 'sm',
         size: 'sm',
         bgColor: 'primary.dark',
         color: 'initial.white',
@@ -72,14 +73,14 @@ const Footer = () => {
   }
 
   return (
-    <Flex justifyContent="flex-end" mt="16px">
+    <Flex justifyContent="flex-end" mt="1rem">
       <Button
         bgColor="initial.white"
         borderColor="primary.dark"
         borderWidth={1}
         color="primary.dark"
         size="sm"
-        mr="8px"
+        mr="0.5rem"
         onClick={() => navigate('/tipo-procedimentos')}
       >
         Voltar
@@ -89,5 +90,3 @@ const Footer = () => {
     </Flex>
   )
 }
-
-export default Footer

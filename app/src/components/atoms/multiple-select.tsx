@@ -8,25 +8,26 @@ export type SelectOption = {
 const customStyles = {
   control: (styles: any) => ({
     ...styles,
+    padding: '0',
     width: '100%',
-    fontSize: '14px',
+    fontSize: '0.75rem',
     backgroundColor: 'white'
   }),
   option: (styles: any) => {
     return {
       ...styles,
       width: '100%',
-      fontSize: '12px'
+      fontSize: '0.75rem'
     }
   }
 }
 
-function MultipleSelect<
+export const MultipleSelect = <
   Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
->(props: Props<Option, IsMulti, Group>) {
+>(
+  props: Props<Option, IsMulti, Group>
+) => {
   return <ReactSelect styles={customStyles} {...props} />
 }
-
-export default MultipleSelect

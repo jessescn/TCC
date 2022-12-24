@@ -13,6 +13,10 @@ export const isLoadingContent = createSelector([getRoot], state => {
   return state.status === 'loading' || state.statusUpdate === 'loading'
 })
 
+export const isUpdatingData = createSelector([getRoot], state => {
+  return state.statusCreate === 'loading' || state.statusUpdate === 'loading'
+})
+
 export const getTipoProcedimentos = createSelector([getRoot], state => {
   return state.tipoProcedimentos
 })

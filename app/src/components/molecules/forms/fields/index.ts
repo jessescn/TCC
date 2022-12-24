@@ -27,7 +27,7 @@ export type BaseCampoProps = CampoProps & {
 
 type CampoComponente = Record<TipoCampoFormulario, (props: any) => JSX.Element>
 
-export const campoComponente: CampoComponente = {
+export const camposComponente: CampoComponente = {
   paragrafo: CampoParagrafo,
   resposta: CampoResposta,
   data: CampoData,

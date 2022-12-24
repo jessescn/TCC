@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react'
-import ConfirmVote from 'components/molecules/votes/confirm-vote'
+import ConfirmVote from 'components/pages/colegiado/homologacao-detalhes/votacao/confirma-voto'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { useState } from 'react'
 import { actions, selectors, store, useSelector } from 'store'

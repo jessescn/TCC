@@ -1,10 +1,5 @@
-import {
-  FormLabelProps,
-  Input,
-  InputProps,
-  StyleProps,
-  Text
-} from '@chakra-ui/react'
+import { FormLabelProps, Input, InputProps, StyleProps } from '@chakra-ui/react'
+import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
 import { ReactNode } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import FormControl from './control'
@@ -36,15 +31,7 @@ const FormInput = ({ label, errors = [], register, ...inputProps }: Props) => {
       />
       {errors.map(error => {
         return !error.condition ? null : (
-          <Text
-            key={error.text}
-            mt="8px"
-            color="info.error"
-            fontSize="12px"
-            {...error.style}
-          >
-            {error.text}
-          </Text>
+          <SimpleErrorMessage key={error.text} message={error.text || ''} />
         )
       })}
     </FormControl>

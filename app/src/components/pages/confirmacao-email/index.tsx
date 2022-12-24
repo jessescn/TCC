@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 
-export const Content = () => {
+export default function ConfirmacaoEmail() {
   const navigate = useNavigate()
   const [sended, setSended] = useState(false)
 
@@ -48,26 +48,22 @@ export const Content = () => {
       w="100%"
       maxW="800px"
       bgColor="initial.white"
-      borderRadius="8px"
+      borderRadius="lg"
       flexDirection={{ base: 'column', md: 'row' }}
     >
       <LogoPanel side="left" />
       <Box p={4}>
-        <Text
-          fontWeight="bold"
-          fontSize={{ base: '16px', md: '20px' }}
-          mb="16px"
-        >
+        <Text fontWeight="bold" fontSize={{ base: 'md', md: 'xl' }} mb="1rem">
           Confirmação Email
         </Text>
-        <Text>
+        <Text fontSize="sm">
           Para acessar o sistema, é necessário confirmar o seu email. Ao clicar
           no botão abaixo será enviado um email para{' '}
           <Text as="span" fontWeight="bold">
             {currentUser?.email}.
           </Text>
         </Text>
-        <Center flexDirection="column" h="50%" my="16px">
+        <Center flexDirection="column" my="2rem">
           <Button
             onClick={handleSendEmail}
             isLoading={status === 'loading'}
@@ -81,10 +77,10 @@ export const Content = () => {
               color: 'initial.white'
             }}
           >
-            {sended ? 'Enviar Novamente' : 'Enviar Email'}
+            {sended ? 'Enviar novamente' : 'Enviar email verificação'}
           </Button>
           {sended && (
-            <Text fontSize="14px" fontWeight="bold">
+            <Text fontSize="sm" fontWeight="bold">
               O link enviado irá se expirar em{' '}
               <Text as="span" color="info.error">
                 5 minutos
@@ -94,7 +90,7 @@ export const Content = () => {
         </Center>
         {status === 'failure' && (
           <Alert
-            fontSize="14px"
+            fontSize="sm"
             status="error"
             borderRadius={{ base: '0', md: '0 8px 0 0' }}
           >
@@ -105,7 +101,13 @@ export const Content = () => {
           </Alert>
         )}
         <Center>
-          <Link onClick={handleRedirect}>Voltar para o login</Link>
+          <Link
+            fontSize="sm"
+            onClick={handleRedirect}
+            style={{ textDecoration: 'underline' }}
+          >
+            Voltar para o login
+          </Link>
         </Center>
       </Box>
     </Flex>

@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react'
-import RenderFormulario from 'components/organisms/render-formulario'
+import { FormularioRender } from 'components/organisms/formulario-render'
 import { Resposta } from 'domain/models/procedimento'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -79,7 +79,7 @@ export default function NovoProcedimento() {
       <FormProvider {...methods}>
         <form id="novo-procedimento" onSubmit={methods.handleSubmit(onSubmit)}>
           {formularios[currentIdx] && (
-            <RenderFormulario formulario={formularios[currentIdx]} />
+            <FormularioRender formulario={formularios[currentIdx]} />
           )}
           <Footer
             currentIdx={currentIdx}

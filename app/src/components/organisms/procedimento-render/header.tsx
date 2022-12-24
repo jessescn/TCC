@@ -34,47 +34,48 @@ const Header = ({ procedimento, status }: Props) => {
   const currentStatus = status ? statusList[status] : undefined
   const revisao = Procedimento.getRevisao(procedimento)
 
-  const revisaoPopover =
-    !revisao || !status || status !== 'correcoes_pendentes' ? null : (
-      <Popover>
-        <PopoverTrigger>
-          <IconButton
-            size="sm"
-            mr="8px"
-            _focus={{ boxShadow: 'none' }}
-            aria-label=""
-            icon={<Icon as={BiCommentDetail} />}
-          />
-        </PopoverTrigger>
-        <Portal>
-          <PopoverContent fontSize="14px" _focus={{ boxShadow: 'none' }}>
-            <PopoverArrow />
-            <PopoverHeader fontWeight="bold">
-              Revisor: {revisao.autor.nome || revisao.autor.email}
-            </PopoverHeader>
-            <PopoverBody>
-              <Box>
-                <Text fontSize="12px" fontWeight="bold">
-                  Comentário:
-                </Text>
-                <Text fontSize="12px" mt="8px">
-                  {revisao.comentario}
-                </Text>
-              </Box>
-            </PopoverBody>
-          </PopoverContent>
-        </Portal>
-      </Popover>
-    )
+  const shouldHideRevisao = !revisao || status !== 'correcoes_pendentes'
+
+  const revisaoPopover = shouldHideRevisao ? null : (
+    <Popover>
+      <PopoverTrigger>
+        <IconButton
+          size="sm"
+          mr="0.5rem"
+          aria-label=""
+          icon={<Icon as={BiCommentDetail} />}
+          _focus={{ boxShadow: 'none' }}
+        />
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent fontSize="sm" _focus={{ boxShadow: 'none' }}>
+          <PopoverArrow />
+          <PopoverHeader fontWeight="bold">
+            Revisor: {revisao.autor.nome || revisao.autor.email}
+          </PopoverHeader>
+          <PopoverBody>
+            <Box>
+              <Text fontSize="sm" fontWeight="bold">
+                Comentário:
+              </Text>
+              <Text fontSize="xs" mt="0.5rem">
+                {revisao.comentario}
+              </Text>
+            </Box>
+          </PopoverBody>
+        </PopoverContent>
+      </Portal>
+    </Popover>
+  )
 
   return (
     <Flex alignItems="center" justifyContent="space-between">
       <Flex>
         <NavigationBackButton />
-        <Text fontSize="24px" fontWeight="bold">
+        <Text fontSize="2xl" fontWeight="bold">
           Procedimento{' '}
-          <Text as="span" fontSize="20px" color="secondary.dark">
-            ID: {procedimento.id}
+          <Text as="span" fontSize="lg" color="secondary.dark">
+            Id: {procedimento.id}
           </Text>
         </Text>
       </Flex>
@@ -82,7 +83,7 @@ const Header = ({ procedimento, status }: Props) => {
         {revisaoPopover}
         <Box>
           {currentStatus && (
-            <Text fontSize="20px" fontWeight="bold">
+            <Text fontSize="xl" fontWeight="bold">
               Status:{' '}
               <Text
                 as="span"
@@ -94,7 +95,7 @@ const Header = ({ procedimento, status }: Props) => {
             </Text>
           )}
           {procedimento.updatedAt && (
-            <Text fontSize="12px">
+            <Text fontSize="sm">
               Última atualização:{' '}
               <Text fontWeight="bold" as="span">
                 {formatDate(procedimento.updatedAt)}

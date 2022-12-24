@@ -1,4 +1,5 @@
-import { Box, Divider } from '@chakra-ui/react'
+import { Divider } from '@chakra-ui/react'
+import { Container } from 'components/atoms/container'
 import ProcedimentoRender from 'components/organisms/procedimento-render'
 import ProcedimentoHeader from 'components/organisms/procedimento-render/header'
 import { Procedimento } from 'domain/entity/procedimento'
@@ -18,28 +19,18 @@ export default function MeusProcedimentosDetails() {
     : []
 
   return !procedimento ? null : (
-    <Box
-      boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.2)"
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-      position="relative"
-    >
+    <Container>
       <ProcedimentoHeader
         procedimento={procedimento}
         status={getCurrentStatus(procedimento)}
       />
-      <Divider borderWidth="1px" borderColor="#EEE" my="16px" />
+      <Divider borderWidth="1px" borderColor="#EEE" my="1.5rem" />
       <ProcedimentoRender
         formularios={formularios}
         procedimento={procedimento}
         editable={isEditable}
         camposInvalidos={camposInvalidos}
       />
-    </Box>
+    </Container>
   )
 }

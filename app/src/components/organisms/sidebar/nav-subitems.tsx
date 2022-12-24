@@ -11,7 +11,6 @@ import { Flex, Icon, Link, Menu, MenuButton } from '@chakra-ui/react'
 import type { NavItemProps } from './nav-item'
 import NavItem from './nav-item'
 
-import { User } from 'domain/entity/user'
 import { ProfileType } from 'domain/types/actors'
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai'
 import { selectors, useSelector } from 'store'
@@ -28,19 +27,11 @@ export default function NavSubItems({
   icon,
   title,
   items,
-  profiles = [],
-  strict
+  profiles = []
 }: Props) {
-  const currentUser = useSelector(selectors.session.getCurrentUser)
-
-  const validation = User.includesInProfiles
-
-  const havePermission =
-    profiles.length > 0
-      ? currentUser
-        ? validation(currentUser, profiles)
-        : false
-      : true
+  const havePermission = useSelector(selectors.session.hasRoutePermission)(
+    profiles
+  )
 
   return !havePermission ? null : (
     <Accordion allowMultiple allowToggle w="100%">
@@ -90,7 +81,7 @@ export default function NavSubItems({
                   icon={item.icon}
                   title={item.title}
                   url={item.url}
-                  style={{ marginTop: '8px' }}
+                  style={{ marginTop: '0.5rem' }}
                 />
               ))}
             </AccordionPanel>

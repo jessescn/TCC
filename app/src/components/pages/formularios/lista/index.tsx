@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
 import { LoadingPage } from 'components/molecules/loading'
 import { debounce } from 'lodash'
+import { Container } from 'components/atoms/container'
+import { Title } from 'components/atoms/title'
 
 export default function FormulariosList() {
   const navigate = useNavigate()
@@ -21,52 +23,38 @@ export default function FormulariosList() {
   }, 700)
 
   return (
-    <Box
-      w="100%"
-      h="100%"
-      maxW="1200px"
-      bgColor="initial.white"
-      borderRadius="8px"
-      px="24px"
-      py="32px"
-    >
+    <Container>
       <Box>
-        <Text fontWeight="bold" fontSize="28px" color="primary.dark">
-          Formulários
-        </Text>
-        <Text my="16px" fontSize="14px">
+        <Title>Formulários</Title>
+        <Text my="1rem" fontSize="sm">
           Crie ou edite formulários para vincular a tipos de procedimentos e que
           serão preenchidos pelos usuários ao criar um novo procedimento. Um
           formulário pode ser reutilizado em mais de um tipo de procedimento.
         </Text>
       </Box>
-      <Divider my="24px" borderColor="secondary.dark" />
+      <Divider my="1.5rem" borderColor="secondary.dark" />
       <Flex justifyContent="space-between" alignItems="flex-end">
         <FormInput
           id="search"
-          maxW="365px"
-          height="35px"
-          fontSize="14px"
+          maxW="400px"
+          height="2rem"
+          fontSize="sm"
           placeholder="Buscar por ID ou nome"
           onChange={e => handleSearch(e.target.value)}
           label={{
             text: 'Buscar formulários',
             props: {
               htmlFor: 'search',
-              fontSize: '14px',
+              fontSize: 'sm',
               fontWeight: 'bold'
             }
           }}
         />
-        <Button
-          fontSize="14px"
-          mb={0}
-          onClick={() => navigate('/formularios/edit')}
-        >
+        <Button size="sm" onClick={() => navigate('/formularios/edit')}>
           Novo Formulário
         </Button>
       </Flex>
       {isLoading ? <LoadingPage /> : <FormulariosTable />}
-    </Box>
+    </Container>
   )
 }

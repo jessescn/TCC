@@ -1,7 +1,7 @@
 import { render, screen } from 'jest/utils/test-utils'
 import { ReactNode } from 'react'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
-import Link from '../link'
+import Link from '../custom-link'
 
 describe('Componente Link', () => {
   const RouterWrapper = ({ children }: { children: ReactNode }) => {

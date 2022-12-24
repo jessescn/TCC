@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { AuthCredentials } from 'services/auth'
 import { UserModel } from '../../../domain/models/user'
-import { Credentials } from '../../../services/auth'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
@@ -45,7 +45,7 @@ const reducers = {
     state.sidebarStatus = initialState.sidebarStatus
     state.loginStatus = initialState.loginStatus
   },
-  login: (state: State, action: PayloadAction<Credentials>) => {
+  login: (state: State, action: PayloadAction<AuthCredentials>) => {
     state.loginStatus = { status: 'loading' }
   },
   loginSuccess: (state: State, action: PayloadAction<UserModel>) => {

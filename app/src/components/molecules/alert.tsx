@@ -11,12 +11,12 @@ type Props = AlertProps & {
   children: ReactNode
 }
 
-export default function Alert(props: Props) {
+export const Alert = (props: Props) => {
   const { title, children, ...styleProps } = props
 
   return (
     <ChakraAlert
-      borderRadius="8px"
+      borderRadius="lg"
       bgColor="info.warning-light"
       flexDirection="column"
       alignItems="flex-start"

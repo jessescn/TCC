@@ -6,6 +6,7 @@ import {
   Center,
   Flex,
   Input,
+  Stack,
   Text
 } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
@@ -15,7 +16,7 @@ import PasswordStrengthBar from 'react-password-strength-bar'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
-export const Content = () => {
+export default function AlteracaoSenhaCodigo() {
   const navigate = useNavigate()
   const { code } = useParams()
   const [searchParams] = useSearchParams()
@@ -43,98 +44,90 @@ export const Content = () => {
     }
   }, [status])
 
-  return (
+  return !email ? null : (
     <Flex
       w="100%"
       maxW="800px"
       minH="200px"
       bgColor="initial.white"
-      borderRadius="8px"
+      borderRadius="lg"
       flexDirection={{ base: 'column', md: 'row' }}
     >
       <LogoPanel side="left" />
-      <Box p={4} maxW="500px">
-        <Text
-          fontWeight="bold"
-          fontSize={{ base: '16px', md: '20px' }}
-          mb="16px"
-        >
+      <Box p="1rem" maxW="500px">
+        <Text fontWeight="bold" fontSize={{ base: 'md', md: 'xl' }} mb="1rem">
           Atualização Senha
         </Text>
-        <Text fontSize="14px">
+        <Text fontSize="sm">
           Insira uma nova senha de acesso para o email{' '}
           <Text as="span" fontWeight="bold">
-            {email}.
+            {email}
           </Text>
-          .
         </Text>
-        <Box my="16px">
-          <Text fontSize="14px" fontWeight="bold" mb="8px">
-            Nova Senha
-          </Text>
-          <Input
-            type="password"
-            color="initial.black"
-            size="sm"
-            placeholder="Insira seu email"
-            borderColor="secondary.dark"
-            _placeholder={{ color: 'secondary.dark' }}
-            onChange={ev => setSenha(ev.target.value)}
-          />
-          <PasswordStrengthBar
-            key="password-strenght"
-            style={{ marginTop: '10px' }}
-            password={senha}
-            scoreWords={[
-              'muito fraco',
-              'fraco',
-              'mediano',
-              'forte',
-              'muito forte'
-            ]}
-            shortScoreWord="senha muito curta"
-            minLength={8}
-            onChangeScore={a => setStrong(a)}
-          />
-        </Box>
-        <Box mb="16px">
-          <Text fontSize="14px" fontWeight="bold" mb="8px">
-            Confirmar Nova Senha
-          </Text>
-          <Input
-            type="password"
-            color="initial.black"
-            size="sm"
-            placeholder="Insira seu email"
-            borderColor="secondary.dark"
-            _placeholder={{ color: 'secondary.dark' }}
-            onChange={ev => setConfrmaSenha(ev.target.value)}
-          />
-          {!passwordsMatches && (
-            <Text fontSize="12px" mt="4px" color="info.error">
-              As senhas não correspondem
+        <Stack spacing="1rem" my="1rem">
+          <Box>
+            <Text fontSize="sm" fontWeight="bold" mb="0.5rem">
+              Nova Senha
             </Text>
-          )}
-        </Box>
+            <Input
+              size="sm"
+              type="password"
+              color="initial.black"
+              borderRadius="md"
+              placeholder="Insira seu email"
+              borderColor="secondary.dark"
+              _placeholder={{ color: 'secondary.dark' }}
+              onChange={ev => setSenha(ev.target.value)}
+            />
+            <PasswordStrengthBar
+              key="password-strenght"
+              style={{ marginTop: '0.5rem' }}
+              password={senha}
+              scoreWords={[
+                'muito fraco',
+                'fraco',
+                'mediano',
+                'forte',
+                'muito forte'
+              ]}
+              shortScoreWord="senha muito curta"
+              minLength={8}
+              onChangeScore={a => setStrong(a)}
+            />
+          </Box>
+          <Box>
+            <Text fontSize="sm" fontWeight="bold" mb="0.5rem">
+              Confirmar Nova Senha
+            </Text>
+            <Input
+              size="sm"
+              type="password"
+              color="initial.black"
+              borderRadius="md"
+              placeholder="Insira seu email"
+              borderColor="secondary.dark"
+              _placeholder={{ color: 'secondary.dark' }}
+              onChange={ev => setConfrmaSenha(ev.target.value)}
+            />
+            {!passwordsMatches && (
+              <Text fontSize="xs" mt="0.5rem" color="info.error">
+                As senhas não correspondem
+              </Text>
+            )}
+          </Box>
+        </Stack>
         <Center flexDir="column">
           <Button
+            size="sm"
             isDisabled={!canUpdate}
             onClick={handleUpdatePassword}
             isLoading={status.status === 'loading'}
-            bgColor={'primary.dark'}
-            color={'initial.white'}
-            borderColor={'initial.white'}
-            borderWidth="2px"
-            _hover={{
-              bgColor: 'primary.dark',
-              color: 'initial.white'
-            }}
           >
             Atualizar Senha
           </Button>
           {status.status === 'failure' && (
             <Alert
-              fontSize="14px"
+              fontSize="sm"
               status="error"
               borderRadius={{ base: '0', md: '0 8px 0 0' }}
             >
