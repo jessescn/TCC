@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { AxiosResponse } from 'axios'
+import { Axios, AxiosResponse } from 'axios'
 import { UserModel } from 'domain/models/user'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import {
@@ -14,12 +14,23 @@ import { actions } from './slice'
 export const sagas = [
   takeLatest(actions.login.type, authUserSaga),
   takeLatest(actions.sidebarInfo.type, sidebarInfoSaga),
+  takeLatest(actions.me.type, meSaga),
   takeLatest(actions.sendEmailConfirmation.type, sendEmailConfirmationSaga),
   takeLatest(
     actions.exchangeEmailConfirmationCode.type,
     exchangeEmailConfirmationCodeSaga
   )
 ]
+
+function* meSaga() {
+  try {
+    const response: AxiosResponse<UserModel> = yield call(AuthService.me)
+
+    yield put(actions.meSuccess(response.data))
+  } catch (error: any) {
+    yield put(actions.meFailure())
+  }
+}
 
 export function* authUserSaga(action: PayloadAction<AuthCredentials>) {
   try {

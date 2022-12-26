@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
+import { LoadingPage } from 'components/molecules/loading'
 import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
 import { User } from 'domain/entity/user'
@@ -17,6 +18,8 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
   const location = useLocation()
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
+  const authStatus = useSelector(state => state.session.authStatus)
+  const isAuthenticating = authStatus === 'loading'
 
   const user = localStorage.getItem('session_user')
 
@@ -42,7 +45,14 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
 
   useEffect(() => {
     store.dispatch(actions.session.sidebarInfo())
+    store.dispatch(actions.session.me())
   }, [])
+
+  useEffect(() => {
+    if (authStatus === 'failure') {
+      store.dispatch(actions.session.logout({ reload: true }))
+    }
+  }, [authStatus])
 
   function closeSidebar() {
     if (isSidebarOpen) {
@@ -64,7 +74,11 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
         height="calc(100vh - 56px)"
       >
         <Sidebar />
-        <Flex onClick={closeSidebar}>{children}</Flex>
+        {isAuthenticating ? (
+          <LoadingPage />
+        ) : (
+          <Flex onClick={closeSidebar}>{children}</Flex>
+        )}
       </Box>
     </Box>
   )

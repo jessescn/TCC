@@ -19,6 +19,7 @@ export type State = {
   currentUser: UserModel | null
   isSidebarOpen: boolean
   loginStatus: StatusWithMessage
+  authStatus: Status
   exchangeCodeStatus: StatusWithMessage
   sidebarStatus: Status
   sendEmailStatus: Status
@@ -31,6 +32,7 @@ export const initialState: State = {
   loginStatus: { status: 'pristine' },
   exchangeCodeStatus: { status: 'pristine' },
   openProcedimentos: [],
+  authStatus: 'pristine',
   sidebarStatus: 'pristine',
   sendEmailStatus: 'pristine',
   isSidebarOpen: false,
@@ -44,6 +46,7 @@ const reducers = {
     state.isSidebarOpen = initialState.isSidebarOpen
     state.sidebarStatus = initialState.sidebarStatus
     state.loginStatus = initialState.loginStatus
+    state.authStatus = initialState.authStatus
   },
   login: (state: State, action: PayloadAction<AuthCredentials>) => {
     state.loginStatus = { status: 'loading' }
@@ -109,6 +112,17 @@ const reducers = {
     action: PayloadAction<string | undefined>
   ) => {
     state.exchangeCodeStatus = { status: 'failure', message: action.payload }
+  },
+  me: (state: State) => {
+    state.authStatus = 'loading'
+  },
+  meSuccess: (state: State, action: PayloadAction<UserModel>) => {
+    state.authStatus = 'success'
+    state.currentUser = action.payload
+  },
+  meFailure: (state: State) => {
+    state.authStatus = 'failure'
+    state.currentUser = null
   }
 }
 
