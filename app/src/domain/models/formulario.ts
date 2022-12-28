@@ -22,6 +22,7 @@ export interface FormularioModel {
   id: number
   nome: string
   descricao?: string
+  template: string | null
   campos: CampoFormulario[]
   createdAt?: string
   updatedAt?: string

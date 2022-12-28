@@ -6,6 +6,7 @@ import { httpClient, Pagination, PaginationResponse } from './config'
 export type NovoFormulario = {
   nome: string
   descricao?: string
+  template: string | null
   campos: CampoFormulario[]
 }
 

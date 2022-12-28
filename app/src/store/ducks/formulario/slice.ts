@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import { Pagination, PaginationResponse } from 'services/config'
+import { NovoFormulario } from 'services/formularios'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
 
@@ -19,11 +20,7 @@ export type UpdatePayload = {
   id: number
 }
 
-export type CreatePayload = {
-  nome: string
-  descricao?: string
-  campos: CampoFormulario[]
-}
+export type CreatePayload = NovoFormulario
 
 export const initialState: State = {
   formularios: [],

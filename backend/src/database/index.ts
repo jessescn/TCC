@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import { Sequelize } from 'sequelize'
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 
 const createSequelizeInstance = () => {
   return new Sequelize(process.env.DATABASE_URL, {

@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Center, Flex } from '@chakra-ui/react'
 import { LoadingPage } from 'components/molecules/loading'
 import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
@@ -60,7 +60,11 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
     }
   }
 
-  return (
+  return isAuthenticating ? (
+    <Center h="100vh">
+      <LoadingPage />
+    </Center>
+  ) : (
     <Box position="relative">
       <Box position="absolute" top="0" left="0" right="0">
         <Header />
@@ -74,11 +78,7 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
         height="calc(100vh - 56px)"
       >
         <Sidebar />
-        {isAuthenticating ? (
-          <LoadingPage />
-        ) : (
-          <Flex onClick={closeSidebar}>{children}</Flex>
-        )}
+        <Flex onClick={closeSidebar}>{children}</Flex>
       </Box>
     </Box>
   )

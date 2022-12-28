@@ -11,18 +11,15 @@ import { isNumber } from 'utils/value'
 export type FormularioQuery = WhereOptions<
   InferAttributes<FormularioAttributes>
 >
-
-export type CreateFormulario = {
-  nome: string
-  campos: CampoFormulario[]
-  descricao?: string
-  createdBy: number
-}
-
 export type NewFormulario = {
   nome: string
   descricao?: string
+  template?: string
   campos: CampoFormulario[]
+}
+
+export type CreateFormulario = NewFormulario & {
+  createdBy: number
 }
 
 export class FormularioRepository implements IRepository {
