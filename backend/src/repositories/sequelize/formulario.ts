@@ -22,7 +22,21 @@ export type CreateFormulario = NewFormulario & {
   createdBy: number
 }
 
-export class FormularioRepository implements IRepository {
+export interface IFormularioRepository extends IRepository {
+  findOne: (id: number) => Promise<FormularioAttributes>
+  findAll: (
+    query: FormularioQuery,
+    term?: string | null
+  ) => Promise<FormularioAttributes[]>
+  create: (data: CreateFormulario) => Promise<FormularioAttributes>
+  update: (
+    id: number,
+    data: Partial<FormularioModel>
+  ) => Promise<FormularioAttributes>
+  destroy: (id: number) => Promise<FormularioAttributes>
+}
+
+export class FormularioRepository implements IFormularioRepository {
   findAll = async (query: FormularioQuery = {}, term?: string) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term

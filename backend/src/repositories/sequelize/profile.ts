@@ -10,7 +10,21 @@ export type CreateProfile = {
   permissoes: Permissions
 }
 
-export class ProfileRepository implements IRepository {
+export interface IProfileRepository extends IRepository {
+  findOne: (id: number) => Promise<ProfileAttributes>
+  findAll: (
+    query?: ProfileQuery,
+    term?: string | null
+  ) => Promise<ProfileAttributes[]>
+  create: (data: CreateProfile) => Promise<ProfileAttributes>
+  update: (
+    id: number,
+    data: Partial<ProfileModel>
+  ) => Promise<ProfileAttributes>
+  destroy: (id: number) => Promise<ProfileAttributes>
+}
+
+export class ProfileRepository implements IProfileRepository {
   findAll = async (query: ProfileQuery = {}) => {
     return Profile.findAll({ where: { deleted: false, ...query } })
   }

@@ -1,12 +1,12 @@
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { IRepository, Pagination } from 'repositories'
-import { FormularioRepository } from 'repositories/sequelize/formulario'
+import { Pagination } from 'repositories'
+import { IFormularioRepository } from 'repositories/sequelize/formulario'
 import {
+  ITipoProcedimentoRepository,
   NewTipoProcedimento,
-  TipoProcedimentoQuery,
-  TipoProcedimentoRepository
+  TipoProcedimentoQuery
 } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
@@ -30,16 +30,10 @@ export interface ITipoProcedimentoService
 }
 
 export class TipoProcedimentoService implements ITipoProcedimentoService {
-  private tipoProcedimentoRepo: TipoProcedimentoRepository
-  private formularioRepo: FormularioRepository
-
   constructor(
-    tipoProcedimentoRepo: IRepository,
-    formularioRepo: FormularioRepository
-  ) {
-    this.tipoProcedimentoRepo = tipoProcedimentoRepo
-    this.formularioRepo = formularioRepo
-  }
+    private tipoProcedimentoRepo: ITipoProcedimentoRepository,
+    private formularioRepo: IFormularioRepository
+  ) {}
 
   private async checkIfFormulariosExists(ids: number[]) {
     if (ids.length === 0) return

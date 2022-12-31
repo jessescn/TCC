@@ -1,12 +1,12 @@
-import { ProcedimentoModel, Status } from 'domain/models/procedimento'
-import { IRepository } from 'repositories'
-import templates from 'templates'
 import { ActorHelper } from 'domain/helpers/actor'
-import { HandlerProps, StatusHandler } from '.'
+import { ProcedimentoModel, Status } from 'domain/models/procedimento'
 import { MailSender } from 'repositories/nodemailer/mail'
+import { IActorRepository } from 'repositories/sequelize/actor'
+import templates from 'templates'
+import { HandlerProps, StatusHandler } from '.'
 
 export class EmHomologacaoStatusHandler implements StatusHandler {
-  constructor(private readonly actorRepo: IRepository) {}
+  constructor(private readonly actorRepo: IActorRepository) {}
 
   private sendEmailColegiado = async (procedimento: ProcedimentoModel) => {
     // Envia email aos membros do colegiado avisando que um novo procedimento está para ser votado

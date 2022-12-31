@@ -1,43 +1,45 @@
+import { FormularioHelper } from 'domain/helpers/formulario'
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
+import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
+import { ActorModel } from 'domain/models/actor'
+import { ComentarioModel } from 'domain/models/comentario'
+import { FormularioModel } from 'domain/models/formulario'
 import {
   ProcedimentoAttributes,
   ProcedimentoModel,
   Revisao,
   TStatus
 } from 'domain/models/procedimento'
-import { ActorModel } from 'domain/models/actor'
-import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { Pagination, PaginationResponse } from 'repositories'
+import { IComentarioRepository } from 'repositories/sequelize/comentario'
+import { IFormularioRepository } from 'repositories/sequelize/formulario'
 import {
   IProcedimentoRepo,
-  IRepository,
-  Pagination,
-  PaginationResponse
-} from 'repositories'
-import {
   NewProcedimento,
   NewRevisao,
   ProcedimentoQuery
 } from 'repositories/sequelize/procedimento'
-import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
+import { ITipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import {
   BadRequestError,
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
-import { IProcedimentoStatusService } from './procedimento-status'
 import { getCurrentStatus, paginateList } from 'utils/value'
-import { ComentarioModel } from 'domain/models/comentario'
-import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { FormularioModel } from 'domain/models/formulario'
-import { ComentarioRepository } from 'repositories/sequelize/comentario'
-import { FormularioRepository } from 'repositories/sequelize/formulario'
+import { IProcedimentoStatusService } from './procedimento-status'
 
 export type ProcedimentoDetails = {
   procedimento: ProcedimentoModel
   comentarios: ComentarioModel[]
   tipoProcedimento: TipoProcedimentoModel
   formularios: FormularioModel[]
+}
+
+export type RespostaExport = {
+  data: string
+  formulario: number
 }
 export interface IProcedimentoService
   extends IService<ProcedimentoModel, ProcedimentoQuery> {
@@ -60,28 +62,17 @@ export interface IProcedimentoService
     pagination?: Pagination
   ) => Promise<PaginationResponse<ProcedimentoModel>>
   details: (id: number) => Promise<ProcedimentoDetails>
+  exportRespostas: (id: number) => Promise<RespostaExport[]>
 }
 
 export class ProcedimentoService implements IProcedimentoService {
-  private procedimentoRepo: IProcedimentoRepo
-  private tipoProcedimentoRepo: TipoProcedimentoRepository
-  private formularioRepo: FormularioRepository
-  private statusService: IProcedimentoStatusService
-  private comentarioRepo: ComentarioRepository
-
   constructor(
-    procedimentoRepo: IProcedimentoRepo,
-    tipoProcedimentoRepo: IRepository,
-    comentarioRepo: IRepository,
-    formularioRepo: IRepository,
-    statusService: IProcedimentoStatusService
-  ) {
-    this.procedimentoRepo = procedimentoRepo
-    this.tipoProcedimentoRepo = tipoProcedimentoRepo
-    this.statusService = statusService
-    this.comentarioRepo = comentarioRepo
-    this.formularioRepo = formularioRepo
-  }
+    private procedimentoRepo: IProcedimentoRepo,
+    private tipoProcedimentoRepo: ITipoProcedimentoRepository,
+    private comentarioRepo: IComentarioRepository,
+    private formularioRepo: IFormularioRepository,
+    private statusService: IProcedimentoStatusService
+  ) {}
 
   private async checkIfTipoProcedimentoExists(tipo: number) {
     const tipoProcedimento = await this.tipoProcedimentoRepo.findOne(tipo)
@@ -275,5 +266,41 @@ export class ProcedimentoService implements IProcedimentoService {
     await this.procedimentoRepo.newRevisao(id, revisao)
 
     return this.updateProcedimentoToNextStatus(procedimento, data)
+  }
+
+  async exportRespostas(id: number) {
+    const procedimento = await this.checkIfProcedimentoExists(id)
+
+    if (!procedimento.tipo) {
+      throw new NotFoundError('procedimento sem tipo relacionado')
+    }
+
+    const tipoProcedimento = await this.checkIfTipoProcedimentoExists(
+      procedimento.tipo
+    )
+
+    const formularios = await this.formularioRepo.findAll({
+      id: tipoProcedimento.formularios
+    })
+
+    const previews = formularios.reduce((current, formulario) => {
+      const respostaToForm = procedimento.respostas.find(
+        resposta => resposta.formulario === formulario.id
+      )
+
+      if (!respostaToForm) {
+        return current
+      }
+
+      const helper = new FormularioHelper()
+      const filledTemplate = helper.insertRespostasIntoTemplate(
+        formulario,
+        respostaToForm
+      )
+
+      return [...current, { data: filledTemplate, formulario: formulario.id }]
+    }, [] as RespostaExport[])
+
+    return previews
   }
 }

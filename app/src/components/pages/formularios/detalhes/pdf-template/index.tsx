@@ -1,7 +1,6 @@
 import { Box, Collapse, Icon, Text, useDisclosure } from '@chakra-ui/react'
-import { FocusableElement } from '@chakra-ui/utils'
 import { Button } from 'components/atoms/button'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { AiFillEdit, AiOutlineFileAdd } from 'react-icons/ai'
 import { MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
@@ -11,7 +10,6 @@ export default function PDFTemplate() {
   const { watch } = useFormContext()
 
   const template = watch('template')
-  const cancelRef = useRef<HTMLButtonElement | FocusableElement>(null)
 
   const modalControls = useDisclosure()
   const [showContent, setShowContent] = useState(true)
@@ -44,9 +42,7 @@ export default function PDFTemplate() {
           {template ? 'Editar Template Atual' : 'Cadastrar Template'}
         </Button>
       </Collapse>
-      {modalControls.isOpen && (
-        <TemplateModal {...modalControls} cancelRef={cancelRef} />
-      )}
+      {modalControls.isOpen && <TemplateModal {...modalControls} />}
     </Box>
   )
 }

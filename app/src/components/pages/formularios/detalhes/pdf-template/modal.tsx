@@ -7,12 +7,11 @@ import {
   ModalOverlay,
   Text
 } from '@chakra-ui/react'
-import { FocusableElement } from '@chakra-ui/utils'
 import { Button } from 'components/atoms/button'
 import CustomMentionsInput from 'components/atoms/mention/custom-mentions'
 import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
 import { CampoFormulario } from 'domain/models/formulario'
-import { RefObject, useState } from 'react'
+import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { SuggestionDataItem } from 'react-mentions'
 import { extract } from 'utils/validation'
@@ -20,7 +19,6 @@ import { extract } from 'utils/validation'
 type Props = {
   isOpen: boolean
   onClose: () => void
-  cancelRef: RefObject<FocusableElement>
 }
 
 export default function TemplateModal({ isOpen, onClose }: Props) {
@@ -37,8 +35,6 @@ export default function TemplateModal({ isOpen, onClose }: Props) {
       id: campo.ordem,
       display: campo.configuracao_campo.titulo
     }))
-
-  console.log({ suggestions })
 
   const handleSave = () => {
     const extractor = extract('<<', '>>')

@@ -1,7 +1,9 @@
 import { ProfileModel } from 'domain/models/profile'
 import { Permissions } from 'domain/profiles'
-import { IRepository } from 'repositories'
-import { ProfileQuery } from 'repositories/sequelize/profile'
+import {
+  IProfileRepository,
+  ProfileQuery
+} from 'repositories/sequelize/profile'
 import { IService } from 'services'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 
@@ -18,7 +20,7 @@ export interface IProfileService extends IService<ProfileModel, ProfileQuery> {
 }
 
 export class ProfileService implements IProfileService {
-  constructor(private readonly repository: IRepository) {}
+  constructor(private readonly repository: IProfileRepository) {}
 
   private async checkIfProfileNameAlreadyExists(nome: string) {
     const [profile] = await this.repository.findAll({ nome, deleted: false })

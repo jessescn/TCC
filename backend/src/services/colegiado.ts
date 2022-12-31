@@ -1,13 +1,14 @@
 import {
   ProcedimentoAttributes,
   ProcedimentoModel,
+  Status,
   TStatus,
   VotoProcedimento
 } from 'domain/models/procedimento'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { IProcedimentoRepo } from 'repositories'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 
 export interface IColegiadoService {
   updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
@@ -16,16 +17,12 @@ export interface IColegiadoService {
 }
 
 export class ColegiadoService implements IColegiadoService {
-  private repository: IProcedimentoRepo
-  private statusService: IProcedimentoStatusService
   private numberOfColegiados: number
 
   constructor(
-    repository: IProcedimentoRepo,
-    statusService: IProcedimentoStatusService
+    private repository: IProcedimentoRepo,
+    private statusService: IProcedimentoStatusService
   ) {
-    this.repository = repository
-    this.statusService = statusService
     this.numberOfColegiados = parseInt(process.env.COLEGIADO_QUANTITY || '0')
   }
 
@@ -70,7 +67,12 @@ export class ColegiadoService implements IColegiadoService {
   private async updateStatus(id: number, status: TStatus) {
     await this.checkIfProcedimentoExists(id)
 
-    return this.repository.updateStatus(id, status)
+    const newStatus: Status = {
+      data: new Date().toISOString(),
+      status
+    }
+
+    return this.repository.updateStatus(id, newStatus)
   }
 
   async homologate(id: number) {

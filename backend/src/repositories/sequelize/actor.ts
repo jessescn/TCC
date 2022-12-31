@@ -25,7 +25,18 @@ export const InclusivableActorOptions = {
   include: [Profile]
 }
 
-export class ActorRepository implements IRepository {
+export interface IActorRepository extends IRepository {
+  findOne: (id: number) => Promise<ActorAttributes>
+  findAll: (
+    query?: ActorQuery,
+    term?: string | null
+  ) => Promise<ActorAttributes[]>
+  create: (data: CreateActor) => Promise<ActorAttributes>
+  update: (id: number, data: Partial<ActorModel>) => Promise<ActorAttributes>
+  destroy: (id: number) => Promise<ActorAttributes>
+}
+
+export class ActorRepository implements IActorRepository {
   findAll = async (query: ActorQuery = {}, term?: string) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term

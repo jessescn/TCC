@@ -1,16 +1,12 @@
-import { ProcedimentoModel, Status } from 'domain/models/procedimento'
 import { ActorHelper } from 'domain/helpers/actor'
-import { IRepository } from 'repositories'
+import { ProcedimentoModel, Status } from 'domain/models/procedimento'
 import { MailSender } from 'repositories/nodemailer/mail'
+import { IActorRepository } from 'repositories/sequelize/actor'
 import templates from 'templates'
 import { HandlerProps, StatusHandler } from '.'
 
 export class EmAnaliseStatusHandler implements StatusHandler {
-  private actorRepo: IRepository
-
-  constructor(actorRepo: IRepository) {
-    this.actorRepo = actorRepo
-  }
+  constructor(private actorRepo: IActorRepository) {}
 
   private sendEmailCoordenacao = async (procedimento: ProcedimentoModel) => {
     // Envia email a coordenacão avisando de um novo procedimento está pronto para ser analisado

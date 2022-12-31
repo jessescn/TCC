@@ -1,6 +1,7 @@
 import { makeCreateProcedimentoController } from './create-factory'
 import { makeDeleteProcedimentoController } from './delete-factory'
 import { makeGetDetailsProcedimentoController } from './details-factory'
+import { makeExportPreviewController } from './export-preview-factory'
 import { makeHomologateProcedimentoController } from './homologate-factory'
 import { makeReadActorProcedimentoController } from './read-actor-factory'
 import { makeReadProcedimentoController } from './read-factory'
@@ -23,3 +24,4 @@ export const readActorProcedimentoController =
   makeReadActorProcedimentoController()
 export const getDetailsProcedimentoController =
   makeGetDetailsProcedimentoController()
+export const exportPreviewController = makeExportPreviewController()

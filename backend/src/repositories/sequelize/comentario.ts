@@ -1,11 +1,9 @@
 import Actor from 'domain/models/actor'
-import Comentario, {
-  ComentarioAttributes,
-  ComentarioModel
-} from 'domain/models/comentario'
+import Comentario, { ComentarioModel } from 'domain/models/comentario'
 import Procedimento from 'domain/models/procedimento'
 import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
+import { ComentarioAttributes } from './../../domain/models/comentario'
 
 export type ComentarioQuery = WhereOptions<
   InferAttributes<ComentarioAttributes>
@@ -22,7 +20,21 @@ export type CreateComentario = {
   createdBy: number
 }
 
-export class ComentarioRepository implements IRepository {
+export interface IComentarioRepository extends IRepository {
+  findOne: (id: number) => Promise<ComentarioAttributes>
+  findAll: (
+    query: ComentarioQuery,
+    term?: string | null
+  ) => Promise<ComentarioAttributes[]>
+  create: (data: CreateComentario) => Promise<ComentarioAttributes>
+  update: (
+    id: number,
+    data: Partial<ComentarioModel>
+  ) => Promise<ComentarioAttributes>
+  destroy: (id: number) => Promise<ComentarioAttributes>
+}
+
+export class ComentarioRepository implements IComentarioRepository {
   findAll = async (query: ComentarioQuery = {}) => {
     const comentarios = await Comentario.findAll({
       include: [

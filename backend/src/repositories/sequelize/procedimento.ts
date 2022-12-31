@@ -12,7 +12,7 @@ import Procedimento, {
   VotoProcedimento
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
-import { IProcedimentoRepo } from 'repositories'
+import { IRepository } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import { getCurrentStatus, isNumber } from 'utils/value'
 
@@ -38,6 +38,32 @@ export type NewRevisao = {
 export type ProcedimentoQuery = WhereOptions<
   InferAttributes<ProcedimentoAttributes>
 >
+
+export interface IProcedimentoRepo extends IRepository {
+  findOne: (id: number) => Promise<ProcedimentoAttributes>
+  findAll: (
+    query: ProcedimentoQuery,
+    term?: string | null
+  ) => Promise<ProcedimentoAttributes[]>
+  create: (data: CreateProcedimento) => Promise<ProcedimentoAttributes>
+  update: (
+    id: number,
+    data: Partial<ProcedimentoModel>
+  ) => Promise<ProcedimentoAttributes>
+  destroy: (id: number) => Promise<ProcedimentoAttributes>
+  findAllByStatus: (
+    status: TStatus,
+    term?: string | null
+  ) => Promise<ProcedimentoAttributes[]>
+  updateVote: (
+    id: number,
+    vote: VotoProcedimento
+  ) => Promise<ProcedimentoAttributes>
+  removeVote: (id: number, autor: number) => Promise<ProcedimentoAttributes>
+  updateStatus: (id: number, status: Status) => Promise<ProcedimentoAttributes>
+  newRevisao: (id: number, revisao: Revisao) => Promise<ProcedimentoAttributes>
+}
+
 export class ProcedimentoRepository implements IProcedimentoRepo {
   findOne = async (id: number) => {
     const procedimento = await Procedimento.findOne({

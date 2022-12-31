@@ -38,7 +38,9 @@ export default {
     list: {
       backgroundColor: 'white',
       border: '1px solid rgba(0,0,0,0.15)',
-      fontSize: 14
+      fontSize: 14,
+      overflow: 'scroll',
+      maxHeight: '300px'
     },
     item: {
       padding: '5px 15px',

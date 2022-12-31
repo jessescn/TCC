@@ -1,13 +1,13 @@
+import { ActorModel } from 'domain/models/actor'
+import { ComentarioModel } from 'domain/models/comentario'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
+import { IService } from 'services'
+import { NotFoundError } from 'types/express/errors'
 import {
   ComentarioQuery,
-  ComentarioRepository,
+  IComentarioRepository,
   NewComentario
 } from '../repositories/sequelize/comentario'
-import { ActorModel } from 'domain/models/actor'
-import { NotFoundError } from 'types/express/errors'
-import { ComentarioModel } from 'domain/models/comentario'
-import { IProcedimentoRepo, IRepository } from 'repositories'
-import { IService } from 'services'
 
 export interface IComentarioService
   extends IService<ComentarioModel, ComentarioQuery> {
@@ -19,13 +19,10 @@ export interface IComentarioService
 }
 
 export class ComentarioService implements IComentarioService {
-  private repository: ComentarioRepository
-  private procedimentoRepo: IProcedimentoRepo
-
-  constructor(repository: IRepository, procedimentoRepo: IProcedimentoRepo) {
-    this.repository = repository
-    this.procedimentoRepo = procedimentoRepo
-  }
+  constructor(
+    private repository: IComentarioRepository,
+    private procedimentoRepo: IProcedimentoRepo
+  ) {}
 
   private async checkIfProcedimentoExists(procedimentoId: number) {
     const procedimento = await this.procedimentoRepo.findOne(procedimentoId)
