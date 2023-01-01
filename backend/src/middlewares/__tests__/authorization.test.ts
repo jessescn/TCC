@@ -7,7 +7,7 @@ import { ActorModel } from 'domain/models/actor'
 describe('AuthToken Middleware', () => {
   const actor = createMock<ActorModel>()
   const service = {
-    findAll: jest.fn().mockResolvedValue([actor])
+    findAll: jest.fn().mockResolvedValue({ data: [actor], total: 1 })
   }
   const sut = new AuthTokenMiddleware(service as any)
 
@@ -27,7 +27,7 @@ describe('AuthToken Middleware', () => {
 
   it('should throw UnauthorizedError if user not found', async () => {
     const service = {
-      findAll: jest.fn().mockResolvedValue([])
+      findAll: jest.fn().mockResolvedValue({ data: [], total: 0 })
     }
     const sut = new AuthTokenMiddleware(service as any)
     const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY)

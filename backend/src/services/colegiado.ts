@@ -1,5 +1,4 @@
 import {
-  ProcedimentoAttributes,
   ProcedimentoModel,
   Status,
   TStatus,
@@ -26,7 +25,7 @@ export class ColegiadoService implements IColegiadoService {
     this.numberOfColegiados = parseInt(process.env.COLEGIADO_QUANTITY || '0')
   }
 
-  private async handleMajorityVotes(procedimento: ProcedimentoAttributes) {
+  private async handleMajorityVotes(procedimento: ProcedimentoModel) {
     const novoStatus: TStatus = ProcedimentoHelper.isProcedimentoAprovado(
       procedimento
     )
@@ -48,9 +47,7 @@ export class ColegiadoService implements IColegiadoService {
     return procedimento
   }
 
-  private checkIfProcedimentoIsOnHomologation(
-    procedimento: ProcedimentoAttributes
-  ) {
+  private checkIfProcedimentoIsOnHomologation(procedimento: ProcedimentoModel) {
     const status = ProcedimentoHelper.getCurrentStatus(procedimento)
 
     if (status !== 'em_homologacao') {

@@ -26,14 +26,11 @@ export const InclusivableActorOptions = {
 }
 
 export interface IActorRepository extends IRepository {
-  findOne: (id: number) => Promise<ActorAttributes>
-  findAll: (
-    query?: ActorQuery,
-    term?: string | null
-  ) => Promise<ActorAttributes[]>
-  create: (data: CreateActor) => Promise<ActorAttributes>
-  update: (id: number, data: Partial<ActorModel>) => Promise<ActorAttributes>
-  destroy: (id: number) => Promise<ActorAttributes>
+  findOne: (id: number) => Promise<ActorModel>
+  findAll: (query?: ActorQuery, term?: string | null) => Promise<ActorModel[]>
+  create: (data: CreateActor) => Promise<ActorModel>
+  update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
+  destroy: (id: number) => Promise<ActorModel>
 }
 
 export class ActorRepository implements IActorRepository {

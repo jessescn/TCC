@@ -83,7 +83,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
   }
 
   async findOne(id: number) {
-    return this.tipoProcedimentoRepo.findOne(id)
+    return this.checkIfTipoProcedimentoExists(id)
   }
 
   async findAll(query: TipoProcedimentoQuery, pagination: Pagination) {

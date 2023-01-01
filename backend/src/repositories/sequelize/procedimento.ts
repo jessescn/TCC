@@ -40,28 +40,25 @@ export type ProcedimentoQuery = WhereOptions<
 >
 
 export interface IProcedimentoRepo extends IRepository {
-  findOne: (id: number) => Promise<ProcedimentoAttributes>
+  findOne: (id: number) => Promise<ProcedimentoModel>
   findAll: (
     query: ProcedimentoQuery,
     term?: string | null
-  ) => Promise<ProcedimentoAttributes[]>
-  create: (data: CreateProcedimento) => Promise<ProcedimentoAttributes>
+  ) => Promise<ProcedimentoModel[]>
+  create: (data: CreateProcedimento) => Promise<ProcedimentoModel>
   update: (
     id: number,
     data: Partial<ProcedimentoModel>
-  ) => Promise<ProcedimentoAttributes>
-  destroy: (id: number) => Promise<ProcedimentoAttributes>
+  ) => Promise<ProcedimentoModel>
+  destroy: (id: number) => Promise<ProcedimentoModel>
   findAllByStatus: (
     status: TStatus,
     term?: string | null
-  ) => Promise<ProcedimentoAttributes[]>
-  updateVote: (
-    id: number,
-    vote: VotoProcedimento
-  ) => Promise<ProcedimentoAttributes>
-  removeVote: (id: number, autor: number) => Promise<ProcedimentoAttributes>
-  updateStatus: (id: number, status: Status) => Promise<ProcedimentoAttributes>
-  newRevisao: (id: number, revisao: Revisao) => Promise<ProcedimentoAttributes>
+  ) => Promise<ProcedimentoModel[]>
+  updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
+  removeVote: (id: number, autor: number) => Promise<ProcedimentoModel>
+  updateStatus: (id: number, status: Status) => Promise<ProcedimentoModel>
+  newRevisao: (id: number, revisao: Revisao) => Promise<ProcedimentoModel>
 }
 
 export class ProcedimentoRepository implements IProcedimentoRepo {

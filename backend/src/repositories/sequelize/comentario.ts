@@ -21,17 +21,17 @@ export type CreateComentario = {
 }
 
 export interface IComentarioRepository extends IRepository {
-  findOne: (id: number) => Promise<ComentarioAttributes>
+  findOne: (id: number) => Promise<ComentarioModel>
   findAll: (
     query: ComentarioQuery,
     term?: string | null
-  ) => Promise<ComentarioAttributes[]>
-  create: (data: CreateComentario) => Promise<ComentarioAttributes>
+  ) => Promise<ComentarioModel[]>
+  create: (data: CreateComentario) => Promise<ComentarioModel>
   update: (
     id: number,
     data: Partial<ComentarioModel>
-  ) => Promise<ComentarioAttributes>
-  destroy: (id: number) => Promise<ComentarioAttributes>
+  ) => Promise<ComentarioModel>
+  destroy: (id: number) => Promise<ComentarioModel>
 }
 
 export class ComentarioRepository implements IComentarioRepository {

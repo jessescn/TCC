@@ -13,9 +13,9 @@ describe('Comentario Service', () => {
   const procedimento = createMock<ProcedimentoModel>()
   const comentarios = createMockList<ComentarioModel>(2)
 
-  const procedimentoRepo = createMock<IProcedimentoRepo>({
+  const procedimentoRepo = {
     findOne: jest.fn().mockResolvedValue(procedimento)
-  })
+  } as any
 
   describe('create', () => {
     const repo = createMock<IRepository>({

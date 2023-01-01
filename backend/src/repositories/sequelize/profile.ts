@@ -11,17 +11,14 @@ export type CreateProfile = {
 }
 
 export interface IProfileRepository extends IRepository {
-  findOne: (id: number) => Promise<ProfileAttributes>
+  findOne: (id: number) => Promise<ProfileModel>
   findAll: (
     query?: ProfileQuery,
     term?: string | null
-  ) => Promise<ProfileAttributes[]>
-  create: (data: CreateProfile) => Promise<ProfileAttributes>
-  update: (
-    id: number,
-    data: Partial<ProfileModel>
-  ) => Promise<ProfileAttributes>
-  destroy: (id: number) => Promise<ProfileAttributes>
+  ) => Promise<ProfileModel[]>
+  create: (data: CreateProfile) => Promise<ProfileModel>
+  update: (id: number, data: Partial<ProfileModel>) => Promise<ProfileModel>
+  destroy: (id: number) => Promise<ProfileModel>
 }
 
 export class ProfileRepository implements IProfileRepository {

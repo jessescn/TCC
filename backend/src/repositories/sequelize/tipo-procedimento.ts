@@ -37,17 +37,17 @@ export type CreateTipoProcedimento = {
 }
 
 export interface ITipoProcedimentoRepository extends IRepository {
-  findOne: (id: number) => Promise<TipoProcedimentoAttributes>
+  findOne: (id: number) => Promise<TipoProcedimentoModel>
   findAll: (
     query: TipoProcedimentoQuery,
     term?: string | null
-  ) => Promise<TipoProcedimentoAttributes[]>
-  create: (data: CreateTipoProcedimento) => Promise<TipoProcedimentoAttributes>
+  ) => Promise<TipoProcedimentoModel[]>
+  create: (data: CreateTipoProcedimento) => Promise<TipoProcedimentoModel>
   update: (
     id: number,
     data: Partial<TipoProcedimentoModel>
-  ) => Promise<TipoProcedimentoAttributes>
-  destroy: (id: number) => Promise<TipoProcedimentoAttributes>
+  ) => Promise<TipoProcedimentoModel>
+  destroy: (id: number) => Promise<TipoProcedimentoModel>
 }
 
 export class TipoProcedimentoRepository implements ITipoProcedimentoRepository {

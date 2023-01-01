@@ -16,6 +16,10 @@ describe('Colegiado Service', () => {
     execute: jest.fn().mockResolvedValue(status)
   } as any
 
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2020-01-01'))
+  })
+
   describe('homologate', () => {
     const repo = createMock<IProcedimentoRepo>({
       findOne: jest.fn().mockResolvedValue(procedimento),
@@ -29,7 +33,10 @@ describe('Colegiado Service', () => {
 
       expect(result).toEqual(procedimento)
       expect(repo.findOne).toBeCalledWith(1)
-      expect(repo.updateStatus).toBeCalledWith(1, 'deferido')
+      expect(repo.updateStatus).toBeCalledWith(1, {
+        status: 'deferido',
+        data: new Date('2020-01-01').toISOString()
+      })
     })
 
     it('should throw a NotFoundError if procedimento does not exists', async () => {

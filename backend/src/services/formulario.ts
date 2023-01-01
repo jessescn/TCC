@@ -88,9 +88,9 @@ export class FormularioService implements IFormularioService {
     })
 
     formularios.forEach(async tipoProcedimento => {
-      tipoProcedimento.set({ status: 'inativo' })
-
-      await tipoProcedimento.save()
+      await this.tipoProcedimentoRepo.update(tipoProcedimento.id, {
+        status: 'inativo'
+      })
     })
   }
 

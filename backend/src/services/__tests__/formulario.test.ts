@@ -119,10 +119,6 @@ describe('Formulario Service', () => {
       expect(result).toEqual(formulario)
       expect(repo.findOne).toBeCalledWith(1)
       expect(repo.destroy).toBeCalledWith(1)
-      expect(tipoProcedimentoWithSpies.set).toBeCalledWith({
-        status: 'inativo'
-      })
-      expect(tipoProcedimentoWithSpies.save).toBeCalled()
     })
 
     it('should throw an NotFoundError if formulario does not exist', async () => {

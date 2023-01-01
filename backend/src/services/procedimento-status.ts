@@ -42,8 +42,6 @@ export class ProcedimentoStatusService implements IProcedimentoStatusService {
 
     const previous = getCurrentTStatus(procedimento)
 
-    console.log(procedimento.tipo)
-
     const status = await StatusHandlerMap[novoStatus].execute({
       autor,
       procedimento

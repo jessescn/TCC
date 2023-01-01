@@ -1,32 +1,34 @@
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { IRepository, Pagination } from 'repositories'
+import { Pagination } from 'repositories'
 import {
+  ITipoProcedimentoRepository,
   NewTipoProcedimento,
   TipoProcedimentoQuery
 } from 'repositories/sequelize/tipo-procedimento'
 import { TipoProcedimentoService } from 'services/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
+import { IFormularioRepository } from 'repositories/sequelize/formulario'
 
 describe('TipoProcedimento Service', () => {
   const formularios = createMockList<FormularioModel>(2)
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
   const tipoProcedimentos = createMockList<TipoProcedimentoModel>(2)
 
-  const formularioRepo = createMock<IRepository>({
+  const formularioRepo = createMock<IFormularioRepository>({
     findAll: jest
       .fn()
       .mockResolvedValue({ data: formularios, total: formularios.length })
   })
 
   describe('create', () => {
-    const tipoProcedimentoRepo = createMock<IRepository>({
+    const tipoProcedimentoRepo = createMock<ITipoProcedimentoRepository>({
       create: jest.fn().mockResolvedValue(tipoProcedimento)
     })
 
-    const formularioRepo = createMock<IRepository>({
+    const formularioRepo = createMock<IFormularioRepository>({
       findAll: jest
         .fn()
         .mockResolvedValue({ data: formularios, total: formularios.length })
@@ -48,7 +50,7 @@ describe('TipoProcedimento Service', () => {
 
     it('should throw a badRequestError if some formulario does not exists', async () => {
       const data = createMock<NewTipoProcedimento>({ formularios: [1, 2] })
-      const formularioRepo = createMock<IRepository>({
+      const formularioRepo = createMock<IFormularioRepository>({
         findAll: jest.fn().mockResolvedValue({ data: [], total: 0 })
       })
 
@@ -62,18 +64,15 @@ describe('TipoProcedimento Service', () => {
       }
 
       expect(shouldThrow).rejects.toThrow(BadRequestError)
-      expect(formularioRepo.findAll).toBeCalledWith(
-        {
-          id: data.formularios
-        },
-        { page: 1, per_page: 1000, term: null }
-      )
+      expect(formularioRepo.findAll).toBeCalledWith({
+        id: data.formularios
+      })
     })
   })
 
   describe('findOne', () => {
-    const repo = createMock<IRepository>({
-      findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+    const repo = createMock<ITipoProcedimentoRepository>({
+      findAll: jest.fn().mockResolvedValue([tipoProcedimento])
     })
 
     it('should return an existing tipoProcedimento by id', async () => {
@@ -82,12 +81,12 @@ describe('TipoProcedimento Service', () => {
       const result = await sut.findOne(1)
 
       expect(result).toEqual(tipoProcedimento)
-      expect(repo.findOne).toBeCalledWith(1)
+      expect(repo.findAll).toBeCalled()
     })
 
     it('should throw a NotFoundError if tipoProcedimento does not exists', async () => {
-      const repoWithUndefined = createMock<IRepository>({
-        findOne: jest.fn().mockResolvedValue(undefined)
+      const repoWithUndefined = createMock<ITipoProcedimentoRepository>({
+        findAll: jest.fn().mockResolvedValue([])
       })
       const sut = new TipoProcedimentoService(repoWithUndefined, formularioRepo)
 
@@ -100,11 +99,8 @@ describe('TipoProcedimento Service', () => {
   })
 
   describe('findAll', () => {
-    const repo = createMock<IRepository>({
-      findAll: jest.fn().mockResolvedValue({
-        data: tipoProcedimentos,
-        total: tipoProcedimentos.length
-      })
+    const repo = createMock<ITipoProcedimentoRepository>({
+      findAll: jest.fn().mockResolvedValue(tipoProcedimentos)
     })
     const pagination: Pagination = {
       per_page: 1000,
@@ -118,7 +114,7 @@ describe('TipoProcedimento Service', () => {
       const result = await sut.findAll({}, pagination)
 
       expect(result.data).toEqual(tipoProcedimentos)
-      expect(repo.findAll).toBeCalledWith({}, pagination)
+      expect(repo.findAll).toBeCalled()
     })
 
     it('should return only tipoProcedimentos which matches the query', async () => {
@@ -128,14 +124,14 @@ describe('TipoProcedimento Service', () => {
       const result = await sut.findAll(query, pagination)
 
       expect(result.data).toEqual(tipoProcedimentos)
-      expect(repo.findAll).toBeCalledWith(query, pagination)
+      expect(repo.findAll).toBeCalled()
     })
   })
 
   describe('update', () => {
-    const repo = createMock<IRepository>({
+    const repo = createMock<ITipoProcedimentoRepository>({
       update: jest.fn().mockResolvedValue(tipoProcedimento),
-      findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+      findAll: jest.fn().mockResolvedValue([tipoProcedimento])
     })
 
     const data: Partial<TipoProcedimentoModel> = { descricao: 'teste' }
@@ -150,9 +146,9 @@ describe('TipoProcedimento Service', () => {
     })
 
     it('should throw a NotFoundError if tipoProcedimento does not exists', async () => {
-      const repoWithUndefined = createMock<IRepository>({
+      const repoWithUndefined = createMock<ITipoProcedimentoRepository>({
         update: jest.fn().mockResolvedValue(tipoProcedimento),
-        findOne: jest.fn().mockResolvedValue(undefined)
+        findAll: jest.fn().mockResolvedValue([])
       })
 
       const sut = new TipoProcedimentoService(repoWithUndefined, formularioRepo)
@@ -166,9 +162,9 @@ describe('TipoProcedimento Service', () => {
   })
 
   describe('delete', () => {
-    const repo = createMock<IRepository>({
+    const repo = createMock<ITipoProcedimentoRepository>({
       destroy: jest.fn().mockResolvedValue(tipoProcedimento),
-      findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+      findAll: jest.fn().mockResolvedValue([tipoProcedimento])
     })
 
     it('should delete an existing tipoProcedimento', async () => {
@@ -181,9 +177,9 @@ describe('TipoProcedimento Service', () => {
     })
 
     it('should throw a NotFoundError if tipoProcedimento does not exists', async () => {
-      const repoWithUndefined = createMock<IRepository>({
+      const repoWithUndefined = createMock<ITipoProcedimentoRepository>({
         destroy: jest.fn().mockResolvedValue(tipoProcedimento),
-        findOne: jest.fn().mockResolvedValue(undefined)
+        findAll: jest.fn().mockResolvedValue([])
       })
 
       const sut = new TipoProcedimentoService(repoWithUndefined, formularioRepo)

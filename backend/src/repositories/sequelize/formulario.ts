@@ -23,17 +23,17 @@ export type CreateFormulario = NewFormulario & {
 }
 
 export interface IFormularioRepository extends IRepository {
-  findOne: (id: number) => Promise<FormularioAttributes>
+  findOne: (id: number) => Promise<FormularioModel>
   findAll: (
     query: FormularioQuery,
     term?: string | null
-  ) => Promise<FormularioAttributes[]>
-  create: (data: CreateFormulario) => Promise<FormularioAttributes>
+  ) => Promise<FormularioModel[]>
+  create: (data: CreateFormulario) => Promise<FormularioModel>
   update: (
     id: number,
     data: Partial<FormularioModel>
-  ) => Promise<FormularioAttributes>
-  destroy: (id: number) => Promise<FormularioAttributes>
+  ) => Promise<FormularioModel>
+  destroy: (id: number) => Promise<FormularioModel>
 }
 
 export class FormularioRepository implements IFormularioRepository {

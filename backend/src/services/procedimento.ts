@@ -4,12 +4,7 @@ import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
 import { ComentarioModel } from 'domain/models/comentario'
 import { FormularioModel } from 'domain/models/formulario'
-import {
-  ProcedimentoAttributes,
-  ProcedimentoModel,
-  Revisao,
-  TStatus
-} from 'domain/models/procedimento'
+import { ProcedimentoModel, Revisao, TStatus } from 'domain/models/procedimento'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { Pagination, PaginationResponse } from 'repositories'
 import { IComentarioRepository } from 'repositories/sequelize/comentario'
@@ -105,7 +100,7 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   private checkIfProcedimentoCanUpdateResposta(
-    procedimento: ProcedimentoAttributes
+    procedimento: ProcedimentoModel
   ) {
     const isOnPendingChangesStatus =
       ProcedimentoHelper.getCurrentStatus(procedimento) ===
@@ -116,9 +111,7 @@ export class ProcedimentoService implements IProcedimentoService {
     }
   }
 
-  private async updateCreatedProcedimentoStatus(
-    created: ProcedimentoAttributes
-  ) {
+  private async updateCreatedProcedimentoStatus(created: ProcedimentoModel) {
     const status = await this.statusService.execute(created, 'em_analise')
 
     const procedimento = await this.procedimentoRepo.updateStatus(
@@ -224,7 +217,7 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   private async updateProcedimentoToNextStatus(
-    procedimento: ProcedimentoAttributes,
+    procedimento: ProcedimentoModel,
     data: NewRevisao
   ) {
     const hasPendingChanges = !data.aprovado
