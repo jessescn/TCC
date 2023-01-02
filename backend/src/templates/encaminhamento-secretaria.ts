@@ -1,4 +1,12 @@
-<html lang="en">
+import { ActorModel } from 'domain/models/actor'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+
+export const getEncaminhamentoSecretariaTemplate = (
+  tipoProcedimento: TipoProcedimentoModel,
+  autor: ActorModel
+) => {
+  return `
+  <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -28,27 +36,6 @@
         text-align: center;
       }
 
-      a.nostyle:link {
-        text-decoration: inherit;
-        color: inherit;
-        cursor: auto;
-      }
-
-      a.nostyle:visited {
-        text-decoration: inherit;
-        color: inherit;
-        cursor: auto;
-      }
-
-      a {
-        padding: 8px 16px;
-        font-size: 18px;
-        color: white !important;
-        background-color: #31498f;
-        border-radius: 4px;
-        cursor: pointer !important;
-      }
-
       img {
         width: 200px;
       }
@@ -62,11 +49,6 @@
         height: 1px;
         background-color: #bcbcbc;
         margin-top: 28px;
-      }
-
-      strong {
-        color: #31498f;
-        font-weight: bold;
       }
 
       span {
@@ -83,10 +65,11 @@
       />
       <h2>Novo Procedimento Encaminhado</h2>
       <p>
-        Um novo procedimento foi realizado dentro da plataforma do PPGCC/UFCG.
+        Um novo procedimento do tipo ${tipoProcedimento.nome} foi realizado dentro da plataforma do PPGCC/UFCG pelo usuário ${autor.nome}(${autor.email}).
         Os dados preenchidos pelo usuário, separados por formulário, foram
         anexados junto a este email.
       </p>
     </div>
   </body>
-</html>
+</html>`
+}

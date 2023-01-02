@@ -10,7 +10,8 @@ import {
   reviewProcedimentoController,
   updateProcedimentoController,
   updateStatusProcedimentoController,
-  exportPreviewController
+  forwardToSecretariaPreviewController,
+  forwardToSecretariaController
 } from 'factories/controllers/procedimento'
 import { makeAuthTokenMiddleware } from 'factories/middlewares/authorization-factory'
 
@@ -25,9 +26,14 @@ routes.get(
 )
 routes.get('/procedimentos/:id', middleware, readOneProcedimentoController.exec)
 routes.get(
-  '/procedimentos/:id/export',
+  '/procedimentos/:id/encaminhamento-preview',
   middleware,
-  exportPreviewController.exec
+  forwardToSecretariaPreviewController.exec
+)
+routes.post(
+  '/procedimentos/:id/encaminhamento-secretaria',
+  middleware,
+  forwardToSecretariaController.exec
 )
 routes.get(
   '/procedimentos/:id/detalhes',

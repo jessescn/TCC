@@ -1,5 +1,4 @@
-import { FormularioHelper } from 'domain/helpers/formulario'
-import { ProcedimentoHelper } from 'domain/helpers/procedimento'
+import { ForwardData, ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
 import { ComentarioModel } from 'domain/models/comentario'
@@ -32,10 +31,6 @@ export type ProcedimentoDetails = {
   formularios: FormularioModel[]
 }
 
-export type RespostaExport = {
-  data: string
-  formulario: number
-}
 export interface IProcedimentoService
   extends IService<ProcedimentoModel, ProcedimentoQuery> {
   create: (
@@ -57,7 +52,8 @@ export interface IProcedimentoService
     pagination?: Pagination
   ) => Promise<PaginationResponse<ProcedimentoModel>>
   details: (id: number) => Promise<ProcedimentoDetails>
-  exportRespostas: (id: number) => Promise<RespostaExport[]>
+  getForwardData: (id: number) => Promise<ForwardData[]>
+  forwardToSecretaria: (id: number) => Promise<ProcedimentoModel>
 }
 
 export class ProcedimentoService implements IProcedimentoService {
@@ -261,7 +257,7 @@ export class ProcedimentoService implements IProcedimentoService {
     return this.updateProcedimentoToNextStatus(procedimento, data)
   }
 
-  async exportRespostas(id: number) {
+  async getForwardData(id: number) {
     const procedimento = await this.checkIfProcedimentoExists(id)
 
     if (!procedimento.tipo) {
@@ -276,24 +272,30 @@ export class ProcedimentoService implements IProcedimentoService {
       id: tipoProcedimento.formularios
     })
 
-    const previews = formularios.reduce((current, formulario) => {
-      const respostaToForm = procedimento.respostas.find(
-        resposta => resposta.formulario === formulario.id
-      )
-
-      if (!respostaToForm) {
-        return current
-      }
-
-      const helper = new FormularioHelper()
-      const filledTemplate = helper.insertRespostasIntoTemplate(
-        formulario,
-        respostaToForm
-      )
-
-      return [...current, { data: filledTemplate, formulario: formulario.id }]
-    }, [] as RespostaExport[])
+    const previews = ProcedimentoHelper.getForwardData(
+      procedimento,
+      formularios
+    )
 
     return previews
+  }
+
+  private checkIfCanBeForward(procedimento: ProcedimentoModel) {
+    const currentStatus = getCurrentStatus(procedimento)
+    const validAvailableStatus: TStatus[] = ['deferido']
+
+    if (!(currentStatus in validAvailableStatus)) {
+      throw new BadRequestError(
+        'Não é possível encaminhar esse procedimento neste status'
+      )
+    }
+  }
+
+  async forwardToSecretaria(id: number) {
+    // const procedimento = await this.checkIfProcedimentoExists(id)
+
+    // this.checkIfCanBeForward(procedimento)
+
+    return this.updateStatus(id, 'encaminhado')
   }
 }

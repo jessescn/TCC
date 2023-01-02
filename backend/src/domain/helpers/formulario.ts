@@ -3,7 +3,10 @@ import { Resposta } from 'domain/models/procedimento'
 import { extract } from 'utils/format'
 
 export class FormularioHelper {
-  insertRespostasIntoTemplate(formulario: FormularioModel, resposta: Resposta) {
+  static insertRespostasIntoTemplate(
+    formulario: FormularioModel,
+    resposta: Resposta
+  ) {
     if (!formulario.template) return
 
     let template = formulario.template

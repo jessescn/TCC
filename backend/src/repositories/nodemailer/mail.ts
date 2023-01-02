@@ -17,8 +17,12 @@ export class MailSender {
     auth: this.auth
   })
 
-  static async send(data: EmailTemplate) {
-    const mailOptions: SendMailOptions = { ...data, from: this.auth.user }
+  static async send(data: EmailTemplate, options: SendMailOptions = {}) {
+    const mailOptions: SendMailOptions = {
+      ...data,
+      from: this.auth.user,
+      ...options
+    }
 
     const info = await this.transporter.sendMail(mailOptions)
     return info

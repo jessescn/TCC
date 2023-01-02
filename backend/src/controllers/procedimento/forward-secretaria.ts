@@ -4,9 +4,9 @@ import { IProcedimentoService } from 'services/procedimento'
 import { Request, Response } from 'types/express'
 import { hasNumericId } from 'utils/request'
 
-export class ExportPreviewController extends Controller<IProcedimentoService> {
+export class ForwardToSecretariaController extends Controller<IProcedimentoService> {
   constructor(service: IProcedimentoService) {
-    const permission: PermissionKey = 'procedimento_review'
+    const permission: PermissionKey = 'procedimento_forward'
     const validations = [hasNumericId]
 
     super({ permission, validations, service })
@@ -18,7 +18,7 @@ export class ExportPreviewController extends Controller<IProcedimentoService> {
 
       const { id } = request.params
 
-      const respostas = await this.service.exportRespostas(Number(id))
+      const respostas = await this.service.forwardToSecretaria(Number(id))
 
       response.json(respostas)
     } catch (error) {

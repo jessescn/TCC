@@ -13,7 +13,7 @@ const sequelize = createSequelizeInstance()
 
 const connect = async () => {
   try {
-    await sequelize.sync({ logging: false })
+    await sequelize.sync()
     console.log('[DATABASE] Connection has been established successfully.')
   } catch (error) {
     console.error('[DATABASE] Unable to connect to the database:', error)
