@@ -6,6 +6,7 @@ import { FiAlertTriangle } from 'react-icons/fi'
 type Props = CampoFormulario<CampoTipoParagrafo> & {
   isInvalido?: boolean
   onInvalide?: (ordem: number) => void
+  editable: boolean
 }
 
 export function CampoParagrafo({

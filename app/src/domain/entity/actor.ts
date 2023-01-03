@@ -1,7 +1,7 @@
 import { UserModel } from 'domain/models/user'
 import { ProfileType } from 'domain/types/actors'
 
-export class User {
+export class Actor {
   static includesInProfiles(user: UserModel, profiles: ProfileType[]) {
     const userProfile = user.profile.nome
 

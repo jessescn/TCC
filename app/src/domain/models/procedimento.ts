@@ -7,16 +7,11 @@ export const statusList = {
   em_analise: { label: 'Em análise', color: 'info.warning' },
   em_homologacao: { label: 'Em homologação', color: 'info.warning' },
   deferido: { label: 'Deferido', color: 'info.warning' },
-  indeferido: { label: 'Indeferido', color: 'info.warning' }
+  indeferido: { label: 'Indeferido', color: 'info.warning' },
+  encaminhado: { label: 'Encaminhado', color: 'info.success' }
 }
 
-export type ProcedimentoStatus =
-  | 'criado'
-  | 'correcoes_pendentes'
-  | 'em_analise'
-  | 'em_homologacao'
-  | 'deferido'
-  | 'indeferido'
+export type ProcedimentoStatus = keyof typeof statusList
 
 export type CampoInvalido = {
   formulario: number

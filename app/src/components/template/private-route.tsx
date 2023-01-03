@@ -2,7 +2,7 @@ import { Box, Center, Flex } from '@chakra-ui/react'
 import { LoadingPage } from 'components/molecules/loading'
 import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
-import { User } from 'domain/entity/user'
+import { Actor } from 'domain/entity/actor'
 import { UserModel } from 'domain/models/user'
 import { ProfileType } from 'domain/types/actors'
 import { useEffect } from 'react'
@@ -32,7 +32,7 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
 
   const hasProfiles =
     allowedProfiles.length > 0
-      ? User.includesInProfiles(userModel, allowedProfiles)
+      ? Actor.includesInProfiles(userModel, allowedProfiles)
       : true
 
   const isVerified = userModel.verificado

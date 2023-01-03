@@ -292,9 +292,9 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   async forwardToSecretaria(id: number) {
-    // const procedimento = await this.checkIfProcedimentoExists(id)
+    const procedimento = await this.checkIfProcedimentoExists(id)
 
-    // this.checkIfCanBeForward(procedimento)
+    this.checkIfCanBeForward(procedimento)
 
     return this.updateStatus(id, 'encaminhado')
   }

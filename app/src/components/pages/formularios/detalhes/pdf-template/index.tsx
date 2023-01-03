@@ -1,5 +1,7 @@
 import { Box, Collapse, Icon, Text, useDisclosure } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
+import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
+import { Formulario } from 'domain/entity/formulario'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { AiFillEdit, AiOutlineFileAdd } from 'react-icons/ai'
@@ -10,9 +12,12 @@ export default function PDFTemplate() {
   const { watch } = useFormContext()
 
   const template = watch('template')
+  const campos = watch('campos') || []
 
   const modalControls = useDisclosure()
   const [showContent, setShowContent] = useState(true)
+
+  const invalidCampos = Formulario.validateTemplate(template, campos)
 
   return (
     <Box my="1rem" w="100%">
@@ -41,6 +46,9 @@ export default function PDFTemplate() {
         >
           {template ? 'Editar Template Atual' : 'Cadastrar Template'}
         </Button>
+        {invalidCampos.length > 0 && (
+          <SimpleErrorMessage message="O template possui dados inválidos" />
+        )}
       </Collapse>
       {modalControls.isOpen && <TemplateModal {...modalControls} />}
     </Box>

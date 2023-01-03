@@ -10,11 +10,11 @@ import {
 import { Button } from 'components/atoms/button'
 import CustomMentionsInput from 'components/atoms/mention/custom-mentions'
 import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
+import { Formulario } from 'domain/entity/formulario'
 import { CampoFormulario } from 'domain/models/formulario'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { SuggestionDataItem } from 'react-mentions'
-import { extract } from 'utils/validation'
 
 type Props = {
   isOpen: boolean
@@ -37,21 +37,7 @@ export default function TemplateModal({ isOpen, onClose }: Props) {
     }))
 
   const handleSave = () => {
-    const extractor = extract('<<', '>>')
-    const fieldTitles = extractor(content)
-    let invalids: string[] = []
-
-    fieldTitles.forEach(title => {
-      const matched = campos.find(
-        campo => campo.configuracao_campo.titulo === title
-      )
-
-      if (!matched) {
-        invalids.push(title)
-      }
-    })
-
-    invalids = [...new Set(invalids)]
+    const invalids = Formulario.validateTemplate(content, campos)
 
     if (invalids.length > 0) {
       setInvalidTitles(invalids)

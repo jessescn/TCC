@@ -27,6 +27,8 @@ export default function AnaliseProcedimento() {
     ? getCurrentStatus(procedimento)
     : undefined
 
+  const isStatusEmAnalise = currentStatus === 'em_analise'
+
   const handleInvalidateField = (campo: CustomCampoInvalido) => {
     const idx = camposInvalidos.findIndex(
       campoInvalido => campoInvalido.ordem === campo.ordem
@@ -51,7 +53,9 @@ export default function AnaliseProcedimento() {
         formularios={formularios}
         procedimento={procedimento}
         camposInvalidos={camposInvalidos}
-        onInvalidateField={handleInvalidateField}
+        onInvalidateField={
+          isStatusEmAnalise ? handleInvalidateField : undefined
+        }
       />
       <Footer
         camposInvalidos={camposInvalidos}

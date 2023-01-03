@@ -20,6 +20,7 @@ export type State = {
   comentarios: ComentarioModel[]
   statusFetch: Status
   statusVote: Status
+  statusEncaminhamento: Status
   statusNewComentario: Status
 }
 
@@ -28,7 +29,8 @@ export const initialState: State = {
   comentarios: [],
   statusFetch: 'pristine',
   statusVote: 'pristine',
-  statusNewComentario: 'pristine'
+  statusNewComentario: 'pristine',
+  statusEncaminhamento: 'pristine'
 }
 
 const reducers = {
@@ -70,6 +72,15 @@ const reducers = {
   },
   commentFailure: (state: State) => {
     state.statusNewComentario = 'failure'
+  },
+  forwardToSecretaria: (state: State) => {
+    state.statusEncaminhamento = 'loading'
+  },
+  forwardToSecretariaSuccess: (state: State) => {
+    state.statusEncaminhamento = 'success'
+  },
+  forwardToSecretariaFailure: (state: State) => {
+    state.statusEncaminhamento = 'failure'
   }
 }
 

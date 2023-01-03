@@ -10,8 +10,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
-import ConfirmApproveModal from './modals/confirm-approve'
-import InvalidFieldsModal from './modals/invalid-fields'
+import ConfirmApproveModal from '../modals/confirm-approve'
+import InvalidFieldsModal from '../modals/invalid-fields'
+import FooterEncaminhamento from './encaminhamento'
 
 export type CustomCampoInvalido = CampoInvalido & {
   campo: CampoFormulario
@@ -44,6 +45,7 @@ export default function Footer({
     : undefined
 
   const canAnalyze = currentStatus === 'em_analise'
+  const canForwardToSecretaria = currentStatus === 'deferido'
 
   const isLoading =
     statusRevisao === 'loading' || statusUpdateStatus === 'loading'
@@ -91,7 +93,9 @@ export default function Footer({
     }
   }, [statusUpdateStatus, statusRevisao])
 
-  return (
+  return canForwardToSecretaria ? (
+    <FooterEncaminhamento />
+  ) : (
     <>
       {!canAnalyze && (
         <Flex justifyContent="flex-end" my="0.5rem">
