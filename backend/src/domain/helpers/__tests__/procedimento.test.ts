@@ -40,8 +40,6 @@ describe('Procedimento Helper', () => {
 
       expect(result1).toBeFalsy()
       expect(result2).toBeTruthy()
-
-      expect(process.env.COLEGIADO_QUANTITY).toEqual('3')
     })
   })
 

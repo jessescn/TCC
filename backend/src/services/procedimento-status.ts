@@ -47,7 +47,7 @@ export class ProcedimentoStatusService implements IProcedimentoStatusService {
       procedimento
     })
 
-    await this.sendUpdateStatusEmail(autor, procedimento, status, previous)
+    this.sendUpdateStatusEmail(autor, procedimento, status, previous) // checar se precisa esperar
 
     return status
   }

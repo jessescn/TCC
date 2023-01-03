@@ -8,6 +8,8 @@ import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
 import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
+import { IActorRepository } from 'repositories/sequelize/actor'
+import { ActorHelper } from 'domain/helpers/actor'
 
 export interface IColegiadoService {
   updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
@@ -16,14 +18,11 @@ export interface IColegiadoService {
 }
 
 export class ColegiadoService implements IColegiadoService {
-  private numberOfColegiados: number
-
   constructor(
     private repository: IProcedimentoRepo,
-    private statusService: IProcedimentoStatusService
-  ) {
-    this.numberOfColegiados = parseInt(process.env.COLEGIADO_QUANTITY || '0')
-  }
+    private statusService: IProcedimentoStatusService,
+    private actorRepository: IActorRepository
+  ) {}
 
   private async handleMajorityVotes(procedimento: ProcedimentoModel) {
     const novoStatus: TStatus = ProcedimentoHelper.isProcedimentoAprovado(
@@ -76,14 +75,23 @@ export class ColegiadoService implements IColegiadoService {
     return this.updateStatus(id, 'deferido')
   }
 
+  private async getNumberOfColegiados() {
+    const usuarios = await this.actorRepository.findAll({ deleted: false })
+    const colegiado = ActorHelper.filterByRole(usuarios, 'colegiado')
+
+    return colegiado.length
+  }
+
   async updateVote(id: number, data: VotoProcedimento) {
     await this.checkIfProcedimentoCanUpdateVote(id)
 
     const procedimento = await this.repository.updateVote(id, data)
 
+    const numberOfColegiados = await this.getNumberOfColegiados()
+
     const isMaioriaVotos = ProcedimentoHelper.isMaioria(
       procedimento.votos,
-      this.numberOfColegiados
+      numberOfColegiados
     )
 
     if (isMaioriaVotos) {

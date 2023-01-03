@@ -10,7 +10,7 @@ export class EmHomologacaoStatusHandler implements StatusHandler {
 
   private sendEmailColegiado = async (procedimento: ProcedimentoModel) => {
     // Envia email aos membros do colegiado avisando que um novo procedimento está para ser votado
-    const usuarios = await this.actorRepo.findAll({})
+    const usuarios = await this.actorRepo.findAll()
     const colegiado = ActorHelper.filterByRole(usuarios, 'colegiado')
 
     if (colegiado.length === 0) return

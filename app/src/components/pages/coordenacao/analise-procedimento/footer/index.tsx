@@ -1,5 +1,6 @@
 import { Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
+import { Procedimento } from 'domain/entity/procedimento'
 import { CampoFormulario } from 'domain/models/formulario'
 import {
   CampoInvalido,
@@ -40,12 +41,11 @@ export default function Footer({
     state => state.procedimento.statusUpdateStatus
   )
 
-  const currentStatus = procedimento
-    ? getCurrentStatus(procedimento)
-    : undefined
+  const currentStatus = getCurrentStatus(procedimento)
 
   const canAnalyze = currentStatus === 'em_analise'
-  const canForwardToSecretaria = currentStatus === 'deferido'
+  const canForwardToSecretaria =
+    Procedimento.canForwardToSecretaria(procedimento)
 
   const isLoading =
     statusRevisao === 'loading' || statusUpdateStatus === 'loading'

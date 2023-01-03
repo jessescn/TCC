@@ -282,9 +282,9 @@ export class ProcedimentoService implements IProcedimentoService {
 
   private checkIfCanBeForward(procedimento: ProcedimentoModel) {
     const currentStatus = getCurrentStatus(procedimento)
-    const validAvailableStatus: TStatus[] = ['deferido']
+    const validAvailableStatus: TStatus[] = ['deferido', 'encaminhado']
 
-    if (!(currentStatus in validAvailableStatus)) {
+    if (!validAvailableStatus.includes(currentStatus)) {
       throw new BadRequestError(
         'Não é possível encaminhar esse procedimento neste status'
       )

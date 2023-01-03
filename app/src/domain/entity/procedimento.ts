@@ -3,7 +3,8 @@ import { CampoFormulario, FormularioModel } from 'domain/models/formulario'
 import {
   ProcedimentoModel,
   Resposta,
-  RespostaCampo
+  RespostaCampo,
+  ProcedimentoStatus
 } from 'domain/models/procedimento'
 import { removeAccents } from 'utils/format'
 import { getCurrentStatus } from 'utils/procedimento'
@@ -132,5 +133,12 @@ export class Procedimento {
     novasRespostas.splice(respostaIdx, 1, { ...resposta, campos: novoCampos })
 
     return novasRespostas
+  }
+
+  static canForwardToSecretaria(procedimento: ProcedimentoModel) {
+    const currentStatus = getCurrentStatus(procedimento)
+    const possibleStatus: ProcedimentoStatus[] = ['deferido', 'encaminhado']
+
+    return currentStatus && possibleStatus.includes(currentStatus)
   }
 }
