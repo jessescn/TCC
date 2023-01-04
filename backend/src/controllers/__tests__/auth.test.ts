@@ -13,19 +13,19 @@ describe('Auth Controller', () => {
       const actor = createMock<ActorModel>({ senha: encrypted })
 
       const service = {
-        findAll: jest.fn().mockResolvedValue([actor])
-      }
-
-      const data = {
-        email: 'user@user.com',
-        senha: password
+        findAll: jest.fn().mockResolvedValue({ data: [actor], total: 1 })
       }
 
       const token = jwt.sign({ data: actor }, process.env.JWT_SECRET_KEY, {
         expiresIn: process.env.JWT_TOKEN_EXPIRATION
       })
 
-      const request = createMock<Request>({ body: data })
+      const request = createMock<Request>({
+        body: {
+          email: 'user@user.com',
+          senha: password
+        }
+      })
       const response = createMock<Response>()
 
       const sut = new AuthController(service as any)
@@ -34,6 +34,8 @@ describe('Auth Controller', () => {
 
       expect(response.json).toBeCalledWith({
         token,
+        verificado: actor.verificado,
+        email: actor.email,
         expiresIn: process.env.JWT_TOKEN_EXPIRATION
       })
     })
@@ -74,7 +76,7 @@ describe('Auth Controller', () => {
       const password = 'teste1'
 
       const service = {
-        findAll: jest.fn().mockResolvedValue([])
+        findAll: jest.fn().mockResolvedValue({ data: [], total: 0 })
       }
 
       const data = {
@@ -98,7 +100,7 @@ describe('Auth Controller', () => {
       const actor = createMock<ActorModel>({ senha: encrypted })
 
       const service = {
-        findAll: jest.fn().mockResolvedValue([actor])
+        findAll: jest.fn().mockResolvedValue({ data: [actor], total: 1 })
       }
 
       const data = {
@@ -120,7 +122,7 @@ describe('Auth Controller', () => {
   describe('me', () => {
     const actor = createMock<ActorModel>()
     const service = {
-      findAll: jest.fn().mockResolvedValue([actor])
+      findAll: jest.fn().mockResolvedValue({ data: [actor], total: 1 })
     } as any
 
     it('should return info about user inside request', async () => {

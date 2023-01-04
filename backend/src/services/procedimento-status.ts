@@ -5,9 +5,8 @@ import {
   statusList,
   TStatus
 } from 'domain/models/procedimento'
-import { IRepository } from 'repositories'
 import { MailSender } from 'repositories/nodemailer/mail'
-import { ActorRepository } from 'repositories/sequelize/actor'
+import { IActorRepository } from 'repositories/sequelize/actor'
 import templates from 'templates'
 import { getCurrentTStatus } from 'utils/value'
 import { StatusHandlerMap } from './status'
@@ -20,11 +19,7 @@ export interface IProcedimentoStatusService {
 }
 
 export class ProcedimentoStatusService implements IProcedimentoStatusService {
-  private actorRepo: ActorRepository
-
-  constructor(actorRepo: IRepository) {
-    this.actorRepo = actorRepo
-  }
+  constructor(private actorRepo: IActorRepository) {}
 
   private sendUpdateStatusEmail = async (
     autor: ActorModel,
@@ -52,7 +47,7 @@ export class ProcedimentoStatusService implements IProcedimentoStatusService {
       procedimento
     })
 
-    await this.sendUpdateStatusEmail(autor, procedimento, status, previous)
+    this.sendUpdateStatusEmail(autor, procedimento, status, previous) // checar se precisa esperar
 
     return status
   }

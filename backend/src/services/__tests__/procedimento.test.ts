@@ -1,8 +1,9 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ProcedimentoModel, Resposta, Status } from 'domain/models/procedimento'
 import { ActorModel } from 'domain/models/actor'
-import { IProcedimentoRepo, IRepository, Pagination } from 'repositories'
+import { IRepository, Pagination } from 'repositories'
 import {
+  IProcedimentoRepo,
   NewProcedimento,
   NewRevisao,
   ProcedimentoQuery

@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { User } from 'domain/entity/user'
+import { Actor } from 'domain/entity/actor'
 import { ProfileType } from 'domain/types/actors'
 import { State } from '..'
 
@@ -33,7 +33,7 @@ export const hasRoutePermission = createSelector(
 
     const hasRequiredProfiles =
       requiredProfiles.length > 0
-        ? User.includesInProfiles(currentUser, requiredProfiles)
+        ? Actor.includesInProfiles(currentUser, requiredProfiles)
         : true
 
     return is('admin') || hasRequiredProfiles

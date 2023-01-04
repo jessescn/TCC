@@ -2,15 +2,21 @@ import { BadRequestError } from './../../types/express/errors'
 import { ProfileModel } from 'domain/models/profile'
 import { ActorModel } from 'domain/models/actor'
 import { IRepository, Pagination } from 'repositories'
-import { NewActor, ActorQuery } from 'repositories/sequelize/actor'
+import {
+  NewActor,
+  ActorQuery,
+  IActorRepository
+} from 'repositories/sequelize/actor'
 import { ActorService } from 'services/actor'
 import { createMock } from 'ts-auto-mock'
 import { ConflictError, NotFoundError } from 'types/express/errors'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ActorHelper } from 'domain/helpers/actor'
+import { IProfileRepository } from 'repositories/sequelize/profile'
+import { ITipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 
 describe('Actor Service', () => {
-  const actor = createMock<ActorModel>()
+  const actor = createMock<ActorModel>({ verificado: false })
   const profile = createMock<ProfileModel>()
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
   const pagination: Pagination = {
@@ -24,17 +30,17 @@ describe('Actor Service', () => {
     createMock<ActorModel>({ publico: ['publico2', 'publico3'] })
   ]
 
-  const profileRepo = createMock<IRepository>({
+  const profileRepo = createMock<IProfileRepository>({
     findOne: jest.fn().mockResolvedValue(profile),
     findAll: jest.fn().mockResolvedValue([profile])
   })
 
-  const tipoRepo = createMock<IRepository>({
+  const tipoRepo = createMock<ITipoProcedimentoRepository>({
     findAll: jest.fn().mockResolvedValue([tipoProcedimento])
   })
 
   describe('create', () => {
-    const repo = createMock<IRepository>({
+    const repo = createMock<IActorRepository>({
       create: jest.fn().mockResolvedValue(actor),
       findAll: jest.fn().mockResolvedValue([])
     })

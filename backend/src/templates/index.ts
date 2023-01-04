@@ -1,7 +1,10 @@
+import { getEncaminhamentoSecretariaTemplate } from './encaminhamento-secretaria'
 import { ProcedimentoModel } from 'domain/models/procedimento'
 import { getEmailVerificationTemplate } from './email-verification'
 import { getResetPasswordTemplate } from './reset-password'
 import { getUpdateStatusTemplate } from './update-status'
+import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { ActorModel } from 'domain/models/actor'
 
 export type EmailTemplate = {
   to: string
@@ -22,10 +25,6 @@ const changePassword: Template<ChangePasswordData> = (to, data) => ({
   html: getResetPasswordTemplate(data.link)
 })
 
-type ApproveProcedimentoData = {
-  procedimento: ProcedimentoModel
-}
-
 type EmailVerificationData = {
   link: string
 }
@@ -34,13 +33,6 @@ const emailVerification: Template<EmailVerificationData> = (to, data) => ({
   to,
   subject: '[PPGCC/UFCG] Confirmação de email',
   html: getEmailVerificationTemplate(data.link)
-})
-
-// Ajustar para ter os campos da resposta para a secretaria
-const approveProcedimento: Template<ApproveProcedimentoData> = (to, data) => ({
-  to,
-  subject: `[PPGCC/UFCG] Procedimento #${data.procedimento.id} aprovado!`,
-  html: `O procedimento #${data.procedimento.id} foi aprovado pelo colegiado e foi encaminhado a secretaria para as próximas etapas`
 })
 
 type UpdateProcedimentoData = {
@@ -98,11 +90,25 @@ const homologacaoColegiado: Template<HomologacaoColegiadoData> = (
   })
 })
 
+type EncaminhamentoSecretariaData = {
+  tipoProcedimento: TipoProcedimentoModel
+  autor: ActorModel
+}
+
+const encaminhamentoSecretaria: Template<EncaminhamentoSecretariaData> = (
+  to,
+  data
+) => ({
+  to,
+  subject: '[PPGCC/UFCG] Novo Procedimento',
+  html: getEncaminhamentoSecretariaTemplate(data.tipoProcedimento, data.autor)
+})
+
 export default {
   'change-password': changePassword,
-  'approve-procedimento': approveProcedimento,
   'update-procedimento-status': updateProcedimentoStatus,
   'analise-procedimento-coordenacao': analiseProcedimentoCoordenacao,
   'homologacao-colegiado': homologacaoColegiado,
-  'verificacao-email': emailVerification
+  'verificacao-email': emailVerification,
+  'encaminhamento-secretaria': encaminhamentoSecretaria
 }

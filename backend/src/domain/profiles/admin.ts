@@ -18,6 +18,7 @@ export default {
   procedimento_delete: 'all',
   procedimento_homologate: 'all',
   procedimento_review: 'all',
+  procedimento_forward: 'all',
   tipo_procedimento_create: 'all',
   tipo_procedimento_delete: 'all',
   tipo_procedimento_read: 'all',

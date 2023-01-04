@@ -1,5 +1,6 @@
 import { Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
+import { Procedimento } from 'domain/entity/procedimento'
 import { CampoFormulario } from 'domain/models/formulario'
 import {
   CampoInvalido,
@@ -10,8 +11,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
-import ConfirmApproveModal from './modals/confirm-approve'
-import InvalidFieldsModal from './modals/invalid-fields'
+import ConfirmApproveModal from '../modals/confirm-approve'
+import InvalidFieldsModal from '../modals/invalid-fields'
+import FooterEncaminhamento from './encaminhamento'
 
 export type CustomCampoInvalido = CampoInvalido & {
   campo: CampoFormulario
@@ -39,11 +41,11 @@ export default function Footer({
     state => state.procedimento.statusUpdateStatus
   )
 
-  const currentStatus = procedimento
-    ? getCurrentStatus(procedimento)
-    : undefined
+  const currentStatus = getCurrentStatus(procedimento)
 
   const canAnalyze = currentStatus === 'em_analise'
+  const canForwardToSecretaria =
+    Procedimento.canForwardToSecretaria(procedimento)
 
   const isLoading =
     statusRevisao === 'loading' || statusUpdateStatus === 'loading'
@@ -91,7 +93,9 @@ export default function Footer({
     }
   }, [statusUpdateStatus, statusRevisao])
 
-  return (
+  return canForwardToSecretaria ? (
+    <FooterEncaminhamento />
+  ) : (
     <>
       {!canAnalyze && (
         <Flex justifyContent="flex-end" my="0.5rem">

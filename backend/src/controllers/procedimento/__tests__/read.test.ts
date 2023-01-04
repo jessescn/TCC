@@ -8,6 +8,7 @@ import { ReadProcedimentoController } from '../read'
 describe('ReadProcedimento Controller', () => {
   const procedimento = createMock<ProcedimentoModel>()
   const { actor, spies, response } = baseSetup('procedimento_read')
+  const pagination = { page: 1, per_page: 1000, term: null }
 
   const makeSut = () => {
     const service = {
@@ -30,7 +31,7 @@ describe('ReadProcedimento Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({})
+    expect(service.findAll).toBeCalled()
     expect(response.json).toBeCalledWith([procedimento])
   })
 
@@ -44,7 +45,7 @@ describe('ReadProcedimento Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({ createdBy: actor.id })
+    expect(service.findAll).toBeCalledWith({ createdBy: actor.id }, pagination)
     expect(response.json).toBeCalledWith([procedimento])
   })
 

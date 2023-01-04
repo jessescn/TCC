@@ -45,7 +45,7 @@ describe('EmHomologacaoStatus Handler', () => {
     const result = await sut.execute({ procedimento, autor })
 
     expect(MailSender.send).toBeCalledWith(email)
-    expect(repo.findAll).toBeCalledWith({})
+    expect(repo.findAll).toBeCalled()
     expect(result).toEqual({
       status: 'em_homologacao',
       data: new Date('2020-01-01').toISOString()

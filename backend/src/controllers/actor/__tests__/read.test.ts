@@ -7,6 +7,7 @@ import { ReadActorController } from '../read'
 
 describe('ReadUsuario Controller', () => {
   const usuarios = createMockList<ActorModel>(2)
+  const pagination = { page: 1, per_page: 1000, term: null }
   const { actor, response, spies } = baseSetup('actor_read')
 
   const makeSut = () => {
@@ -29,7 +30,7 @@ describe('ReadUsuario Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({})
+    expect(service.findAll).toBeCalled()
     expect(response.json).toBeCalledWith(usuarios)
   })
 
@@ -44,7 +45,10 @@ describe('ReadUsuario Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({ id: actorWithLimitedScope.id })
+    expect(service.findAll).toBeCalledWith(
+      { id: actorWithLimitedScope.id },
+      pagination
+    )
     expect(response.json).toBeCalledWith(usuarios)
   })
 

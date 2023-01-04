@@ -36,7 +36,21 @@ export type CreateTipoProcedimento = {
   status: TipoProcedimentoStatus
 }
 
-export class TipoProcedimentoRepository implements IRepository {
+export interface ITipoProcedimentoRepository extends IRepository {
+  findOne: (id: number) => Promise<TipoProcedimentoModel>
+  findAll: (
+    query: TipoProcedimentoQuery,
+    term?: string | null
+  ) => Promise<TipoProcedimentoModel[]>
+  create: (data: CreateTipoProcedimento) => Promise<TipoProcedimentoModel>
+  update: (
+    id: number,
+    data: Partial<TipoProcedimentoModel>
+  ) => Promise<TipoProcedimentoModel>
+  destroy: (id: number) => Promise<TipoProcedimentoModel>
+}
+
+export class TipoProcedimentoRepository implements ITipoProcedimentoRepository {
   findAll = async (query: TipoProcedimentoQuery, term?: string) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term

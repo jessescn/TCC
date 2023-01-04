@@ -1,6 +1,8 @@
 import { makeCreateProcedimentoController } from './create-factory'
 import { makeDeleteProcedimentoController } from './delete-factory'
 import { makeGetDetailsProcedimentoController } from './details-factory'
+import { makeForwardToSecretariaController } from './forward-secretaria-factory'
+import { makeForwardToSecretariaPreviewController } from './forward-secretaria-preview-factory'
 import { makeHomologateProcedimentoController } from './homologate-factory'
 import { makeReadActorProcedimentoController } from './read-actor-factory'
 import { makeReadProcedimentoController } from './read-factory'
@@ -23,3 +25,6 @@ export const readActorProcedimentoController =
   makeReadActorProcedimentoController()
 export const getDetailsProcedimentoController =
   makeGetDetailsProcedimentoController()
+export const forwardToSecretariaPreviewController =
+  makeForwardToSecretariaPreviewController()
+export const forwardToSecretariaController = makeForwardToSecretariaController()

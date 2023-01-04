@@ -1,13 +1,15 @@
 import {
-  ProcedimentoAttributes,
   ProcedimentoModel,
+  Status,
   TStatus,
   VotoProcedimento
 } from 'domain/models/procedimento'
 import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { IProcedimentoRepo } from 'repositories'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
 import { IProcedimentoStatusService } from './procedimento-status'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
+import { IActorRepository } from 'repositories/sequelize/actor'
+import { ActorHelper } from 'domain/helpers/actor'
 
 export interface IColegiadoService {
   updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
@@ -16,20 +18,13 @@ export interface IColegiadoService {
 }
 
 export class ColegiadoService implements IColegiadoService {
-  private repository: IProcedimentoRepo
-  private statusService: IProcedimentoStatusService
-  private numberOfColegiados: number
-
   constructor(
-    repository: IProcedimentoRepo,
-    statusService: IProcedimentoStatusService
-  ) {
-    this.repository = repository
-    this.statusService = statusService
-    this.numberOfColegiados = parseInt(process.env.COLEGIADO_QUANTITY || '0')
-  }
+    private repository: IProcedimentoRepo,
+    private statusService: IProcedimentoStatusService,
+    private actorRepository: IActorRepository
+  ) {}
 
-  private async handleMajorityVotes(procedimento: ProcedimentoAttributes) {
+  private async handleMajorityVotes(procedimento: ProcedimentoModel) {
     const novoStatus: TStatus = ProcedimentoHelper.isProcedimentoAprovado(
       procedimento
     )
@@ -51,9 +46,7 @@ export class ColegiadoService implements IColegiadoService {
     return procedimento
   }
 
-  private checkIfProcedimentoIsOnHomologation(
-    procedimento: ProcedimentoAttributes
-  ) {
+  private checkIfProcedimentoIsOnHomologation(procedimento: ProcedimentoModel) {
     const status = ProcedimentoHelper.getCurrentStatus(procedimento)
 
     if (status !== 'em_homologacao') {
@@ -70,11 +63,23 @@ export class ColegiadoService implements IColegiadoService {
   private async updateStatus(id: number, status: TStatus) {
     await this.checkIfProcedimentoExists(id)
 
-    return this.repository.updateStatus(id, status)
+    const newStatus: Status = {
+      data: new Date().toISOString(),
+      status
+    }
+
+    return this.repository.updateStatus(id, newStatus)
   }
 
   async homologate(id: number) {
     return this.updateStatus(id, 'deferido')
+  }
+
+  private async getNumberOfColegiados() {
+    const usuarios = await this.actorRepository.findAll({ deleted: false })
+    const colegiado = ActorHelper.filterByRole(usuarios, 'colegiado')
+
+    return colegiado.length
   }
 
   async updateVote(id: number, data: VotoProcedimento) {
@@ -82,9 +87,11 @@ export class ColegiadoService implements IColegiadoService {
 
     const procedimento = await this.repository.updateVote(id, data)
 
+    const numberOfColegiados = await this.getNumberOfColegiados()
+
     const isMaioriaVotos = ProcedimentoHelper.isMaioria(
       procedimento.votos,
-      this.numberOfColegiados
+      numberOfColegiados
     )
 
     if (isMaioriaVotos) {

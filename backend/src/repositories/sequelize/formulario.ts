@@ -11,21 +11,32 @@ import { isNumber } from 'utils/value'
 export type FormularioQuery = WhereOptions<
   InferAttributes<FormularioAttributes>
 >
-
-export type CreateFormulario = {
-  nome: string
-  campos: CampoFormulario[]
-  descricao?: string
-  createdBy: number
-}
-
 export type NewFormulario = {
   nome: string
   descricao?: string
+  template?: string
   campos: CampoFormulario[]
 }
 
-export class FormularioRepository implements IRepository {
+export type CreateFormulario = NewFormulario & {
+  createdBy: number
+}
+
+export interface IFormularioRepository extends IRepository {
+  findOne: (id: number) => Promise<FormularioModel>
+  findAll: (
+    query: FormularioQuery,
+    term?: string | null
+  ) => Promise<FormularioModel[]>
+  create: (data: CreateFormulario) => Promise<FormularioModel>
+  update: (
+    id: number,
+    data: Partial<FormularioModel>
+  ) => Promise<FormularioModel>
+  destroy: (id: number) => Promise<FormularioModel>
+}
+
+export class FormularioRepository implements IFormularioRepository {
   findAll = async (query: FormularioQuery = {}, term?: string) => {
     const searchId = isNumber(term) ? { id: { [Op.eq]: term } } : {}
     const search = term

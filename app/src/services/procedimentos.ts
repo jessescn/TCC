@@ -104,11 +104,17 @@ export const ProcedimentoService = {
       body: payload
     })
   },
-  revisao: (procedimentoId: number, payload: RevisaoPayload) => {
+  review: (procedimentoId: number, payload: RevisaoPayload) => {
     return httpClient.request<AxiosResponse<ProcedimentoModel>>({
       method: 'post',
       url: `/procedimentos/${procedimentoId}/revisao`,
       body: payload
+    })
+  },
+  forwardToSecretaria: (procedimentoId: number) => {
+    return httpClient.request<AxiosResponse<ProcedimentoModel>>({
+      method: 'post',
+      url: `/procedimentos/${procedimentoId}/encaminhamento-secretaria`
     })
   }
 }

@@ -1,4 +1,11 @@
+import { FormularioModel } from 'domain/models/formulario'
 import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
+import { FormularioHelper } from './formulario'
+
+export type ForwardData = {
+  data: string
+  formulario: FormularioModel
+}
 
 export class ProcedimentoHelper {
   static insertOrUpdateVote = (
@@ -40,5 +47,31 @@ export class ProcedimentoHelper {
     const negative = votes.length - positive
 
     return positive > negative
+  }
+
+  static getForwardData = (
+    procedimento: ProcedimentoModel,
+    formularios: FormularioModel[]
+  ) => {
+    const previews = formularios
+      .filter(formulario => formulario.template)
+      .reduce((current, formulario) => {
+        const respostaToForm = procedimento.respostas.find(
+          resposta => resposta.formulario === formulario.id
+        )
+
+        if (!respostaToForm) {
+          return current
+        }
+
+        const filledTemplate = FormularioHelper.insertRespostasIntoTemplate(
+          formulario,
+          respostaToForm
+        )
+
+        return [...current, { data: filledTemplate, formulario }]
+      }, [] as ForwardData[])
+
+    return previews
   }
 }

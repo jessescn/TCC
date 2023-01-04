@@ -1,12 +1,12 @@
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
-import { IRepository, Pagination } from 'repositories'
+import { Pagination } from 'repositories'
 import {
   FormularioQuery,
-  FormularioRepository,
+  IFormularioRepository,
   NewFormulario
 } from 'repositories/sequelize/formulario'
-import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
+import { ITipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { Op } from 'sequelize'
 import { IService } from 'services'
 import { NotFoundError } from 'types/express/errors'
@@ -23,13 +23,10 @@ export interface IFormularioService
 }
 
 export class FormularioService implements IFormularioService {
-  private repository: FormularioRepository
-  private tipoProcedimentoRepo: TipoProcedimentoRepository
-
-  constructor(repository: IRepository, tipoProcedimentoRepo: IRepository) {
-    this.repository = repository
-    this.tipoProcedimentoRepo = tipoProcedimentoRepo
-  }
+  constructor(
+    private repository: IFormularioRepository,
+    private tipoProcedimentoRepo: ITipoProcedimentoRepository
+  ) {}
 
   async create(actor: ActorModel, data: NewFormulario) {
     const newFormulario = await this.repository.create({
@@ -91,9 +88,9 @@ export class FormularioService implements IFormularioService {
     })
 
     formularios.forEach(async tipoProcedimento => {
-      tipoProcedimento.set({ status: 'inativo' })
-
-      await tipoProcedimento.save()
+      await this.tipoProcedimentoRepo.update(tipoProcedimento.id, {
+        status: 'inativo'
+      })
     })
   }
 

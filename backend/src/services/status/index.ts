@@ -5,6 +5,7 @@ import { makeCriadoStatusHandler } from 'factories/services/status/criado-factor
 import { makeDeferidoStatusHandler } from 'factories/services/status/deferido-factory'
 import { makeEmAnaliseStatusHandler } from 'factories/services/status/em-analise-factory'
 import { makeEmHomologacaoStatusHandler } from 'factories/services/status/em-homologacao-factory'
+import { makeEncaminhadoStatusHandler } from 'factories/services/status/encaminhado-factory'
 import { makeIndeferidoStatusHandler } from 'factories/services/status/indeferido-factory'
 
 export type HandlerProps = {
@@ -22,5 +23,6 @@ export const StatusHandlerMap: Record<TStatus, StatusHandler> = {
   correcoes_pendentes: makeCorrecoesPendentesStatusHandler(),
   deferido: makeDeferidoStatusHandler(),
   em_homologacao: makeEmHomologacaoStatusHandler(),
-  indeferido: makeIndeferidoStatusHandler()
+  indeferido: makeIndeferidoStatusHandler(),
+  encaminhado: makeEncaminhadoStatusHandler()
 }

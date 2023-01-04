@@ -3,7 +3,8 @@ import {
   Status,
   VotoProcedimento
 } from 'domain/models/procedimento'
-import { IProcedimentoRepo } from 'repositories'
+import { IActorRepository } from 'repositories/sequelize/actor'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 import { ColegiadoService } from 'services/colegiado'
 import { createMock } from 'ts-auto-mock'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
@@ -16,6 +17,12 @@ describe('Colegiado Service', () => {
     execute: jest.fn().mockResolvedValue(status)
   } as any
 
+  const actorRepo = createMock<IActorRepository>()
+
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2020-01-01'))
+  })
+
   describe('homologate', () => {
     const repo = createMock<IProcedimentoRepo>({
       findOne: jest.fn().mockResolvedValue(procedimento),
@@ -23,13 +30,16 @@ describe('Colegiado Service', () => {
     })
 
     it("should update status of an existing procedimento to 'homologate'", async () => {
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       const result = await sut.homologate(1)
 
       expect(result).toEqual(procedimento)
       expect(repo.findOne).toBeCalledWith(1)
-      expect(repo.updateStatus).toBeCalledWith(1, 'deferido')
+      expect(repo.updateStatus).toBeCalledWith(1, {
+        status: 'deferido',
+        data: new Date('2020-01-01').toISOString()
+      })
     })
 
     it('should throw a NotFoundError if procedimento does not exists', async () => {
@@ -37,7 +47,7 @@ describe('Colegiado Service', () => {
         findOne: jest.fn().mockResolvedValue(undefined)
       })
 
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       const shouldThrow = async () => {
         await sut.homologate(1)
@@ -64,7 +74,7 @@ describe('Colegiado Service', () => {
 
     it('should update a vote of an existing procedimento', async () => {
       const data = createMock<VotoProcedimento>()
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       const result = await sut.updateVote(1, data)
 
@@ -93,7 +103,7 @@ describe('Colegiado Service', () => {
       })
 
       const data = createMock<VotoProcedimento>()
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       await sut.updateVote(1, data)
 
@@ -120,7 +130,7 @@ describe('Colegiado Service', () => {
       })
 
       const data = createMock<VotoProcedimento>()
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       await sut.updateVote(1, data)
 
@@ -143,7 +153,7 @@ describe('Colegiado Service', () => {
       })
 
       const data = createMock<VotoProcedimento>()
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       const shouldThrow = async () => {
         await sut.updateVote(1, data)
@@ -168,7 +178,7 @@ describe('Colegiado Service', () => {
     })
 
     it('should remove a vote from an existing procedimento', async () => {
-      const sut = new ColegiadoService(repo, statusService)
+      const sut = new ColegiadoService(repo, statusService, actorRepo)
 
       const result = await sut.deleteVote(2, 1)
 

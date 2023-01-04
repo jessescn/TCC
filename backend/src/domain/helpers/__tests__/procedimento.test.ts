@@ -40,24 +40,6 @@ describe('Procedimento Helper', () => {
 
       expect(result1).toBeFalsy()
       expect(result2).toBeTruthy()
-
-      expect(process.env.COLEGIADO_QUANTITY).toEqual('3')
-    })
-
-    it('should consider the colegiado quantity as zero if environment is not found', () => {
-      const copy = process.env
-
-      process.env = {}
-
-      const result = sut.isMaioria(
-        [createMock<VotoProcedimento>({ autor: 1, aprovado: true })],
-        4
-      )
-
-      expect(result).toBeTruthy()
-      expect(process.env.COLEGIADO_QUANTITY).toBeUndefined()
-
-      process.env = copy
     })
   })
 

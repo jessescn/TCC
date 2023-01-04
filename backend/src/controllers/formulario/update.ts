@@ -6,7 +6,12 @@ import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
-  const validFields: (keyof FormularioModel)[] = ['nome', 'descricao', 'campos']
+  const validFields: (keyof FormularioModel)[] = [
+    'nome',
+    'descricao',
+    'campos',
+    'template'
+  ]
   notIncludesInvalidFields(req, validFields)
 }
 

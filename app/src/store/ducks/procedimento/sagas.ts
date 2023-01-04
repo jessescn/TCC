@@ -93,7 +93,7 @@ function* updateStatusSaga(action: PayloadAction<UpdateStatusPayload>) {
 function* novaRevisaoSaga(action: PayloadAction<NovaRevisaoPayload>) {
   try {
     const response: AxiosResponse<ProcedimentoModel> = yield call(() =>
-      ProcedimentoService.revisao(action.payload.id, action.payload.data)
+      ProcedimentoService.review(action.payload.id, action.payload.data)
     )
 
     yield put(actions.novaRevisaoSuccess(response.data))

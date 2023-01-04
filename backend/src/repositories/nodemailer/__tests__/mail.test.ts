@@ -3,6 +3,11 @@ import { EmailTemplate } from 'templates'
 import { createMock } from 'ts-auto-mock'
 import { MailSender } from '../mail'
 
+jest.mock('repositories/nodemailer/mail', () => {
+  return {
+    ...jest.requireActual('repositories/nodemailer/mail')
+  }
+})
 describe('MailSender', () => {
   const template = createMock<EmailTemplate>()
 

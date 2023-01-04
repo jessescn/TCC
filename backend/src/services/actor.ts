@@ -1,14 +1,16 @@
 import { ActorHelper } from 'domain/helpers/actor'
 import { ActorModel } from 'domain/models/actor'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Pagination } from 'repositories'
+import { MailSender } from 'repositories/nodemailer/mail'
 import {
   ActorQuery,
-  ActorRepository,
+  IActorRepository,
   NewActor
 } from 'repositories/sequelize/actor'
-import { ProfileRepository } from 'repositories/sequelize/profile'
-import { TipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
+import { IProfileRepository } from 'repositories/sequelize/profile'
+import { ITipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
 import { IService } from 'services'
 import templates from 'templates'
 import {
@@ -17,10 +19,8 @@ import {
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
-import { paginateList } from 'utils/value'
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import { MailSender } from 'repositories/nodemailer/mail'
 import { encryptPassword } from 'utils/password'
+import { paginateList } from 'utils/value'
 
 export type SidebarInfo = {
   open: TipoProcedimentoModel[]
@@ -40,9 +40,9 @@ export interface IActorService extends IService<ActorModel, ActorQuery> {
 
 export class ActorService implements IActorService {
   constructor(
-    private readonly repository: ActorRepository,
-    private readonly profileRepo: ProfileRepository,
-    private readonly tipoProcedimentoRepo: TipoProcedimentoRepository
+    private readonly repository: IActorRepository,
+    private readonly profileRepo: IProfileRepository,
+    private readonly tipoProcedimentoRepo: ITipoProcedimentoRepository
   ) {}
 
   private checkIfUserAlreadyExistsByEmail = async (email: string) => {

@@ -1,20 +1,21 @@
 import { ComentarioModel } from 'domain/models/comentario'
 import { ActorModel } from 'domain/models/actor'
-import { IProcedimentoRepo, IRepository } from 'repositories'
+import { IRepository } from 'repositories'
 import { NewComentario } from 'repositories/sequelize/comentario'
 import { ComentarioService } from 'services/comentario'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { NotFoundError } from 'types/express/errors'
 import { ProcedimentoModel } from 'domain/models/procedimento'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 
 describe('Comentario Service', () => {
   const comentario = createMock<ComentarioModel>()
   const procedimento = createMock<ProcedimentoModel>()
   const comentarios = createMockList<ComentarioModel>(2)
 
-  const procedimentoRepo = createMock<IProcedimentoRepo>({
+  const procedimentoRepo = {
     findOne: jest.fn().mockResolvedValue(procedimento)
-  })
+  } as any
 
   describe('create', () => {
     const repo = createMock<IRepository>({

@@ -34,6 +34,7 @@ export interface FormularioModel {
   descricao: string
   campos: CampoFormulario[]
   deleted: boolean
+  template?: string
   actor?: ActorModel
   createdAt?: Date
   updatedAt?: Date
@@ -49,6 +50,7 @@ export interface FormularioAttributes
   descricao: CreationOptional<string>
   campos: CampoFormulario[]
   deleted: CreationOptional<boolean>
+  template: CreationOptional<string>
   createdAt?: Date
   updatedAt?: Date
   createdBy?: number
@@ -75,6 +77,9 @@ const Formulario = sequelize.define<FormularioAttributes>('formulario', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
+  },
+  template: {
+    type: DataTypes.TEXT
   },
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE

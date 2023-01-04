@@ -16,7 +16,8 @@ export default function Preview() {
       campos,
       deleted: false,
       nome,
-      descricao
+      descricao,
+      template: null
     }
 
     return fakeFormulario

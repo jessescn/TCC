@@ -1,6 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { AxiosResponse } from 'axios'
 import { NewComentario } from 'domain/models/comentario'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 import { UserModel } from 'domain/models/user'
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { ComentarioService } from 'services/comentario'
@@ -14,7 +15,8 @@ import { actions, VotePayload } from './slice'
 export const sagas = [
   takeLatest(actions.getInfo.type, getInfoSaga),
   takeLatest(actions.vote.type, voteSaga),
-  takeLatest(actions.comment.type, newCommentSaga)
+  takeLatest(actions.comment.type, newCommentSaga),
+  takeLatest(actions.forwardToSecretaria.type, forwardToSecretariaSaga)
 ]
 
 function* getInfoSaga(action: PayloadAction<number>) {
@@ -67,5 +69,28 @@ function* newCommentSaga(action: PayloadAction<NewComentario>) {
     })
   } catch (error) {
     yield put(actions.commentFailure())
+  }
+}
+
+function* forwardToSecretariaSaga() {
+  try {
+    const procedimento: ProcedimentoModel | undefined = yield select(
+      selectors.procedimentoDetalhes.getProcedimento
+    )
+
+    if (!procedimento) {
+      yield put(actions.forwardToSecretariaFailure())
+      return
+    }
+
+    yield call(() => ProcedimentoService.forwardToSecretaria(procedimento.id))
+
+    yield put(actions.forwardToSecretariaSuccess())
+    yield call(getInfoSaga, {
+      payload: procedimento.id,
+      type: actions.getInfo.type
+    })
+  } catch (error) {
+    yield put(actions.forwardToSecretariaFailure())
   }
 }
