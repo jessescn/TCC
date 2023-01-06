@@ -1,4 +1,3 @@
-import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import Actor from 'domain/models/actor'
 import Comentario from 'domain/models/comentario'
 import Procedimento, {
@@ -8,10 +7,10 @@ import Procedimento, {
   Resposta,
   Revisao,
   Status,
-  TStatus,
-  VotoProcedimento
+  TStatus
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
+import Voto from 'domain/models/voto'
 import { IRepository } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import { getCurrentStatus, isNumber } from 'utils/value'
@@ -19,14 +18,12 @@ import { getCurrentStatus, isNumber } from 'utils/value'
 export type CreateProcedimento = {
   tipo: number
   respostas: Resposta[]
-  votos?: VotoProcedimento[]
   createdBy: number
 }
 
 export type NewProcedimento = {
   tipo: number
   respostas: Resposta[]
-  votos?: VotoProcedimento[]
 }
 
 export type NewRevisao = {
@@ -55,8 +52,6 @@ export interface IProcedimentoRepo extends IRepository {
     status: TStatus,
     term?: string | null
   ) => Promise<ProcedimentoModel[]>
-  updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
-  removeVote: (id: number, autor: number) => Promise<ProcedimentoModel>
   updateStatus: (id: number, status: Status) => Promise<ProcedimentoModel>
   newRevisao: (id: number, revisao: Revisao) => Promise<ProcedimentoModel>
 }
@@ -65,7 +60,19 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
   findOne = async (id: number) => {
     const procedimento = await Procedimento.findOne({
       where: { id },
-      include: [TipoProcedimento, Comentario]
+      include: [
+        TipoProcedimento,
+        Comentario,
+        {
+          model: Voto,
+          include: [
+            {
+              model: Actor,
+              as: 'autor'
+            }
+          ]
+        }
+      ]
     })
 
     return procedimento
@@ -77,6 +84,7 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     const procedimentos = await Procedimento.findAll({
       include: [
         TipoProcedimento,
+        Voto,
         {
           model: Actor,
           attributes: ['nome']
@@ -167,35 +175,6 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     const procedimento = await this.findOne(id)
 
     procedimento.set({ deleted: true })
-
-    await procedimento.save()
-
-    return procedimento
-  }
-
-  updateVote = async (id: number, newVote: VotoProcedimento) => {
-    const procedimento = await this.findOne(id)
-
-    const votes = ProcedimentoHelper.insertOrUpdateVote(
-      procedimento.votos,
-      newVote
-    )
-
-    procedimento.set({ votos: votes })
-
-    await procedimento.save()
-
-    return procedimento
-  }
-
-  removeVote = async (id: number, autor: number) => {
-    const procedimento = await this.findOne(id)
-
-    const filteredVotes = procedimento.votos.filter(
-      voto => voto.autor !== autor
-    )
-
-    procedimento.set({ votos: filteredVotes })
 
     await procedimento.save()
 

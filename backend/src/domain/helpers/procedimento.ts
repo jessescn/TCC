@@ -1,5 +1,6 @@
 import { FormularioModel } from 'domain/models/formulario'
-import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
+import { VotoModel } from 'domain/models/voto'
 import { FormularioHelper } from './formulario'
 
 export type ForwardData = {
@@ -8,29 +9,7 @@ export type ForwardData = {
 }
 
 export class ProcedimentoHelper {
-  static insertOrUpdateVote = (
-    votes: VotoProcedimento[],
-    newVote: VotoProcedimento
-  ) => {
-    const index = votes.findIndex(vote => vote.autor === newVote.autor)
-
-    if (index === -1) {
-      return [...votes, newVote]
-    }
-
-    return votes.reduce((current, vote) => {
-      if (vote.autor === newVote.autor) {
-        return [...current, newVote]
-      }
-
-      return [...current, vote]
-    }, [])
-  }
-
-  static isMaioria = (
-    votes: VotoProcedimento[],
-    numberOfColegiados: number
-  ) => {
+  static isMaioria = (votes: VotoModel[], numberOfColegiados: number) => {
     const numberOfVotes = votes.length
 
     return numberOfVotes >= Math.ceil(numberOfColegiados / 2)
@@ -40,9 +19,7 @@ export class ProcedimentoHelper {
     return procedimento.status[procedimento.status.length - 1]?.status
   }
 
-  static isProcedimentoAprovado = (procedimento: ProcedimentoModel) => {
-    const votes = procedimento.votos
-
+  static isProcedimentoAprovado = (votes: VotoModel[]) => {
     const positive = votes.filter(vote => vote.aprovado).length
     const negative = votes.length - positive
 

@@ -1,5 +1,6 @@
 import { baseSetup } from 'controllers/__mocks__'
-import { ProcedimentoModel, VotoProcedimento } from 'domain/models/procedimento'
+import { ProcedimentoModel } from 'domain/models/procedimento'
+import { VotoModel } from 'domain/models/voto'
 import { createMock } from 'ts-auto-mock'
 import { HttpStatusCode, Request } from 'types/express'
 import { UpdateVoteController } from '../update-vote'
@@ -10,7 +11,7 @@ describe('UpdateVote Controller', () => {
 
   const makeSut = () => {
     const service = {
-      updateVote: jest.fn().mockResolvedValue(procedimento)
+      vote: jest.fn().mockResolvedValue(procedimento)
     }
 
     return { sut: new UpdateVoteController(service as any), service }
@@ -22,7 +23,11 @@ describe('UpdateVote Controller', () => {
   })
 
   it('should update/create a vote in an existing procedimento', async () => {
-    const data = createMock<VotoProcedimento>({ autor: 1, aprovado: true })
+    const data = createMock<VotoModel>({
+      autorId: 1,
+      aprovado: true,
+      procedimentoId: 1
+    })
     const request = createMock<Request>({
       actor,
       params: { id: '1' },
@@ -33,7 +38,7 @@ describe('UpdateVote Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.updateVote).toBeCalledWith(1, data)
+    expect(service.vote).toBeCalledWith({ ...data, autorId: actor.id })
     expect(response.json).toBeCalledWith(procedimento)
   })
 

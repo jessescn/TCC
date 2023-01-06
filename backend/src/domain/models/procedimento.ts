@@ -38,12 +38,6 @@ export type Resposta = {
   campos: RespostaCampo[]
 }
 
-export type VotoProcedimento = {
-  aprovado: boolean
-  autor: number
-  data?: string
-}
-
 export type Status = {
   data: string
   status: TStatus
@@ -61,7 +55,6 @@ export interface ProcedimentoModel {
   status: Status[]
   revisoes: Revisao[]
   respostas: Resposta[]
-  votos: VotoProcedimento[]
   deleted: boolean
   tipo?: number
   createdAt?: Date
@@ -78,7 +71,6 @@ export interface ProcedimentoAttributes
   status: Status[]
   revisoes: Revisao[]
   respostas: Resposta[]
-  votos: VotoProcedimento[]
   deleted: boolean
   tipo?: number
   createdAt?: Date
@@ -103,11 +95,6 @@ const Procedimento = sequelize.define<ProcedimentoAttributes>('procedimento', {
     defaultValue: []
   },
   revisoes: {
-    type: DataTypes.ARRAY(DataTypes.JSON),
-    allowNull: false,
-    defaultValue: []
-  },
-  votos: {
     type: DataTypes.ARRAY(DataTypes.JSON),
     allowNull: false,
     defaultValue: []

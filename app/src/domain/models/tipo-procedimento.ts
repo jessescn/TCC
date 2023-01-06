@@ -11,6 +11,7 @@ export interface TipoProcedimentoModel {
   escopo: string
   publicos: string[]
   colegiado: boolean
+  revisao_coordenacao: boolean
   deleted?: boolean
   createdAt?: string
   updatedAt?: string

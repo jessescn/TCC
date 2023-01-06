@@ -1,4 +1,4 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import { SelectOption, MultipleSelect } from 'components/atoms/multiple-select'
 import { InfoIcon } from 'components/molecules/info'
 import { useMemo } from 'react'
@@ -36,13 +36,15 @@ export default function PublicosSelect() {
 
   return (
     <Box>
-      <Text fontSize="sm" fontWeight="bold" mb="0.5rem">
-        Públicos
+      <Flex alignItems="center" mb="8px">
+        <Text fontSize="sm" fontWeight="bold" mb="0.5rem">
+          Públicos
+        </Text>
         <InfoIcon
           label="Apenas os usuários que possuirem ao menos um dos públicos listados
           terão acesso ao procedimento."
         />
-      </Text>
+      </Flex>
       <MultipleSelect
         isMulti
         value={getSelectedOptions()}

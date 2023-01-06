@@ -8,7 +8,7 @@ import { ProfileModel } from 'domain/models/profile'
 
 describe('ReadByProcedimento Controller', () => {
   const comentario = createMock<ComentarioModel>({ actor: { id: 2 } })
-  const { actor, response, spies } = baseSetup('colegiado_comments_read')
+  const { actor, response, spies } = baseSetup('comentario_read')
 
   const makeSut = () => {
     const service = {
@@ -39,7 +39,7 @@ describe('ReadByProcedimento Controller', () => {
     const actorWithLimitedPermission = createMock<ActorModel>({
       id: 2,
       profile: createMock<ProfileModel>({
-        permissoes: { colegiado_comments_read: 'owned' }
+        permissoes: { comentario_read: 'owned' }
       })
     })
 

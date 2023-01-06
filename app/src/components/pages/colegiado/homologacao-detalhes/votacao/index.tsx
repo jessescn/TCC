@@ -1,10 +1,11 @@
-import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react'
-import ConfirmVote from 'components/pages/colegiado/homologacao-detalhes/votacao/confirma-voto'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
 import { ProcedimentoModel } from 'domain/models/procedimento'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { actions, selectors, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
 import BotoesVotacao from './botoes-votacao'
+import ListaVotos from './lista-votos'
 
 export type VoteOption = 'yes' | 'no'
 
@@ -13,7 +14,6 @@ type Props = {
 }
 
 const Votacao = ({ procedimento }: Props) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
   const currentStatus = getCurrentStatus(procedimento)
 
   const isColegiado = useSelector(selectors.session.is)('colegiado')
@@ -21,10 +21,16 @@ const Votacao = ({ procedimento }: Props) => {
   const statusVote = useSelector(state => state.procedimentoDetalhes.statusVote)
 
   const currentVote = procedimento.votos?.find(
-    voto => voto.autor === currentUser?.id
+    voto => voto.autor.id === currentUser?.id
   )
 
   const [vote, setVote] = useState(currentVote?.aprovado)
+
+  useEffect(() => {
+    if (currentVote?.aprovado !== vote) {
+      setVote(currentVote?.aprovado)
+    }
+  }, [currentVote])
 
   function handleConfirmVote() {
     if (vote === undefined || !isColegiado) return
@@ -35,32 +41,29 @@ const Votacao = ({ procedimento }: Props) => {
         aprovado: vote
       })
     )
-
-    onClose()
   }
 
-  const isSaveDisabled =
-    !isColegiado ||
-    vote === undefined ||
-    vote === currentVote?.aprovado ||
-    currentStatus !== 'em_homologacao'
+  function handleDeleteVote() {
+    if (vote === undefined || !isColegiado) return
+
+    store.dispatch(actions.procedimentoDetalhes.cancelVote(procedimento.id))
+  }
+
+  const isVoteDisabled = !isColegiado || currentStatus !== 'em_homologacao'
+
+  const isSaveVoteDisabled =
+    isVoteDisabled || vote === undefined || vote === currentVote?.aprovado
+
+  const isCancelVoteDisabled = isVoteDisabled || currentVote === undefined
 
   return (
     <Flex w="fit-content" marginLeft="auto">
-      {/* <Box pr="16px" h="80px" overflowY="scroll">
-        <VotosLista
-          votos={[
-            { aprovado: true, autor: 1, data: '' },
-            { aprovado: false, autor: 2, data: '' },
-            { aprovado: true, autor: 1, data: '' },
-            { aprovado: false, autor: 2, data: '' },
-            { aprovado: true, autor: 1, data: '' },
-            { aprovado: false, autor: 2, data: '' },
-            { aprovado: true, autor: 1, data: '' },
-            { aprovado: false, autor: 2, data: '' }
-          ]}
+      <Box mr="32px">
+        <ListaVotos
+          votos={procedimento?.votos || []}
+          currentUser={currentUser}
         />
-      </Box> */}
+      </Box>
       <Box>
         <BotoesVotacao
           setCurrentVote={setVote}
@@ -68,29 +71,44 @@ const Votacao = ({ procedimento }: Props) => {
           currentVote={vote}
         />
         <Flex mt="8px" justifyContent="space-between" alignItems="center">
-          {currentVote !== undefined && (
-            <Text fontSize="12px">
-              Você votou em{' '}
-              <Text
-                color={currentVote ? 'info.success' : 'info.error'}
-                as="span"
-              >
-                {currentVote ? 'Sim' : 'Não'}
-              </Text>
-            </Text>
+          {!isCancelVoteDisabled && (
+            <SimpleConfirmationButton
+              title="Cancelar Voto"
+              content={`Deseja mesmo cancelar seu voto? você poderá votar novamente enquanto os votos não alcançarem a maioria`}
+              onConfirmButtonText="Cancelar Voto"
+              onCancelButtonText="Voltar"
+              onConfirm={handleDeleteVote}
+              style={{
+                marginLeft: 'auto',
+                bgColor: 'info.error',
+                color: 'initial.white',
+                _hover: { bgColor: 'info.errorDark' },
+                size: 'xs',
+                disabled: isCancelVoteDisabled,
+                isLoading: statusVote === 'loading'
+              }}
+            >
+              Cancelar Voto
+            </SimpleConfirmationButton>
           )}
-          <Button
-            marginLeft="auto"
-            bgColor="primary.dark"
-            color="initial.white"
-            _hover={{ bgColor: 'primary.default' }}
-            size="xs"
-            onClick={onOpen}
-            disabled={isSaveDisabled}
-            isLoading={statusVote === 'loading'}
+          <SimpleConfirmationButton
+            title="Confirmar Voto"
+            content={`Deseja mesmo confirmar seu voto como ${
+              vote ? 'Sim' : 'Não'
+            }?`}
+            onConfirm={handleConfirmVote}
+            style={{
+              marginLeft: 'auto',
+              bgColor: 'primary.dark',
+              color: 'initial.white',
+              _hover: { bgColor: 'primary.default' },
+              size: 'xs',
+              disabled: isSaveVoteDisabled,
+              isLoading: statusVote === 'loading'
+            }}
           >
-            Salvar voto
-          </Button>
+            Salvar Voto
+          </SimpleConfirmationButton>
         </Flex>
         {currentStatus !== 'em_homologacao' && (
           <Text mt="8px" fontSize="10px" color="info.error">
@@ -102,12 +120,6 @@ const Votacao = ({ procedimento }: Props) => {
             Apenas membros do colegiado podem votar
           </Text>
         )}
-        <ConfirmVote
-          isOpen={isOpen}
-          onClose={onClose}
-          onConfirm={handleConfirmVote}
-          currentVote={vote ? 'Sim' : 'Não'}
-        />
       </Box>
     </Flex>
   )

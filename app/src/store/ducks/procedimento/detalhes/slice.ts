@@ -64,6 +64,15 @@ const reducers = {
   voteFailure: (state: State) => {
     state.statusVote = 'failure'
   },
+  cancelVote: (state: State, action: PayloadAction<number>) => {
+    state.statusVote = 'loading'
+  },
+  cancelVoteSuccess: (state: State) => {
+    state.statusVote = 'success'
+  },
+  cancelVoteFailure: (state: State) => {
+    state.statusVote = 'failure'
+  },
   comment: (state: State, action: PayloadAction<NewComentario>) => {
     state.statusNewComentario = 'loading'
   },

@@ -15,8 +15,8 @@ routes.get(
   middleware,
   readEmHomologacaoController.exec
 )
-routes.post('/colegiado/:id/vote', middleware, voteController.exec)
-routes.delete('/colegiado/:id/vote', middleware, deleteVoteController.exec)
+routes.post('/colegiado/vote', middleware, voteController.exec)
+routes.delete('/colegiado/vote', middleware, deleteVoteController.exec)
 routes.get(
   '/colegiado/:id/comentarios',
   middleware,

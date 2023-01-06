@@ -23,6 +23,7 @@ export interface TipoProcedimentoModel {
   formularios: number[]
   publicos: string[]
   colegiado: boolean
+  revisao_coordenacao: boolean
   deleted: boolean
   actor?: ActorModel
   createdAt?: Date
@@ -44,6 +45,7 @@ export interface TipoProcedimentoAttributes
   formularios: number[]
   publicos: string[]
   colegiado: boolean
+  revisao_coordenacao: boolean
   deleted: CreationOptional<boolean>
   createdAt?: CreationOptional<Date>
   updatedAt?: CreationOptional<Date>
@@ -86,6 +88,11 @@ const TipoProcedimento = sequelize.define<TipoProcedimentoAttributes>(
       defaultValue: []
     },
     colegiado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
+    revisao_coordenacao: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true

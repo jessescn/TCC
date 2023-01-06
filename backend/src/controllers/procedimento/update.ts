@@ -6,11 +6,7 @@ import { Request, Response } from 'types/express'
 import { hasNumericId, notIncludesInvalidFields } from 'utils/request'
 
 const notIncludesInvalidUpdateFields = (req: Request) => {
-  const validFields: (keyof ProcedimentoModel)[] = [
-    'revisoes',
-    'respostas',
-    'votos'
-  ]
+  const validFields: (keyof ProcedimentoModel)[] = ['revisoes', 'respostas']
   notIncludesInvalidFields(req, validFields)
 }
 

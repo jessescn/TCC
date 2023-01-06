@@ -11,6 +11,7 @@ export class CreateTipoProcedimentoController extends Controller<ITipoProcedimen
       'nome',
       'escopo',
       'colegiado',
+      'revisao_coordenacao',
       'formularios',
       'publicos'
     ]

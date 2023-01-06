@@ -3,13 +3,15 @@ import { Button } from 'components/atoms/button'
 import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'store'
+import { selectors, useSelector } from 'store'
 
 const Footer = () => {
   const navigate = useNavigate()
   const refSubmitButtom = useRef<HTMLButtonElement>(null)
 
   const statusUpdate = useSelector(state => state.userDetalhes.statusUpdate)
+  const canUpdateUsuario = useSelector(selectors.userDetalhes.canUpdateUsuario)
+
   const isLoading = statusUpdate === 'loading'
 
   useEffect(() => {
@@ -39,7 +41,8 @@ const Footer = () => {
           bgColor: 'primary.dark',
           color: 'initial.white',
           _hover: { bgColor: 'primary.default' },
-          isLoading: isLoading
+          isLoading: isLoading,
+          isDisabled: !canUpdateUsuario
         }}
         content="Deseja mesmo salvar as alterações?"
         onCancelButtonText="Cancelar"

@@ -18,8 +18,7 @@ export class GetDetailsProcedimentoController extends Controller<IProcedimentoSe
 
       const { id } = request.params
 
-      const actorRole = request.actor.profile.nome
-      const canSeeComments = actorRole === 'admin' || actorRole === 'colegiado'
+      const canSeeComments = request.actor.profile.permissoes?.comentario_read
 
       const result = await this.service.details(Number(id))
 

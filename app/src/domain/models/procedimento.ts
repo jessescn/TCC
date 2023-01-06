@@ -30,7 +30,7 @@ export type Resposta = {
 
 export type VotoProcedimento = {
   aprovado: boolean
-  autor: number
+  autor: UserModel
   data: string
 }
 

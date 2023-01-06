@@ -22,7 +22,7 @@ describe('DeleteVote Controller', () => {
   })
 
   it('should delete a vote from an existing procedimento', async () => {
-    const data = createMock<RemoteDeleteVote>({ autor: 1 })
+    const data = createMock<RemoteDeleteVote>({ autor: 1, procedimentoId: 1 })
     const request = createMock<Request>({
       actor,
       params: { id: '1' },
@@ -33,7 +33,7 @@ describe('DeleteVote Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.deleteVote).toBeCalledWith(1, data.autor)
+    expect(service.deleteVote).toBeCalledWith(data.procedimentoId, data.autor)
     expect(response.json).toBeCalledWith(procedimento)
   })
 

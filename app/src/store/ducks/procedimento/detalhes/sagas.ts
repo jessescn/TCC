@@ -16,7 +16,8 @@ export const sagas = [
   takeLatest(actions.getInfo.type, getInfoSaga),
   takeLatest(actions.vote.type, voteSaga),
   takeLatest(actions.comment.type, newCommentSaga),
-  takeLatest(actions.forwardToSecretaria.type, forwardToSecretariaSaga)
+  takeLatest(actions.forwardToSecretaria.type, forwardToSecretariaSaga),
+  takeLatest(actions.cancelVote.type, cancelVoteSaga)
 ]
 
 function* getInfoSaga(action: PayloadAction<number>) {
@@ -42,8 +43,8 @@ function* voteSaga(action: PayloadAction<VotePayload>) {
     }
 
     yield call(() =>
-      ProcedimentoService.vote(action.payload.procedimentoId, {
-        aprovado: action.payload.aprovado,
+      ProcedimentoService.vote({
+        ...action.payload,
         autor: currentUser.id
       })
     )
@@ -55,6 +56,30 @@ function* voteSaga(action: PayloadAction<VotePayload>) {
     })
   } catch (error) {
     yield put(actions.voteFailure())
+  }
+}
+
+function* cancelVoteSaga(action: PayloadAction<number>) {
+  try {
+    const currentUser: UserModel = yield select(
+      selectors.session.getCurrentUser
+    )
+
+    if (!currentUser) {
+      yield put(actions.voteFailure())
+    }
+
+    yield call(() =>
+      ProcedimentoService.deleteVote(action.payload, currentUser.id)
+    )
+
+    yield put(actions.cancelVoteSuccess())
+    yield call(getInfoSaga, {
+      payload: action.payload,
+      type: actions.getInfo.type
+    })
+  } catch (error) {
+    yield put(actions.cancelVoteFailure())
   }
 }
 

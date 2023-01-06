@@ -1,9 +1,11 @@
 import Actor from 'domain/models/actor'
-import Comentario, { ComentarioModel } from 'domain/models/comentario'
-import Procedimento from 'domain/models/procedimento'
+import Comentario, {
+  ComentarioAttributes,
+  ComentarioModel
+} from 'domain/models/comentario'
+import Profile from 'domain/models/profile'
 import { IRepository } from 'repositories'
 import { InferAttributes, WhereOptions } from 'sequelize/types'
-import { ComentarioAttributes } from './../../domain/models/comentario'
 
 export type ComentarioQuery = WhereOptions<
   InferAttributes<ComentarioAttributes>
@@ -38,13 +40,14 @@ export class ComentarioRepository implements IComentarioRepository {
   findAll = async (query: ComentarioQuery = {}) => {
     const comentarios = await Comentario.findAll({
       include: [
-        Procedimento,
         {
           model: Actor,
-          attributes: ['nome', 'email']
+          attributes: ['nome', 'email'],
+          include: [Profile]
         }
       ],
-      where: { deleted: false, ...query }
+      where: { deleted: false, ...query },
+      order: [['createdAt', 'ASC']]
     })
 
     return comentarios
@@ -53,7 +56,13 @@ export class ComentarioRepository implements IComentarioRepository {
   findOne = async (id: number) => {
     const comentario = await Comentario.findOne({
       where: { id, deleted: false },
-      include: [Procedimento]
+      include: [
+        {
+          model: Actor,
+          attributes: ['nome', 'email'],
+          include: [Profile]
+        }
+      ]
     })
 
     return comentario
@@ -62,10 +71,10 @@ export class ComentarioRepository implements IComentarioRepository {
   create = async (data: CreateComentario) => {
     const comentario = await Comentario.create(data, {
       include: [
-        Procedimento,
         {
           model: Actor,
-          attributes: ['nome', 'email']
+          attributes: ['nome', 'email'],
+          include: [Profile]
         }
       ]
     })

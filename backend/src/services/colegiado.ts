@@ -1,19 +1,20 @@
-import {
-  ProcedimentoModel,
-  Status,
-  TStatus,
-  VotoProcedimento
-} from 'domain/models/procedimento'
-import { ProcedimentoHelper } from 'domain/helpers/procedimento'
-import { BadRequestError, NotFoundError } from 'types/express/errors'
-import { IProcedimentoStatusService } from './procedimento-status'
-import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
-import { IActorRepository } from 'repositories/sequelize/actor'
 import { ActorHelper } from 'domain/helpers/actor'
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
+import { ProcedimentoModel, Status, TStatus } from 'domain/models/procedimento'
+import { VotoModel } from 'domain/models/voto'
+import { IActorRepository } from 'repositories/sequelize/actor'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
+import { CreateVoto } from 'repositories/sequelize/voto'
+import { BadRequestError, NotFoundError } from 'types/express/errors'
+import { IVotoRepository } from './../repositories/sequelize/voto'
+import { IProcedimentoStatusService } from './procedimento-status'
 
 export interface IColegiadoService {
-  updateVote: (id: number, vote: VotoProcedimento) => Promise<ProcedimentoModel>
-  deleteVote: (id: number, autor: number) => Promise<ProcedimentoModel>
+  vote: (vote: CreateVoto) => Promise<ProcedimentoModel>
+  deleteVote: (
+    procedimentoId: number,
+    autor: number
+  ) => Promise<ProcedimentoModel>
   homologate: (id: number) => Promise<ProcedimentoModel>
 }
 
@@ -21,13 +22,15 @@ export class ColegiadoService implements IColegiadoService {
   constructor(
     private repository: IProcedimentoRepo,
     private statusService: IProcedimentoStatusService,
-    private actorRepository: IActorRepository
+    private actorRepository: IActorRepository,
+    private votoRepository: IVotoRepository
   ) {}
 
-  private async handleMajorityVotes(procedimento: ProcedimentoModel) {
-    const novoStatus: TStatus = ProcedimentoHelper.isProcedimentoAprovado(
-      procedimento
-    )
+  private async handleMajorityVotes(
+    procedimento: ProcedimentoModel,
+    votos: VotoModel[]
+  ) {
+    const novoStatus: TStatus = ProcedimentoHelper.isProcedimentoAprovado(votos)
       ? 'deferido'
       : 'indeferido'
 
@@ -82,28 +85,47 @@ export class ColegiadoService implements IColegiadoService {
     return colegiado.length
   }
 
-  async updateVote(id: number, data: VotoProcedimento) {
-    await this.checkIfProcedimentoCanUpdateVote(id)
+  async vote(data: CreateVoto) {
+    await this.checkIfProcedimentoCanUpdateVote(data.procedimentoId)
 
-    const procedimento = await this.repository.updateVote(id, data)
+    await this.votoRepository.createOrUpdate(data)
+
+    const votos: VotoModel[] = await this.votoRepository.findAll({
+      procedimentoId: data.procedimentoId
+    })
 
     const numberOfColegiados = await this.getNumberOfColegiados()
 
     const isMaioriaVotos = ProcedimentoHelper.isMaioria(
-      procedimento.votos,
+      votos,
       numberOfColegiados
     )
 
+    const procedimento = await this.repository.findOne(data.procedimentoId)
+
     if (isMaioriaVotos) {
-      return this.handleMajorityVotes(procedimento)
+      return this.handleMajorityVotes(procedimento, votos)
     }
 
     return procedimento
   }
 
-  async deleteVote(id: number, autor: number) {
-    await this.checkIfProcedimentoCanUpdateVote(id)
+  async deleteVote(procedimentoId: number, autor: number) {
+    await this.checkIfProcedimentoCanUpdateVote(procedimentoId)
 
-    return this.repository.removeVote(id, autor)
+    const [currentVoto] = await this.votoRepository.findAll({
+      autorId: autor,
+      procedimentoId
+    })
+
+    if (!currentVoto) {
+      throw new NotFoundError('Voto não encontrado')
+    }
+
+    await this.votoRepository.destroy(currentVoto.id)
+
+    const procedimento = await this.repository.findOne(procedimentoId)
+
+    return procedimento
   }
 }

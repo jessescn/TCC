@@ -68,6 +68,7 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
 
     const newTipoProcedimento = await this.tipoProcedimentoRepo.create({
       colegiado: data.colegiado,
+      revisao_coordenacao: data.revisao_coordenacao,
       escopo: data.escopo,
       formularios: data.formularios,
       nome: data.nome,
