@@ -11,7 +11,7 @@ import TemplateModal from './modal'
 export default function PDFTemplate() {
   const { watch } = useFormContext()
 
-  const template = watch('template')
+  const template = watch('template') || ''
   const campos = watch('campos') || []
 
   const modalControls = useDisclosure()

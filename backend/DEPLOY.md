@@ -14,6 +14,12 @@ Obs: o --platform é importante caso esteja sendo gerado em uma máquina rodando
 
 ### 2. Subir para o Container Registry
 
+Antes de subir para Container Registry do Google Cloud, é necessário realizar o login utilizando o sdk
+
+```
+$ gcloud auth login
+```
+
 Tendo a imagem pronta, basta subir para o container registry
 
 ```
