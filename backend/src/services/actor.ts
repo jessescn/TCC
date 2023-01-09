@@ -33,9 +33,12 @@ export interface IActorService extends IService<ActorModel, ActorQuery> {
   getPublicos: () => Promise<string[]>
   getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
   sendConfirmationCode: (data: ActorModel) => Promise<void>
-  confirmEmailByCode: (code: string) => Promise<ActorModel>
+  verifyActorByCode: (code: string) => Promise<ActorModel>
   sendChangePasswordEmail: (email: string) => Promise<void>
-  changePassword: (code: string, password: string) => Promise<void>
+  changeActorPasswordByCode: (
+    code: string,
+    password: string
+  ) => Promise<ActorModel>
 }
 
 export class ActorService implements IActorService {
@@ -45,7 +48,7 @@ export class ActorService implements IActorService {
     private readonly tipoProcedimentoRepo: ITipoProcedimentoRepository
   ) {}
 
-  private checkIfUserAlreadyExistsByEmail = async (email: string) => {
+  private checkIfActorAlreadyExistsByEmail = async (email: string) => {
     const [actor] = await this.repository.findAll({ email })
 
     if (actor) {
@@ -53,7 +56,7 @@ export class ActorService implements IActorService {
     }
   }
 
-  private checkIfUserAlreadyExists = async (id: number) => {
+  private checkIfActorAlreadyExists = async (id: number) => {
     const actor = await this.repository.findOne(id)
 
     if (!actor) {
@@ -68,7 +71,7 @@ export class ActorService implements IActorService {
   }
 
   async create(data: NewActor) {
-    await this.checkIfUserAlreadyExistsByEmail(data.email)
+    await this.checkIfActorAlreadyExistsByEmail(data.email)
     const [profile] = await this.getBaseProfile()
 
     const actor = await this.repository.create({
@@ -78,7 +81,7 @@ export class ActorService implements IActorService {
       profile: profile.id
     })
 
-    await this.sendConfirmationCode(actor, '1000d')
+    await this.sendConfirmationCode(actor, '5m')
 
     return actor
   }
@@ -126,13 +129,13 @@ export class ActorService implements IActorService {
   }
 
   async delete(id: number) {
-    await this.checkIfUserAlreadyExists(id)
+    await this.checkIfActorAlreadyExists(id)
 
     return this.repository.destroy(id)
   }
 
   async findOne(id: number) {
-    const actor = await this.checkIfUserAlreadyExists(id)
+    const actor = await this.checkIfActorAlreadyExists(id)
 
     return actor
   }
@@ -149,7 +152,7 @@ export class ActorService implements IActorService {
   }
 
   async update(id: number, data: Partial<ActorModel>) {
-    await this.checkIfUserAlreadyExists(id)
+    await this.checkIfActorAlreadyExists(id)
 
     return this.repository.update(id, data)
   }
@@ -164,7 +167,7 @@ export class ActorService implements IActorService {
   }
 
   async getSidebarInfo(id: number) {
-    const actor = (await this.checkIfUserAlreadyExists(id)) as ActorModel
+    const actor = (await this.checkIfActorAlreadyExists(id)) as ActorModel
     const publicos = actor.publico
 
     const activeTipos = await this.tipoProcedimentoRepo.findAll({
@@ -209,22 +212,26 @@ export class ActorService implements IActorService {
     await MailSender.send(email)
   }
 
-  async confirmEmailByCode(code: string) {
-    let email: string | undefined
-
+  private extractEmailFromCode(code: string) {
     try {
       const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
         complete: true
       }) as JwtPayload
 
-      email = payload?.data?.email
+      const email = payload.data.email
+
+      if (!email) {
+        throw new Error()
+      }
+
+      return email
     } catch (error) {
       throw new UnauthorizedError('Código inválido ou expirado!')
     }
+  }
 
-    if (!email) {
-      throw new BadRequestError('Codigo inválido')
-    }
+  async verifyActorByCode(code: string) {
+    const email = this.extractEmailFromCode(code)
 
     const [actor] = await this.repository.findAll({ email })
 
@@ -232,7 +239,7 @@ export class ActorService implements IActorService {
       throw new NotFoundError('Usuário não encontrado')
     }
 
-    return this.update(actor.id, { verificado: true })
+    return this.repository.update(actor.id, { verificado: true })
   }
 
   async sendChangePasswordEmail(email: string) {
@@ -256,22 +263,8 @@ export class ActorService implements IActorService {
     await MailSender.send(emailTemplate)
   }
 
-  async changePassword(code: string, newPassword: string) {
-    let email: string | undefined
-
-    try {
-      const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
-        complete: true
-      }) as JwtPayload
-
-      email = payload?.actor?.email
-    } catch (error) {
-      throw new UnauthorizedError('Código inválido ou expirado!')
-    }
-
-    if (!email) {
-      throw new BadRequestError('Codigo inválido')
-    }
+  async changeActorPasswordByCode(code: string, newPassword: string) {
+    const email = this.extractEmailFromCode(code)
 
     const [actor] = await this.repository.findAll({ email })
 
@@ -281,6 +274,6 @@ export class ActorService implements IActorService {
 
     const encrypted = await encryptPassword(newPassword)
 
-    await this.repository.update(actor.id, { senha: encrypted })
+    return this.repository.update(actor.id, { senha: encrypted })
   }
 }

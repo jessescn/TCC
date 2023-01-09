@@ -18,7 +18,7 @@ export class ForwardToSecretariaPreviewController extends Controller<IProcedimen
 
       const { id } = request.params
 
-      const respostas = await this.service.getForwardData(Number(id))
+      const respostas = await this.service.getDataToForward(Number(id))
 
       response.json(respostas)
     } catch (error) {

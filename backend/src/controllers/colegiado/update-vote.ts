@@ -20,7 +20,7 @@ export class UpdateVoteController extends Controller<IColegiadoService> {
 
       const procedimento = await this.service.vote({
         ...data,
-        autorId: request.actor?.id
+        autorId: request.actor.id
       })
 
       response.json(procedimento)

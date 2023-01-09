@@ -18,6 +18,9 @@ import {
 } from 'types/express/errors'
 import { FormularioModel } from 'domain/models/formulario'
 import { ComentarioModel } from 'domain/models/comentario'
+import { ITipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
+import { IFormularioRepository } from 'repositories/sequelize/formulario'
+import { ForwardData } from 'domain/helpers/procedimento'
 
 describe('Procedimento Service', () => {
   const procedimento = createMock<ProcedimentoModel>({ tipo: 1 })
@@ -36,6 +39,10 @@ describe('Procedimento Service', () => {
     per_page: 1000,
     term: null
   }
+
+  afterAll(() => {
+    jest.resetAllMocks()
+  })
 
   describe('create', () => {
     const tipoProcedimento = createMock<TipoProcedimentoModel>({
@@ -77,6 +84,57 @@ describe('Procedimento Service', () => {
       expect(statusService.execute).toBeCalledWith(procedimento, 'em_analise')
       expect(repo.updateStatus).toBeCalledWith(procedimento.id, status)
       expect(result).toEqual(procedimento)
+    })
+
+    it('should create with current status "deferido" if "colegiado" and "revisao_coordenacao" flags are false', async () => {
+      const statusService = createMock<IProcedimentoStatusService>({
+        execute: jest.fn().mockResolvedValue(status)
+      })
+      const tipoProcedimento = createMock<TipoProcedimentoModel>({
+        colegiado: false,
+        revisao_coordenacao: false
+      })
+      const tipoRepo = createMock<IRepository>({
+        findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+      })
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
+
+      await sut.create(usuario, data)
+
+      expect(statusService.execute).toBeCalledWith(procedimento, 'deferido')
+    })
+
+    it('should create with current status "em_homologacao" if "revisao_coordenacao" flag is false', async () => {
+      const statusService = createMock<IProcedimentoStatusService>({
+        execute: jest.fn().mockResolvedValue(status)
+      })
+      const tipoProcedimento = createMock<TipoProcedimentoModel>({
+        colegiado: true,
+        revisao_coordenacao: false
+      })
+      const tipoRepo = createMock<IRepository>({
+        findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+      })
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
+
+      await sut.create(usuario, data)
+
+      expect(statusService.execute).toBeCalledWith(
+        procedimento,
+        'em_homologacao'
+      )
     })
 
     it('should throw BadRequestError if tipoProcedimento does not exists', async () => {
@@ -507,6 +565,115 @@ describe('Procedimento Service', () => {
 
       const shouldThrow = async () => {
         await sut.newReview(1, usuario, data)
+      }
+
+      expect(shouldThrow).rejects.toThrow(BadRequestError)
+    })
+  })
+
+  describe('getDataToForward', () => {
+    const procedimento = createMock<ProcedimentoModel>({
+      tipo: 1,
+      respostas: [{ campos: [], formulario: 1 }]
+    })
+    const formulario = createMock<FormularioModel>({
+      template: 'template teste 1',
+      id: 1
+    })
+
+    const repo = createMock<IProcedimentoRepo>({
+      findOne: jest.fn().mockResolvedValue(procedimento)
+    })
+    const tipoRepo = createMock<ITipoProcedimentoRepository>({
+      findOne: jest.fn().mockResolvedValue(tipoProcedimento)
+    })
+    const formularioRepo = createMock<IFormularioRepository>({
+      findAll: jest.fn().mockResolvedValue([formulario])
+    })
+
+    it('should create and return all dataToForward to secretaria', async () => {
+      const expected: ForwardData = { formulario, data: formulario.template }
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        formularioRepo,
+        statusService
+      )
+
+      const result = await sut.getDataToForward(1)
+
+      expect(result).toEqual([expected])
+    })
+
+    it('should throw NotFoundError if procedimento does not have related tipo procedimento', async () => {
+      const procedimentoWithoutTipo = createMock<ProcedimentoModel>()
+      const repo = createMock<IProcedimentoRepo>({
+        findOne: jest.fn().mockResolvedValue(procedimentoWithoutTipo)
+      })
+      const sut = new ProcedimentoService(
+        repo,
+        tipoRepo,
+        baseRepo,
+        formularioRepo,
+        statusService
+      )
+
+      const shouldThrow = async () => {
+        await sut.getDataToForward(1)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
+    })
+  })
+
+  describe('forwardToSecretaria', () => {
+    const procedimento = createMock<ProcedimentoModel>({
+      status: [{ data: new Date().toISOString(), status: 'deferido' }]
+    })
+    const procedimentoEncaminhado = createMock<ProcedimentoModel>({
+      status: [
+        { data: new Date().toISOString(), status: 'deferido' },
+        { data: new Date().toISOString(), status: 'encaminhado' }
+      ]
+    })
+
+    const repo = createMock<IProcedimentoRepo>({
+      findOne: jest.fn().mockResolvedValue(procedimento),
+      updateStatus: jest.fn().mockResolvedValue(procedimentoEncaminhado)
+    })
+
+    it('should update procedimento status to "encaminhado"', async () => {
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
+      const result = await sut.forwardToSecretaria(1)
+
+      expect(repo.findOne).toBeCalled()
+      expect(result.status[1].status).toEqual('encaminhado')
+    })
+
+    it('should throw BadRequestError if procedimento cannot be encaminhando', async () => {
+      const procedimento = createMock<ProcedimentoModel>({
+        status: [{ data: new Date().toISOString(), status: 'em_homologacao' }]
+      })
+      const repo = createMock<IProcedimentoRepo>({
+        findOne: jest.fn().mockResolvedValue(procedimento)
+      })
+      const sut = new ProcedimentoService(
+        repo,
+        baseRepo,
+        baseRepo,
+        baseRepo,
+        statusService
+      )
+
+      const shouldThrow = async () => {
+        await sut.forwardToSecretaria(1)
       }
 
       expect(shouldThrow).rejects.toThrow(BadRequestError)

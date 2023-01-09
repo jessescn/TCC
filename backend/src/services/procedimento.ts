@@ -21,7 +21,7 @@ import {
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
-import { getCurrentStatus, paginateList } from 'utils/value'
+import { paginateList } from 'utils/value'
 import { IProcedimentoStatusService } from './procedimento-status'
 
 export type ProcedimentoDetails = {
@@ -52,7 +52,7 @@ export interface IProcedimentoService
     pagination?: Pagination
   ) => Promise<PaginationResponse<ProcedimentoModel>>
   details: (id: number) => Promise<ProcedimentoDetails>
-  getForwardData: (id: number) => Promise<ForwardData[]>
+  getDataToForward: (id: number) => Promise<ForwardData[]>
   forwardToSecretaria: (id: number) => Promise<ProcedimentoModel>
 }
 
@@ -249,7 +249,7 @@ export class ProcedimentoService implements IProcedimentoService {
   }
 
   private checkIfCanReceiveReviews(procedimento: ProcedimentoModel) {
-    const currentStatus = getCurrentStatus(procedimento)
+    const currentStatus = ProcedimentoHelper.getCurrentStatus(procedimento)
 
     if (currentStatus !== 'em_analise') {
       throw new BadRequestError(
@@ -274,7 +274,7 @@ export class ProcedimentoService implements IProcedimentoService {
     return this.updateProcedimentoToNextStatus(procedimento, data)
   }
 
-  async getForwardData(id: number) {
+  async getDataToForward(id: number) {
     const procedimento = await this.checkIfProcedimentoExists(id)
 
     if (!procedimento.tipo) {
@@ -289,16 +289,16 @@ export class ProcedimentoService implements IProcedimentoService {
       id: tipoProcedimento.formularios
     })
 
-    const previews = ProcedimentoHelper.getForwardData(
+    const dataToForward = ProcedimentoHelper.getForwardData(
       procedimento,
       formularios
     )
 
-    return previews
+    return dataToForward
   }
 
   private checkIfCanBeForward(procedimento: ProcedimentoModel) {
-    const currentStatus = getCurrentStatus(procedimento)
+    const currentStatus = ProcedimentoHelper.getCurrentStatus(procedimento)
     const validAvailableStatus: TStatus[] = ['deferido', 'encaminhado']
 
     if (!validAvailableStatus.includes(currentStatus)) {

@@ -8,9 +8,11 @@
     "start": "yarn build && cd dist/ && NODE_PATH=dist/src NODE_ENV=prod node index.js",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "test": "NODE_PATH=src jest",
+    "posttest": "rm -rf uploads/*",
     "tw": "NODE_PATH=src jest --watch --coverage",
     "lint": "eslint --ext .js,.ts .",
     "coverage": "NODE_PATH=src jest --coverage",
+    "postcoverage": "rm -rf uploads/*",
     "clear": "rm -rf ./db-data",
     "deploy": "gcloud run deploy --env-vars-file=.env.service.yaml",
     "local-deploy": "gcloud beta code dev --dockerfile=Dockerfile --local-port=8080"

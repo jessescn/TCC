@@ -25,7 +25,7 @@ export interface IVotoRepository extends IRepository {
 }
 
 export class VotoRepository implements IVotoRepository {
-  findAll = async (query: VotoQuery) => {
+  findAll = async (query: VotoQuery = {}) => {
     const votos = await Voto.findAll({
       where: { ...query }
     })
@@ -58,17 +58,18 @@ export class VotoRepository implements IVotoRepository {
   }
 
   destroy = async (id: number) => {
-    const voto = await this.findOne(id)
+    const voto = await Voto.findOne({ where: { id } })
 
-    await Voto.destroy({ where: { id: voto.id } })
+    await voto.destroy()
 
     return voto
   }
 
   createOrUpdate = async (data: CreateVoto) => {
-    const [voto] = await this.findAll({
-      procedimentoId: data.procedimentoId,
-      autorId: data.autorId
+    const { procedimentoId, autorId } = data
+
+    const [voto] = await Voto.findAll({
+      where: { procedimentoId, autorId }
     })
 
     if (!voto) {

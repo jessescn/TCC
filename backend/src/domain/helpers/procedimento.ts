@@ -15,10 +15,6 @@ export class ProcedimentoHelper {
     return numberOfVotes >= Math.ceil(numberOfColegiados / 2)
   }
 
-  static getCurrentStatus = (procedimento: ProcedimentoModel) => {
-    return procedimento.status[procedimento.status.length - 1]?.status
-  }
-
   static isProcedimentoAprovado = (votes: VotoModel[]) => {
     const positive = votes.filter(vote => vote.aprovado).length
     const negative = votes.length - positive
@@ -50,5 +46,17 @@ export class ProcedimentoHelper {
       }, [] as ForwardData[])
 
     return previews
+  }
+
+  static getCurrentTStatus = (procedimento: ProcedimentoModel) => {
+    if (procedimento.status.length === 0) return
+
+    return procedimento.status[procedimento.status.length - 1]
+  }
+
+  static getCurrentStatus = (procedimento: ProcedimentoModel) => {
+    const tstatus = ProcedimentoHelper.getCurrentTStatus(procedimento)
+
+    return tstatus?.status
   }
 }

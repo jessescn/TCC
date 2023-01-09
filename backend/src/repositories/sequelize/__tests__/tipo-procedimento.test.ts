@@ -8,6 +8,7 @@ import {
   CreateTipoProcedimento,
   TipoProcedimentoRepository
 } from '../tipo-procedimento'
+import { createUpdatableElement } from './voto.test'
 
 describe('Tipo Procedimento Repository', () => {
   const tipoProcedimento = createMock<TipoProcedimentoModel>()
@@ -91,11 +92,8 @@ describe('Tipo Procedimento Repository', () => {
   })
 
   describe('update', () => {
-    const tipoProcedimentoWithSpies = {
-      ...tipoProcedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const tipoProcedimentoWithSpies =
+      createUpdatableElement<TipoProcedimentoAttributes>(tipoProcedimento)
 
     jest
       .spyOn(TipoProcedimento, 'findOne')
@@ -112,11 +110,8 @@ describe('Tipo Procedimento Repository', () => {
   })
 
   describe('destroy', () => {
-    const tipoProcedimentoWithSpies = {
-      ...tipoProcedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const tipoProcedimentoWithSpies =
+      createUpdatableElement<TipoProcedimentoAttributes>(tipoProcedimento)
 
     jest
       .spyOn(TipoProcedimento, 'findOne')

@@ -1,5 +1,6 @@
 import 'jest-ts-auto-mock'
 
+process.env.SECRETARIA_EMAIL = 'secretaria_teste@mail.com'
 process.env.MAIL_TRANSPORTER_USER = 'user@mail.com'
 process.env.MAIL_TRANSPORTER_PASSWORD = 'password'
 process.env.JWT_SECRET_KEY = 'secret_key'

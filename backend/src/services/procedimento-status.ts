@@ -1,3 +1,4 @@
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import { ActorModel } from 'domain/models/actor'
 import {
   ProcedimentoModel,
@@ -8,7 +9,6 @@ import {
 import { MailSender } from 'repositories/nodemailer/mail'
 import { IActorRepository } from 'repositories/sequelize/actor'
 import templates from 'templates'
-import { getCurrentTStatus } from 'utils/value'
 import { StatusHandlerMap } from './status'
 
 export interface IProcedimentoStatusService {
@@ -34,13 +34,13 @@ export class ProcedimentoStatusService implements IProcedimentoStatusService {
       dataAtualizacao: status.data
     })
 
-    await MailSender.send(email)
+    MailSender.send(email)
   }
 
   async execute(procedimento: ProcedimentoModel, novoStatus: TStatus) {
     const autor = await this.actorRepo.findOne(procedimento.createdBy)
 
-    const previous = getCurrentTStatus(procedimento)
+    const previous = ProcedimentoHelper.getCurrentTStatus(procedimento)
 
     const status = await StatusHandlerMap[novoStatus].execute({
       autor,

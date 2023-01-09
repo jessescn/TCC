@@ -1,4 +1,5 @@
-import { isNumber } from 'utils/value'
+import { Pagination } from 'repositories'
+import { isNumber, paginateList } from 'utils/value'
 describe('Value utils Tests', () => {
   describe('isNumber', () => {
     const sut = isNumber
@@ -22,6 +23,27 @@ describe('Value utils Tests', () => {
       expect(result1).toBeFalsy()
       expect(result2).toBeFalsy()
       expect(result3).toBeFalsy()
+    })
+  })
+
+  describe('paginateList', () => {
+    const sut = paginateList
+    const list = [1, 2, 3, 4, 5, 6, 7]
+
+    it('should return part of list based on pagination window', () => {
+      const pagination: Pagination = { page: 1, per_page: 3, term: null }
+
+      const result = sut(list, pagination)
+
+      expect(result).toEqual([1, 2, 3])
+    })
+
+    it('should return less itens than pagination size if doesn`t have enough itens', () => {
+      const pagination: Pagination = { page: 3, per_page: 3, term: null }
+
+      const result = sut(list, pagination)
+
+      expect(result).toEqual([7])
     })
   })
 })

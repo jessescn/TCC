@@ -2,19 +2,24 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 export const removeFile = async (filename: string, resolve = []) => {
-  await fs.unlink(path.resolve(...resolve, filename))
+  const filepath = path.resolve(...resolve, filename)
+  await fs.unlink(filepath)
 }
 
 export const removeFiles = async (filepaths: string[], resolvePaths = []) => {
-  const promises = []
+  try {
+    const promises = []
 
-  filepaths.forEach(filepath => {
-    const promise = new Promise((resolve, reject) => {
-      removeFile(filepath, resolvePaths).then(resolve).catch(reject)
+    filepaths.forEach(filepath => {
+      const promise = new Promise((resolve, reject) => {
+        removeFile(filepath, resolvePaths).then(resolve).catch(reject)
+      })
+
+      promises.push(promise)
     })
 
-    promises.push(promise)
-  })
-
-  await Promise.all(promises)
+    await Promise.all(promises)
+  } catch (error) {
+    console.error(error)
+  }
 }

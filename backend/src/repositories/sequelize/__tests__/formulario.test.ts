@@ -6,6 +6,7 @@ import Formulario, {
 import { Op } from 'sequelize'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateFormulario, FormularioRepository } from '../formulario'
+import { createUpdatableElement } from './voto.test'
 
 describe('Formulario Repository', () => {
   const formulario = createMock<FormularioModel>()
@@ -111,16 +112,12 @@ describe('Formulario Repository', () => {
   })
 
   describe('update', () => {
-    const formularioWithSpies = {
-      ...formulario,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const formularioWithSpies = createUpdatableElement<FormularioAttributes>()
 
     beforeEach(() => {
       jest
         .spyOn(Formulario, 'findOne')
-        .mockResolvedValueOnce(formularioWithSpies as any)
+        .mockResolvedValueOnce(formularioWithSpies)
     })
 
     it('should update a existing formulario', async () => {
@@ -136,16 +133,12 @@ describe('Formulario Repository', () => {
   })
 
   describe('destroy', () => {
-    const formularioWithSpies = {
-      ...formulario,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const formularioWithSpies = createUpdatableElement<FormularioAttributes>()
 
     beforeEach(() => {
       jest
         .spyOn(Formulario, 'findOne')
-        .mockResolvedValueOnce(formularioWithSpies as any)
+        .mockResolvedValueOnce(formularioWithSpies)
     })
 
     it('should destroy a formulario setting the deleted flag as true', async () => {

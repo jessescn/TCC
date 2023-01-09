@@ -1,23 +1,17 @@
-import { Controller, errorResponseHandler, Validation } from 'controllers'
+import { Controller, errorResponseHandler } from 'controllers'
 import { IActorService } from 'services/actor'
-import { Request, Response } from 'types/express'
-import { notIncludesInvalidFields } from 'utils/request'
+import { HttpStatusCode, Request, Response } from 'types/express'
 
-type ChangePasswordPayload = {
+export type ChangePasswordPayload = {
   code: string
   password: string
 }
 
-const notIncludesInvalidUpdateFields: Validation = request => {
-  const validFields: (keyof ChangePasswordPayload)[] = ['code', 'password']
-  notIncludesInvalidFields(request, validFields)
-}
-
 export class ChangePasswordController extends Controller<IActorService> {
   constructor(service: IActorService) {
-    const validations = [notIncludesInvalidUpdateFields]
+    const mandatoryFields = ['code', 'password']
 
-    super({ validations, service })
+    super({ mandatoryFields, service })
   }
 
   exec = async (request: Request, response: Response) => {
@@ -26,9 +20,9 @@ export class ChangePasswordController extends Controller<IActorService> {
 
       const data = request.body as ChangePasswordPayload
 
-      await this.service.changePassword(data.code, data.password)
+      await this.service.changeActorPasswordByCode(data.code, data.password)
 
-      response.status(200).send()
+      response.status(HttpStatusCode.ok).send()
     } catch (error) {
       errorResponseHandler(response, error)
     }

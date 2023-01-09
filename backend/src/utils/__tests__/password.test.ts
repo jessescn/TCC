@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import { isValidPassword } from 'utils/password'
+import { encryptPassword, isValidPassword } from 'utils/password'
 
 describe('Password utils Tests', () => {
   describe('isValidPassword', () => {
@@ -14,6 +14,17 @@ describe('Password utils Tests', () => {
 
       expect(results[0]).toBeTruthy()
       expect(results[1]).toBeFalsy()
+    })
+  })
+
+  describe('encryptPassword', () => {
+    const sut = encryptPassword
+    it('should encrypt an password', async () => {
+      const result = await sut('teste')
+
+      const isSame = await bcrypt.compare('teste', result)
+
+      expect(isSame).toBeTruthy()
     })
   })
 })

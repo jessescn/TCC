@@ -1,4 +1,3 @@
-import { BadRequestError } from './../../types/express/errors'
 import { ProfileModel } from 'domain/models/profile'
 import { ActorModel } from 'domain/models/actor'
 import { IRepository, Pagination } from 'repositories'
@@ -9,11 +8,18 @@ import {
 } from 'repositories/sequelize/actor'
 import { ActorService } from 'services/actor'
 import { createMock } from 'ts-auto-mock'
-import { ConflictError, NotFoundError } from 'types/express/errors'
+import {
+  BadRequestError,
+  ConflictError,
+  NotFoundError,
+  UnauthorizedError
+} from 'types/express/errors'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { ActorHelper } from 'domain/helpers/actor'
 import { IProfileRepository } from 'repositories/sequelize/profile'
 import { ITipoProcedimentoRepository } from 'repositories/sequelize/tipo-procedimento'
+import { MailSender } from 'repositories/nodemailer/mail'
+import jwt from 'jsonwebtoken'
 
 describe('Actor Service', () => {
   const actor = createMock<ActorModel>({ verificado: false })
@@ -45,6 +51,7 @@ describe('Actor Service', () => {
       findAll: jest.fn().mockResolvedValue([])
     })
     const data = createMock<NewActor>()
+    jest.spyOn(MailSender, 'send')
 
     it('should create a new actor', async () => {
       const sut = new ActorService(repo, profileRepo, tipoRepo)
@@ -58,6 +65,7 @@ describe('Actor Service', () => {
         senha: data.senha,
         profile: profile.id
       })
+      expect(MailSender.send).toBeCalled()
       expect(repo.findAll).toBeCalled()
     })
 
@@ -255,6 +263,201 @@ describe('Actor Service', () => {
       }
 
       expect(shouldThrow).rejects.toThrow(BadRequestError)
+    })
+  })
+
+  describe('getSidebarInfo', () => {
+    const actor = createMock<ActorModel>({ publico: ['teste2'] })
+    const tipoProcedimento = createMock<TipoProcedimentoModel>({
+      dataInicio: new Date('01-01-1999').toISOString(),
+      dataFim: new Date('01-01-2050').toISOString(),
+      publicos: ['teste1', 'teste2']
+    })
+    const tipoProcedimentoOutOfTime = createMock<TipoProcedimentoModel>({
+      dataInicio: new Date('01-01-1999').toISOString(),
+      dataFim: new Date('01-01-2000').toISOString(),
+      publicos: ['teste1', 'teste2']
+    })
+    const tipoProcedimentoOutOfPublico = createMock<TipoProcedimentoModel>({
+      publicos: ['teste1', 'teste3']
+    })
+    const tipoRepo = createMock<ITipoProcedimentoRepository>({
+      findAll: jest
+        .fn()
+        .mockResolvedValue([
+          tipoProcedimento,
+          tipoProcedimentoOutOfTime,
+          tipoProcedimentoOutOfPublico
+        ])
+    })
+
+    const repo = createMock<IActorRepository>({
+      findOne: jest.fn().mockResolvedValue(actor)
+    })
+
+    it('should return all opened tipos by actorID', async () => {
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const result = await sut.getSidebarInfo(1)
+
+      expect(result.open).toEqual([tipoProcedimento])
+      expect(repo.findOne).toBeCalledWith(1)
+      expect(tipoRepo.findAll).toBeCalledWith({
+        status: 'ativo',
+        deleted: false
+      })
+    })
+  })
+
+  describe('sendConfirmationCode', () => {
+    const actor = createMock<ActorModel>({ verificado: false })
+    const repo = createMock<IActorRepository>()
+    const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+    jest.spyOn(MailSender, 'send')
+
+    it('should send a confirmation code via email', async () => {
+      await sut.sendConfirmationCode(actor)
+
+      expect(MailSender.send).toBeCalled()
+    })
+
+    it('should throw a BadRequestError if actor is already verified', async () => {
+      const verifiedActor = createMock<ActorModel>({ verificado: true })
+
+      const shouldThrow = async () => {
+        await sut.sendConfirmationCode(verifiedActor)
+      }
+
+      expect(shouldThrow).rejects.toThrow(BadRequestError)
+    })
+  })
+
+  describe('verifyActorByCode', () => {
+    const data = createMock<ActorModel>({ email: 'teste@teste.com' })
+    const repo = createMock<IActorRepository>({
+      findAll: jest.fn().mockResolvedValue([actor])
+    })
+
+    const code = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+      expiresIn: '5m'
+    })
+
+    it('should verify actor with code', async () => {
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+      const result = await sut.verifyActorByCode(code)
+
+      expect(result).toEqual(actor)
+      expect(repo.findAll).toBeCalledWith({ email: data.email })
+      expect(repo.update).toBeCalledWith(actor.id, { verificado: true })
+    })
+
+    it('should throw UnauthorizedError if code is expired', async () => {
+      const code = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+        expiresIn: '0m'
+      })
+
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const shouldThrow = async () => {
+        await sut.verifyActorByCode(code)
+      }
+
+      expect(shouldThrow).rejects.toThrow(UnauthorizedError)
+    })
+
+    it('should throw UnauthorizedError if code is invalid', async () => {
+      const data = createMock<ActorModel>({ email: null })
+      const code = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+        expiresIn: '5m'
+      })
+
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const shouldThrow = async () => {
+        await sut.verifyActorByCode(code)
+      }
+
+      expect(shouldThrow).rejects.toThrow(UnauthorizedError)
+    })
+
+    it('should throw NotFoundError if actor does not exists', async () => {
+      const repo = createMock<IActorRepository>({
+        findAll: jest.fn().mockResolvedValue([])
+      })
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const shouldThrow = async () => {
+        await sut.verifyActorByCode(code)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
+    })
+  })
+
+  describe('sendChangePasswordEmail', () => {
+    const email = 'teste@teste.com'
+    jest.spyOn(MailSender, 'send')
+
+    const repo = createMock<IActorRepository>({
+      findAll: jest.fn().mockResolvedValue([actor])
+    })
+
+    it('should send change password email', async () => {
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      await sut.sendChangePasswordEmail(email)
+
+      expect(MailSender.send).toBeCalled()
+      expect(repo.findAll).toBeCalledWith({ email })
+    })
+
+    it('should throw a NotFoundError if actor does not exists with provided email', async () => {
+      const repo = createMock<IActorRepository>({
+        findAll: jest.fn().mockResolvedValue([])
+      })
+
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const shouldThrow = async () => {
+        await sut.sendChangePasswordEmail(email)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
+    })
+  })
+
+  describe('changeActorPasswordByCode', () => {
+    const newPassword = 'teste password'
+    const data = createMock<ActorModel>({ email: 'teste@teste.com' })
+    const repo = createMock<IActorRepository>({
+      findAll: jest.fn().mockResolvedValue([actor])
+    })
+
+    const code = jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+      expiresIn: '5m'
+    })
+
+    it('should change actor password with code', async () => {
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const result = await sut.changeActorPasswordByCode(code, newPassword)
+
+      expect(result).toEqual(actor)
+      expect(repo.findAll).toBeCalledWith({ email: data.email })
+    })
+
+    it('should throw a NotFoundError if actor does not exists', async () => {
+      const repo = createMock<IActorRepository>({
+        findAll: jest.fn().mockResolvedValue([])
+      })
+      const sut = new ActorService(repo, profileRepo, tipoRepo)
+
+      const shouldThrow = async () => {
+        await sut.changeActorPasswordByCode(code, newPassword)
+      }
+
+      expect(shouldThrow).rejects.toThrow(NotFoundError)
     })
   })
 })

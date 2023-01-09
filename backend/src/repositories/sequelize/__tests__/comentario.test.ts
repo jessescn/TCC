@@ -6,6 +6,7 @@ import Comentario, {
 import Profile from 'domain/models/profile'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { ComentarioRepository, CreateComentario } from '../comentario'
+import { createUpdatableElement } from './voto.test'
 
 describe('Comentario Repository', () => {
   const sut = new ComentarioRepository()
@@ -91,16 +92,12 @@ describe('Comentario Repository', () => {
   })
 
   describe('update', () => {
-    const comentarioWithSpies = {
-      ...comentario,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const comentarioWithSpies = createUpdatableElement<ComentarioAttributes>()
 
     beforeEach(() => {
       jest
         .spyOn(Comentario, 'findOne')
-        .mockResolvedValueOnce(comentarioWithSpies as any)
+        .mockResolvedValueOnce(comentarioWithSpies)
     })
 
     it('should update an existing comentario', async () => {
@@ -116,11 +113,7 @@ describe('Comentario Repository', () => {
   })
 
   describe('destroy', () => {
-    const comentarioWithSpies = {
-      ...comentario,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const comentarioWithSpies = createUpdatableElement<ComentarioAttributes>()
 
     beforeEach(() => {
       jest

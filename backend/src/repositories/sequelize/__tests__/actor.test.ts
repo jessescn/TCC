@@ -6,6 +6,7 @@ import {
   ActorRepository,
   InclusivableActorOptions
 } from '../actor'
+import { createUpdatableElement } from './voto.test'
 
 describe('Actor Repository', () => {
   const actors = createMockList<ActorModel>(2)
@@ -101,14 +102,10 @@ describe('Actor Repository', () => {
   })
 
   describe('update', () => {
-    const actorWithSpies = {
-      ...actor,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const actorWithSpies = createUpdatableElement<ActorAttributes>()
 
     beforeEach(() => {
-      jest.spyOn(Actor, 'findOne').mockResolvedValueOnce(actorWithSpies as any)
+      jest.spyOn(Actor, 'findOne').mockResolvedValueOnce(actorWithSpies)
     })
 
     it('should update an existing actor', async () => {
@@ -127,14 +124,10 @@ describe('Actor Repository', () => {
   })
 
   describe('destroy', () => {
-    const actorWithSpies = {
-      ...actor,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const actorWithSpies = createUpdatableElement<ActorAttributes>()
 
     beforeEach(() => {
-      jest.spyOn(Actor, 'findOne').mockResolvedValueOnce(actorWithSpies as any)
+      jest.spyOn(Actor, 'findOne').mockResolvedValueOnce(actorWithSpies)
     })
 
     it('should delete an existing actor setting the deleted flag as true (soft delete)', async () => {

@@ -9,6 +9,7 @@ import TipoProcedimento from 'domain/models/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { ProcedimentoRepository } from '../procedimento'
 import Actor from 'domain/models/actor'
+import { createUpdatableElement } from './voto.test'
 
 describe('Procedimento Repository', () => {
   const procedimento = createMock<ProcedimentoModel>({
@@ -120,16 +121,13 @@ describe('Procedimento Repository', () => {
   })
 
   describe('update', () => {
-    const procedimentoWithSpies = {
-      ...procedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const procedimentoWithSpies =
+      createUpdatableElement<ProcedimentoAttributes>(procedimento)
 
     beforeEach(() => {
       jest
         .spyOn(Procedimento, 'findOne')
-        .mockResolvedValueOnce(procedimentoWithSpies as any)
+        .mockResolvedValueOnce(procedimentoWithSpies)
     })
 
     it('should update an existing procedimento', async () => {
@@ -145,11 +143,8 @@ describe('Procedimento Repository', () => {
   })
 
   describe('destroy', () => {
-    const procedimentoWithSpies = {
-      ...procedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const procedimentoWithSpies =
+      createUpdatableElement<ProcedimentoAttributes>(procedimento)
 
     beforeEach(() => {
       jest
@@ -168,11 +163,8 @@ describe('Procedimento Repository', () => {
   })
 
   describe('updateStatus', () => {
-    const procedimentoWithSpies = {
-      ...procedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const procedimentoWithSpies =
+      createUpdatableElement<ProcedimentoAttributes>(procedimento)
 
     beforeEach(() => {
       jest
@@ -200,11 +192,8 @@ describe('Procedimento Repository', () => {
   describe('newRevisao', () => {
     const revisao = createMock<Revisao>()
 
-    const procedimentoWithSpies = {
-      ...procedimento,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const procedimentoWithSpies =
+      createUpdatableElement<ProcedimentoAttributes>(procedimento)
 
     beforeEach(() => {
       jest

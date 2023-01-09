@@ -18,9 +18,7 @@ describe('TipoProcedimento Service', () => {
   const tipoProcedimentos = createMockList<TipoProcedimentoModel>(2)
 
   const formularioRepo = createMock<IFormularioRepository>({
-    findAll: jest
-      .fn()
-      .mockResolvedValue({ data: formularios, total: formularios.length })
+    findAll: jest.fn().mockResolvedValue(formularios)
   })
 
   describe('create', () => {
@@ -29,13 +27,12 @@ describe('TipoProcedimento Service', () => {
     })
 
     const formularioRepo = createMock<IFormularioRepository>({
-      findAll: jest
-        .fn()
-        .mockResolvedValue({ data: formularios, total: formularios.length })
+      findAll: jest.fn().mockResolvedValue(formularios)
     })
 
     const usuario = createMock<ActorModel>({ id: 1 })
     const data = createMock<NewTipoProcedimento>()
+    const data2 = createMock<NewTipoProcedimento>({ formularios: [1, 2] })
 
     it('should create a new tipoProcedimento', async () => {
       const sut = new TipoProcedimentoService(
@@ -46,12 +43,17 @@ describe('TipoProcedimento Service', () => {
 
       expect(result).toEqual(tipoProcedimento)
       expect(formularioRepo.findAll).not.toBeCalled()
+
+      const result2 = await sut.create(usuario, data2)
+
+      expect(result2).toEqual(tipoProcedimento)
+      expect(formularioRepo.findAll).toBeCalledWith({ id: data2.formularios })
     })
 
     it('should throw a badRequestError if some formulario does not exists', async () => {
       const data = createMock<NewTipoProcedimento>({ formularios: [1, 2] })
       const formularioRepo = createMock<IFormularioRepository>({
-        findAll: jest.fn().mockResolvedValue({ data: [], total: 0 })
+        findAll: jest.fn().mockResolvedValue([])
       })
 
       const sut = new TipoProcedimentoService(

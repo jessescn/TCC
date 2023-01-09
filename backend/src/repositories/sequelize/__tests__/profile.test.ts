@@ -1,6 +1,7 @@
 import Profile, { ProfileAttributes, ProfileModel } from 'domain/models/profile'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { CreateProfile, ProfileRepository } from '../profile'
+import { createUpdatableElement } from './voto.test'
 
 describe('Profile Repository', () => {
   const profile = createMock<ProfileModel>()
@@ -78,11 +79,7 @@ describe('Profile Repository', () => {
   })
 
   describe('update', () => {
-    const profileWithSpies = {
-      ...profile,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const profileWithSpies = createUpdatableElement<ProfileAttributes>(profile)
 
     beforeEach(() => {
       jest
@@ -103,11 +100,7 @@ describe('Profile Repository', () => {
   })
 
   describe('destroy', () => {
-    const profileWithSpies = {
-      ...profile,
-      set: jest.fn(),
-      save: jest.fn()
-    }
+    const profileWithSpies = createUpdatableElement<ProfileAttributes>(profile)
 
     beforeEach(() => {
       jest

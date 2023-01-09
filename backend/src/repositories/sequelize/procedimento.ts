@@ -1,3 +1,4 @@
+import { ProcedimentoHelper } from 'domain/helpers/procedimento'
 import Actor from 'domain/models/actor'
 import Comentario from 'domain/models/comentario'
 import Procedimento, {
@@ -13,7 +14,7 @@ import TipoProcedimento from 'domain/models/tipo-procedimento'
 import Voto from 'domain/models/voto'
 import { IRepository } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
-import { getCurrentStatus, isNumber } from 'utils/value'
+import { isNumber } from 'utils/value'
 
 export type CreateProcedimento = {
   tipo: number
@@ -141,7 +142,8 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     const procedimentos = await this.findAll({}, term)
 
     const filteredByStatus = procedimentos.filter(
-      procedimento => getCurrentStatus(procedimento) === status
+      procedimento =>
+        ProcedimentoHelper.getCurrentStatus(procedimento) === status
     )
 
     return filteredByStatus
