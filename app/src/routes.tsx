@@ -25,169 +25,167 @@ import ConfirmacaoEmail from 'pages/session/confirmacao-email'
 import ConfirmacaoEmailCodigo from 'pages/session/confirmacao-email-code'
 import AlteracaoSenha from 'pages/session/alteracao-senha'
 import AlteracaoSenhaCodigo from 'pages/session/alteracao-senha-code'
+import { ProfileType } from 'domain/types/actors'
+
+type RouteProps = {
+  path: string
+  redirectTo?: string
+  component: JSX.Element
+  allowedProfiles?: ProfileType[]
+  isPrivate?: boolean
+}
+
+export const routes: RouteProps[] = [
+  {
+    path: '/login',
+    component: <Login />,
+    redirectTo: '/home'
+  },
+  {
+    path: '/cadastro',
+    component: <Register />,
+    redirectTo: '/home'
+  },
+  {
+    path: '/alteracao-senha',
+    component: <AlteracaoSenha />
+  },
+  {
+    path: '/alteracao-senha/:code',
+    component: <AlteracaoSenhaCodigo />
+  },
+  {
+    path: '/confirmacao-email',
+    component: <ConfirmacaoEmail />,
+    redirectTo: '/home'
+  },
+  {
+    path: '/confirmacao-email/:code',
+    component: <ConfirmacaoEmailCodigo />
+  },
+  {
+    path: '/',
+    component: <Home />,
+    isPrivate: true
+  },
+  {
+    path: '/home',
+    component: <Home />,
+    isPrivate: true
+  },
+  {
+    path: '/formularios',
+    component: <ListaFormularios />,
+    isPrivate: true,
+    allowedProfiles: ['coordenacao']
+  },
+  {
+    path: '/formularios/edit',
+    component: <DetalhesFormulario />,
+    isPrivate: true,
+    allowedProfiles: ['coordenacao']
+  },
+  {
+    path: '/tipo-procedimentos',
+    component: <ListaTipoProcedimentos />,
+    isPrivate: true,
+    allowedProfiles: ['coordenacao']
+  },
+  {
+    path: '/tipo-procedimentos/edit',
+    component: <DetalhesTipoProcedimentos />,
+    isPrivate: true,
+    allowedProfiles: ['coordenacao']
+  },
+  {
+    path: '/meus-procedimentos',
+    component: <MeusProcedimentos />,
+    isPrivate: true
+  },
+  {
+    path: '/meus-procedimentos/:id',
+    component: <DetalhesProcedimento />,
+    isPrivate: true
+  },
+  {
+    path: '/colegiado/procedimentos',
+    component: <ListaHomologacao />,
+    allowedProfiles: ['coordenacao', 'colegiado', 'secretaria'],
+    isPrivate: true
+  },
+  {
+    path: '/colegiado/procedimentos/:id',
+    component: <HomologarProcedimento />,
+    allowedProfiles: ['coordenacao', 'colegiado', 'secretaria'],
+    isPrivate: true
+  },
+  {
+    path: '/coordenacao/procedimentos',
+    component: <ProcedimentosCoordenacao />,
+    allowedProfiles: ['coordenacao'],
+    isPrivate: true
+  },
+  {
+    path: '/coordenacao/procedimentos/:id',
+    component: <AnaliseProcedimento />,
+    allowedProfiles: ['coordenacao'],
+    isPrivate: true
+  },
+  {
+    path: '/coordenacao/usuarios',
+    component: <TodosUsuarios />,
+    allowedProfiles: ['coordenacao'],
+    isPrivate: true
+  },
+  {
+    path: '/coordenacao/usuarios/edit',
+    component: <DetalhesUsuario />,
+    allowedProfiles: ['coordenacao'],
+    isPrivate: true
+  },
+  {
+    path: '/coordenacao/estatisticas',
+    component: <EstatisticasProcedimento />,
+    allowedProfiles: ['coordenacao'],
+    isPrivate: true
+  },
+  {
+    path: '/novo-procedimento/:id',
+    component: <NovoProcedimento />,
+    isPrivate: true
+  },
+  {
+    path: '*',
+    component: <NotFound />
+  }
+]
 
 export default function Routes() {
+  function getRouterElement(route: RouteProps) {
+    if (route.isPrivate) {
+      return (
+        <PrivateRoute allowedProfiles={route.allowedProfiles}>
+          {route.component}
+        </PrivateRoute>
+      )
+    }
+
+    if (route.redirectTo) {
+      return (
+        <AuthRedirect redirectTo={route.redirectTo}>
+          {route.component}
+        </AuthRedirect>
+      )
+    }
+
+    return route.component
+  }
+
   return (
     <RoutesWrapper>
-      <Route
-        path="/login"
-        element={
-          <AuthRedirect redirectTo="/home">
-            <Login />
-          </AuthRedirect>
-        }
-      />
-      <Route
-        path="/cadastro"
-        element={
-          <AuthRedirect redirectTo="/home">
-            <Register />
-          </AuthRedirect>
-        }
-      />
-      <Route path="/alteracao-senha" element={<AlteracaoSenha />} />
-      <Route path="/alteracao-senha/:code" element={<AlteracaoSenhaCodigo />} />
-      <Route
-        path="/confirmacao-email/:code"
-        element={<ConfirmacaoEmailCodigo />}
-      />
-      <Route
-        path="/confirmacao-email"
-        element={
-          <AuthRedirect redirectTo="/home">
-            <ConfirmacaoEmail />
-          </AuthRedirect>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/home"
-        element={
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/formularios"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <ListaFormularios />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/formularios/edit"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <DetalhesFormulario />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/tipo-procedimentos"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <ListaTipoProcedimentos />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/tipo-procedimentos/edit"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <DetalhesTipoProcedimentos />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/meus-procedimentos"
-        element={
-          <PrivateRoute>
-            <MeusProcedimentos />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/meus-procedimentos/:id"
-        element={
-          <PrivateRoute>
-            <DetalhesProcedimento />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/colegiado/procedimentos/:id"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao', 'colegiado']}>
-            <HomologarProcedimento />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/colegiado/procedimentos"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao', 'colegiado']}>
-            <ListaHomologacao />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/coordenacao/procedimentos"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <ProcedimentosCoordenacao />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/coordenacao/usuarios"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <TodosUsuarios />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/coordenacao/usuarios/edit"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <DetalhesUsuario />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/coordenacao/procedimentos/:id"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <AnaliseProcedimento />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/coordenacao/estatisticas"
-        element={
-          <PrivateRoute allowedProfiles={['coordenacao']}>
-            <EstatisticasProcedimento />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/novo-procedimento/:id"
-        element={
-          <PrivateRoute>
-            <NovoProcedimento />
-          </PrivateRoute>
-        }
-      />
-      <Route path="*" element={<NotFound />} />
+      {routes.map(route => (
+        <Route path={route.path} element={getRouterElement(route)} />
+      ))}
     </RoutesWrapper>
   )
 }

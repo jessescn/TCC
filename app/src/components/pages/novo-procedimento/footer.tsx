@@ -1,4 +1,5 @@
-import { Box, Button, Flex, useDisclosure } from '@chakra-ui/react'
+import { Box, Flex, useDisclosure } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'

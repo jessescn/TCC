@@ -1,5 +1,5 @@
-import { Button } from '@chakra-ui/react'
 import { FocusableElement } from '@chakra-ui/utils'
+import { Button } from 'components/atoms/button'
 import { ConfirmDialog } from 'components/molecules/confirm-dialog'
 import { useRef } from 'react'
 
@@ -21,15 +21,7 @@ export default function SaveChangesModal(props: Props) {
       >
         Cancelar
       </Button>
-      <Button
-        size="sm"
-        color="initial.white"
-        bgColor="primary.dark"
-        _hover={{ bgColor: 'primary.default' }}
-        ml={3}
-        type="submit"
-        form="procedimento-form"
-      >
+      <Button size="sm" ml={3} type="submit" form="procedimento-form">
         Submeter Alterações
       </Button>
     </>

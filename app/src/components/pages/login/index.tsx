@@ -111,7 +111,7 @@ export default function Login() {
                   message={status.message || 'credenciais inválidas!'}
                 />
               )}
-              <Flex justifyContent="center">
+              <Flex justifyContent="center" mt="0.5rem">
                 <CustomLink redirectTo="/cadastro" mr="0.5rem">
                   Criar Conta
                 </CustomLink>

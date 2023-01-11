@@ -1,10 +1,9 @@
-import { Avatar, Box, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
+import { Flex, Icon, IconButton, Text } from '@chakra-ui/react'
 import { HiMenuAlt1 } from 'react-icons/hi'
-import { actions, selectors, store, useSelector } from 'store'
+import { actions, store } from 'store'
+import CurrentUserMenu from './current-user-menu'
 
 export default function Header() {
-  const currentUser = useSelector(selectors.session.getCurrentUser)
-
   const toggleSidebar = () => {
     store.dispatch(actions.session.toggleSidebar())
   }
@@ -43,22 +42,7 @@ export default function Header() {
           Computação UFCG
         </Text>
       </Flex>
-      <Flex align="center">
-        <Box textAlign="end" mr="1rem">
-          <Text color="initial.white" size="md" fontWeight="bold">
-            {currentUser?.nome}
-          </Text>
-          <Text color="secondary.dark" fontSize="xs">
-            {currentUser?.email}
-          </Text>
-        </Box>
-        <Avatar
-          size="sm"
-          name={currentUser?.nome || ''}
-          borderColor="initial.white"
-          borderWidth="1px"
-        />
-      </Flex>
+      <CurrentUserMenu />
     </Flex>
   )
 }

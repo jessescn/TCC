@@ -1,7 +1,8 @@
 import { ConfirmDialog } from 'components/molecules/confirm-dialog'
 import { FocusableElement } from '@chakra-ui/utils'
 import { useRef } from 'react'
-import { Button, StyleProps } from '@chakra-ui/react'
+import { StyleProps } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 
 type Props = {
   isOpen: boolean
@@ -30,7 +31,7 @@ export default function ConfirmModal({
     <>
       <Button
         size="sm"
-        variant="ghost"
+        customVariant="ghost"
         ref={cancelRef as any}
         onClick={onClose}
       >
@@ -38,8 +39,6 @@ export default function ConfirmModal({
       </Button>
       <Button
         size="sm"
-        color="initial.white"
-        bgColor="primary.dark"
         ml={3}
         type="submit"
         form="novo-procedimento"

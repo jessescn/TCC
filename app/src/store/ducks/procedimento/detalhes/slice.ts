@@ -22,6 +22,8 @@ export type State = {
   statusVote: Status
   statusEncaminhamento: Status
   statusNewComentario: Status
+  showComments: boolean
+  showFormulario: boolean
 }
 
 export const initialState: State = {
@@ -30,7 +32,9 @@ export const initialState: State = {
   statusFetch: 'pristine',
   statusVote: 'pristine',
   statusNewComentario: 'pristine',
-  statusEncaminhamento: 'pristine'
+  statusEncaminhamento: 'pristine',
+  showComments: false,
+  showFormulario: true
 }
 
 const reducers = {
@@ -41,6 +45,8 @@ const reducers = {
     state.comentarios = initialState.comentarios
     state.statusFetch = 'loading'
     state.statusNewComentario = 'pristine'
+    state.showComments = initialState.showComments
+    state.showFormulario = initialState.showFormulario
   },
   getInfoSuccess: (
     state: State,
@@ -90,6 +96,18 @@ const reducers = {
   },
   forwardToSecretariaFailure: (state: State) => {
     state.statusEncaminhamento = 'failure'
+  },
+  setshowComments: (state: State, action: PayloadAction<boolean>) => {
+    if (action.payload) {
+      state.showFormulario = false
+    }
+    state.showComments = action.payload
+  },
+  setshowFormulario: (state: State, action: PayloadAction<boolean>) => {
+    if (action.payload) {
+      state.showComments = false
+    }
+    state.showFormulario = action.payload
   }
 }
 

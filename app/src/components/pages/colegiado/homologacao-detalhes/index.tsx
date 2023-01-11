@@ -1,9 +1,18 @@
-import { Box, Divider, Flex, Icon, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  Flex,
+  Icon,
+  IconButton,
+  Stack,
+  Text,
+  Tooltip
+} from '@chakra-ui/react'
 import Formulario from 'components/organisms/procedimento-render/formulario'
 import Header from 'components/organisms/procedimento-render/header'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'
-import { selectors, useSelector } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import { getCurrentStatus } from 'utils/procedimento'
 
 import { Container } from 'components/atoms/container'
@@ -12,32 +21,25 @@ import { FormularioModel } from 'domain/models/formulario'
 import { motion } from 'framer-motion'
 import ListaComentarios from './comentarios'
 import Votacao from './votacao'
-import { Button } from 'components/atoms/button'
 
 export default function HomologarProcedimentoDetails() {
   const procedimento = useSelector(
     selectors.procedimentoDetalhes.getProcedimento
   )
-  const firstLoad = useRef(false)
   const formularios = useSelector(selectors.procedimentoDetalhes.getFormularios)
+  const showComments = useSelector(
+    selectors.procedimentoDetalhes.isComentarioSidebarOpen
+  )
 
-  const [showComments, setShowComments] = useState(false)
   const [hidden, setHidden] = useState(!showComments)
 
   const handleToggleComments = () => {
-    setShowComments(prev => !prev)
+    store.dispatch(actions.procedimentoDetalhes.setshowComments(!showComments))
   }
 
   const [formularioSelecionado, setFormularioSelecionado] = useState<
     FormularioModel | undefined
-  >()
-
-  useEffect(() => {
-    if (formularios.length === 0 || firstLoad.current) return
-
-    setFormularioSelecionado(formularios[0])
-    firstLoad.current = true
-  }, [formularios])
+  >(formularios[0])
 
   function handleSelectFormulario(formularioId?: number) {
     const novoFormularioSelecionado = formularios.find(
@@ -58,10 +60,28 @@ export default function HomologarProcedimentoDetails() {
     value: formulario.id
   }))
 
+  const comentarioButtonSlot = (
+    <Tooltip label="Exibir comentários">
+      <IconButton
+        size="sm"
+        mr="1rem"
+        aria-label="botão comentário"
+        onClick={handleToggleComments}
+        bgColor="primary.dark"
+        _hover={{ bgColor: 'primary.default' }}
+        icon={<Icon color="#fff" as={BiCommentDetail} />}
+      />
+    </Tooltip>
+  )
+
   return !procedimento ? null : (
     <Container pos="relative">
       <Box height="50px">
-        <Header procedimento={procedimento} status={status} />
+        <Header
+          slot={comentarioButtonSlot}
+          procedimento={procedimento}
+          status={status}
+        />
       </Box>
       <Divider borderWidth="1px" borderColor="#EEE" my="1.5rem" />
       <Box minH="80%">
@@ -101,13 +121,6 @@ export default function HomologarProcedimentoDetails() {
         </Box>
       </Box>
       <Flex mt="1rem">
-        <Button
-          size="sm"
-          onClick={handleToggleComments}
-          leftIcon={<Icon color="#fff" as={BiCommentDetail} />}
-        >
-          Comentários
-        </Button>
         <motion.div
           hidden={hidden}
           initial={false}

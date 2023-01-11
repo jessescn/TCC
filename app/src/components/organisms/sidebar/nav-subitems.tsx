@@ -59,7 +59,7 @@ export default function NavSubItems({
                       <Flex justifyContent="space-between" alignItems="center">
                         <Flex alignItems="center">
                           <Icon as={icon} fontSize="lg" />
-                          <Text ml={3} display={'flex'} fontSize="14px">
+                          <Text ml={2} display={'flex'} fontSize="14px">
                             {title}
                           </Text>
                         </Flex>

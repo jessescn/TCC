@@ -77,7 +77,7 @@ export default function RegisterFormContent() {
   const passwordProps: fieldProps = {
     id: 'senha',
     label: 'Senha',
-    placeholder: '******',
+    placeholder: '********',
     type: 'password',
     invalid: Boolean(errors.senha),
     register: register('senha', {
@@ -176,7 +176,9 @@ export default function RegisterFormContent() {
               message={status.message || 'erro ao criar novo usuário'}
             />
           )}
-          <CustomLink redirectTo="/login">já possuo conta!</CustomLink>
+          <Box mt="0.5rem">
+            <CustomLink redirectTo="/login">já possuo conta!</CustomLink>
+          </Box>
         </Center>
       </form>
     </Box>

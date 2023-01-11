@@ -105,15 +105,17 @@ export default function Footer({
         </Flex>
       )}
       <Flex justifyContent="flex-end" mt="1rem" alignItems="center">
-        <Button
-          size="sm"
-          customVariant="ghost"
-          onClick={handleClearInvalidations}
-          hidden={isLoading}
-          disabled={!canAnalyze}
-        >
-          Limpar correção
-        </Button>
+        {camposInvalidos.length > 0 && (
+          <Button
+            size="sm"
+            customVariant="ghost"
+            onClick={handleClearInvalidations}
+            hidden={isLoading}
+            disabled={!canAnalyze}
+          >
+            Limpar correção
+          </Button>
+        )}
         <Button
           customVariant="outline"
           size="sm"
@@ -141,6 +143,8 @@ export default function Footer({
           onClick={confirmApproveControls.onOpen}
           disabled={camposInvalidos.length > 0 || !canAnalyze}
           loadingText="Processando"
+          bgColor="info.successDark"
+          _hover={{ bgColor: 'info.success' }}
         >
           Aprovar
         </Button>

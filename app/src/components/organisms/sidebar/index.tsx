@@ -1,27 +1,27 @@
 import {
   Box,
-  Button,
   Drawer,
   DrawerContent,
   DrawerOverlay,
   Flex,
   Icon,
   IconButton,
-  Text,
-  Tooltip
+  Text
 } from '@chakra-ui/react'
 import { useRef } from 'react'
 
-import { BsCardChecklist, BsClipboardData, BsListCheck } from 'react-icons/bs'
-import { FaVoteYea } from 'react-icons/fa'
+import { BsCardChecklist, BsClipboardData } from 'react-icons/bs'
 import { FiCornerDownRight, FiHome, FiUsers } from 'react-icons/fi'
+import { GrTemplate } from 'react-icons/gr'
 
-import { BiLogOut } from 'react-icons/bi'
+import { ImInsertTemplate } from 'react-icons/im'
+
 import { actions, selectors, store, useSelector } from 'store'
 import NavItem from './nav-item'
 import NavSubItems from './nav-subitems'
 
-import { AiOutlineClose, AiOutlineFileAdd, AiOutlineForm } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineFileAdd } from 'react-icons/ai'
+import { MdApproval, MdOutlineManageAccounts } from 'react-icons/md'
 import { invisibleStyle } from 'style/scroll'
 
 const Sidebar = () => {
@@ -32,10 +32,6 @@ const Sidebar = () => {
   )
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
-
-  const handleLogout = () => {
-    store.dispatch(actions.session.logout({ reload: true }))
-  }
 
   const closeSidebar = () => {
     store.dispatch(actions.session.closeSidebar())
@@ -98,14 +94,9 @@ const Sidebar = () => {
               css={invisibleStyle}
             >
               <NavItem icon={FiHome} title="Página inicial" url="/" />
-              <NavItem
-                icon={BsCardChecklist}
-                title="Meus procedimentos"
-                url="/meus-procedimentos"
-              />
               {procedimentosAbertos.length > 0 && (
                 <NavSubItems
-                  icon={BsListCheck}
+                  icon={AiOutlineFileAdd}
                   title="Abrir Procedimento"
                   items={procedimentosAbertos.map(tipoProcedimento => ({
                     title: tipoProcedimento.nome,
@@ -114,8 +105,13 @@ const Sidebar = () => {
                   }))}
                 />
               )}
+              <NavItem
+                icon={BsCardChecklist}
+                title="Meus procedimentos"
+                url="/meus-procedimentos"
+              />
               <NavSubItems
-                icon={BsListCheck}
+                icon={MdOutlineManageAccounts}
                 title="Coordenação"
                 profiles={['admin', 'coordenacao']}
                 items={[
@@ -137,45 +133,24 @@ const Sidebar = () => {
                 ]}
               />
               <NavItem
-                icon={FaVoteYea}
+                icon={MdApproval}
                 title="Homologação"
                 url="/colegiado/procedimentos"
-                profiles={['admin', 'coordenacao', 'colegiado']}
+                profiles={['admin', 'coordenacao', 'colegiado', 'secretaria']}
               />
               <NavItem
-                icon={AiOutlineFileAdd}
+                icon={GrTemplate}
                 title="Tipo de Procedimentos"
                 url="/tipo-procedimentos"
                 profiles={['admin', 'coordenacao']}
               />
               <NavItem
-                icon={AiOutlineForm}
+                icon={ImInsertTemplate}
                 title="Formulários"
                 url="/formularios"
                 profiles={['admin', 'coordenacao']}
               />
             </Box>
-          </Flex>
-          <Flex
-            px="1rem"
-            mb="1rem"
-            flexDir="column"
-            w="100%"
-            alignItems={'flex-start'}
-          >
-            <Tooltip label="Sair">
-              <Button
-                px="0.5rem"
-                w="100%"
-                onClick={handleLogout}
-                bgColor="#fff"
-                aria-label=""
-                leftIcon={<Icon fontSize="lg" as={BiLogOut} />}
-                justifyContent="flex-start"
-              >
-                Deslogar
-              </Button>
-            </Tooltip>
           </Flex>
         </Flex>
       </DrawerContent>

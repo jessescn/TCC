@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { BsChevronBarExpand, BsChevronExpand } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
-import { actions, store, useSelector } from 'store'
+import { actions, selectors, store, useSelector } from 'store'
 import { loadFields } from 'utils/procedimento'
 import SaveChangesModal from './modals/save-changes'
 import RenderContent from './render-campos'
@@ -38,9 +38,10 @@ export default function Formulario({
   camposInvalidos = [],
   handleInvalidate
 }: Props) {
-  const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true })
-
   const navigate = useNavigate()
+  const isOpen = useSelector(
+    selectors.procedimentoDetalhes.isFormularioExpanded
+  )
   const statusUpdate = useSelector(
     state => state.procedimento.statusUpdateStatus
   )
@@ -49,6 +50,10 @@ export default function Formulario({
   const saveChangesModalControls = useDisclosure()
 
   const defaultFields = loadFields(procedimento)
+
+  function handleToggle() {
+    store.dispatch(actions.procedimentoDetalhes.setshowFormulario(!isOpen))
+  }
 
   const methods = useForm<CustomFormModel>({
     defaultValues: { respostas: procedimento.respostas, ...defaultFields }
@@ -76,7 +81,7 @@ export default function Formulario({
       <Flex justifyContent="flex-end" mb="1rem">
         <Button
           size="xs"
-          onClick={onToggle}
+          onClick={handleToggle}
           bgColor="secondary.default"
           _focus={{ boxShadow: 'none' }}
           rightIcon={

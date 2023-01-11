@@ -19,18 +19,20 @@ import {
   ProcedimentoStatus,
   statusList
 } from 'domain/models/procedimento'
+import { ReactNode } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'
 import { formatDate } from 'utils/format'
 
 type Props = {
   procedimento: ProcedimentoModel
   status?: ProcedimentoStatus
+  slot?: ReactNode
 }
 
 export const PopoverTrigger: React.FC<{ children: React.ReactNode }> =
   OrigPopoverTrigger
 
-const Header = ({ procedimento, status }: Props) => {
+const Header = ({ procedimento, status, slot }: Props) => {
   const currentStatus = status ? statusList[status] : undefined
   const revisao = Procedimento.getRevisao(procedimento)
 
@@ -79,7 +81,8 @@ const Header = ({ procedimento, status }: Props) => {
           </Text>
         </Text>
       </Flex>
-      <Flex>
+      <Flex alignItems="center">
+        {slot}
         {revisaoPopover}
         <Box>
           {currentStatus && (

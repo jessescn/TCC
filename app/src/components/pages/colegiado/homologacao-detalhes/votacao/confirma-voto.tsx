@@ -1,5 +1,5 @@
-import { Button } from '@chakra-ui/react'
 import { FocusableElement } from '@chakra-ui/utils'
+import { Button } from 'components/atoms/button'
 import { ConfirmDialog } from 'components/molecules/confirm-dialog'
 import { useRef } from 'react'
 
@@ -28,14 +28,7 @@ export default function ConfirmVote({
       >
         Cancelar
       </Button>
-      <Button
-        size="sm"
-        color="initial.white"
-        bgColor="primary.dark"
-        _hover={{ bgColor: 'primary.default' }}
-        ml={3}
-        onClick={onConfirm}
-      >
+      <Button size="sm" color="initial.white" ml={3} onClick={onConfirm}>
         Confirmar
       </Button>
     </>

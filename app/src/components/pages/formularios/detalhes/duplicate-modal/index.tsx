@@ -5,10 +5,10 @@ import {
   AlertDialogFooter as AlertFooter,
   AlertDialogHeader as AlertHeader,
   AlertDialogOverlay as AlertOverlay,
-  Button,
   Text
 } from '@chakra-ui/react'
 import { FocusableElement } from '@chakra-ui/utils'
+import { Button } from 'components/atoms/button'
 import { SelectOption, MultipleSelect } from 'components/atoms/multiple-select'
 import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
 import { FormularioModel } from 'domain/models/formulario'
@@ -32,12 +32,15 @@ export default function DuplicateFormularioModal({
   const [selectedFormOptions, setSelectedFormOptions] = useState<
     SelectOption | undefined
   >()
+  const formulario = useSelector(selectors.formularioDetalhes.getFormulario)
   const formularios = useSelector(selectors.formularioDetalhes.getFormularios)
 
-  const formOptions = formularios.map(formulario => ({
-    value: formulario,
-    label: `${formulario.nome} (id:${formulario.id})`
-  }))
+  const formOptions = formularios
+    .filter(item => item.id !== formulario?.id && item.deleted == false)
+    .map(formulario => ({
+      value: formulario,
+      label: `${formulario.nome} (id:${formulario.id})`
+    }))
 
   const handleConfirm = () => {
     const formulario = selectedFormOptions?.value
@@ -51,7 +54,7 @@ export default function DuplicateFormularioModal({
     <>
       <Button
         size="sm"
-        variant="ghost"
+        customVariant="ghost"
         ref={cancelRef as any}
         onClick={onClose}
       >

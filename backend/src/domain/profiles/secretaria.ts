@@ -12,7 +12,6 @@ export default {
   procedimento_homologate: 'all',
   procedimento_review: 'all',
   tipo_procedimento_read: 'all',
-  actor_create: 'all',
-  actor_read: 'all',
+  actor_read: 'owned',
   profile_read: 'all'
 }

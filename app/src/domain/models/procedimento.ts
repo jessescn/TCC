@@ -2,13 +2,13 @@ import { TipoProcedimentoModel } from './tipo-procedimento'
 import { UserModel } from './user'
 
 export const statusList = {
-  criado: { label: 'Criado', color: 'info.warning' },
+  criado: { label: 'Criado', color: 'secondary.dark' },
   correcoes_pendentes: { label: 'Correções Pendentes', color: 'info.warning' },
-  em_analise: { label: 'Em análise', color: 'info.warning' },
-  em_homologacao: { label: 'Em homologação', color: 'info.warning' },
-  deferido: { label: 'Deferido', color: 'info.warning' },
-  indeferido: { label: 'Indeferido', color: 'info.warning' },
-  encaminhado: { label: 'Encaminhado', color: 'info.success' }
+  em_analise: { label: 'Em análise', color: 'primary.default' },
+  em_homologacao: { label: 'Em homologação', color: 'primary.dark' },
+  deferido: { label: 'Deferido', color: 'info.success' },
+  indeferido: { label: 'Indeferido', color: 'info.error' },
+  encaminhado: { label: 'Encaminhado', color: 'info.successDarkest' }
 }
 
 export type ProcedimentoStatus = keyof typeof statusList

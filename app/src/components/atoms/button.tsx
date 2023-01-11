@@ -53,6 +53,7 @@ export const Button = ({ children, ref, customVariant, ...props }: Props) => {
       color="initial.white"
       bgColor="primary.dark"
       _hover={{ bgColor: 'primary.default' }}
+      _focus={{ boxShadow: 'none' }}
       {...buttonStyle}
       {...props}
     >

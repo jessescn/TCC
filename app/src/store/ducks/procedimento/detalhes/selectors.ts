@@ -20,3 +20,11 @@ export const getFormularios = createSelector([getRoot], state => {
 export const getComentarios = createSelector([getRoot], state => {
   return state.comentarios
 })
+
+export const isComentarioSidebarOpen = createSelector([getRoot], state => {
+  return state.showComments
+})
+
+export const isFormularioExpanded = createSelector([getRoot], state => {
+  return state.showFormulario
+})

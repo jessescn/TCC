@@ -39,7 +39,7 @@ export default function ProcessosHomologacaoList() {
           }}
         />
       </Flex>
-      {isLoading ? <LoadingPage /> : <ProcedimentosHomologacaoTable />}
+      {isLoading ? <LoadingPage default /> : <ProcedimentosHomologacaoTable />}
     </Container>
   )
 }

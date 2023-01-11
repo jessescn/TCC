@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
-import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react'
+import { ButtonProps, useDisclosure } from '@chakra-ui/react'
 import ConfirmModal from './confirm-modal'
+import { Button } from 'components/atoms/button'
 
 type Props = {
   title?: string

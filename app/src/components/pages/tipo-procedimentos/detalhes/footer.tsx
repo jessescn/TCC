@@ -1,4 +1,5 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
+import { Button } from 'components/atoms/button'
 import { SimpleConfirmationButton } from 'components/organisms/simple-confirmation-button'
 import { useEffect, useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -36,10 +37,7 @@ export default function Footer() {
   const createButton = (
     <Button
       isLoading={isLoading}
-      bgColor="primary.dark"
-      color="initial.white"
       size="sm"
-      _hover={{ bgColor: 'primary.default' }}
       type="submit"
       isDisabled={isTipoProcedimentoInvalido}
     >
@@ -50,11 +48,7 @@ export default function Footer() {
   const updateButton = (
     <SimpleConfirmationButton
       style={{
-        fontSize: 'sm',
         size: 'sm',
-        bgColor: 'primary.dark',
-        color: 'initial.white',
-        _hover: { bgColor: 'primary.default' },
         isLoading: isLoading,
         isDisabled: isTipoProcedimentoInvalido
       }}
@@ -75,10 +69,7 @@ export default function Footer() {
   return (
     <Flex justifyContent="flex-end" mt="1rem">
       <Button
-        bgColor="initial.white"
-        borderColor="primary.dark"
-        borderWidth={1}
-        color="primary.dark"
+        customVariant="ghost"
         size="sm"
         mr="0.5rem"
         onClick={() => navigate('/tipo-procedimentos')}

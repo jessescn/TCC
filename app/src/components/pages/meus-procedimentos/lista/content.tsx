@@ -46,7 +46,7 @@ export default function MeusProcedimentosList() {
           }}
         />
       </Flex>
-      {isLoading ? <LoadingPage /> : <MeusProcedimentosTable />}
+      {isLoading ? <LoadingPage default /> : <MeusProcedimentosTable />}
     </Container>
   )
 }

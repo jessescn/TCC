@@ -18,6 +18,8 @@ const colors = {
   },
   info: {
     success: '#44CF6C',
+    successDark: '#2cae52',
+    successDarkest: '#145025',
     warning: '#FFC914',
     'warning-light': '#FBE28D',
     error: '#FE5F55',

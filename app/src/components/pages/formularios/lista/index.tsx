@@ -54,7 +54,7 @@ export default function FormulariosList() {
           Novo Formulário
         </Button>
       </Flex>
-      {isLoading ? <LoadingPage /> : <FormulariosTable />}
+      {isLoading ? <LoadingPage default /> : <FormulariosTable />}
     </Container>
   )
 }

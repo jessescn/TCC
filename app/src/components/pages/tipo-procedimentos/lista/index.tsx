@@ -53,7 +53,7 @@ export default function TipoProcedimentosList() {
           Novo Tipo de Procedimento
         </Button>
       </Flex>
-      {isLoading ? <LoadingPage /> : <TipoProcedimentosTable />}
+      {isLoading ? <LoadingPage default /> : <TipoProcedimentosTable />}
     </Container>
   )
 }

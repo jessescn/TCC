@@ -1,4 +1,6 @@
 export default {
+  colegiado_delete_vote: 'all',
+  colegiado_update_vote: 'all',
   colegiado_read: 'all',
   comentario_create: 'all',
   comentario_delete: 'all',
@@ -22,5 +24,6 @@ export default {
   actor_create: 'all',
   actor_delete: 'all',
   actor_read: 'all',
-  actor_update: 'all'
+  actor_update: 'all',
+  profile_read: 'all'
 }

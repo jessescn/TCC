@@ -43,7 +43,7 @@ export default function UsuariosList() {
         />
         <UploadUsuariosButton />
       </Flex>
-      {isLoading ? <LoadingPage /> : <UsuariosTable />}
+      {isLoading ? <LoadingPage default /> : <UsuariosTable />}
     </Container>
   )
 }
