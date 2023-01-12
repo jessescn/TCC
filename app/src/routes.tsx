@@ -184,7 +184,11 @@ export default function Routes() {
   return (
     <RoutesWrapper>
       {routes.map(route => (
-        <Route path={route.path} element={getRouterElement(route)} />
+        <Route
+          key={route.path}
+          path={route.path}
+          element={getRouterElement(route)}
+        />
       ))}
     </RoutesWrapper>
   )

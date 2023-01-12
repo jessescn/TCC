@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Icon, Text } from '@chakra-ui/react'
 import FormInput from 'components/molecules/forms/input'
 
 import { Button } from 'components/atoms/button'
@@ -9,6 +9,7 @@ import { LoadingPage } from 'components/molecules/loading'
 import { debounce } from 'lodash'
 import { Container } from 'components/atoms/container'
 import { Title } from 'components/atoms/title'
+import { MdAdd } from 'react-icons/md'
 
 export default function FormulariosList() {
   const navigate = useNavigate()
@@ -50,7 +51,11 @@ export default function FormulariosList() {
             }
           }}
         />
-        <Button size="sm" onClick={() => navigate('/formularios/edit')}>
+        <Button
+          leftIcon={<Icon boxSize={5} as={MdAdd} />}
+          size="sm"
+          onClick={() => navigate('/formularios/edit')}
+        >
           Novo Formulário
         </Button>
       </Flex>

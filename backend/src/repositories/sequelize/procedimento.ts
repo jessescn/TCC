@@ -115,6 +115,15 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
           attributes: ['nome']
         },
         {
+          model: Voto,
+          include: [
+            {
+              model: Actor,
+              as: 'autor'
+            }
+          ]
+        },
+        {
           model: TipoProcedimento,
           where: { ...whereClause }
         }

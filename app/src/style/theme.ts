@@ -10,6 +10,7 @@ const colors = {
   secondary: {
     light: '#F7F7F7',
     default: '#EFEFEF',
+    semidark: '#e1e1e1',
     dark: '#BCBCBC'
   },
   initial: {

@@ -1,12 +1,12 @@
 import { Box, Center, Stack, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
-import { CustomLink } from 'components/atoms/custom-link'
 import { SimpleErrorMessage } from 'components/atoms/simple-error-message'
 import FormInput, { ErrorText } from 'components/molecules/forms/input'
 
 import { HTMLInputTypeAttribute } from 'react'
 import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 import PasswordStrengthBar from 'react-password-strength-bar'
+import { useNavigate } from 'react-router-dom'
 import { CreateUser } from 'services/usuarios'
 import { actions, selectors, store, useSelector } from 'store'
 import { validateEmail } from 'utils/validation'
@@ -26,6 +26,8 @@ export type RegisterForm = CreateUser & {
 }
 
 export default function RegisterFormContent() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -177,7 +179,19 @@ export default function RegisterFormContent() {
             />
           )}
           <Box mt="0.5rem">
-            <CustomLink redirectTo="/login">já possuo conta!</CustomLink>
+            <Text fontSize="xs">
+              Já possui conta?
+              <Text
+                as="span"
+                color="primary.dark"
+                fontWeight="bold"
+                ml="0.25rem"
+                _hover={{ cursor: 'pointer', textDecor: 'underline' }}
+                onClick={() => navigate('/login')}
+              >
+                Acessar
+              </Text>
+            </Text>
           </Box>
         </Center>
       </form>

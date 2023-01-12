@@ -12,7 +12,6 @@ import { useRef } from 'react'
 
 import { BsCardChecklist, BsClipboardData } from 'react-icons/bs'
 import { FiCornerDownRight, FiHome, FiUsers } from 'react-icons/fi'
-import { GrTemplate } from 'react-icons/gr'
 
 import { ImInsertTemplate } from 'react-icons/im'
 
@@ -21,6 +20,7 @@ import NavItem from './nav-item'
 import NavSubItems from './nav-subitems'
 
 import { AiOutlineClose, AiOutlineFileAdd } from 'react-icons/ai'
+import { HiTemplate } from 'react-icons/hi'
 import { MdApproval, MdOutlineManageAccounts } from 'react-icons/md'
 import { invisibleStyle } from 'style/scroll'
 
@@ -139,7 +139,7 @@ const Sidebar = () => {
                 profiles={['admin', 'coordenacao', 'colegiado', 'secretaria']}
               />
               <NavItem
-                icon={GrTemplate}
+                icon={HiTemplate}
                 title="Tipo de Procedimentos"
                 url="/tipo-procedimentos"
                 profiles={['admin', 'coordenacao']}

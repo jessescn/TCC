@@ -1,5 +1,6 @@
 import { Box, Center, Icon, Text } from '@chakra-ui/react'
 import SimpleTable, { Cell } from 'components/organisms/simple-table'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 import { MdSearchOff } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
@@ -11,6 +12,7 @@ export default function ProcedimentosHomologacaoTable() {
   const procedimentos = useSelector(selectors.colegiado.getProcedimentos)
   const pagination = useSelector(selectors.colegiado.getPagination)
   const total = useSelector(state => state.colegiado.total)
+  const currentUser = useSelector(selectors.session.getCurrentUser)
 
   const handleRedirect = (element: Cell[]) => {
     const id = Number(element[0].content)
@@ -20,6 +22,16 @@ export default function ProcedimentosHomologacaoTable() {
 
   const handleUpdateCurrentPage = (nextPage: number) => {
     store.dispatch(actions.colegiado.list({ ...pagination, page: nextPage }))
+  }
+
+  function getCurrentVoteLabel(procedimento: ProcedimentoModel) {
+    const voto = procedimento.votos?.find(
+      vote => vote.autor.id === currentUser?.id
+    )
+
+    if (!voto) return 'Não votou'
+
+    return voto.aprovado ? 'Votou Sim' : 'Votou Não'
   }
 
   return procedimentos.length > 0 ? (
@@ -37,8 +49,9 @@ export default function ProcedimentosHomologacaoTable() {
         onClickRow={handleRedirect}
         columns={[
           { content: 'ID', props: { width: '10%' } },
-          { content: 'Nome', props: { width: '40%' } },
-          { content: 'Autor', props: { width: '15%' } },
+          { content: 'Nome', props: { width: '35%' } },
+          { content: 'Autor', props: { width: '10%' } },
+          { content: 'Seu Voto', props: { width: '10%' } },
           { content: 'Votos', props: { width: '5%' } },
           { content: 'Última Atualização', props: { width: '15%' } },
           { content: 'Criado em', props: { width: '15%' } }
@@ -47,6 +60,7 @@ export default function ProcedimentosHomologacaoTable() {
           { content: procedimento.id },
           { content: procedimento.tipo_procedimento?.nome },
           { content: procedimento.actor?.nome || '-' },
+          { content: getCurrentVoteLabel(procedimento) },
           { content: procedimento.votos?.length || 0 },
           {
             content: !procedimento.updatedAt

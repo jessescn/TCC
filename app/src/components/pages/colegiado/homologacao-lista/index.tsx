@@ -1,4 +1,4 @@
-import { Divider, Flex } from '@chakra-ui/react'
+import { Divider, Flex, Text } from '@chakra-ui/react'
 import { Container } from 'components/atoms/container'
 import { Title } from 'components/atoms/title'
 import FormInput from 'components/molecules/forms/input'
@@ -20,6 +20,9 @@ export default function ProcessosHomologacaoList() {
   return (
     <Container>
       <Title>Procedimentos em homologação</Title>
+      <Text my="1rem" fontSize="sm">
+        Acompanhe os procedimentos que estão sendo votados pelo colegiado.
+      </Text>
       <Divider my="1.5rem" borderColor="secondary.dark" />
       <Flex justifyContent="space-between" alignItems="flex-end">
         <FormInput

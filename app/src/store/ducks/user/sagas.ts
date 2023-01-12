@@ -41,7 +41,11 @@ function* createBulkSaga(action: PayloadAction<CreateBulk>) {
 
     yield put(actions.createBulkSuccess())
   } catch (error: any) {
-    yield put(actions.createBulkFailure(error?.response?.data))
+    yield put(
+      actions.createBulkFailure(
+        error?.response?.data || 'Erro ao cadastrar usuários'
+      )
+    )
   }
 }
 

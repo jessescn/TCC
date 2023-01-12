@@ -19,7 +19,9 @@ export class ReadTipoProcedimentoController extends Controller<ITipoProcedimento
   getQueryByScope = (actor: ActorModel): TipoProcedimentoQuery => {
     const scope = actor.profile.permissoes[this.permission]
 
-    return scope === 'owned' ? { createdBy: actor.id } : {}
+    return scope === 'owned'
+      ? { createdBy: actor.id, deleted: false }
+      : { deleted: false }
   }
 
   exec = async (request: Request, response: Response) => {

@@ -19,7 +19,9 @@ export class ReadFormularioController extends Controller<IFormularioService> {
   getQueryByScope(actor: ActorModel): FormularioQuery {
     const scope = actor.profile.permissoes[this.permission]
 
-    return scope === 'owned' ? { createdBy: actor.id } : {}
+    return scope === 'owned'
+      ? { createdBy: actor.id, deleted: false }
+      : { deleted: false }
   }
 
   exec = async (request: Request, response: Response) => {
@@ -28,9 +30,9 @@ export class ReadFormularioController extends Controller<IFormularioService> {
 
       const pagination = extractPagination(request)
 
-      const scope = this.getQueryByScope(request.actor)
+      const query = this.getQueryByScope(request.actor)
 
-      const result = await this.service.findAll(scope, pagination)
+      const result = await this.service.findAll(query, pagination)
 
       response.json(result)
     } catch (error) {

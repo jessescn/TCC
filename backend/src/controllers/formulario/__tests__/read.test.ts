@@ -37,7 +37,10 @@ describe('ReadFormulario Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({}, defaultPagination)
+    expect(service.findAll).toBeCalledWith(
+      { deleted: false },
+      defaultPagination
+    )
     expect(response.json).toBeCalledWith({ data: [formulario], total: 1 })
   })
 
@@ -55,7 +58,8 @@ describe('ReadFormulario Controller', () => {
 
     expect(service.findAll).toBeCalledWith(
       {
-        createdBy: actorWithLimitedPrivileges.id
+        createdBy: actorWithLimitedPrivileges.id,
+        deleted: false
       },
       defaultPagination
     )

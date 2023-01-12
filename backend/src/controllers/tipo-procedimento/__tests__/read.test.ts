@@ -37,7 +37,7 @@ describe('ReadTipoProcedimento Controller', () => {
 
     await sut.exec(request, response as any)
 
-    expect(service.findAll).toBeCalledWith({}, pagination)
+    expect(service.findAll).toBeCalledWith({ deleted: false }, pagination)
     expect(response.json).toBeCalledWith({
       data: tipoProcedimentos,
       total: tipoProcedimentos.length
@@ -57,7 +57,8 @@ describe('ReadTipoProcedimento Controller', () => {
 
     expect(service.findAll).toBeCalledWith(
       {
-        createdBy: actorWithLimitedScope.id
+        createdBy: actorWithLimitedScope.id,
+        deleted: false
       },
       pagination
     )

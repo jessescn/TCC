@@ -13,8 +13,10 @@ export const CustomLink = ({ children, redirectTo, ...linkStyle }: Props) => {
       <Link
         as="p"
         fontSize="xs"
-        textDecoration="underline"
-        color="primary.default"
+        color="primary.dark"
+        fontWeight="bold"
+        textDecor="none"
+        _hover={{ cursor: 'pointer', textDecor: 'underline' }}
         {...linkStyle}
       >
         {children}

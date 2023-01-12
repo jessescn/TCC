@@ -1,9 +1,10 @@
-import { Box, Divider, Flex, Text } from '@chakra-ui/react'
+import { Box, Divider, Flex, Icon, Text } from '@chakra-ui/react'
 import { Button } from 'components/atoms/button'
 import { Container } from 'components/atoms/container'
 import { Title } from 'components/atoms/title'
 import FormInput from 'components/molecules/forms/input'
 import { LoadingPage } from 'components/molecules/loading'
+import { MdAdd } from 'react-icons/md'
 
 import { useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
@@ -49,8 +50,12 @@ export default function TipoProcedimentosList() {
             }
           }}
         />
-        <Button size="sm" onClick={() => navigate('/tipo-procedimentos/edit')}>
-          Novo Tipo de Procedimento
+        <Button
+          leftIcon={<Icon boxSize={5} as={MdAdd} />}
+          size="sm"
+          onClick={() => navigate('/tipo-procedimentos/edit')}
+        >
+          Novo Tipo Procedimento
         </Button>
       </Flex>
       {isLoading ? <LoadingPage default /> : <TipoProcedimentosTable />}

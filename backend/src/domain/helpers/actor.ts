@@ -1,9 +1,8 @@
 import { ActorModel } from 'domain/models/actor'
-import { Profiles } from 'domain/profiles'
-import * as fs from 'fs'
-import * as path from 'path'
-import * as csv from 'fast-csv'
 import { ProfileModel } from 'domain/models/profile'
+import { Profiles } from 'domain/profiles'
+import * as csv from 'fast-csv'
+import * as fs from 'fs'
 import { removeFile } from 'utils/file'
 
 type ActorRow = {
@@ -53,9 +52,7 @@ export class ActorHelper {
         encoding: 'utf-8'
       }
 
-      const readableStream = fs.createReadStream(
-        path.resolve('/usr/app/', filename)
-      )
+      const readableStream = fs.createReadStream(filename)
 
       csv
         .parseStream(readableStream, config)

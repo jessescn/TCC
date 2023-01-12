@@ -110,7 +110,9 @@ export default function AlteracaoSenha() {
               </AlertDescription>
             </Alert>
           )}
-          <CustomLink redirectTo="/login">Voltar ao login</CustomLink>
+          <CustomLink redirectTo="/login" mt="0.5rem">
+            Voltar ao login
+          </CustomLink>
         </Center>
       </Box>
     </Flex>

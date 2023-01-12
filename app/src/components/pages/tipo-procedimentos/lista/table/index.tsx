@@ -33,9 +33,9 @@ export default function TipoProcedimentosTable() {
           onChangePage={handleUpdateCurrentPage}
           columns={[
             { content: 'ID', props: { width: '5%' } },
-            { content: 'Nome', props: { width: '35%' } },
-            { content: 'Deletado', props: { width: '5%' } },
+            { content: 'Nome', props: { width: '30%' } },
             { content: 'Status', props: { width: '5%' } },
+            { content: 'Análise Coordenação', props: { width: '10%' } },
             { content: 'Colegiado', props: { width: '10%' } },
             { content: 'Prazo Início', props: { width: '10%' } },
             { content: 'Prazo Fim', props: { width: '10%' } },
@@ -44,8 +44,8 @@ export default function TipoProcedimentosTable() {
           rows={tipoProcedimentos.map(tipo => [
             { content: tipo.id },
             { content: tipo.nome },
-            { content: tipo.deleted ? 'Sim' : 'Não' },
             { content: tipo.status },
+            { content: tipo.revisao_coordenacao ? 'Sim' : 'Não' },
             { content: tipo.colegiado ? 'Sim' : 'Não' },
             {
               content: !tipo.dataInicio ? '-' : formatDate(tipo.dataInicio)

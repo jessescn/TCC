@@ -40,7 +40,7 @@ const SimpleTable = ({
     <>
       <Table>
         <Thead>
-          <Tr bgColor="secondary.default">
+          <Tr bgColor="primary.dark" color="initial.white">
             {columns.map((column, index) => (
               <Th
                 color="initial.dark"
@@ -62,7 +62,9 @@ const SimpleTable = ({
               _even={{
                 bgColor: 'secondary.default'
               }}
-              _hover={{ bgColor: 'secondary.light' }}
+              _hover={{
+                bgColor: onClickRow ? 'secondary.semidark' : 'inherit'
+              }}
               key={`row-${rowIdx}`}
             >
               {row.map((cell, cellIdx) => (

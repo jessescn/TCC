@@ -82,7 +82,7 @@ export default function Login() {
             />
             <FormInput
               id="senha"
-              placeholder="******"
+              placeholder="********"
               type="password"
               isInvalid={Boolean(errors.senha)}
               label={{
@@ -111,14 +111,34 @@ export default function Login() {
                   message={status.message || 'credenciais inválidas!'}
                 />
               )}
-              <Flex justifyContent="center" mt="0.5rem">
-                <CustomLink redirectTo="/cadastro" mr="0.5rem">
-                  Criar Conta
-                </CustomLink>
-                <CustomLink redirectTo="/alteracao-senha">
-                  Esqueci a Senha
-                </CustomLink>
-              </Flex>
+              <Box mt="0.5rem" textAlign="center">
+                <Text fontSize="xs">
+                  Não possui conta?
+                  <Text
+                    as="span"
+                    color="primary.dark"
+                    fontWeight="bold"
+                    ml="0.25rem"
+                    _hover={{ cursor: 'pointer', textDecor: 'underline' }}
+                    onClick={() => navigate('/cadastro')}
+                  >
+                    Crie agora
+                  </Text>
+                </Text>
+                <Text fontSize="xs">
+                  Esqueceu sua senha?
+                  <Text
+                    as="span"
+                    color="primary.dark"
+                    fontWeight="bold"
+                    ml="0.25rem"
+                    _hover={{ cursor: 'pointer', textDecor: 'underline' }}
+                    onClick={() => navigate('/alteracao-senha')}
+                  >
+                    Altere aqui
+                  </Text>
+                </Text>
+              </Box>
             </Center>
           </form>
         </Box>

@@ -48,16 +48,16 @@ export default function FormulariosTable() {
         totalPages={totalPages}
         columns={[
           { content: 'ID', props: { width: '10%' } },
-          { content: 'Nome', props: { width: '55%' } },
-          { content: 'Deletado', props: { width: '10%' } },
-          { content: 'Criado por', props: { width: '10%' } },
-          { content: 'Última atualizacão', props: { width: '10%' } },
+          { content: 'Nome', props: { width: '40%' } },
+          { content: 'Qtd campos', props: { width: '15%' } },
+          { content: 'Criado por', props: { width: '15%' } },
+          { content: 'Última atualizacão', props: { width: '15%' } },
           { content: '', props: { width: '5%' } }
         ]}
         rows={formularios.map(form => [
           { content: form.id },
           { content: form.nome },
-          { content: form.deleted ? 'Sim' : 'Não' },
+          { content: form.campos.length },
           { content: form.actor?.nome || '-' },
           {
             content: !form.updatedAt ? '-' : formatDate(form.updatedAt)
