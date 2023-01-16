@@ -1,7 +1,9 @@
+import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { ActorModel } from 'domain/models/actor'
 import { Pagination } from 'repositories'
+import { IFormularioRepository } from 'repositories/sequelize/formulario'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 import {
   ITipoProcedimentoRepository,
   NewTipoProcedimento,
@@ -10,7 +12,6 @@ import {
 import { TipoProcedimentoService } from 'services/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
-import { IFormularioRepository } from 'repositories/sequelize/formulario'
 
 describe('TipoProcedimento Service', () => {
   const formularios = createMockList<FormularioModel>(2)
@@ -20,6 +21,7 @@ describe('TipoProcedimento Service', () => {
   const formularioRepo = createMock<IFormularioRepository>({
     findAll: jest.fn().mockResolvedValue(formularios)
   })
+  const procedimentoRepo = createMock<IProcedimentoRepo>()
 
   describe('create', () => {
     const tipoProcedimentoRepo = createMock<ITipoProcedimentoRepository>({
@@ -37,7 +39,8 @@ describe('TipoProcedimento Service', () => {
     it('should create a new tipoProcedimento', async () => {
       const sut = new TipoProcedimentoService(
         tipoProcedimentoRepo,
-        formularioRepo
+        formularioRepo,
+        procedimentoRepo
       )
       const result = await sut.create(usuario, data)
 
@@ -58,7 +61,8 @@ describe('TipoProcedimento Service', () => {
 
       const sut = new TipoProcedimentoService(
         tipoProcedimentoRepo,
-        formularioRepo
+        formularioRepo,
+        procedimentoRepo
       )
 
       const shouldThrow = async () => {
@@ -78,7 +82,11 @@ describe('TipoProcedimento Service', () => {
     })
 
     it('should return an existing tipoProcedimento by id', async () => {
-      const sut = new TipoProcedimentoService(repo, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repo,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const result = await sut.findOne(1)
 
@@ -90,7 +98,11 @@ describe('TipoProcedimento Service', () => {
       const repoWithUndefined = createMock<ITipoProcedimentoRepository>({
         findAll: jest.fn().mockResolvedValue([])
       })
-      const sut = new TipoProcedimentoService(repoWithUndefined, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repoWithUndefined,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const shouldThrow = async () => {
         await sut.findOne(1)
@@ -111,7 +123,11 @@ describe('TipoProcedimento Service', () => {
     }
 
     it('should return all tipoProcedimentos', async () => {
-      const sut = new TipoProcedimentoService(repo, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repo,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const result = await sut.findAll({}, pagination)
 
@@ -121,7 +137,11 @@ describe('TipoProcedimento Service', () => {
 
     it('should return only tipoProcedimentos which matches the query', async () => {
       const query: TipoProcedimentoQuery = { nome: 'teste' }
-      const sut = new TipoProcedimentoService(repo, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repo,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const result = await sut.findAll(query, pagination)
 
@@ -139,7 +159,11 @@ describe('TipoProcedimento Service', () => {
     const data: Partial<TipoProcedimentoModel> = { descricao: 'teste' }
 
     it('should update an existing tipoProcedimento', async () => {
-      const sut = new TipoProcedimentoService(repo, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repo,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const result = await sut.update(1, data)
 
@@ -153,7 +177,11 @@ describe('TipoProcedimento Service', () => {
         findAll: jest.fn().mockResolvedValue([])
       })
 
-      const sut = new TipoProcedimentoService(repoWithUndefined, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repoWithUndefined,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const shouldThrow = async () => {
         await sut.update(1, data)
@@ -170,7 +198,11 @@ describe('TipoProcedimento Service', () => {
     })
 
     it('should delete an existing tipoProcedimento', async () => {
-      const sut = new TipoProcedimentoService(repo, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repo,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const result = await sut.delete(1)
 
@@ -184,7 +216,11 @@ describe('TipoProcedimento Service', () => {
         findAll: jest.fn().mockResolvedValue([])
       })
 
-      const sut = new TipoProcedimentoService(repoWithUndefined, formularioRepo)
+      const sut = new TipoProcedimentoService(
+        repoWithUndefined,
+        formularioRepo,
+        procedimentoRepo
+      )
 
       const shouldThrow = async () => {
         await sut.delete(1)

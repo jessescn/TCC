@@ -1,8 +1,10 @@
+import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { Pagination } from 'repositories'
 import { IFormularioRepository } from 'repositories/sequelize/formulario'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 import {
   ITipoProcedimentoRepository,
   NewTipoProcedimento,
@@ -27,12 +29,19 @@ export interface ITipoProcedimentoService
     id: number,
     data: Partial<TipoProcedimentoModel>
   ) => Promise<TipoProcedimentoModel>
+  exportData: (id: number) => Promise<any>
+  analyzableData: (
+    id: number,
+    formularioId: number,
+    nomeCampo: string
+  ) => Promise<any>
 }
 
 export class TipoProcedimentoService implements ITipoProcedimentoService {
   constructor(
     private tipoProcedimentoRepo: ITipoProcedimentoRepository,
-    private formularioRepo: IFormularioRepository
+    private formularioRepo: IFormularioRepository,
+    private procedimentoRepo: IProcedimentoRepo
   ) {}
 
   private async checkIfFormulariosExists(ids: number[]) {
@@ -111,5 +120,80 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
     await this.checkIfTipoProcedimentoExists(id)
 
     return this.tipoProcedimentoRepo.destroy(id)
+  }
+
+  async exportData(id: number) {
+    const tipoProcedimento = await this.checkIfTipoProcedimentoExists(id)
+    const formularios = await this.checkIfFormulariosExists(
+      tipoProcedimento.formularios
+    )
+
+    const procedimentos = await this.procedimentoRepo.findAll({
+      tipo: id,
+      deleted: false
+    })
+
+    const data = procedimentos
+      .map(procedimento =>
+        TipoProcedimentoHelper.getExportData(procedimento, formularios)
+      )
+      .filter(value => value.length > 0)
+
+    return data
+  }
+
+  async analyzableData(id: number, formularioId: number, nomeCampo: string) {
+    const tipoProcedimento = await this.checkIfTipoProcedimentoExists(id)
+    const formularios = await this.checkIfFormulariosExists(
+      tipoProcedimento.formularios
+    )
+
+    const formulario = formularios.find(
+      formulario => formulario.id === formularioId
+    )
+
+    if (!formulario) {
+      throw new BadRequestError('Formulario não existe')
+    }
+
+    const campo = formulario.campos.find(
+      value => value.configuracao_campo.titulo === nomeCampo
+    )
+
+    if (!nomeCampo || !campo) {
+      throw new BadRequestError('Nome do campo inválido ou inexistente')
+    }
+
+    const procedimentos = await this.procedimentoRepo.findAll({
+      tipo: id,
+      deleted: false
+    })
+
+    const dataList = procedimentos.reduce((current, procedimento) => {
+      const result = TipoProcedimentoHelper.getAnalyzableData(
+        procedimento,
+        formulario,
+        nomeCampo
+      )
+
+      if (Object.keys(result).length === 0) {
+        return current
+      }
+
+      return [
+        ...current,
+        {
+          procedimento: procedimento.id,
+          date: procedimento.updatedAt,
+          values: result
+        }
+      ]
+    }, [])
+
+    return {
+      formulario,
+      tipoProcedimento,
+      data: dataList
+    }
   }
 }

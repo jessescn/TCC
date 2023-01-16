@@ -1,8 +1,17 @@
 import { Box, Divider, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
-import Content from 'components/pages/coordenacao/estatisticas/content'
+import EstatisticasProcedimento from 'components/pages/coordenacao/estatisticas'
+import { useEffect } from 'react'
+import { actions, store } from 'store'
 
-export default function EstatisticasProcedimento() {
+export default function EstatisticasProcedimentoPage() {
+  useEffect(() => {
+    store.dispatch(
+      actions.tipoProcedimento.list({ page: 1, per_page: 1000, term: null })
+    )
+    store.dispatch(actions.analiseDados.resetState())
+  }, [])
+
   return (
     <Screen py="24px">
       <Box
@@ -19,13 +28,13 @@ export default function EstatisticasProcedimento() {
             Estatísticas
           </Text>
           <Text my="16px" fontSize="14px">
-            Métricas extraídas de dados históricos para auxiliar em decisões
-            futuras.
+            Crie até 4 gráficos simultâneos com as respostas de tipo de
+            procedimentos existentes.
           </Text>
           <Divider my="24px" borderColor="secondary.dark" />
         </Box>
         <Box>
-          <Content />
+          <EstatisticasProcedimento />
         </Box>
       </Box>
     </Screen>

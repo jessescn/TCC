@@ -1,7 +1,9 @@
 import { Router } from 'express'
 import {
+  analyzableDataController,
   createTipoProcedimentoController,
   deleteTipoProcedimentoController,
+  exportDataController,
   readOneTipoProcedimentoController,
   readTipoProcedimentoController,
   updateTipoProcedimentoController
@@ -35,6 +37,16 @@ routes.delete(
   '/tipo-procedimentos/:id',
   middleware,
   deleteTipoProcedimentoController.exec
+)
+routes.get(
+  '/tipo-procedimentos/:id/export-data',
+  middleware,
+  exportDataController.exec
+)
+routes.post(
+  '/tipo-procedimentos/:id/analyzable-data',
+  middleware,
+  analyzableDataController.exec
 )
 
 export default routes

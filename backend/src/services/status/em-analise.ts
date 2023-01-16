@@ -25,7 +25,7 @@ export class EmAnaliseStatusHandler implements StatusHandler {
   }
 
   execute = async ({ procedimento }: HandlerProps) => {
-    await this.sendEmailCoordenacao(procedimento)
+    this.sendEmailCoordenacao(procedimento)
 
     const statusAnalise: Status = {
       status: 'em_analise',
