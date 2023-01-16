@@ -2,7 +2,7 @@ import { CampoFormulario } from 'domain/models/formulario'
 import { RespostaCampo } from 'domain/models/procedimento'
 import { CampoTipoBase, StrategyHandler } from '.'
 
-type CampoGrelhaVerificacao = CampoTipoBase & {
+export type CampoGrelhaVerificacao = CampoTipoBase & {
   opcoes: {
     linhas: string[]
     colunas: string[]
@@ -17,8 +17,8 @@ export class GrelhaVerificacaoStrategyHandler implements StrategyHandler {
 
   getExportFormat(analyze = false) {
     const result = {}
-    const linhas = this.campo.configuracao_campo.opcoes.linhas || []
-    const colunas = this.campo.configuracao_campo.opcoes.colunas || []
+    const linhas = this.campo.configuracao_campo.opcoes.linhas
+    const colunas = this.campo.configuracao_campo.opcoes.colunas
 
     const data = this.resposta.valor
 

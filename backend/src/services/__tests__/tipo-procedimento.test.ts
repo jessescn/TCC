@@ -1,7 +1,9 @@
+import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import { ActorModel } from 'domain/models/actor'
 import { Pagination } from 'repositories'
+import { IFormularioRepository } from 'repositories/sequelize/formulario'
+import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 import {
   ITipoProcedimentoRepository,
   NewTipoProcedimento,
@@ -10,8 +12,6 @@ import {
 import { TipoProcedimentoService } from 'services/tipo-procedimento'
 import { createMock, createMockList } from 'ts-auto-mock'
 import { BadRequestError, NotFoundError } from 'types/express/errors'
-import { IFormularioRepository } from 'repositories/sequelize/formulario'
-import { IProcedimentoRepo } from 'repositories/sequelize/procedimento'
 
 describe('TipoProcedimento Service', () => {
   const formularios = createMockList<FormularioModel>(2)

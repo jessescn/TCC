@@ -1,20 +1,20 @@
 import { Box, Text } from '@chakra-ui/react'
 import { MultipleSelect, SelectOption } from 'components/atoms/multiple-select'
 import { LoadingPage } from 'components/molecules/loading'
-import { FormularioModel } from 'domain/models/formulario'
+import { TipoCampoFormulario } from 'domain/models/formulario'
 import { selectors, useSelector } from 'store'
 
 type Props = {
-  formulario?: FormularioModel
+  formularioId?: number
   campo?: string
-  onChangeFormulario: (form: FormularioModel) => void
+  onChangeFormulario: (formId: number) => void
   onChangeCampo: (campo: string) => void
 }
 
 export default function FormularioSelect({
   onChangeCampo,
   onChangeFormulario,
-  formulario,
+  formularioId,
   campo
 }: Props) {
   const tipoProcedimento = useSelector(
@@ -26,22 +26,30 @@ export default function FormularioSelect({
   const formularios = useSelector(
     selectors.tipoProcedimentoDetalhes.getFormulariosFromTipo
   )
+  const formulario = formularios.find(form => form.id === formularioId)
   const options: SelectOption[] = formularios.map(form => ({
     value: form.id,
     label: `${form.nome} (id: ${form.id})`
   }))
 
-  const campoOptions = (formulario?.campos || []).map(campo => ({
-    label: campo.configuracao_campo.titulo,
-    value: campo.configuracao_campo.titulo
-  }))
+  const tipoCamposValidos: TipoCampoFormulario[] = [
+    'hora',
+    'data',
+    'caixa_verificacao',
+    'escolha_multipla',
+    'grelha_multipla',
+    'grelha_verificacao'
+  ]
+
+  const campoOptions = (formulario?.campos || [])
+    .filter(value => tipoCamposValidos.includes(value.tipo))
+    .map(value => ({
+      label: value.configuracao_campo.titulo,
+      value: value.configuracao_campo.titulo
+    }))
 
   function handleChangeForm(e: SelectOption) {
-    const formulario = formularios.find(form => form.id === e.value)
-
-    if (formulario) {
-      onChangeFormulario(formulario)
-    }
+    onChangeFormulario(e.value)
   }
 
   if (isLoading) {

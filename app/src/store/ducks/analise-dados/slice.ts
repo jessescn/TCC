@@ -5,7 +5,7 @@ import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { FetchData } from 'services/tipo-procedimentos'
 
 type Status = 'pristine' | 'loading' | 'success' | 'failure'
-type GraphType = 'bar'
+export type GraphType = 'bar' | 'pie' | 'radial'
 
 export type DataFetchPayload = {
   tipo: number
@@ -38,7 +38,10 @@ export const initialState: State = {
 }
 
 const reducers = {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  resetState: (state: State) => {
+    state.dataInfo = initialState.dataInfo
+    state.fetchStatus = initialState.fetchStatus
+  },
   fetchData: (state: State, action: PayloadAction<DataFetchPayload>) => {
     state.fetchStatus = 'loading'
   },

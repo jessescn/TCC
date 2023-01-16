@@ -17,13 +17,13 @@ export class CaixaVerificacaoStrategyHandler implements StrategyHandler {
     const data = this.resposta.valor.join(', ')
 
     return {
-      [this.campo.configuracao_campo.titulo || '']: data
+      [this.campo.configuracao_campo.titulo]: data
     }
   }
 
   getAnalyzableData() {
     return {
-      [this.campo.configuracao_campo.titulo || '']: this.resposta.valor
+      [this.campo.configuracao_campo.titulo]: this.resposta.valor
     }
   }
 }
