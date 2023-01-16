@@ -1,4 +1,5 @@
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
+import { FetchData } from 'services/tipo-procedimentos'
 
 export class TipoProcedimento {
   static getTipoProcedimentosAbertos(
@@ -21,5 +22,46 @@ export class TipoProcedimento {
     })
 
     return procedimentosAbertos
+  }
+
+  static convertFetchDataIntoGraphData(data: FetchData[]) {
+    const parsedBars = data.reduce((bars, elm) => {
+      const keys = Object.keys(elm.values)
+
+      keys.forEach(key => {
+        const keyValues = elm.values[key]
+        const current = bars[key] || []
+
+        bars[key] = [...current, ...keyValues]
+      })
+
+      return bars
+    }, {} as Record<string, string[]>)
+
+    const toRender = Object.keys(parsedBars).map(bar => {
+      const values = parsedBars[bar].reduce((current, value) => {
+        const count = current[value] || 0
+
+        current[value] = count + 1
+
+        return current
+      }, {} as Record<string, number>)
+
+      return {
+        name: bar,
+        ...values
+      }
+    })
+
+    const bars = toRender.reduce((current, element) => {
+      return [...current, ...Object.keys(element)]
+    }, [] as string[])
+
+    const uniqueBars = [...new Set(bars)].filter(e => e !== 'name')
+
+    return {
+      parsedData: toRender,
+      bars: uniqueBars
+    }
   }
 }

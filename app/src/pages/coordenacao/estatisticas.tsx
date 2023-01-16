@@ -1,8 +1,13 @@
 import { Box, Divider, Text } from '@chakra-ui/react'
 import Screen from 'components/atoms/screen'
 import Content from 'components/pages/coordenacao/estatisticas/content'
+import { actions, store } from 'store'
 
 export default function EstatisticasProcedimento() {
+  store.dispatch(
+    actions.tipoProcedimento.list({ page: 1, per_page: 1000, term: null })
+  )
+
   return (
     <Screen py="24px">
       <Box

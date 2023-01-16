@@ -10,7 +10,7 @@ import {
   Model
 } from 'sequelize'
 
-type TipoCampoFormulario =
+export type TipoCampoFormulario =
   | 'paragrafo'
   | 'resposta'
   | 'data'
@@ -21,11 +21,11 @@ type TipoCampoFormulario =
   | 'grelha_multipla'
   | 'grelha_verificacao'
 
-export type CampoFormulario = {
+export type CampoFormulario<T = any> = {
   ordem: number
   tipo: TipoCampoFormulario
   obrigatorio?: boolean
-  configuracao_campo?: any
+  configuracao_campo?: T
 }
 
 export interface FormularioModel {

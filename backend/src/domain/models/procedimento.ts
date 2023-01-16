@@ -28,8 +28,8 @@ export type CampoInvalido = {
   ordem: number
 }
 
-export type RespostaCampo = {
-  valor: any
+export type RespostaCampo<T = any> = {
+  valor: T
   ordem: number
 }
 
