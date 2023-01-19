@@ -6,8 +6,10 @@ import {
   Input,
   Stack
 } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoCaixaVerificacao } from 'domain/types/campo-tipos'
+import {
+  CampoFormulario,
+  CampoTipoCaixaVerificacao
+} from 'domain/models/formulario'
 import { useState } from 'react'
 import { BaseCampoProps } from '..'
 import { ErrorWrapper } from '../error-wrapper'

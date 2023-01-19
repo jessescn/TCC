@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { Actor } from 'domain/entity/actor'
-import { ProfileType } from 'domain/types/actors'
+import { ProfileType } from 'domain/models/user'
 import { State } from '..'
 
 export const getRoot = (state: State) => {

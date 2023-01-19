@@ -1,5 +1,7 @@
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoCaixaVerificacao } from 'domain/types/campo-tipos'
+import {
+  CampoFormulario,
+  CampoTipoCaixaVerificacao
+} from 'domain/models/formulario'
 import { Controller, useFormContext } from 'react-hook-form'
 import { CampoProps } from '..'
 import { BaseCampoCaixaVerificacao } from './base'

@@ -1,6 +1,5 @@
 import { Input } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoResposta } from 'domain/types/campo-tipos'
+import { CampoFormulario, CampoTipoResposta } from 'domain/models/formulario'
 import { debounce } from 'lodash'
 import React from 'react'
 import { BaseCampoProps } from '..'

@@ -31,6 +31,7 @@
     "react-mentions": "^4.4.7",
     "react-password-strength-bar": "^0.4.1",
     "react-redux": "^8.0.1",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "react-select": "^5.4.0",

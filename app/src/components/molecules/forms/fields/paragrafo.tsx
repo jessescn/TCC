@@ -1,6 +1,5 @@
 import { Box, Flex, Icon, IconButton, Text, Tooltip } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoParagrafo } from 'domain/types/campo-tipos'
+import { CampoFormulario, CampoTipoParagrafo } from 'domain/models/formulario'
 import { FiAlertTriangle } from 'react-icons/fi'
 
 type Props = CampoFormulario<CampoTipoParagrafo> & {

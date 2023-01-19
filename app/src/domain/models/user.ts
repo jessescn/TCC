@@ -1,4 +1,9 @@
-import { ProfileType } from 'domain/types/actors'
+export type ProfileType =
+  | 'usuario'
+  | 'admin'
+  | 'coordenacao'
+  | 'secretaria'
+  | 'colegiado'
 
 export interface UserModel {
   id: number

@@ -1,6 +1,7 @@
 import { TipoProcedimentoHelper } from 'domain/helpers/tipo-procedimento'
 import { ActorModel } from 'domain/models/actor'
 import { FormularioModel } from 'domain/models/formulario'
+import { ProcedimentoModel } from 'domain/models/procedimento'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import { Pagination } from 'repositories'
 import { IFormularioRepository } from 'repositories/sequelize/formulario'
@@ -33,7 +34,8 @@ export interface ITipoProcedimentoService
   analyzableData: (
     id: number,
     formularioId: number,
-    nomeCampo: string
+    nomeCampo: string,
+    filtros?: any
   ) => Promise<any>
 }
 
@@ -142,7 +144,47 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
     return data
   }
 
-  async analyzableData(id: number, formularioId: number, nomeCampo: string) {
+  private applyFiltrosOnProcedimentos(
+    procedimentos: ProcedimentoModel[],
+    filtros: any = {}
+  ) {
+    let result = procedimentos.filter(procedimento => procedimento.createdAt)
+    const dataInicio = filtros.dataInicio
+    const dataFim = filtros.dataFim
+
+    if (dataInicio && dataInicio !== '') {
+      try {
+        const dataInicioDate = new Date(dataInicio)
+
+        result = result.filter(procedimento => {
+          const dataProcedimento = new Date(procedimento.createdAt)
+
+          return dataProcedimento >= dataInicioDate
+        })
+      } catch (error) {}
+    }
+
+    if (dataFim && dataFim !== '') {
+      try {
+        const dataFimDate = new Date(dataFim)
+
+        result = result.filter(procedimento => {
+          const dataProcedimento = new Date(procedimento.createdAt)
+
+          return dataProcedimento < dataFimDate
+        })
+      } catch (error) {}
+    }
+
+    return result
+  }
+
+  async analyzableData(
+    id: number,
+    formularioId: number,
+    nomeCampo: string,
+    filtros: any
+  ) {
     const tipoProcedimento = await this.checkIfTipoProcedimentoExists(id)
     const formularios = await this.checkIfFormulariosExists(
       tipoProcedimento.formularios
@@ -169,7 +211,12 @@ export class TipoProcedimentoService implements ITipoProcedimentoService {
       deleted: false
     })
 
-    const dataList = procedimentos.reduce((current, procedimento) => {
+    const filteredProcedimentos = this.applyFiltrosOnProcedimentos(
+      procedimentos,
+      filtros
+    )
+
+    const dataList = filteredProcedimentos.reduce((current, procedimento) => {
       const result = TipoProcedimentoHelper.getAnalyzableData(
         procedimento,
         formulario,

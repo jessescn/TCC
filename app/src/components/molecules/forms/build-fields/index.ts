@@ -1,13 +1,12 @@
-import { CampoFormulario } from 'domain/models/formulario'
 import CaixaVerificacaoBuilder from 'components/molecules/forms/build-fields/caixa-verificacao'
 import DataBuilder from 'components/molecules/forms/build-fields/data'
 import EscolhaMultiplaBuilder from 'components/molecules/forms/build-fields/escolha-multipla'
-import FicheiroBuilder from 'components/molecules/forms/build-fields/ficheiro'
 import GrelhaMultiplaBuilder from 'components/molecules/forms/build-fields/grelha-multipla'
 import GrelhaVerificacaoBuilder from 'components/molecules/forms/build-fields/grelha-verificacao'
 import HoraBuilder from 'components/molecules/forms/build-fields/hora'
 import ParagrafoBuilder from 'components/molecules/forms/build-fields/paragrafo'
 import RespostaBuilder from 'components/molecules/forms/build-fields/resposta'
+import { CampoFormulario } from 'domain/models/formulario'
 
 export type BaseBuildFieldProps = {
   campo: CampoFormulario
@@ -19,7 +18,6 @@ export const opcoesCampos = new Map([
   ['resposta', { label: 'Resposta', render: RespostaBuilder }],
   ['data', { label: 'Data', render: DataBuilder }],
   ['hora', { label: 'Hora', render: HoraBuilder }],
-  ['ficheiro', { label: 'Ficheiro', render: FicheiroBuilder }],
   [
     'escolha_multipla',
     { label: 'Escolha Múltipla', render: EscolhaMultiplaBuilder }

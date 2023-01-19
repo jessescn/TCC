@@ -7,7 +7,7 @@ import {
   StyleProps,
   Text
 } from '@chakra-ui/react'
-import { ProfileType } from 'domain/types/actors'
+import { ProfileType } from 'domain/models/user'
 import { IconType } from 'react-icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'

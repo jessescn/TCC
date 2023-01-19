@@ -1,5 +1,7 @@
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoEscolhaMultipla } from 'domain/types/campo-tipos'
+import {
+  CampoFormulario,
+  CampoTipoEscolhaMultipla
+} from 'domain/models/formulario'
 import { Controller, useFormContext } from 'react-hook-form'
 import { CampoProps } from '..'
 import { BaseCampoEscolhaMultipla } from './base'

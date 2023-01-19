@@ -59,7 +59,8 @@ const reducers = {
   deleteData: (state: State, action: PayloadAction<number>) => {
     const copy = [...state.dataInfo]
     copy.splice(action.payload, 1)
-    state.dataInfo = copy
+
+    state.dataInfo = copy.map((element, i) => ({ ...element, position: i }))
   },
   resetStatus: (state: State) => {
     state.fetchStatus = 'pristine'

@@ -1,6 +1,8 @@
 import { Box, Flex, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoEscolhaMultipla } from 'domain/types/campo-tipos'
+import {
+  CampoFormulario,
+  CampoTipoEscolhaMultipla
+} from 'domain/models/formulario'
 import { useState } from 'react'
 import { BaseCampoProps } from '..'
 import { ErrorWrapper } from '../error-wrapper'

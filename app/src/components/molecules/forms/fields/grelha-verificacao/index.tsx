@@ -1,5 +1,7 @@
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoGrelhaVerificacao } from 'domain/types/campo-tipos'
+import {
+  CampoFormulario,
+  CampoTipoGrelhaVerificacao
+} from 'domain/models/formulario'
 import { Controller, useFormContext } from 'react-hook-form'
 import { CampoProps } from '..'
 import { BaseCampoGrelhaVerificacao } from './base'

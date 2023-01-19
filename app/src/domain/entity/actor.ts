@@ -1,5 +1,4 @@
-import { UserModel } from 'domain/models/user'
-import { ProfileType } from 'domain/types/actors'
+import { ProfileType, UserModel } from 'domain/models/user'
 
 export class Actor {
   static includesInProfiles(user: UserModel, profiles: ProfileType[]) {

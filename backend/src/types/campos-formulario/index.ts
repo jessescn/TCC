@@ -41,7 +41,6 @@ export type CampoTipos = {
   resposta: CampoTipoResposta
   data: CampoTipoData
   hora: CampoTipoHora
-  ficheiro: CampoTipoFicheiro
   escolha_multipla: CampoTipoEscolhaMultipla
   caixa_verificacao: CampoTipoCaixaVerificacao
   grelha_multipla: CampoTipoGrelhaMultipla

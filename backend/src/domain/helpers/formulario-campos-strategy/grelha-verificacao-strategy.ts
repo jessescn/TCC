@@ -15,6 +15,27 @@ export class GrelhaVerificacaoStrategyHandler implements StrategyHandler {
     private campo: CampoFormulario<CampoGrelhaVerificacao>
   ) {}
 
+  getKeyName(linha: string, analyze: boolean) {
+    return analyze
+      ? linha
+      : `${this.campo.configuracao_campo.titulo} [${linha}]`
+  }
+
+  fillWithNulls(result: object, analyze = false) {
+    return this.campo.configuracao_campo.opcoes.linhas.reduce(
+      (current, linha) => {
+        const keyName = this.getKeyName(linha, analyze)
+
+        if (!current[keyName]) {
+          current[keyName] = analyze ? [] : ''
+        }
+
+        return current
+      },
+      result
+    )
+  }
+
   getExportFormat(analyze = false) {
     const result = {}
     const linhas = this.campo.configuracao_campo.opcoes.linhas
@@ -34,11 +55,9 @@ export class GrelhaVerificacaoStrategyHandler implements StrategyHandler {
         columnResponses.push(coluna)
       })
 
-      const resultColumnName = analyze
-        ? linha
-        : `${this.campo.configuracao_campo.titulo} [${linha}]`
+      const resultKeyName = this.getKeyName(linha, analyze)
 
-      result[resultColumnName] = analyze
+      result[resultKeyName] = analyze
         ? columnResponses
         : columnResponses.join(', ')
     })
@@ -47,6 +66,7 @@ export class GrelhaVerificacaoStrategyHandler implements StrategyHandler {
   }
 
   getAnalyzableData() {
-    return this.getExportFormat(true)
+    const data = this.getExportFormat(true)
+    return this.fillWithNulls(data, true)
   }
 }

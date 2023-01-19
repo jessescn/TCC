@@ -30,6 +30,27 @@ export class GrelhaMultiplaStrategyHandler implements StrategyHandler {
     }
   }
 
+  getKeyName(linha: string, analyze: boolean) {
+    return analyze
+      ? linha
+      : `${this.campo.configuracao_campo.titulo} [${linha}]`
+  }
+
+  fillWithNulls(result: object, analyze = false) {
+    return this.campo.configuracao_campo.opcoes.linhas.reduce(
+      (current, linha) => {
+        const keyName = this.getKeyName(linha, analyze)
+
+        if (!current[keyName]) {
+          current[keyName] = analyze ? [] : ''
+        }
+
+        return current
+      },
+      result
+    )
+  }
+
   getExportFormat(analyze = false) {
     const { linhas, colunas, data } = this.parseData()
     const result = {}
@@ -40,9 +61,7 @@ export class GrelhaMultiplaStrategyHandler implements StrategyHandler {
       const coluna = colunas[colunaIdx]
 
       if (linha && coluna) {
-        const resultColumnName = analyze
-          ? linha
-          : `${this.campo.configuracao_campo.titulo} [${linha}]`
+        const resultColumnName = this.getKeyName(linha, analyze)
 
         result[resultColumnName] = analyze ? [coluna] : coluna
       }
@@ -52,6 +71,7 @@ export class GrelhaMultiplaStrategyHandler implements StrategyHandler {
   }
 
   getAnalyzableData() {
-    return this.getExportFormat(true)
+    const data = this.getExportFormat(true)
+    return this.fillWithNulls(data, true)
   }
 }

@@ -11,9 +11,9 @@ import { Flex, Icon, Link, Menu, MenuButton } from '@chakra-ui/react'
 import type { NavItemProps } from './nav-item'
 import NavItem from './nav-item'
 
-import { ProfileType } from 'domain/types/actors'
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai'
 import { selectors, useSelector } from 'store'
+import { ProfileType } from 'domain/models/user'
 
 type Props = {
   icon: IconType

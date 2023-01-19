@@ -18,12 +18,13 @@ export class AnalyzableDataController extends Controller<ITipoProcedimentoServic
       this.validateRequest(request)
 
       const { id } = request.params
-      const { campo, formulario } = request.body
+      const { campo, formulario, filtros } = request.body
 
       const data = await this.service.analyzableData(
         Number(id),
         Number(formulario),
-        campo
+        campo,
+        filtros
       )
 
       response.json(data)

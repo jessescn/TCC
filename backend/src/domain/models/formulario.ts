@@ -15,7 +15,6 @@ export type TipoCampoFormulario =
   | 'resposta'
   | 'data'
   | 'hora'
-  | 'ficheiro'
   | 'escolha_multipla'
   | 'caixa_verificacao'
   | 'grelha_multipla'

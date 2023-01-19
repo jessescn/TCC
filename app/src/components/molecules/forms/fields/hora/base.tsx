@@ -1,6 +1,5 @@
 import { Input } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoHora } from 'domain/types/campo-tipos'
+import { CampoFormulario, CampoTipoHora } from 'domain/models/formulario'
 import { debounce } from 'lodash'
 import { BaseCampoProps } from '..'
 import { ErrorWrapper } from '../error-wrapper'

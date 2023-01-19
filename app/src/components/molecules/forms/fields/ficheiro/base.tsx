@@ -7,8 +7,7 @@ import {
   Input,
   Text
 } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoFicheiro } from 'domain/types/campo-tipos'
+import { CampoFormulario, CampoTipoFicheiro } from 'domain/models/formulario'
 import { useRef } from 'react'
 import { AiOutlineClose, AiOutlineUpload } from 'react-icons/ai'
 import { BaseCampoProps } from '..'

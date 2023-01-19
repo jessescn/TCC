@@ -8,8 +8,10 @@ import {
   Thead,
   Tr
 } from '@chakra-ui/react'
-import { CampoFormulario } from 'domain/models/formulario'
-import { CampoTipoGrelhaMultipla } from 'domain/types/campo-tipos'
+import {
+  CampoFormulario,
+  CampoTipoGrelhaMultipla
+} from 'domain/models/formulario'
 import { BaseCampoProps } from '..'
 import { ErrorWrapper } from '../error-wrapper'
 import { CampoParagrafo } from '../paragrafo'

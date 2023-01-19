@@ -1,12 +1,15 @@
 import { TipoProcedimento } from 'domain/entity/tipo-procedimento'
 import {
   CartesianGrid,
+  Cell,
   Legend,
   Pie,
   PieChart as RechartPie,
   Tooltip
 } from 'recharts'
 import { DataFetched } from 'store/ducks/analise-dados'
+import { Box, Text } from '@chakra-ui/react'
+import Carousel from 'components/organisms/carousel'
 
 const colors = [
   '#e60049',
@@ -27,34 +30,43 @@ type Props = {
 }
 
 export default function PieChart({ data, width, height }: Props) {
-  const { parsedData, bars } = TipoProcedimento.convertFetchDataIntoGraphData(
+  const { parsedData } = TipoProcedimento.convertFetchDataIntoGraphData(
     data.values
   )
 
-  function getInnerRadius(i: number) {
-    if (i == 0) return 0
+  function convertToPieChart(value: any) {
+    const elements = Object.keys(value)
 
-    return 40 + 10 * i
+    return elements
+      .filter(e => e !== 'name')
+      .map(element => ({ name: element, value: value[element] }))
   }
 
   return (
-    <RechartPie width={width} height={height}>
-      {bars.map((bar, i) => (
-        <Pie
-          data={parsedData}
-          dataKey={bar}
-          nameKey={bar}
-          cx="50%"
-          cy="50%"
-          innerRadius={getInnerRadius(i)}
-          outerRadius={50 + 10 * i + 20}
-          fill={colors[i]}
-          label
-        />
+    <Carousel>
+      {parsedData.map((value, index) => (
+        <Box key={`pie-${index}`}>
+          <Text fontWeight="bold">{value.name}</Text>
+          <RechartPie width={width} height={height}>
+            <Pie
+              data={convertToPieChart(value)}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              label
+            >
+              {convertToPieChart(value).map((_, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index]} />
+              ))}
+            </Pie>
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Legend wrapperStyle={{ fontSize: '12px' }} />
+          </RechartPie>
+        </Box>
       ))}
-      <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip />
-      <Legend />
-    </RechartPie>
+    </Carousel>
   )
 }

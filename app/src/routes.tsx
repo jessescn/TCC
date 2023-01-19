@@ -25,7 +25,7 @@ import ConfirmacaoEmail from 'pages/session/confirmacao-email'
 import ConfirmacaoEmailCodigo from 'pages/session/confirmacao-email-code'
 import AlteracaoSenha from 'pages/session/alteracao-senha'
 import AlteracaoSenhaCodigo from 'pages/session/alteracao-senha-code'
-import { ProfileType } from 'domain/types/actors'
+import { ProfileType } from 'domain/models/user'
 
 type RouteProps = {
   path: string

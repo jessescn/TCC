@@ -13,7 +13,8 @@ function* fetchDataSaga(action: PayloadAction<DataFetchPayload>) {
   try {
     const data = {
       formulario: action.payload.formulario,
-      campo: action.payload.campo
+      campo: action.payload.campo,
+      filtros: action.payload.filtros
     }
 
     const response: AxiosResponse<AnaliseDadosResponse> = yield call(() =>

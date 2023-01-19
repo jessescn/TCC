@@ -21,7 +21,7 @@ export default function EditGraph({ data }: Props) {
           color="initial.white"
           aria-label="remove grafico"
           icon={<Icon as={AiFillEdit} />}
-          mr="0.5rem"
+          mx="0.5rem"
         />
       </Tooltip>
       {controls.isOpen && (

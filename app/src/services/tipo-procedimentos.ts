@@ -16,6 +16,7 @@ export type NovoTipoProcedimento = {
 export type AnaliseDadosPayload = {
   formulario: number
   campo: string
+  filtros?: any
 }
 
 export type FetchData = {

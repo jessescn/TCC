@@ -1,7 +1,16 @@
 import { format, addHours } from 'date-fns'
 
-export const formatDate = (date: string) => {
-  return format(new Date(date), 'dd/MM/yyyy HH:mm')
+type FormatDateOptions = {
+  customFormat?: string
+  ignoreTimezone?: boolean
+}
+
+export const formatDate = (date: string, options: FormatDateOptions = {}) => {
+  const dt = new Date(date)
+  const dtDateOnly = new Date(dt.valueOf() + dt.getTimezoneOffset() * 60 * 1000)
+  const formatString = options.customFormat || 'dd/MM/yyyy HH:mm'
+  const dtToRender = options.ignoreTimezone ? dtDateOnly : dt
+  return format(dtToRender, formatString)
 }
 
 export const formatISODate = (date?: string) => {

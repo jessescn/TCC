@@ -3,7 +3,6 @@ import { RespostaCampo } from 'domain/models/procedimento'
 import { CampoCaixaVerificacao } from './caixa-verificacao'
 import { CampoData } from './data'
 import { CampoEscolhaMultipla } from './escolha-multipla'
-import { CampoFicheiro } from './ficheiro'
 import { CampoGrelhaMultipla } from './grelha-multipla'
 import { CampoGrelhaVerificacao } from './grelha-verificacao'
 import { CampoHora } from './hora'
@@ -32,7 +31,6 @@ export const camposComponente: CampoComponente = {
   resposta: CampoResposta,
   data: CampoData,
   hora: CampoHora,
-  ficheiro: CampoFicheiro,
   escolha_multipla: CampoEscolhaMultipla,
   caixa_verificacao: CampoCaixaVerificacao,
   grelha_multipla: CampoGrelhaMultipla,

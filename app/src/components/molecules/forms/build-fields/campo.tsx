@@ -11,8 +11,7 @@ import {
   Tooltip
 } from '@chakra-ui/react'
 import { opcoesCampos } from 'components/molecules/forms/build-fields'
-import { TipoCampoFormulario } from 'domain/models/formulario'
-import { CampoTipoBase } from 'domain/types/campo-tipos'
+import { CampoTipoBase, TipoCampoFormulario } from 'domain/models/formulario'
 import { debounce } from 'lodash'
 import { useRef } from 'react'
 import type { XYCoord, Identifier } from 'dnd-core'
