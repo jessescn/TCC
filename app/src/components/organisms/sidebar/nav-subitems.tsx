@@ -5,35 +5,25 @@ import {
   AccordionPanel,
   Text
 } from '@chakra-ui/react'
-import { IconType } from 'react-icons'
 
 import { Flex, Icon, Link, Menu, MenuButton } from '@chakra-ui/react'
-import type { NavItemProps } from './nav-item'
 import NavItem from './nav-item'
 
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai'
 import { selectors, useSelector } from 'store'
-import { ProfileType } from 'domain/models/user'
-
-type Props = {
-  icon: IconType
-  title: string
-  items: NavItemProps[]
-  profiles?: ProfileType[]
-  strict?: boolean
-}
+import { SidebarElement } from '.'
 
 export default function NavSubItems({
   icon,
   title,
-  items,
-  profiles = []
-}: Props) {
+  items = [],
+  permissions
+}: SidebarElement) {
   const havePermission = useSelector(selectors.session.hasRoutePermission)(
-    profiles
+    permissions
   )
 
-  return !havePermission ? null : (
+  return !havePermission || items.length === 0 ? null : (
     <Accordion allowMultiple allowToggle w="100%">
       <AccordionItem border="none" w="100%">
         {({ isExpanded }) => (
@@ -82,6 +72,8 @@ export default function NavSubItems({
                   title={item.title}
                   url={item.url}
                   style={{ marginTop: '0.5rem' }}
+                  permissions={item.permissions}
+                  items={item.items}
                 />
               ))}
             </AccordionPanel>

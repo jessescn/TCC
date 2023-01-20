@@ -6,7 +6,7 @@ import { hasNumericId } from 'utils/request'
 
 export class AnalyzableDataController extends Controller<ITipoProcedimentoService> {
   constructor(service: ITipoProcedimentoService) {
-    const permission: PermissionKey = 'tipo_procedimento_create'
+    const permission: PermissionKey = 'analise_data_read'
     const validations = [hasNumericId]
     const mandatoryFields = ['campo', 'formulario']
 

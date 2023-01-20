@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { Actor } from 'domain/entity/actor'
+import { Actor, PermissionScope } from 'domain/entity/actor'
 import { ProfileType } from 'domain/models/user'
 import { State } from '..'
 
@@ -9,6 +9,10 @@ export const getRoot = (state: State) => {
 
 export const getCurrentUser = createSelector([getRoot], state => {
   return state.currentUser
+})
+
+export const getCurrentActorProfile = createSelector([getRoot], state => {
+  return state.currentUser?.profile.nome
 })
 
 export const getAuthStatus = createSelector([getRoot], state => {
@@ -28,14 +32,14 @@ export const is = createSelector(
 
 export const hasRoutePermission = createSelector(
   [getCurrentUser, is],
-  (currentUser, is) => (requiredProfiles: ProfileType[]) => {
+  (currentUser, is) => (requiredPermissions: PermissionScope[]) => {
     if (!currentUser) return false
 
-    const hasRequiredProfiles =
-      requiredProfiles.length > 0
-        ? Actor.includesInProfiles(currentUser, requiredProfiles)
+    const hasRequiredPermissions =
+      requiredPermissions.length > 0
+        ? Actor.includesInProfiles(currentUser, requiredPermissions)
         : true
 
-    return is('admin') || hasRequiredProfiles
+    return is('admin') || hasRequiredPermissions
   }
 )

@@ -5,33 +5,33 @@ import PrivateRoute from './components/template/private-route'
 import DetalhesProcedimento from 'pages/meus-procedimentos/detalhes'
 import MeusProcedimentos from 'pages/meus-procedimentos/lista'
 import ListaTipoProcedimentos from 'pages/tipo-procedimentos/lista'
+import DetalhesFormulario from './pages/formularios/detalhes'
+import ListaFormularios from './pages/formularios/lista'
 import Home from './pages/home'
 import Login from './pages/session/login'
 import Register from './pages/session/register'
-import ListaFormularios from './pages/formularios/lista'
-import DetalhesFormulario from './pages/formularios/detalhes'
 
-import DetalhesTipoProcedimentos from 'pages/tipo-procedimentos/detalhes'
-import NovoProcedimento from 'pages/novo-procedimento'
+import { PermissionScope } from 'domain/entity/actor'
+import NotFound from 'pages/404'
 import HomologarProcedimento from 'pages/colegiado/homologacao-detalhes'
 import ListaHomologacao from 'pages/colegiado/homologacao-lista'
-import ProcedimentosCoordenacao from 'pages/coordenacao/todos-procedimentos'
-import EstatisticasProcedimento from 'pages/coordenacao/estatisticas'
 import AnaliseProcedimento from 'pages/coordenacao/analise-procedimento'
-import NotFound from 'pages/404'
-import TodosUsuarios from 'pages/usuarios/lista'
-import DetalhesUsuario from 'pages/usuarios/detalhes'
-import ConfirmacaoEmail from 'pages/session/confirmacao-email'
-import ConfirmacaoEmailCodigo from 'pages/session/confirmacao-email-code'
+import EstatisticasProcedimento from 'pages/coordenacao/estatisticas'
+import ProcedimentosCoordenacao from 'pages/coordenacao/todos-procedimentos'
+import NovoProcedimento from 'pages/novo-procedimento'
 import AlteracaoSenha from 'pages/session/alteracao-senha'
 import AlteracaoSenhaCodigo from 'pages/session/alteracao-senha-code'
-import { ProfileType } from 'domain/models/user'
+import ConfirmacaoEmail from 'pages/session/confirmacao-email'
+import ConfirmacaoEmailCodigo from 'pages/session/confirmacao-email-code'
+import DetalhesTipoProcedimentos from 'pages/tipo-procedimentos/detalhes'
+import DetalhesUsuario from 'pages/usuarios/detalhes'
+import TodosUsuarios from 'pages/usuarios/lista'
 
 type RouteProps = {
   path: string
   redirectTo?: string
   component: JSX.Element
-  allowedProfiles?: ProfileType[]
+  permissions?: PermissionScope[]
   isPrivate?: boolean
 }
 
@@ -77,25 +77,25 @@ export const routes: RouteProps[] = [
     path: '/formularios',
     component: <ListaFormularios />,
     isPrivate: true,
-    allowedProfiles: ['coordenacao']
+    permissions: [{ name: 'formulario_read', scope: 'all' }]
   },
   {
     path: '/formularios/edit',
     component: <DetalhesFormulario />,
     isPrivate: true,
-    allowedProfiles: ['coordenacao']
+    permissions: [{ name: 'formulario_update', scope: 'all' }]
   },
   {
     path: '/tipo-procedimentos',
     component: <ListaTipoProcedimentos />,
     isPrivate: true,
-    allowedProfiles: ['coordenacao']
+    permissions: [{ name: 'tipo_procedimento_read', scope: 'all' }]
   },
   {
     path: '/tipo-procedimentos/edit',
     component: <DetalhesTipoProcedimentos />,
     isPrivate: true,
-    allowedProfiles: ['coordenacao']
+    permissions: [{ name: 'tipo_procedimento_update', scope: 'all' }]
   },
   {
     path: '/meus-procedimentos',
@@ -110,43 +110,46 @@ export const routes: RouteProps[] = [
   {
     path: '/colegiado/procedimentos',
     component: <ListaHomologacao />,
-    allowedProfiles: ['coordenacao', 'colegiado', 'secretaria'],
+    permissions: [{ name: 'colegiado_read', scope: 'all' }],
     isPrivate: true
   },
   {
     path: '/colegiado/procedimentos/:id',
     component: <HomologarProcedimento />,
-    allowedProfiles: ['coordenacao', 'colegiado', 'secretaria'],
+    permissions: [{ name: 'colegiado_read', scope: 'all' }],
     isPrivate: true
   },
   {
     path: '/coordenacao/procedimentos',
     component: <ProcedimentosCoordenacao />,
-    allowedProfiles: ['coordenacao'],
+    permissions: [{ name: 'procedimento_read', scope: 'all' }],
     isPrivate: true
   },
   {
     path: '/coordenacao/procedimentos/:id',
     component: <AnaliseProcedimento />,
-    allowedProfiles: ['coordenacao'],
+    permissions: [{ name: 'procedimento_read', scope: 'all' }],
     isPrivate: true
   },
   {
     path: '/coordenacao/usuarios',
     component: <TodosUsuarios />,
-    allowedProfiles: ['coordenacao'],
+    permissions: [{ name: 'actor_create', scope: 'all' }],
     isPrivate: true
   },
   {
     path: '/coordenacao/usuarios/edit',
     component: <DetalhesUsuario />,
-    allowedProfiles: ['coordenacao'],
+    permissions: [
+      { name: 'actor_create', scope: 'all' },
+      { name: 'actor_update', scope: 'all' }
+    ],
     isPrivate: true
   },
   {
     path: '/coordenacao/estatisticas',
     component: <EstatisticasProcedimento />,
-    allowedProfiles: ['coordenacao'],
+    permissions: [{ name: 'analise_data_read', scope: 'all' }],
     isPrivate: true
   },
   {
@@ -164,7 +167,7 @@ export default function Routes() {
   function getRouterElement(route: RouteProps) {
     if (route.isPrivate) {
       return (
-        <PrivateRoute allowedProfiles={route.allowedProfiles}>
+        <PrivateRoute permissions={route.permissions}>
           {route.component}
         </PrivateRoute>
       )

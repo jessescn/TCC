@@ -2,18 +2,18 @@ import { Box, Center, Flex } from '@chakra-ui/react'
 import { LoadingPage } from 'components/molecules/loading'
 import Header from 'components/organisms/header'
 import Sidebar from 'components/organisms/sidebar'
-import { Actor } from 'domain/entity/actor'
-import { ProfileType, UserModel } from 'domain/models/user'
+import { Actor, PermissionScope } from 'domain/entity/actor'
+import { UserModel } from 'domain/models/user'
 import { useEffect } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { actions, store, useSelector } from 'store'
 
 type Props = {
   children: JSX.Element
-  allowedProfiles?: ProfileType[]
+  permissions?: PermissionScope[]
 }
 
-function PrivateRoute({ children, allowedProfiles = [] }: Props) {
+function PrivateRoute({ children, permissions = [] }: Props) {
   const location = useLocation()
 
   const isSidebarOpen = useSelector(state => state.session.isSidebarOpen)
@@ -30,8 +30,8 @@ function PrivateRoute({ children, allowedProfiles = [] }: Props) {
   const isAdmin = userModel.profile.nome === 'admin'
 
   const hasProfiles =
-    allowedProfiles.length > 0
-      ? Actor.includesInProfiles(userModel, allowedProfiles)
+    permissions.length > 0
+      ? Actor.includesInProfiles(userModel, permissions)
       : true
 
   const isVerified = userModel.verificado

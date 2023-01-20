@@ -7,17 +7,11 @@ import {
   StyleProps,
   Text
 } from '@chakra-ui/react'
-import { ProfileType } from 'domain/models/user'
-import { IconType } from 'react-icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { actions, selectors, store, useSelector } from 'store'
+import { SidebarElement } from '.'
 
-export type NavItemProps = {
-  icon?: IconType
-  title: string
-  url: string
-  profiles?: ProfileType[]
-  strict?: boolean
+export type NavItemProps = SidebarElement & {
   style?: StyleProps
   isSubitem?: boolean
 }
@@ -26,21 +20,23 @@ export default function NavItem({
   icon,
   title,
   url,
-  profiles = [],
+  permissions,
   style,
-  isSubitem = false
+  isSubitem
 }: NavItemProps) {
   const navigate = useNavigate()
   const location = useLocation()
 
   const havePermission = useSelector(selectors.session.hasRoutePermission)(
-    profiles
+    permissions
   )
 
   const isCurrentRoute = location.pathname === url
 
   const handleNavigate = () => {
-    navigate(url)
+    if (url) {
+      navigate(url)
+    }
     store.dispatch(actions.session.closeSidebar())
   }
 
@@ -78,7 +74,7 @@ export default function NavItem({
               {icon && <Icon as={icon} fontSize="lg" />}
               <Flex alignItems="center">
                 <Text
-                  ml={icon ? 2 : 0}
+                  ml={2}
                   display={'flex'}
                   fontSize={isSubitem ? 'xs' : 'sm'}
                 >

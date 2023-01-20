@@ -25,5 +25,6 @@ export default {
   actor_delete: 'all',
   actor_read: 'all',
   actor_update: 'all',
-  profile_read: 'all'
+  profile_read: 'all',
+  analise_data_read: 'all'
 }
