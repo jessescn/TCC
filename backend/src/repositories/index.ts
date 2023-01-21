@@ -4,6 +4,7 @@ export type Pagination = {
   per_page: number
   page: number
   term: string | null
+  [key: string]: any
 }
 
 export type PaginationResponse<T> = {

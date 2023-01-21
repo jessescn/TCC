@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
+    "debug-dev": "NODE_PATH=src NODE_ENV=dev nodemon -r dotenv/config --exec 'node --inspect -r ts-node/register src/index.ts'",
     "dev": "NODE_PATH=src NODE_ENV=dev nodemon -r dotenv/config --exec ts-node src/index.ts --watch src",
     "start": "yarn build && cd dist/ && NODE_PATH=dist/src NODE_ENV=prod node index.js",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",

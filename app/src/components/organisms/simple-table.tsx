@@ -59,11 +59,16 @@ const SimpleTable = ({
             <Tr
               cursor={onClickRow ? 'pointer' : 'inherit'}
               onClick={onClickRow ? () => onClickRow(row) : undefined}
-              _even={{
-                bgColor: 'secondary.default'
-              }}
               _hover={{
-                bgColor: onClickRow ? 'secondary.semidark' : 'inherit'
+                bgColor: onClickRow ? 'secondary.semidark' : 'initial.white'
+              }}
+              _even={{
+                bgColor: 'secondary.default',
+                _hover: {
+                  bgColor: onClickRow
+                    ? 'secondary.semidark'
+                    : 'secondary.default'
+                }
               }}
               key={`row-${rowIdx}`}
             >

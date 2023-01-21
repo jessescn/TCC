@@ -13,6 +13,10 @@ export const formatISODate = (date: string) => {
   return format(new Date(timeDate), 'dd/MM/yyyy HH:mm')
 }
 
+export const escapeRegExp = (text: string) => {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 export const extract = (beg: string, end: string) => {
   const matcher = new RegExp(`${beg}(.*?)${end}`, 'gm')
   const normalise = (str: string) => str.slice(beg.length, end.length * -1)

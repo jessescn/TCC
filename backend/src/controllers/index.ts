@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { PermissionKey, Scope } from 'domain/profiles'
 import { Pagination } from 'repositories'
 import { HttpStatusCode, Request, Response } from 'types/express'
@@ -21,10 +22,13 @@ export const errorResponseHandler = (res: Response, error: any) => {
 }
 
 export const extractPagination = (request: Request) => {
+  const { page, per_page, term, ...filters } = request.query
+
   const pagination: Pagination = {
-    page: request.query.page ? Number(request.query.page) : 1,
-    per_page: request.query.per_page ? Number(request.query.per_page) : 1000,
-    term: (request.query.term as string) || null
+    page: page ? Number(page) : 1,
+    per_page: per_page ? Number(per_page) : 1000,
+    term: (term as string) || null,
+    ...filters
   }
 
   return pagination

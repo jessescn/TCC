@@ -99,7 +99,7 @@ export class EncaminhadoStatusHandler implements StatusHandler {
 
     const autor = await this.actorRepo.findOne(procedimento.createdBy)
 
-    await this.sendEmailToSecretaria(autor, tipoProcedimento, forwardData)
+    this.sendEmailToSecretaria(autor, tipoProcedimento, forwardData)
 
     return this.buildNewStatus()
   }

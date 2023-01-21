@@ -30,7 +30,7 @@ export default function ProcessosHomologacaoList() {
           maxW="400px"
           height="2rem"
           fontSize="sm"
-          placeholder="Ex.Busca por ID, nome e status"
+          placeholder="Ex.Busca por ID ou nome"
           onChange={e => handleSearch(e.target.value)}
           label={{
             text: 'Buscar procedimentos em homologacão',

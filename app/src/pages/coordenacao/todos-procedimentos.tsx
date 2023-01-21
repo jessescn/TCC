@@ -1,5 +1,5 @@
 import Screen from 'components/atoms/screen'
-import TodosProcedimentosList from 'components/pages/coordenacao/procedimentos'
+import TodosProcedimentosList from 'components/pages/coordenacao/todos-procedimentos'
 import { useEffect } from 'react'
 
 import { actions, store } from 'store'

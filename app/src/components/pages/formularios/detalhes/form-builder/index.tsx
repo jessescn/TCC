@@ -110,17 +110,20 @@ export default function FormBuilder({ onDuplicate }: Props) {
         <Tabs isLazy>
           <TabList>
             <Tab>Campos</Tab>
-            <Tab>Preview</Tab>
+            <Tab>Visualizar Prévia</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
               <Box my="1rem">
-                <Flex alignItems="center" mb="1rem">
-                  <Icon as={RiErrorWarningLine} mr="0.5rem" />
-                  <Text fontSize="sm" fontWeight="bold">
-                    Segure e arraste os campos para alterar a ordem de exibição
-                  </Text>
-                </Flex>
+                {campos.length > 0 && (
+                  <Flex alignItems="center" mb="1rem">
+                    <Icon as={RiErrorWarningLine} mr="0.5rem" />
+                    <Text fontSize="sm" fontWeight="bold">
+                      Segure e arraste os campos para alterar a ordem de
+                      exibição
+                    </Text>
+                  </Flex>
+                )}
                 <Stack spacing="1.5rem">
                   {campos.map((campo, idx) => (
                     <Campo

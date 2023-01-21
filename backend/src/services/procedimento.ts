@@ -187,7 +187,7 @@ export class ProcedimentoService implements IProcedimentoService {
 
   async findAll(query: ProcedimentoQuery, pagination: Pagination) {
     const procedimentos: ProcedimentoModel[] =
-      await this.procedimentoRepo.findAll(query, pagination.term)
+      await this.procedimentoRepo.findAll(query, pagination.term, pagination)
 
     const paginated = paginateList(procedimentos, pagination)
 

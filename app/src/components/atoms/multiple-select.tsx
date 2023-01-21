@@ -10,6 +10,7 @@ const customStyles = {
     ...styles,
     padding: '0',
     width: '100%',
+    height: '100%',
     fontSize: '0.75rem',
     backgroundColor: 'white'
   }),

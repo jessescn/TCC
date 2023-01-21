@@ -12,7 +12,7 @@ import Procedimento, {
 } from 'domain/models/procedimento'
 import TipoProcedimento from 'domain/models/tipo-procedimento'
 import Voto from 'domain/models/voto'
-import { IRepository } from 'repositories'
+import { IRepository, Pagination } from 'repositories'
 import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import { isNumber } from 'utils/value'
 
@@ -41,7 +41,8 @@ export interface IProcedimentoRepo extends IRepository {
   findOne: (id: number) => Promise<ProcedimentoModel>
   findAll: (
     query: ProcedimentoQuery,
-    term?: string | null
+    term?: string | null,
+    pagination?: Pagination
   ) => Promise<ProcedimentoModel[]>
   create: (data: CreateProcedimento) => Promise<ProcedimentoModel>
   update: (
@@ -135,16 +136,80 @@ export class ProcedimentoRepository implements IProcedimentoRepo {
     return procedimentos
   }
 
-  findAll = async (query: ProcedimentoQuery = {}, term?: string | null) => {
+  _filterByStatus = (
+    status: TStatus[] | TStatus,
+    procedimentos: ProcedimentoModel[]
+  ) => {
+    return procedimentos.filter(procedimento => {
+      const currentStatus = ProcedimentoHelper.getCurrentStatus(procedimento)
+
+      if (Array.isArray(status)) {
+        return status.includes(currentStatus)
+      }
+
+      return status === currentStatus
+    })
+  }
+
+  _filterByDates = (
+    procedimentos: ProcedimentoModel[],
+    start?: string,
+    end?: string
+  ) => {
+    let result: ProcedimentoModel[] = []
+
+    if (start) {
+      try {
+        const startDate = new Date(start)
+        result = procedimentos.filter(procedimento => {
+          const data = new Date(procedimento.createdAt)
+
+          return data > startDate
+        })
+      } catch (error) {}
+    }
+
+    if (end) {
+      try {
+        const endDate = new Date(end)
+        result = procedimentos.filter(procedimento => {
+          const data = new Date(procedimento.createdAt)
+
+          return data > endDate
+        })
+      } catch (error) {}
+    }
+
+    return result
+  }
+
+  findAll = async (
+    query: ProcedimentoQuery = {},
+    term?: string | null,
+    pagination?: Pagination
+  ) => {
+    let result: ProcedimentoModel[] = []
     const procedimentosById = await this._findAllById(query, term)
     const procedimentosByName = await this._findAllBySearchTerm(query, term)
 
-    const procedimentos =
+    result =
       isNumber(term) && procedimentosById.length > 0
         ? procedimentosById
         : procedimentosByName
 
-    return procedimentos
+    if (pagination?.status) {
+      result = this._filterByStatus(pagination?.status, result)
+    }
+
+    if (pagination?.dataInicio || pagination?.dataFim) {
+      result = this._filterByDates(
+        result,
+        pagination?.dataInicio,
+        pagination?.dataFim
+      )
+    }
+
+    return result
   }
 
   findAllByStatus = async (status: TStatus, term?: string | null) => {
