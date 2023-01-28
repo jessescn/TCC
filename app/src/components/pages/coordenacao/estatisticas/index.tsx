@@ -8,7 +8,7 @@ export default function EstatisticasProcedimento() {
 
   return (
     <Box>
-      <Grid gap={4} templateColumns="repeat(2, 1fr)" w="100%" mt="16px">
+      <Grid gap={8} templateColumns="repeat(2, 1fr)" w="100%" mt="16px">
         {tipoDatas.map((data, i) => (
           <GridItem key={data.position} colSpan={1}>
             <Graph index={i} type="bar" data={data} />

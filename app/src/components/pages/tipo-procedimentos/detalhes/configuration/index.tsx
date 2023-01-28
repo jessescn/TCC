@@ -42,16 +42,6 @@ export default function TipoProcedimentoConfiguration() {
         />
         <ErrorMessage errors={errors} fieldName="nome" />
       </Box>
-      <Box>
-        <Text fontSize="sm" mb="0.5rem" fontWeight="bold">
-          Descrição
-        </Text>
-        <Textarea
-          defaultValue={tipoProcedimento?.descricao}
-          size="sm"
-          {...register('descricao')}
-        />
-      </Box>
       <Flex justifyContent="space-between">
         <Flex alignItems="center">
           <Flex alignItems="center">

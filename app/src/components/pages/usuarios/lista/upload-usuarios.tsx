@@ -90,7 +90,7 @@ export default function UploadUsuariosButton() {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Text fontSize="xl">Atualizar Usuários</Text>
+          <Text fontSize="xl">Importar Usuários</Text>
         </ModalHeader>
         <ModalBody p="1rem">
           <Text fontSize="sm" fontWeight="normal">
