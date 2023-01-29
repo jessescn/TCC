@@ -10,16 +10,16 @@ As seções a seguir explicam com mais detalhes cada funcionalidade do sistema, 
 
 Cada usuário possui um _profile_ vinculado. Existem 5 tipos de profile: _usuario_, _colegiado_, _secretaria_, _coordenacao_ e _admin_.
 
-[1.1 Autenticação](/docs/autenticacao.md)
-[1.2 Tela Inicial](/docs/tela-inicial.md)
-[1.3 Meus Procedimentos](/docs/meus-procedimentos.md)
-[1.4 Abrir Procedimento](/docs/abrir-procedimento.md)
-[1.5 Formulários](/docs/formulario.md)
-[1.6 Tipo de Procedimentos](/docs/tipo-procedimento.md)
-[1.7 Todos os Procedimentos](/docs/todos-procedimentos.md)
-[1.8 Homologação](/docs/homologacao.md)
-[1.9 Gerenciamento de Usuários](/docs/gerenciamento-usuarios.md)
-[1.10 Estatísticas Gerais](/docs/estatisticas-gerais.md)
+- [1.1 Autenticação](/docs/autenticacao.md)
+- [1.2 Tela Inicial](/docs/tela-inicial.md)
+- [1.3 Meus Procedimentos](/docs/meus-procedimentos.md)
+- [1.4 Abrir Procedimento](/docs/abrir-procedimento.md)
+- [1.5 Formulários](/docs/formulario.md)
+- [1.6 Tipo de Procedimentos](/docs/tipo-procedimento.md)
+- [1.7 Todos os Procedimentos](/docs/todos-procedimentos.md)
+- [1.8 Homologação](/docs/homologacao.md)
+- [1.9 Gerenciamento de Usuários](/docs/gerenciamento-usuarios.md)
+- [1.10 Estatísticas Gerais](/docs/estatisticas-gerais.md)
 
 ### 2. Arquitetura
 
