@@ -1,4 +1,4 @@
-#### 1.1 Autenticação
+## Autenticação
 
 Ao acessar o sistema, a primeira tela que o usuário tem acesso é a de autenticação. Além dos campos para preencher os dados, é possível acessar as telas de cadastro e alteração de senha.
 

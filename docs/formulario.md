@@ -1,4 +1,4 @@
-#### 1.5 Formulários
+## Formulários
 
 Assim como formulários Google, um formulário é um conjunto de campos que devem ser preenchidos pelos usuários ao submeter um novo procedimento. Usuários do tipo _admin_ e _coordenacao_ podem gerenciar os formulários do sistema.
 
@@ -12,19 +12,19 @@ Também é possível criar um novo através do botão "Novo Formulário", bem co
 
 Ao acessar a tela de criação/edição, além de poder preencher os campos de nome e descrição, é possivel realizar algumas ações.
 
-##### 1.5.1 Duplicar Formulário
+### Duplicar Formulário
 
 A primeira é duplicação a partir de um formulário existente, clicando em "Duplicar Formulário", é aberto um modal onde é possível selecionar um formulário existente para importar as suas configurações. Uma vez que é realizada a importação, todos os dados atuais são sobrescritos pelo formulário selecionado.
 
 ![duplicar formulário image](/screenshots/duplicar-formulario.png)
 
-##### 1.5.2 Exportar PDF
+### Exportar PDF
 
 Uma das etapas de um procedimento é o encaminhamento a secretaria, onde é enviado um email contendo informações do procedimento. Também existe a possibilidade de anexar um arquivo pdf contendo informações preenchidas pelo usuário. Para isso, o coordenador pode cadastrar um template ao formulário que será utilizado para a geração desse pdf. No momento de cadastrar o template, o usuário pode vincular com campos presentes no formulário, ou seja, caso ele queira que em certa parte do pdf tenha uma resposta do usuário, como por exemplo, o email do orientador, ele pode referenciar o campo digitando "@" e selecionando o campo desejado.
 
 ![template pdf formulário image](/screenshots/template-pdf.png)
 
-##### 1.5.3 Configuração dos Campos
+### Configuração dos Campos
 
 Um dos pontos principais do formulário é exatamente a manipulação dos campos que o compõem. Para isso, o usuário tem acesso a um construtor de campos. Através do menu flutuante no canto direito, o usuário pode adicionar novos campos.
 

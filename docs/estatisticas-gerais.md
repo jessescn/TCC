@@ -1,4 +1,4 @@
-#### 1.10 Estatísticas Gerais
+## Estatísticas Gerais
 
 Usuários com profile _admin_ e _coordenacao_ tem permissão de acessar a opção "Estatísticas Gerais". Nessa página é possível a construção de gráficos utilizando as respostas dos usuários como fonte de dados. Para adicionar um novo gráfico, o usuário precisa selecionar o tipo de procedimento, formulário e campo no qual serão consumidas as respostas.
 

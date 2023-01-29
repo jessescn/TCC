@@ -1,4 +1,4 @@
-#### 1.8 Homologação
+## Homologação
 
 A opcão "Homologação" é visível para todos os profiles, exceto o profile _usuario_. A página lista todos os procedimentos que estão sendo ou precisam ser votados pelos membros do colegiado. A partir das informações presentes na tabela, já é possível visualizar o nome do tipo de procedimento, autor do procedimento, bem como o voto do usuário autenticado (caso ele não seja um _colegiado_ ou não tenha votado ainda será exibido o texto "Não votou"). Também é exibido o total de votos atual daquele procedimento.
 

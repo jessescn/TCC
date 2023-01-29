@@ -1,4 +1,4 @@
-#### 1.7 Todos os Procedimentos
+## Todos os Procedimentos
 
 A opção "Todos os Procedimentos" é visível apenas a usuários com profile _admin_ ou _coordenacao_ e lista todos os procedimentos do sistema. Uma vez que são listados todos os procedimentos do sistema, foi implementado um sistema mais sofisticado de filtragem para facilitar a busca de procedimentos específicos.
 

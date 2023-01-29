@@ -1,4 +1,4 @@
-#### 1.9 Gerenciamento de Usuários
+## Gerenciamento de Usuários
 
 Usuários com profile _admin_ e _coordenacao_ tem permissão para editar qualquer usuário do sistema. Ao clicar na opção "Gerenciamento Usuários", é exibido uma listagem de todos os usuários do sistema, bem como a possibilidade de pesquisar por nome, ID ou email.
 
