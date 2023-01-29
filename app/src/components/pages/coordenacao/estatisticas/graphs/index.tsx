@@ -38,30 +38,24 @@ export default function Graph({ index, data }: Props) {
   const hasSomeFilter = data.filtros?.dataFim || data.filtros?.dataInicio
 
   return (
-    <Flex flexDir="column" alignItems="center">
+    <Flex flexDir="column" alignItems="center" w="100%">
       <Flex justifyContent="space-between" w="100%" mb="1rem">
-        <Box>
-          <Text fontSize="sm" fontWeight="bold" noOfLines={1} isTruncated>
-            Tipo Procedimento:
-            <Text ml="4px" as="span" fontWeight="normal">
-              {data.tipoProcedimentoNome}
-            </Text>
-          </Text>
-          <Text fontSize="sm" fontWeight="bold" noOfLines={1} isTruncated>
-            Formulário:
-            <Text ml="4px" as="span" fontWeight="normal">
-              {data.formularioNome}
-            </Text>
-          </Text>
-          <Text fontSize="sm" fontWeight="bold" noOfLines={1} isTruncated>
-            Campo:
-            <Text ml="4px" as="span" fontWeight="normal">
-              {data.campo}
-            </Text>
-          </Text>
-          <Text fontSize="sm" fontWeight="bold">
-            Total:
-            <Text ml="4px" as="span" fontWeight="normal">
+        <Stack spacing="0.5rem" fontSize="sm">
+          <Box>
+            <Text fontWeight="bold">Tipo Procedimento:</Text>
+            <Text>{data.tipoProcedimentoNome}</Text>
+          </Box>
+          <Box>
+            <Text fontWeight="bold">Formulário:</Text>
+            <Text>{data.formularioNome}</Text>
+          </Box>
+          <Box>
+            <Text fontWeight="bold">Campo:</Text>
+            <Text>{data.campo}</Text>
+          </Box>
+          <Text fontWeight="bold">
+            Total procedimentos:
+            <Text ml="0.5rem" as="span" fontWeight="normal">
               {data.values.length}
             </Text>
           </Text>
@@ -94,7 +88,7 @@ export default function Graph({ index, data }: Props) {
               </Stack>
             </Box>
           )}
-        </Box>
+        </Stack>
         <Box>
           <Flex>
             <FiltersGraph data={data} />

@@ -49,7 +49,7 @@ export default function Barchart({ data, height, width }: Props) {
       <XAxis dataKey="name" />
       <YAxis />
       <Tooltip />
-      <Legend />
+      <Legend wrapperStyle={{ fontSize: '12px' }} />
       {bars.map((bar, i) => (
         <Bar dataKey={bar} fill={colors[i]} />
       ))}
