@@ -6,8 +6,10 @@ export const isNumber = (value: any) => {
   return !isNaN(Number(value))
 }
 
-export const paginateList = <T>(list: T[], pagination: Pagination) => {
-  const end = pagination.per_page * pagination.page
+export const paginateList = <T>(list: T[], pag?: Pagination) => {
+  const defaultPagination: Pagination = { page: 1, per_page: 10000, term: null }
+  const pagination = pag || defaultPagination
+  const end = pagination?.per_page * pagination.page
   const start = end - pagination.per_page
 
   return list.slice(start, end)

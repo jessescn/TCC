@@ -1,6 +1,10 @@
-import { ChangePasswordController } from 'controllers/actor/change-password'
-import { makeActorService } from 'factories/services/actor-factory'
+import { Controller } from 'controllers/controller'
+import { makeActorRepository } from 'factories/repositories/actor-factory'
+import { ChangePasswordUseCase } from 'usecases/actor/change-password'
 
 export const makeChangePasswordController = () => {
-  return new ChangePasswordController(makeActorService())
+  const usecase = new ChangePasswordUseCase(makeActorRepository())
+  const mandatoryFields = ['password', 'code']
+
+  return new Controller({ usecase, mandatoryFields, validations: [] })
 }

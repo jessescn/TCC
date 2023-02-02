@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
-import { encryptPassword, isValidPassword } from 'utils/password'
+import { encryptPassword, validatePassword } from 'utils/password'
 
 describe('Password utils Tests', () => {
-  describe('isValidPassword', () => {
-    const sut = isValidPassword
+  describe('validatePassword', () => {
+    const sut = validatePassword
     const encrypted = bcrypt.hashSync('banana', 2)
 
     it('should return if password and the encrypted password are the same', async () => {

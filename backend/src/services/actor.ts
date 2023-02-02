@@ -2,7 +2,7 @@ import { ActorHelper } from 'domain/helpers/actor'
 import { ActorModel } from 'domain/models/actor'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { Pagination } from 'repositories'
+import { Pagination, PaginationResponse } from 'repositories'
 import { MailSender } from 'repositories/nodemailer/mail'
 import {
   ActorQuery,
@@ -19,7 +19,6 @@ import {
   NotFoundError,
   UnauthorizedError
 } from 'types/express/errors'
-import { encryptPassword } from 'utils/password'
 import { paginateList } from 'utils/value'
 
 export type SidebarInfo = {
@@ -27,18 +26,16 @@ export type SidebarInfo = {
 }
 
 export interface IActorService extends IService<ActorModel, ActorQuery> {
+  findAll: (
+    query?: ActorQuery,
+    pagination?: Pagination
+  ) => Promise<PaginationResponse<ActorModel>>
   create: (data: NewActor) => Promise<ActorModel>
   bulkCreate: (filepath: string) => Promise<ActorModel[]>
   update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
   getPublicos: () => Promise<string[]>
   getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
   sendConfirmationCode: (data: ActorModel) => Promise<void>
-  verifyActorByCode: (code: string) => Promise<ActorModel>
-  sendChangePasswordEmail: (email: string) => Promise<void>
-  changeActorPasswordByCode: (
-    code: string,
-    password: string
-  ) => Promise<ActorModel>
 }
 
 export class ActorService implements IActorService {
@@ -140,8 +137,8 @@ export class ActorService implements IActorService {
     return actor
   }
 
-  async findAll(query: ActorQuery, pagination: Pagination) {
-    const usuarios = await this.repository.findAll(query, pagination.term)
+  async findAll(query?: ActorQuery, pagination?: Pagination) {
+    const usuarios = await this.repository.findAll(query, pagination?.term)
 
     const paginated = paginateList(usuarios, pagination)
 
@@ -228,52 +225,5 @@ export class ActorService implements IActorService {
     } catch (error) {
       throw new UnauthorizedError('Código inválido ou expirado!')
     }
-  }
-
-  async verifyActorByCode(code: string) {
-    const email = this.extractEmailFromCode(code)
-
-    const [actor] = await this.repository.findAll({ email })
-
-    if (!actor) {
-      throw new NotFoundError('Usuário não encontrado')
-    }
-
-    return this.repository.update(actor.id, { verificado: true })
-  }
-
-  async sendChangePasswordEmail(email: string) {
-    const [actor] = await this.repository.findAll({ email })
-
-    if (!actor) {
-      throw new NotFoundError('Não existe usuário com esse email')
-    }
-
-    const code = jwt.sign({ actor }, process.env.JWT_SECRET_KEY, {
-      expiresIn: '5m'
-    })
-    const baseUrl = process.env.WEB_URL || 'http://localhost:3000'
-    const link = `${baseUrl}/alteracao-senha/${code}?email=${actor.email}`
-
-    const emailTemplate = templates['change-password'](email, {
-      link,
-      name: actor.nome
-    })
-
-    await MailSender.send(emailTemplate)
-  }
-
-  async changeActorPasswordByCode(code: string, newPassword: string) {
-    const email = this.extractEmailFromCode(code)
-
-    const [actor] = await this.repository.findAll({ email })
-
-    if (!actor) {
-      throw new NotFoundError('Usuário não encontrado')
-    }
-
-    const encrypted = await encryptPassword(newPassword)
-
-    return this.repository.update(actor.id, { senha: encrypted })
   }
 }

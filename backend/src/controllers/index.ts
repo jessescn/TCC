@@ -82,7 +82,7 @@ export abstract class Controller<T> implements IController {
     return this.props.service
   }
 
-  abstract exec: (req: Request, res: Response) => Promise<void>
+  abstract exec: (req: Request, res: Response) => Promise<any>
 
   hasPermissions = (req: Request) => {
     if (!this.permission) return
