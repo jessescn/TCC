@@ -49,7 +49,7 @@ export default function Home() {
           fontSize="lg"
           fontWeight="bold"
         >
-          Sistema de Procedimentos da Pós-Graduacão
+          Sistema de Automação de Procedimentos
         </Text>
       </Box>
       <Box my="2rem">
@@ -57,9 +57,9 @@ export default function Home() {
           Sobre o Sistema
         </Text>
         <Text fontSize="sm">
-          O sistema de procedimentos da PPGCC tem como objetivo centralizar e
-          facilitar o acompanhamentos dos procedimentos dos discentes e docentes
-          do curso de ciência da computação da UFCG.
+          O sistema de automação de procedimentos da PPGCC tem como objetivo
+          centralizar e facilitar o acompanhamentos dos procedimentos dos
+          discentes e docentes do curso de ciência da computação da UFCG.
         </Text>
       </Box>
       <Box my="1rem">

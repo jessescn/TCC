@@ -1,4 +1,12 @@
-import { Box, Flex, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Input,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text
+} from '@chakra-ui/react'
 import {
   CampoFormulario,
   CampoTipoEscolhaMultipla
@@ -37,9 +45,11 @@ export function BaseCampoEscolhaMultipla({
                 isDisabled={!props.editable}
                 value={opcao}
                 key={opcao}
-                display="block"
+                display="flex"
               >
-                {opcao}
+                <Text as="span" fontSize="sm">
+                  {opcao}
+                </Text>
               </Radio>
             ))}
             {outro && (

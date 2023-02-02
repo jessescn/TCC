@@ -36,10 +36,10 @@ export default function Header() {
         <Text
           color="initial.white"
           fontWeight="bold"
-          fontSize={{ base: 'md', md: '2xl' }}
+          fontSize={{ base: 'md', md: 'xl' }}
           ml="0.5rem"
         >
-          Computação UFCG
+          SAP - Sistema de Automação de Procedimentos da Copin
         </Text>
       </Flex>
       <CurrentUserMenu />

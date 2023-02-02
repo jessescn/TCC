@@ -75,7 +75,7 @@ export function BaseCampoGrelhaMultipla({
       message="Preencha corretamente todas as linhas"
     >
       <CampoParagrafo {...props} />
-      <Table>
+      <Table fontSize="sm">
         <Thead>
           <Tr>
             <Th key="campo-vazio"></Th>

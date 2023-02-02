@@ -163,10 +163,10 @@ const Sidebar = () => {
               <Text
                 color="primary.dark"
                 fontWeight="bold"
-                fontSize={{ base: 'md', md: '2xl' }}
+                fontSize={{ base: 'md', md: 'xl' }}
                 ml="0.5rem"
               >
-                Computação UFCG
+                SAP - PPGCC
               </Text>
             </Flex>
             <Box
@@ -177,10 +177,17 @@ const Sidebar = () => {
             >
               {items.map(navItem => {
                 if (navItem.items) {
-                  return <NavSubItems {...navItem} />
+                  return (
+                    <NavSubItems
+                      key={`${navItem.title}-container`}
+                      {...navItem}
+                    />
+                  )
                 }
 
-                return <NavItem {...navItem} />
+                return (
+                  <NavItem key={`${navItem.title}-container`} {...navItem} />
+                )
               })}
             </Box>
           </Flex>

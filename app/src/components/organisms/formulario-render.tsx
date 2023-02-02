@@ -36,7 +36,9 @@ export const FormularioRender = ({ formulario }: Props) => {
               {formulario.nome}
             </Text>
             {formulario.descricao && (
-              <Text as="h2">{formulario.descricao}</Text>
+              <Text as="h2" fontSize="sm">
+                {formulario.descricao}
+              </Text>
             )}
           </Box>
           {formulario.campos.map(campo => {

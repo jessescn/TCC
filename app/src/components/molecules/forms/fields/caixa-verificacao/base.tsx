@@ -4,7 +4,8 @@ import {
   CheckboxGroup,
   Flex,
   Input,
-  Stack
+  Stack,
+  Text
 } from '@chakra-ui/react'
 import {
   CampoFormulario,
@@ -43,7 +44,9 @@ export function BaseCampoCaixaVerificacao({
           <Stack spacing="16px">
             {opcoes.map(opcao => (
               <Checkbox disabled={!props.editable} key={opcao} value={opcao}>
-                {opcao}
+                <Text as="span" fontSize="sm">
+                  {opcao}
+                </Text>
               </Checkbox>
             ))}
             {outro && (
