@@ -1,6 +1,6 @@
-# PCopin
+# SAT - Sistema de Automação de Procedimentos da PPGCC/UFCG
 
-O PCopin é uma solução voltada para o contexto do programa de pós-graduação do curso de ciência da computação da universidade federal de campina grande (PPGCC/UFCG).
+O SAT é uma solução voltada para o contexto do programa de pós-graduação do curso de ciência da computação da universidade federal de campina grande (PPGCC/UFCG).
 
 O sistema tem como objetivo a automação de procedimentos da PPGCC através de uma plataforma que oferece diversas funcionalidades que automatizam etapas dos processos.
 
