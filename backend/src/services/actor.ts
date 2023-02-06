@@ -1,7 +1,7 @@
 import { ActorHelper } from 'domain/helpers/actor'
 import { ActorModel } from 'domain/models/actor'
 import { TipoProcedimentoModel } from 'domain/models/tipo-procedimento'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { Pagination, PaginationResponse } from 'repositories'
 import { MailSender } from 'repositories/nodemailer/mail'
 import {
@@ -16,8 +16,7 @@ import templates from 'templates'
 import {
   BadRequestError,
   ConflictError,
-  NotFoundError,
-  UnauthorizedError
+  NotFoundError
 } from 'types/express/errors'
 import { paginateList } from 'utils/value'
 
@@ -33,8 +32,6 @@ export interface IActorService extends IService<ActorModel, ActorQuery> {
   create: (data: NewActor) => Promise<ActorModel>
   bulkCreate: (filepath: string) => Promise<ActorModel[]>
   update: (id: number, data: Partial<ActorModel>) => Promise<ActorModel>
-  getPublicos: () => Promise<string[]>
-  getSidebarInfo: (actorId: number) => Promise<SidebarInfo>
   sendConfirmationCode: (data: ActorModel) => Promise<void>
 }
 
@@ -154,44 +151,6 @@ export class ActorService implements IActorService {
     return this.repository.update(id, data)
   }
 
-  async getPublicos() {
-    const { data } = await this.findAll(
-      {},
-      { page: 1, per_page: 1000, term: null }
-    )
-
-    return ActorHelper.getPublicos(data)
-  }
-
-  async getSidebarInfo(id: number) {
-    const actor = (await this.checkIfActorAlreadyExists(id)) as ActorModel
-    const publicos = actor.publico
-
-    const activeTipos = await this.tipoProcedimentoRepo.findAll({
-      status: 'ativo',
-      deleted: false
-    })
-
-    const openedTipos = activeTipos.filter(tipo => {
-      const startDate = new Date(tipo.dataInicio || '01-01-1999')
-      const endDate = new Date(tipo.dataFim || '01-01-2999')
-      const currentDate = new Date()
-
-      const intersection = tipo.publicos.filter(publico =>
-        publicos.includes(publico)
-      )
-
-      const isInInterval = startDate <= currentDate && endDate >= currentDate
-      const isInPublicos = tipo.publicos.length === 0 || intersection.length > 0
-
-      return isInInterval && isInPublicos
-    })
-
-    return {
-      open: openedTipos
-    }
-  }
-
   async sendConfirmationCode(data: ActorModel, expiration = '5m') {
     if (data.verificado) {
       throw new BadRequestError('Usuário com email já verificado')
@@ -207,23 +166,5 @@ export class ActorService implements IActorService {
     const email = template(data.email, { link })
 
     await MailSender.send(email)
-  }
-
-  private extractEmailFromCode(code: string) {
-    try {
-      const { payload } = jwt.verify(code, process.env.JWT_SECRET_KEY, {
-        complete: true
-      }) as JwtPayload
-
-      const email = payload.data.email
-
-      if (!email) {
-        throw new Error()
-      }
-
-      return email
-    } catch (error) {
-      throw new UnauthorizedError('Código inválido ou expirado!')
-    }
   }
 }

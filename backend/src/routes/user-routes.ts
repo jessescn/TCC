@@ -2,10 +2,10 @@ import { Router } from 'express'
 import {
   bulkCreateActorsController,
   deleteActorController,
-  publicosController,
+  actorsPublicosController,
   readActorController,
   readOneActorController,
-  sidebarInfoController,
+  actorSidebarController,
   updateActorController
 } from 'factories/controllers/actor'
 import { makeAuthTokenMiddleware } from 'factories/middlewares/authorization-factory'
@@ -15,8 +15,8 @@ const upload = multer({ dest: 'uploads/' })
 const routes = Router()
 const middleware = makeAuthTokenMiddleware().exec
 
-routes.get('/users/publicos', middleware, publicosController.exec)
-routes.get('/users/sidebar', middleware, sidebarInfoController.exec)
+routes.get('/users/publicos', middleware, actorsPublicosController.exec)
+routes.get('/users/sidebar', middleware, actorSidebarController.exec)
 routes.get('/users', middleware, readActorController.exec)
 routes.get('/users/:id', middleware, readOneActorController.exec)
 routes.post(
