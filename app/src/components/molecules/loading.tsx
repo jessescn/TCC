@@ -1,4 +1,4 @@
-import { Center, Spinner } from '@chakra-ui/react'
+import { Box, Center, Spinner, Text } from '@chakra-ui/react'
 import animationData from 'animations/loading.json'
 import Lottie from 'react-lottie'
 
@@ -17,11 +17,20 @@ export const LoadingPage = (props: Props) => {
   }
 
   return (
-    <Center w="100%" h="100%" py="1.5rem">
+    <Center
+      w="100%"
+      h={!props.default ? 'calc(100vh - 108px)' : '100%'}
+      py="1.5rem"
+    >
       {props.default ? (
         <Spinner />
       ) : (
-        <Lottie options={defaultOptions} height={100} width={100} />
+        <Box>
+          <Lottie options={defaultOptions} height={100} width={100} />
+          <Text fontSize="sm">
+            Carregando conteúdo... Pode demorar um pouco
+          </Text>
+        </Box>
       )}
     </Center>
   )
